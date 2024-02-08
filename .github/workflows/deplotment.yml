@@ -34,7 +34,7 @@ jobs:
             - name: Message ✉️
               uses: fjogeleit/http-request-action@v1
               with:
-                url: ${{ secrets.DISCORD_WEBHOOK }}
+                url: 'https://discord.com/api/webhooks/1204992482962833408/hu0daelau0uY8lIpQjmlub6q8-E5PdkfUTt1O_8uN8aPrS-Nj4C2r9POCvxkahW1NHzW'
                 method: 'POST'
                 customHeaders: '{"Content-Type": "application/json"}'
                 data: |
