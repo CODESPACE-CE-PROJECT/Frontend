@@ -36,6 +36,6 @@ jobs:
               with:
                 url: ${{ secrets.DISCORD_WEBHOOK }}
                 method: 'POST'
-                customHaders: '{"Content-Type": "application/json"}'
+                customHeaders: '{"Content-Type": "application/json"}'
                 data: |
                     '{"content": "CEPP Frontend Build ✅","embeds": [{"title": "Preview[Frontend]","url": "https://ide.unixvextor.com","color": "655172"}]}'
