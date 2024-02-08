@@ -1,0 +1,41 @@
+name: Deployment
+
+on: 
+    push: 
+        branches: ['main']
+    pull_request:
+        branches: ['main']
+
+jobs:
+    build:
+        runs-on: self-hosted
+        steps:
+            - name: Clone Repo 🤖
+              uses: action/checkout@v3
+            
+            - name: free disk space
+              run: |
+                echo ${{ secrets.HOST_PASS }} | sudo -S su
+                sudo swapoff -a
+                sudo rm -f /swapfile
+                sudo apt clean
+                df -h
+            
+            - name: Clear Cache 🫧
+              run: |
+                docker stop frontend || true
+                docker rm frontend || true
+                docker rmi frontend-frontend:latest || true
+            
+            - name: Run Image ✅
+              run: |
+                docker compose up -d
+            
+            - name: Message ✉️
+              uses: fjogeleit/http-request-action@v1
+              with:
+                url: ${{ secrets.DISCORD_WEBHOOK }}
+                method: 'POST'
+                customHaders: '{"Content-Type": "application/json"}'
+                data: |
+                    '{"content": "CEPP Frontend Build ✅","embeds": [{"title": "Preview[Frontend]","url": "https://ide.unixvextor.com","color": "655172"}]}'
