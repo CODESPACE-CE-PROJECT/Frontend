@@ -1,43 +1,68 @@
 "use client";
-
+import { useState } from "react";
 import Editor from "@monaco-editor/react";
-
-const onChange = (value: string, ev: any[]) => {
-  console.log(value);
-};
-
-const handleOnClick = () => {
-  console.log("Button clicked");
-};
-
-const options = {
-  autoIndent: "full",
-  contextmenu: true,
-  fontFamily: "monospace",
-  fontSize: 16,
-  lineHeight: 24,
-  hideCursorInOverviewRuler: true,
-  matchBrackets: "always",
-  minimap: {
-    enabled: true,
-  },
-  scrollbar: {
-    horizontalSliderSize: 4,
-    verticalSliderSize: 18,
-  },
-  selectOnLineNumbers: true,
-  roundedSelection: false,
-  readOnly: false,
-  cursorStyle: "line",
-  automaticLayout: true,
-
-  LineNumber: "on",
-  padding: {
-    top: 5,
-  },
-};
+import axios from "axios";
 
 export default function Home() {
+  const [sourceCode, setSourceCode] = useState("");
+  const [input, setInput] = useState("");
+  const [showOutput, setShowOutput]: any = useState("");
+
+  const sendCode = () => {
+    axios
+      .post("https://compiler-api.unixvextor.com/compiler/", {
+        sourceCode: sourceCode,
+        language: "cpp",
+        input: input,
+      })
+      .then(
+        (response) => {
+          console.log(response.data);
+          setShowOutput(response.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
+  const onChange: any = (value: string, ev: any[]) => {
+    console.log(sourceCode);
+    setSourceCode(value);
+  };
+
+  const handleOnClick = () => {
+    console.log("Button clicked");
+    sendCode();
+  };
+
+  const options = {
+    autoIndent: "full",
+    contextmenu: true,
+    fontFamily: "monospace",
+    fontSize: 16,
+    lineHeight: 24,
+    hideCursorInOverviewRuler: true,
+    matchBrackets: "always",
+    minimap: {
+      enabled: true,
+    },
+    scrollbar: {
+      horizontalSliderSize: 4,
+      verticalSliderSize: 18,
+    },
+    selectOnLineNumbers: true,
+    roundedSelection: false,
+    readOnly: false,
+    cursorStyle: "line",
+    automaticLayout: true,
+
+    LineNumber: "on",
+    padding: {
+      top: 5,
+    },
+  };
+
   return (
     <>
       <div className="flex-row">
@@ -49,14 +74,33 @@ export default function Home() {
             Run▸
           </button>
         </div>
+
         <Editor
           height="60vh"
-          defaultLanguage="c"
-          defaultValue="// some comment"
+          defaultLanguage="cpp"
+          defaultValue={``}
           onChange={onChange}
           theme="vs-dark"
           options={options}
         />
+
+        <div>
+          <span className="text-lg">input:&nbsp;</span>
+          <input
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
+            className="text-[#000000]"
+            type="text"
+            placeholder="input"
+          />
+        </div>
+        <div className="bg-green-800">
+          <span className="text-lg">
+            output:<br></br>
+          </span>
+          {showOutput.data}
+        </div>
       </div>
     </>
   );
