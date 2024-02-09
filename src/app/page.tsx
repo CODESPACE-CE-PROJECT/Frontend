@@ -17,22 +17,27 @@ export default function Home() {
       })
       .then(
         (response) => {
-          console.log(response.data);
+          if (process.env.NODE_ENV === "development") {
+            console.log(response.data);
+          }
           setShowOutput(response.data);
         },
         (error) => {
-          console.log(error);
+          if (process.env.NODE_ENV === "development") {
+            console.log(error);
+          }
         }
       );
   };
 
   const onChange: any = (value: string, ev: any[]) => {
-    console.log(sourceCode);
     setSourceCode(value);
   };
 
   const handleOnClick = () => {
-    console.log("Button clicked");
+    if (process.env.NODE_ENV === "development") {
+      console.log("Button clicked");
+    }
     sendCode();
   };
 
