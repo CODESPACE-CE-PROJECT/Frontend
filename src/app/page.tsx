@@ -70,41 +70,55 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex-row">
-        <div className="grid justify-items-end m-1 mr-5 ">
+      <div className="flex flex-col ">
+        <div className="flex flex-row justify-end m-1 mr-5 ">
           <button
             onClick={handleOnClick}
-            className="px-5 py-2 bg-green-600 rounded-md"
+            className="px-5 py-2 text-white bg-[#068632] rounded-md"
           >
             Run▸
           </button>
         </div>
 
-        <Editor
-          height="60vh"
-          defaultLanguage="cpp"
-          defaultValue={``}
-          onChange={onChange}
-          theme="vs-dark"
-          options={options}
-        />
+        <div className="flex flex-row w-full gap-5">
+          <Editor
+            height="80vh"
+            width="100vw"
+            defaultLanguage="cpp"
+            defaultValue={`#include <iostream>
 
-        <div>
-          <span className="text-lg">input:&nbsp;</span>
-          <input
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-            className="text-[#000000]"
-            type="text"
-            placeholder="input"
+int main() {
+  std::cout << "Hello World!";
+  return 0;
+}`}
+            onChange={onChange}
+            theme="vs-dark"
+            options={options}
           />
-        </div>
-        <div className="bg-green-800">
-          <span className="text-lg">
-            output:<br></br>
-          </span>
-          {showOutput.data}
+
+          <div className="p-2 pt-0 bg-[#161D2D] text-xl text-[#C2C8CC] w-3/4 ">
+            <div className="mb-10">
+              <span className="font-semibold w-full">
+                Input
+                <br />
+              </span>
+              <input
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+                className="pl-5 bg-[#1C2333] w-full h-12"
+                type="text"
+                placeholder="input"
+              />
+            </div>
+            <div className="mb-10">
+              <span className="font-semibold w-full">
+                Output
+                <br />
+              </span>
+              <p className="pl-5 bg-[#1C2333]">{showOutput.data}</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
