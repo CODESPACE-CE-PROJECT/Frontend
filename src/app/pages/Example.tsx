@@ -2,11 +2,23 @@
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
+import XtermTerminal from "../components/terminal";
 
 export default function Example() {
   const [sourceCode, setSourceCode] = useState("");
   const [input, setInput] = useState("");
   const [showOutput, setShowOutput]: any = useState("");
+  
+  const sendToXterm = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_COMPILER}/terminal`, {
+      container_id: `${process.env.NEXT_PUBLIC_CONTAINER_ID}`,
+      sourceCode: sourceCode,
+      language: "cpp",
+      fileName: '',
+    }).then((res) => {
+      console.log(res.data)
+    })
+  }
 
   const sendCode = () => {
     axios
@@ -38,7 +50,8 @@ export default function Example() {
     if (process.env.NODE_ENV === "development") {
       console.log("Button clicked");
     }
-    sendCode();
+    // sendCode();
+    sendToXterm();
   };
 
   const options = {
@@ -96,7 +109,9 @@ int main() {
             options={options}
           />
 
-          <div className="p-2 pt-0 bg-[#161D2D] text-xl text-[#C2C8CC] w-3/4 ">
+
+          <XtermTerminal />
+          {/* <div className="p-2 pt-0 bg-[#161D2D] text-xl text-[#C2C8CC] w-3/4 ">
             <div className="mb-10">
               <span className="font-semibold w-full">
                 Input
@@ -118,7 +133,7 @@ int main() {
               </span>
               <p className="pl-5 bg-[#1C2333]">{showOutput.data}</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
