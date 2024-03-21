@@ -6,12 +6,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    networks:
-      - frontend
+    network_mode: 'host'
     restart: always
 
-networks:
-  frontend:
-    external: true
