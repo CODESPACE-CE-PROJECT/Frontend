@@ -5,5 +5,6 @@ const nextConfig = {
       domains: ["drive.google.com"],
     },
     output: "standalone",
+    
 }
 module.exports = nextConfig
