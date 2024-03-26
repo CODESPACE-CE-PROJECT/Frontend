@@ -11,7 +11,7 @@ export default function Description() {
                     <div className="pl-2">Description</div>
                 </div>
                 <div className="p-2 pt-0 bg-[#1c2333] text-xl text-[#C2C8CC] rounded-b-lg pl-2 h-screen ">
-                    <div className="text-white pt-5 pl-4">
+                    <div className="text-white pt-5 pl-4 ">
                         1.หาพื้นที่สี่เหลี่ยม
                     </div>
                 </div>
