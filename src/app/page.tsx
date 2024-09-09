@@ -1,6 +1,5 @@
 "use client";
 
-import Example from "./pages/Example";
 import WorkingSpace from "./pages/WorkingSpace";
 
 export default function Home() {
