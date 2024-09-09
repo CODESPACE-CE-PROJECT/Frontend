@@ -16,14 +16,26 @@ export default function TextEditter() {
                     width="50vw"
                     defaultLanguage="cpp"
                     defaultValue={`#include <iostream>
+using namespace std;
 
-              int main() {
-              std::cout << "Hello World!";
-              return 0;
-              }`}
+int main() {
+
+  int first_number, second_number, sum;
+    
+  cout << "Enter two integers: ";
+  cin >> first_number >> second_number;
+
+  // sum of two numbers in stored in variable sumOfTwoNumbers
+  sum = first_number + second_number;
+
+  // prints sum 
+  cout << first_number << " + " <<  second_number << " = " << sum;     
+
+  return 0;
+}`}
 
 
-            theme="vs-dark"
+                    theme="vs-dark"
                 />
             </div>
 
