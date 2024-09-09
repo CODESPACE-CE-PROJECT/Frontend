@@ -8,9 +8,6 @@ import React, { useState } from 'react';
 import Home from '../page';
 import HomeworkNav from "../components/HomeworkNav";
 export default function HomeWorkSpace() {
-
-
-
   return (
     <>
 
@@ -32,11 +29,6 @@ export default function HomeWorkSpace() {
         </div>
 
       </div>
-
-
-
-
-
 
     </>
   );
