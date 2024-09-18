@@ -1,6 +1,11 @@
 "use client";
 
+
+
+
 import WorkingSpace from "./pages/WorkingSpace";
+import Settings  from "./pages/Settings";
+
 
 export default function Home() {
   return (
