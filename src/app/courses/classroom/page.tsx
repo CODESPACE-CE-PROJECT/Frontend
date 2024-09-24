@@ -1,6 +1,5 @@
 "use client"; // Add this line at the top
 
-import { useState } from "react";
 import UserNav from "@/app/components/UserNav";
 import SideNav from "@/app/components/SideNav";
 import ClassRoomNav from "@/app/components/ClassRoomNav";
@@ -9,18 +8,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
 
 export default function Classroom() {
-  const [isSideNavVisible, setIsSideNavVisible] = useState(true);
-
-  const toggleSideNav = () => {
-    setIsSideNavVisible(!isSideNavVisible);
-  };
   return (
     <>
-      <div className="flex flex-col h-screen overflow-x-hidden overscroll-none">
-        <UserNav toggleSideNav={toggleSideNav} />
-        <SideNav toggleSideNav={toggleSideNav} isVisible={isSideNavVisible} />
+      <div className="flex flex-row">
+        <SideNav />
         {/* page start */}
-        <div className="flex flex-col w-screen items-center bg-[#21252e] ">
+        <div className="flex flex-col w-screen overflow-x-hidden overscroll-none">
+          <UserNav />
           <ClassRoomNav />
 
           <div className="flex flex-col items-center py-10 px-40 h-full w-4/5 space-y-10">
