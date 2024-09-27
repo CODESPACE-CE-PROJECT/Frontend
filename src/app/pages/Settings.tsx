@@ -1,12 +1,12 @@
+
 "use client";
 
 import { useState } from 'react';
 import Image from 'next/image';
 import profile from "../../../src/app/assets/setting/profile.svg";
 
-export default function HomeWorkSpace() {
+export default function Setting() {
     const [isEditing, setIsEditing] = useState(false);
-
     const [profileData, setProfileData] = useState({
         username: 'Please enter your full name',
         firstName: 'Please enter your first name',
@@ -15,11 +15,32 @@ export default function HomeWorkSpace() {
         email: '64010726@kmitl.ac.th',
         newPassword: '**********************',
         confirmPassword: '**********************',
-        gender: ''
+        gender: '',
+        profilePicture: profile // ใช้ภาพโปรไฟล์เริ่มต้น
     });
 
     const handleEditClick = () => {
-        setIsEditing(!isEditing);
+        if (!isEditing) {
+            setIsEditing(true); // เปิดโหมดแก้ไข
+        }
+    };
+
+    const handleProfileChangeClick = () => {
+        document.getElementById('fileInput').click(); // คลิกเพื่อเปิดไดอะล็อกอัปโหลดภาพ
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileData({
+                    ...profileData,
+                    profilePicture: reader.result // อัปเดต URL ของภาพโปรไฟล์
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleCancel = () => {
@@ -41,25 +62,27 @@ export default function HomeWorkSpace() {
             {/* Sidebar - Profile Container */}
             <div className="w-full md:w-1/3 flex flex-col">
                 <h2 className="text-3xl text-white mb-4">โปรไฟล์</h2>
-                <div className="rounded-lg p-6 flex flex-col bg-[#16233A] shadow-xl border border-[#1E293B]">
+                <div className="rounded-lg p-6 flex flex-col bg-[#16233A] shadow-xl border border-[#1E293B] h-3/4">
                     <div className="flex items-center mb-6">
                         <Image
-                            src={profile}
+                            src={profileData.profilePicture} // แสดงภาพโปรไฟล์
                             className="w-32 h-32 rounded-full border-4 border-[#3b4f61] shadow-lg"
                             alt="Profile Picture"
                         />
                         <div className="ml-4">
                             <h1 className="text-3xl font-bold mb-2 text-white">{profileData.username}</h1>
                             <p className="text-gray-400">{profileData.email}</p>
+                            
                             <button
                                 onClick={handleEditClick}
-                                className={`text-white mt-4 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${isEditing ? 'bg-[#0099FF] hover:bg-[#007bb5]' : 'bg-[#475766] hover:bg-[#1f3a47]'}`}
+                                
+                                className={`text-white mt-2 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${isEditing ? 'bg-[#0099FF] hover:bg-[#007bb5]' : 'bg-[#475766] hover:bg-[#1f3a47]'}`}
                             >
                                 {isEditing ? 'เปลี่ยนโปรไฟล์' : 'แก้ไขโปรไฟล์'}
                             </button>
                         </div>
                     </div>
-                    <div className="flex flex-col text-white space-y-6 pt-7">
+                    <div className="flex flex-col text-white space-y-14 pt-7">
                         <ProfileField label="ชื่อผู้ใช้งาน" name="username" value={profileData.username} isEditing={isEditing} onChange={handleChange} />
                         <ProfileField label="ชื่อจริง" name="firstName" value={profileData.firstName} isEditing={isEditing} onChange={handleChange} />
                         <ProfileField label="นามสกุล" name="lastName" value={profileData.lastName} isEditing={isEditing} onChange={handleChange} />
@@ -95,6 +118,15 @@ export default function HomeWorkSpace() {
                     </div>
                 )}
             </div>
+
+        
+            <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden" // ซ่อน input
+            />
         </div>
     );
 }
@@ -135,7 +167,7 @@ const GenderRadio = ({ value, checked, onChange }) => (
 
 const ContactSection = ({ profileData, isEditing, handleChange }) => (
     <>
-        <h2 className="text-3xl text-white mb-6">ช่องทางติดต่อ</h2>
+        <h2 className="text-3xl text-white ">ช่องทางติดต่อ</h2>
         <div className="bg-[#16233A] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-[#1E293B]">
             <div className="mb-6">
                 <h2 className="text-2xl font-bold text-white mb-2">โรงเรียน/สถาบัน</h2>
@@ -171,7 +203,7 @@ const ContactSection = ({ profileData, isEditing, handleChange }) => (
 
 const ResetPasswordSection = ({ profileData, isEditing, handleChange }) => (
     <>
-        <h2 className="text-3xl text-white mt-8 mb-6">รีเซ็ตรหัสผ่าน</h2>
+        <h2 className="text-3xl text-white ">รีเซ็ตรหัสผ่าน</h2>
         <div className="bg-[#16233A] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-[#1E293B]">
             <div className="mb-6">
                 <h2 className="text-2xl font-bold text-white mb-2">รหัสใหม่</h2>

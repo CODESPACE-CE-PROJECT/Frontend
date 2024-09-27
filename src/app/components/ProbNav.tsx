@@ -13,13 +13,14 @@ export default function ProbNav() {
 
     return (
         <>
-            <div>
-                <button
-                    className="flex  left-0 top-0 z-50 "
+            <div className="flex flex-col ">
+            <button
+                    className="flex left-0 top-0  hover:bg-[#494949] p-2 rounded-full "
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <Image src={Group} alt="" />
                 </button>
+
 
 
                 <div
