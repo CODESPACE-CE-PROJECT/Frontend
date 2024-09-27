@@ -28,7 +28,7 @@ export default function SideNav() {
 
           <li>
             <a
-              href="/courses"
+              href="/student/courses"
               className="flex flex-col items-center rounded-lg space-y-2 w-full"
             >
               <ClassIcon className=" text-3xl " />
@@ -38,7 +38,7 @@ export default function SideNav() {
 
           <li>
             <a
-              href="/workingspace"
+              href="/student/workingspace"
               className="flex flex-col items-center rounded-lg space-y-2 w-full"
             >
               <CodeIcon className="text-3xl " />
@@ -48,7 +48,7 @@ export default function SideNav() {
 
           <li>
             <a
-              href="/calendar"
+              href="/student/calendar"
               className="flex flex-col items-center rounded-lg space-y-2 w-full"
             >
               <CalendarTodayIcon className="text-3xl" />
@@ -57,14 +57,20 @@ export default function SideNav() {
           </li>
 
           <li>
-            <a href="/homeworkspace" className="flex flex-col items-center rounded-lg space-y-2 w-full">
+            <a
+              href="/student/homeworkspace"
+              className="flex flex-col items-center rounded-lg space-y-2 w-full"
+            >
               <AssignmentIcon className="text-3xl " />
               <span className="text-sm">แบบฝึกหัด</span>
             </a>
           </li>
 
           <li>
-            <a href="/profile" className="flex flex-col items-center rounded-lg space-y-2 w-full">
+            <a
+              href="/student/profile"
+              className="flex flex-col items-center rounded-lg space-y-2 w-full"
+            >
               <PermIdentityIcon className="text-3xl" />
               <span className="text-sm">โปรไฟล์</span>
             </a>

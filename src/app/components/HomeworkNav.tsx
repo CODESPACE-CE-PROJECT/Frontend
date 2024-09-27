@@ -14,7 +14,7 @@ export default function WorkHeadNav() {
 
             <div className="flex flex-row justify-between items-center m-2">
                 <div className="flex flex-row ml-7 space-x-4 ">
-                <Link href="/"><ArrowBackIcon className="text-white"size="large"/></Link>
+                <Link href="/"><ArrowBackIcon className="text-white"fontSize="large"/></Link>
                     <ProbNav />
                     <div className=" text-white">
                     Problem List 

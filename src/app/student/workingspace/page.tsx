@@ -2,18 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import WorkHeadNav from "../components/WorkHeadNav";
+import WorkHeadNav from "@/app/components/WorkHeadNav";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
-import XtermTerminal from "../components/terminal";
+import XtermTerminal from "@/app/components/terminal";
 
-import dropDownIcon from "../../app/assets/WorkingAssets/dropDownIcon.svg";
-import dirIcon from "../../app/assets/WorkingAssets/dirIcon.svg";
-import newFileIcon from "../../app/assets/WorkingAssets/newFileIcon.svg";
-import newDirIcon from "../../app/assets/WorkingAssets/newDirIcon.svg";
-import dotIcon from "../../app/assets/WorkingAssets/3dotIcon.svg";
-import logos_cpp from "../../app/assets/WorkingAssets/logos_cpp.svg";
-import closeIcon from "../../app/assets/WorkingAssets/closeIcon.svg";
+import dropDownIcon from "@/app/assets/WorkingAssets/dropDownIcon.svg";
+import dirIcon from "@/app/assets/WorkingAssets/dirIcon.svg";
+import newFileIcon from "@/app/assets/WorkingAssets/newFileIcon.svg";
+import newDirIcon from "@/app/assets/WorkingAssets/newDirIcon.svg";
+import dotIcon from "@/app/assets/WorkingAssets/3dotIcon.svg";
+import logos_cpp from "@/app/assets/WorkingAssets/logos_cpp.svg";
+import closeIcon from "@/app/assets/WorkingAssets/closeIcon.svg";
 import TerminalIcon from "@mui/icons-material/Terminal";
 
 export default function WorkingSpace() {
