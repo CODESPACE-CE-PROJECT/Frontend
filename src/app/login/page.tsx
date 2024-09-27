@@ -6,7 +6,7 @@ import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
 import { signIn } from "next-auth/react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; 
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -53,7 +53,7 @@ export default function Login() {
             SIGN IN TO CODE SPACE
           </h1>
         </div>
-        <form action="#">
+        <form className="flex flex-col" action="#">
           <div className="mb-6">
             <label
               htmlFor="email"
@@ -70,13 +70,15 @@ export default function Login() {
               onChange={handleUserName}
             />
           </div>
-          <div className="mb-6 relative"> 
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-white mb-2"
-            >
-              Password
-            </label>
+
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-white mb-2"
+          >
+            Password
+          </label>
+
+          <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               id="password"
@@ -85,8 +87,8 @@ export default function Login() {
               required
               onChange={handlePassword}
             />
-          
-            <div
+
+            <h1
               className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
               onClick={togglePasswordVisibility}
             >
@@ -95,14 +97,16 @@ export default function Login() {
               ) : (
                 <AiFillEye size={24} className="text-[#BCBEC0]" />
               )}
-            </div>
-            <Link
-              href="/login/resetpassword"
-              className="pt-4 flex justify-end text-xs text-white hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
-            >
-              Reset password
-            </Link>
+            </h1>
           </div>
+          <div className="pt-0.5"></div>
+          <Link
+            href="/login/resetpassword"
+            className="my-3 flex justify-end text-xs text-white hover:text-indigo-500"
+          >
+            <p>Reset password</p>
+          </Link>
+
           <button
             onClick={handlelogin}
             type="button"
