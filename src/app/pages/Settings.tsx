@@ -72,10 +72,8 @@ export default function Setting() {
                         <div className="ml-4">
                             <h1 className="text-3xl font-bold mb-2 text-white">{profileData.username}</h1>
                             <p className="text-gray-400">{profileData.email}</p>
-                            
                             <button
                                 onClick={handleEditClick}
-                                
                                 className={`text-white mt-2 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${isEditing ? 'bg-[#0099FF] hover:bg-[#007bb5]' : 'bg-[#475766] hover:bg-[#1f3a47]'}`}
                             >
                                 {isEditing ? 'เปลี่ยนโปรไฟล์' : 'แก้ไขโปรไฟล์'}
