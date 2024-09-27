@@ -6,11 +6,13 @@ import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; 
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleUserName = (e) => {
     setEmail(e.target.value);
@@ -18,6 +20,10 @@ export default function Login() {
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
   };
 
   const handlelogin = (e) => {
@@ -42,41 +48,54 @@ export default function Login() {
         <div className="flex justify-center mb-6">
           <Image src={Logo} alt="Logo" width={100} height={100} />
         </div>
-        <h1 className="text-2xl font-bold text-center mb-6 dark:text-gray-200">
-          Sign in to CODE SPACE
-        </h1>
+        <div className="flex justify-center">
+          <h1 className="text-4xl font-bold text-center mb-6 dark:text-gray-200 whitespace-nowrap">
+            SIGN IN TO CODE SPACE
+          </h1>
+        </div>
         <form action="#">
           <div className="mb-6">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-white mb-2"
             >
               Username
             </label>
             <input
               type="email"
               id="email"
-              className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 focus:outline-none"
-              placeholder="your@email.com"
+              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#BCBEC0] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+              placeholder="Username"
               required
               onChange={handleUserName}
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-6 relative"> 
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-white mb-2"
             >
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
-              className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 dark:border-gray-700 dark:text-gray-300 focus:outline-none"
-              placeholder="Enter your password"
+              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#BCBEC0] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+              placeholder="Password"
               required
               onChange={handlePassword}
             />
+          
+            <div
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? (
+                <AiFillEyeInvisible size={24} className="text-[#BCBEC0]" />
+              ) : (
+                <AiFillEye size={24} className="text-[#BCBEC0]" />
+              )}
+            </div>
             <Link
               href="/login/resetpassword"
               className="pt-4 flex justify-end text-xs text-white hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
@@ -87,7 +106,7 @@ export default function Login() {
           <button
             onClick={handlelogin}
             type="button"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#0053A6] hover:bg-indigo-700"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0053A6] hover:bg-indigo-700"
           >
             Sign in
           </button>
@@ -100,7 +119,7 @@ export default function Login() {
 
         <button
           onClick={() => signIn("google")}
-          className=" w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 border-white hover:bg-gray-100"
+          className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 border-white"
         >
           <Image
             src={"https://logopng.com.br/logos/google-37.svg"}
