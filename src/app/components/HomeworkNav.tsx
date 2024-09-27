@@ -16,7 +16,7 @@ export default function WorkHeadNav() {
 
             <div className="flex flex-row justify-between items-center m-2">
                 <div className="flex flex-row ml-7 space-x-4 items-center">
-                    <Link href="/"><ArrowBackIcon className="text-white" fontSize="large" /></Link>
+                    <Link href="/"><ArrowBackIcon className="text-white" fontSize="medium" /></Link>
                     <ProbNav />
                     <div className=" text-white">
                         Problem List
@@ -37,7 +37,7 @@ export default function WorkHeadNav() {
                         <div className="text-white text-lg ">อัพโค้ด</div>
                     </button>
 
-                    <button className="flex flex-row  text-white items-center  bg-[#1E9733] rounded-md px-0.5 py-2 ">
+                    <button className="flex flex-row  text-[#95F9A7] bg-[#044A10] hover:bg-[#1E9733]  hover:text-white rounded-md px-0.5 py-4 ">
                         <CloudUploadIcon className="ml-3 " />
                         <div className="px-3  font-bold">
                             Submit
