@@ -6,7 +6,6 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
       <div className="mb-10 text-3xl font-bold">Welcome to the Home Page</div>
-
       <nav className="flex space-x-6">
 
         <Link href="/login">

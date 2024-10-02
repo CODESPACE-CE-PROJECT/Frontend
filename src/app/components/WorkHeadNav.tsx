@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import Image from "next/image";
 import Hamburger from "../../app/assets/CommonAssets/Hamburger.svg";
 import WindowsIcon from "../../app/assets/CommonAssets/WindowsIcon.svg";

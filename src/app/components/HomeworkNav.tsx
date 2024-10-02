@@ -1,9 +1,6 @@
-import Image from "next/image";
-import Hamburger from "../../app/assets/CommonAssets/Hamburger.svg";
-import WindowsIcon from "../../app/assets/CommonAssets/WindowsIcon.svg";
-import RunArrow from "../../app/assets/CommonAssets/RunArrow.svg";
+import React, { useState } from "react";
+
 import ProbNav from "./ProbNav";
-import submiticon from "../../app/assets/CommonAssets/SubmitIcon.svg"
 import UploadIcon from '@mui/icons-material/Upload';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
@@ -16,7 +13,7 @@ export default function WorkHeadNav() {
 
             <div className="flex flex-row justify-between items-center m-2">
                 <div className="flex flex-row ml-7 space-x-4 items-center">
-                    <Link href="/"><ArrowBackIcon className="text-white" fontSize="medium" /></Link>
+                    <Link href="/student/courses/classroom/assignment"><ArrowBackIcon className="text-white" fontSize="large" /></Link>
                     <ProbNav />
                     <div className=" text-white">
                         Problem List
