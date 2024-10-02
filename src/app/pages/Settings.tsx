@@ -1,99 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import profile from "../../../src/app/assets/setting/profile.svg";
 
 export default function Setting() {
-    const [isEditing, setIsEditing] = useState(false);
-    const [profileData, setProfileData] = useState({
-        username: 'Please enter your full name',
-        firstName: 'Please enter your first name',
-        lastName: 'Please enter your last name',
-        school: 'Please enter your school',
-        email: '64010726@kmitl.ac.th',
-        newPassword: '**********************',
-        confirmPassword: '**********************',
-        gender: '',
-        profilePicture: profile // ใช้ภาพโปรไฟล์เริ่มต้น
-    });
-
-    const handleEditClick = () => {
-        if (!isEditing) {
-            setIsEditing(true); // เปิดโหมดแก้ไข
-        }
-    };
-
-    const handleProfileChangeClick = () => {
-        document.getElementById('fileInput').click(); // คลิกเพื่อเปิดไดอะล็อกอัปโหลดภาพ
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfileData({
-                    ...profileData,
-                    profilePicture: reader.result // อัปเดต URL ของภาพโปรไฟล์
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleCancel = () => {
-        // Reset data or handle cancel
-        setIsEditing(false);
-    };
-
-    const handleSave = () => {
-        // Handle save logic
-        setIsEditing(false);
-    };
-
-    const handleChange = (e) => {
-        setProfileData({ ...profileData, [e.target.name]: e.target.value });
-    };
-
-    return (
-        <div className="flex flex-col md:flex-row gap-8 p-8 min-h-screen bg-[#0F172A]">
-            {/* Sidebar - Profile Container */}
-            <div className="w-full md:w-1/3 flex flex-col">
-                <h2 className="text-3xl text-white mb-4">โปรไฟล์</h2>
-                <div className="rounded-lg p-6 flex flex-col bg-[#16233A] shadow-xl border border-[#1E293B] h-3/4">
-                    <div className="flex items-center mb-6">
-                        <Image
-                            src={profileData.profilePicture} // แสดงภาพโปรไฟล์
-                            className="w-32 h-32 rounded-full border-4 border-[#3b4f61] shadow-lg"
-                            alt="Profile Picture"
-                        />
-                        <div className="ml-4">
-                            <h1 className="text-3xl font-bold mb-2 text-white">{profileData.username}</h1>
-                            <p className="text-gray-400">{profileData.email}</p>
-                            <button
-                                onClick={handleEditClick}
-                                className={`text-white mt-2 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${isEditing ? 'bg-[#0099FF] hover:bg-[#007bb5]' : 'bg-[#475766] hover:bg-[#1f3a47]'}`}
-                            >
-                                {isEditing ? 'เปลี่ยนโปรไฟล์' : 'แก้ไขโปรไฟล์'}
-                            </button>
-                        </div>
-                    </div>
-                    <div className="flex flex-col text-white space-y-14 pt-7">
-                        <ProfileField label="ชื่อผู้ใช้งาน" name="username" value={profileData.username} isEditing={isEditing} onChange={handleChange} />
-                        <ProfileField label="ชื่อจริง" name="firstName" value={profileData.firstName} isEditing={isEditing} onChange={handleChange} />
-                        <ProfileField label="นามสกุล" name="lastName" value={profileData.lastName} isEditing={isEditing} onChange={handleChange} />
-                        <div className="flex items-center space-x-4">
-                            <label className="text-white text-lg">เพศ:</label>
-                            <div className="flex items-center space-x-4">
-                                <GenderRadio value="male" checked={profileData.gender === 'male'} onChange={handleChange} />
-                                <GenderRadio value="female" checked={profileData.gender === 'female'} onChange={handleChange} />
-                                <GenderRadio value="other" checked={profileData.gender === 'other'} onChange={handleChange} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState({
+    username: "Please enter your full name",
+    firstName: "Please enter your first name",
+    lastName: "Please enter your last name",
+    school: "Please enter your school",
+    email: "64010726@kmitl.ac.th",
+    newPassword: "**********************",
+    confirmPassword: "**********************",
+    gender: "",
+    profilePicture: profile, // ใช้ภาพโปรไฟล์เริ่มต้น
+  });
 
   const handleEditClick = () => {
     if (!isEditing) {
@@ -150,7 +73,6 @@ export default function Setting() {
                 {profileData.username}
               </h1>
               <p className="text-gray-400">{profileData.email}</p>
-
               <button
                 onClick={handleEditClick}
                 className={`text-white mt-2 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${

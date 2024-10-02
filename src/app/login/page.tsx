@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import Image from "next/image";
+import React, { useState } from "react";
 import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
