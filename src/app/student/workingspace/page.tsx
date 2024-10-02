@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import WorkHeadNav from "@/app/components/WorkHeadNav";
 import Editor from "@monaco-editor/react";

@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
 import XtermTerminal from "../components/terminal";
@@ -8,17 +9,19 @@ export default function Example() {
   const [sourceCode, setSourceCode] = useState("");
   const [input, setInput] = useState("");
   const [showOutput, setShowOutput]: any = useState("");
-  
+
   const sendToXterm = () => {
-    axios.post(`${process.env.NEXT_PUBLIC_COMPILER}/terminal`, {
-      container_id: `${process.env.NEXT_PUBLIC_CONTAINER_ID}`,
-      sourceCode: sourceCode,
-      language: "cpp",
-      fileName: '',
-    }).then((res) => {
-      console.log(res.data)
-    })
-  }
+    axios
+      .post(`${process.env.NEXT_PUBLIC_COMPILER}/terminal`, {
+        container_id: `${process.env.NEXT_PUBLIC_CONTAINER_ID}`,
+        sourceCode: sourceCode,
+        language: "cpp",
+        fileName: "",
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
 
   const sendCode = () => {
     axios
@@ -108,7 +111,6 @@ int main() {
             theme="vs-dark"
             options={options}
           />
-
 
           <XtermTerminal />
           {/* <div className="p-2 pt-0 bg-[#161D2D] text-xl text-[#C2C8CC] w-3/4 ">

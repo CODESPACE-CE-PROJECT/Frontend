@@ -1,5 +1,6 @@
 "use client"; // Add this line at the top
 
+import React, { useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
 
@@ -46,7 +47,7 @@ export default function General() {
           </div>
         </div>
 
-        {/* box 2*/}
+        {/* box 2 assign*/}
         <div className="bg-[#1C2433] rounded-md border-2 border-slate-900 w-full">
           <div className="border-[#131823] border-b-2 gap-y-5">
             <div className="flex flex-row items-center gap-x-5 font-light text-lg mx-8 my-4">

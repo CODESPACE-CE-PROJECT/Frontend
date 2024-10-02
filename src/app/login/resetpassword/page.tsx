@@ -1,12 +1,11 @@
 "use client";
 
-import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Image from "next/image";
 import Logo from "../../app/assets/Login/logo.svg";
-import Link from 'next/link'; 
+import Link from "next/link";
 
 export default function ResetPassword() {
-
     const [email, setEmail] = useState("");
 
     return (
@@ -49,6 +48,9 @@ export default function ResetPassword() {
                     </form>
                 </div>
             </div>
-        </>
-    );
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }
