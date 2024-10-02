@@ -1,5 +1,6 @@
 "use client"; // Add this line at the top
 
+import React from "react";
 import Image from "next/image";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 

@@ -1,7 +1,7 @@
 "use client"; // Add this line at the top
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PersonIcon from "@mui/icons-material/Person";
+import React, { useState } from "react";
+import ClassAssignmentTable from "@/app/components/AssignmentItems/ClassAssignmentTable";
 
 export default function Assignment() {
   return (
@@ -16,7 +16,9 @@ export default function Assignment() {
       </div>
 
       {/* head */}
-      <div className="flex flex-col items-center space-y-10 px-40 py-5"></div>
+      <div className="flex flex-col items-center space-y-10 px-40 py-5">
+        <ClassAssignmentTable />
+      </div>
     </>
   );
 }

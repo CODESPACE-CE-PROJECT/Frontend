@@ -1,5 +1,6 @@
 "use client"; // Add this line at the top
 
+import React, { useState } from "react";
 import Image from "next/image";
 import UserProfileIcon from "../../app/assets/CoursesAssets/UserProfileIcon.svg";
 

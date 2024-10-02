@@ -1,5 +1,6 @@
 "use client"; // Add this line at the top
 
+import React, { useState } from "react";
 import Image from "next/image";
 import profileteacher from "@/app/assets/CommonAssets/profileteacher.svg";
 import profilestudent from "@/app/assets/CommonAssets/profilestudent.svg";
