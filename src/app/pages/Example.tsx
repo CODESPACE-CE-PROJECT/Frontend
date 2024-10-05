@@ -113,7 +113,7 @@ int main() {
           />
 
           <XtermTerminal />
-          {/* <div className="p-2 pt-0 bg-[#161D2D] text-xl text-[#C2C8CC] w-3/4 ">
+          <div className="p-2 pt-0 bg-[#161D2D] text-xl text-[#C2C8CC] w-3/4 ">
             <div className="mb-10">
               <span className="font-semibold w-full">
                 Input
@@ -135,7 +135,7 @@ int main() {
               </span>
               <p className="pl-5 bg-[#1C2333]">{showOutput.data}</p>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </>
