@@ -16,12 +16,18 @@ export default function Home() {
 
         <Link href="/student/courses">
           <span className="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-500 transition duration-300">
-            Courses
+            Courses student
+          </span>
+        </Link>
+
+        <Link href="/teacher/courses">
+          <span className="px-4 py-2 bg-[#87CEFA] rounded-md hover:bg-blue-500 transition duration-300">
+            Courses teacher
           </span>
         </Link>
 
         <Link href="/student/homeworkspace">
-          <span className="px-4 py-2 bg-purple-600 rounded-md hover:bg-purple-500 transition duration-300">
+          <span className="px-4 py-2 bg-[#FFC0CB] rounded-md hover:bg-purple-500 transition duration-300">
             Home Workspace
           </span>
         </Link>

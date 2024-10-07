@@ -17,19 +17,19 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [loginError, setLoginError] = useState(""); // Store error message for username and password
+  const [loginError, setLoginError] = useState("");
   const router = useRouter();
 
   const handleUserName = (e) => {
     setUsername(e.target.value);
     setUsernameError(false);
-    setLoginError(""); // Reset combined error when user starts typing
+    setLoginError("");
   };
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
     setPasswordError(false);
-    setLoginError(""); // Reset combined error when user starts typing
+    setLoginError("");
   };
 
   const togglePasswordVisibility = () => {
@@ -43,13 +43,13 @@ export default function Login() {
     setPasswordError(false);
     setLoginError("");
 
-    // Check if both fields are empty
+
     if (!username && !password) {
       setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
       return;
     }
 
-    // Check individual fields
+
     if (!username) {
       setUsernameError(true);
     }
@@ -57,7 +57,6 @@ export default function Login() {
       setPasswordError(true);
     }
 
-    // Stop if any error exists
     if (!username || !password) return;
 
     setLoading(true);
@@ -72,9 +71,26 @@ export default function Login() {
       })
       .catch((err) => {
         setLoading(false);
-        setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง"); // Set error message
+        setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
       });
   };
+
+  const handlegooglelogin = (e) => {
+    e.preventDefault();
+
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    // if (!backendUrl) {
+    //   console.error("Backend URL is not defined.");
+    //   return;
+    // }
+
+    window.location.href = `${backendUrl}/auth/google`;
+  };
+
+
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
@@ -94,9 +110,8 @@ export default function Login() {
             <input
               type="email"
               id="username"
-              className={`shadow-sm rounded-md w-full px-3 py-2 border ${
-                usernameError ? "border-red-500" : "border-[#BCBEC0]"
-              } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
+              className={`shadow-sm rounded-md w-full px-3 py-2 border ${usernameError ? "border-red-500" : "border-[#BCBEC0]"
+                } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
               placeholder="Username"
               required
               onChange={handleUserName}
@@ -114,9 +129,8 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className={`shadow-sm rounded-md w-full px-3 py-2 border ${
-                passwordError ? "border-red-500" : "border-[#BCBEC0]"
-              } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
+              className={`shadow-sm rounded-md w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-[#BCBEC0]"
+                } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
               placeholder="Password"
               required
               onChange={handlePassword}
@@ -153,9 +167,8 @@ export default function Login() {
           <button
             onClick={handlelogin}
             type="button"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#0053A6] hover:bg-indigo-700"
-            }`}
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#0053A6] hover:bg-indigo-700"
+              }`}
             disabled={loading}
           >
             {loading ? "Signing in..." : "Sign in"}
@@ -168,7 +181,7 @@ export default function Login() {
         </div>
 
         <button
-          onClick={() => signIn("google")}
+          onClick={handlegooglelogin}
           className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 border-white"
         >
           <Image
