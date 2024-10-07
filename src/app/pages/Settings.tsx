@@ -1,31 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import profile from "../../../src/app/assets/setting/profile.svg";
+import axios from "axios"
 
 export default function Setting() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    username: "Please enter your full name",
-    firstName: "Please enter your first name",
+    username: "",
+    firstName: "",
     lastName: "Please enter your last name",
     school: "Please enter your school",
     email: "64010726@kmitl.ac.th",
     newPassword: "**********************",
     confirmPassword: "**********************",
     gender: "",
-    profilePicture: profile, // ใช้ภาพโปรไฟล์เริ่มต้น
+    profilePicture: profile,
   });
+
 
   const handleEditClick = () => {
     if (!isEditing) {
-      setIsEditing(true); // เปิดโหมดแก้ไข
+      setIsEditing(true); 
     }
   };
 
   const handleProfileChangeClick = () => {
-    document.getElementById("fileInput").click(); // คลิกเพื่อเปิดไดอะล็อกอัปโหลดภาพ
+    document.getElementById("fileInput").click(); 
   };
 
   const handleFileChange = (e) => {
@@ -35,7 +37,7 @@ export default function Setting() {
       reader.onloadend = () => {
         setProfileData({
           ...profileData,
-          profilePicture: reader.result, // อัปเดต URL ของภาพโปรไฟล์
+          profilePicture: reader.result, 
         });
       };
       reader.readAsDataURL(file);
@@ -52,9 +54,35 @@ export default function Setting() {
     setIsEditing(false);
   };
 
-  const handleChange = (e) => {
-    setProfileData({ ...profileData, [e.target.name]: e.target.value });
+
+
+  const getProfile = async (e) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`
+      );
+
+      console.log("API Response:", response.data); 
+
+      setProfileData({
+        username: response.data.username || "", 
+        firstName: response.data.firstName || "" 
+      });
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
   };
+
+  useEffect(() => {
+    getProfile(); 
+  }, []);
+
+ 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
 
   return (
     <div className="flex flex-col md:flex-row gap-8 p-8 min-h-screen bg-[#0F172A]">
@@ -75,11 +103,10 @@ export default function Setting() {
               <p className="text-gray-400">{profileData.email}</p>
               <button
                 onClick={handleEditClick}
-                className={`text-white mt-2 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${
-                  isEditing
-                    ? "bg-[#0099FF] hover:bg-[#007bb5]"
-                    : "bg-[#475766] hover:bg-[#1f3a47]"
-                }`}
+                className={`text-white mt-2 py-2 px-4 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md ${isEditing
+                  ? "bg-[#0099FF] hover:bg-[#007bb5]"
+                  : "bg-[#475766] hover:bg-[#1f3a47]"
+                  }`}
               >
                 {isEditing ? "เปลี่ยนโปรไฟล์" : "แก้ไขโปรไฟล์"}
               </button>
@@ -199,9 +226,8 @@ const GenderRadio = ({ value, checked, onChange }) => (
       className="hidden peer"
     />
     <div
-      className={`w-5 h-5 flex items-center justify-center border-2 rounded-full ${
-        checked ? "bg-[#15A7D5] border-transparent" : "border-[#15A7D5]"
-      }`}
+      className={`w-5 h-5 flex items-center justify-center border-2 rounded-full ${checked ? "bg-[#15A7D5] border-transparent" : "border-[#15A7D5]"
+        }`}
     >
       {checked && <div className="w-2 h-2 bg-[#2A3A50] rounded-full"></div>}
     </div>
