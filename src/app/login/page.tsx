@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import {login} from '../services/auth.service'
+
 
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
@@ -21,6 +22,7 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState(false);
   const [loginError, setLoginError] = useState("");
   const router = useRouter();
+ 
 
   const handleUserName = (e:React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -80,7 +82,6 @@ export default function Login() {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     window.location.href = `${backendUrl}/auth/google`;
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">

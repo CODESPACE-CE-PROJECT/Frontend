@@ -73,6 +73,27 @@ export default function Setting() {
   //   }
   // };
 
+  // const editProfile = (e, profileData) => {
+  //   e.preventDefault(); // Prevent the default form submission behavior
+
+  //   axios
+  //     .patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/edit`, {
+  //       email: profileData.email,
+  //       firstName: profileData.firstName,
+  //       lastName: profileData.lastName,
+  //       studentNo: profileData.studentNo,
+  //       gender: profileData.gender,
+  //     })
+  //     .then((response) => {
+  //       console.log("Profile updated successfully", response.data);
+  //       // You can handle additional actions here, such as showing a success message
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error updating profile", error);
+  //       // Handle the error, possibly showing an error message to the user
+  //     });
+  // };
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await getProfile();
@@ -103,7 +124,7 @@ export default function Setting() {
       {/* Sidebar - Profile Container */}
       <div className="w-full md:w-1/3 flex flex-col">
         <h2 className="text-3xl text-white mb-4">โปรไฟล์</h2>
-        <div className="rounded-lg p-6 flex flex-col bg-[#16233A] shadow-xl border border-[#1E293B] h-3/4">
+        <div className="rounded-lg p-6 flex flex-col bg-[#16233A] shadow-xl border border-[#1E293B] h-10/12	">
           <div className="flex items-center mb-6">
             <Image
               src={profileData.profilePicture !== "" ? profileData.profilePicture:profile} // แสดงภาพโปรไฟล์
