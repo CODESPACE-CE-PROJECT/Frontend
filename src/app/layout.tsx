@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Thai } from "next/font/google";
 import { Mulish } from "next/font/google";
+import AuthProvider from "./context/AuthProvider";
 import "./globals.css";
 
 const noto = Noto_Sans_Thai({ subsets: ["latin"] });
@@ -18,7 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={noto.className}>{children}</body>
+      <body className={noto.className}>
+      <AuthProvider>{children}</AuthProvider>
+
+      </body>
     </html>
   );
 }

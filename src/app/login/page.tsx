@@ -6,41 +6,91 @@ import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const router = useRouter();
 
   const handleUserName = (e) => {
-    setEmail(e.target.value);
+    setUsername(e.target.value);
+    setUsernameError(false);
+    setLoginError("");
   };
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
+    setPasswordError(false);
+    setLoginError("");
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Toggle password visibility
+    setShowPassword(!showPassword);
   };
 
   const handlelogin = (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true
+
+    setUsernameError(false);
+    setPasswordError(false);
+    setLoginError("");
+
+
+    if (!username && !password) {
+      setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
+      return;
+    }
+
+
+    if (!username) {
+      setUsernameError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
+
+    if (!username || !password) return;
+
+    setLoading(true);
     axios
-      .post("https://your-backend-endpoint", { email, password })
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
+        username,
+        password,
+      })
       .then((response) => {
-        setLoading(false); // Set loading to false after response
-        console.log(response);
-        alert(response);
+        setLoading(false);
+        router.push("/student/courses");
       })
       .catch((err) => {
-        setLoading(false); // Set loading to false if there's an error
-        console.log(err.response);
+        setLoading(false);
+        setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
       });
   };
+
+  const handlegooglelogin = (e) => {
+    e.preventDefault();
+
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    // if (!backendUrl) {
+    //   console.error("Backend URL is not defined.");
+    //   return;
+    // }
+
+    window.location.href = `${backendUrl}/auth/google`;
+  };
+
+
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
@@ -48,33 +98,30 @@ export default function Login() {
         <div className="flex justify-center mb-6">
           <Image src={Logo} alt="Logo" width={100} height={100} />
         </div>
-        <div className="flex justify-center">
-          <h1 className="text-4xl font-bold text-center mb-6 dark:text-gray-200 whitespace-nowrap">
-            SIGN IN TO CODE SPACE
-          </h1>
-        </div>
+        <h1 className="text-4xl font-bold text-center mb-6 dark:text-gray-200">
+          SIGN IN TO CODE SPACE
+        </h1>
+
         <form className="flex flex-col" action="#">
           <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-white mb-2"
-            >
+            <label htmlFor="username" className="block text-sm font-medium text-white mb-2">
               Username
             </label>
             <input
               type="email"
-              id="email"
-              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#BCBEC0] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+              id="username"
+              className={`shadow-sm rounded-md w-full px-3 py-2 border ${usernameError ? "border-red-500" : "border-[#BCBEC0]"
+                } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
               placeholder="Username"
               required
               onChange={handleUserName}
             />
+            {usernameError && (
+              <p className="text-red-500 text-xs mt-2">ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง</p>
+            )}
           </div>
 
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-white mb-2"
-          >
+          <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
             Password
           </label>
 
@@ -82,13 +129,17 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#BCBEC0] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+              className={`shadow-sm rounded-md w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-[#BCBEC0]"
+                } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
               placeholder="Password"
               required
               onChange={handlePassword}
             />
+            {passwordError && (
+              <p className="text-red-500 text-xs mt-2">รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง</p>
+            )}
 
-            <h1
+            <span
               className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
               onClick={togglePasswordVisibility}
             >
@@ -97,9 +148,15 @@ export default function Login() {
               ) : (
                 <AiFillEye size={24} className="text-[#BCBEC0]" />
               )}
-            </h1>
+            </span>
           </div>
           <div className="pt-0.5"></div>
+
+          {/* Combined login error message */}
+          {loginError && (
+            <p className="text-red-500 text-sm mb-1 mt-3 text-start">{loginError}</p>
+          )}
+
           <Link
             href="/login/resetpassword"
             className="my-3 flex justify-end text-xs text-white hover:text-indigo-500"
@@ -110,9 +167,11 @@ export default function Login() {
           <button
             onClick={handlelogin}
             type="button"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0053A6] hover:bg-indigo-700"
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#0053A6] hover:bg-indigo-700"
+              }`}
+            disabled={loading}
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
@@ -122,7 +181,7 @@ export default function Login() {
         </div>
 
         <button
-          onClick={() => signIn("google")}
+          onClick={handlegooglelogin}
           className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 border-white"
         >
           <Image

@@ -44,7 +44,7 @@ export default function ResetPassword() {
               }}
               className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                 email
-                  ? "bg-[#1367C8] hover:bg-[#EEF3ED]"
+                  ? "bg-[#1367C8] hover:bg-[#EEF3ED] hover:text-black"
                   : "bg-[#141414] cursor-not-allowed"
               }`}
               disabled={!email}
