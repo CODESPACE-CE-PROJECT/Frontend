@@ -3,16 +3,16 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import profile from "../../../src/app/assets/setting/profile.svg";
-import axios from "axios"
+import { getProfile } from "../services/user.service";
 
 export default function Setting() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     username: "",
     firstName: "",
-    lastName: "Please enter your last name",
-    school: "Please enter your school",
-    email: "64010726@kmitl.ac.th",
+    lastName: "",
+    school: "",
+    email: "",
     newPassword: "**********************",
     confirmPassword: "**********************",
     gender: "",
@@ -22,12 +22,12 @@ export default function Setting() {
 
   const handleEditClick = () => {
     if (!isEditing) {
-      setIsEditing(true); 
+      setIsEditing(true);
     }
   };
 
   const handleProfileChangeClick = () => {
-    document.getElementById("fileInput").click(); 
+    document.getElementById("fileInput").click();
   };
 
   const handleFileChange = (e) => {
@@ -37,7 +37,7 @@ export default function Setting() {
       reader.onloadend = () => {
         setProfileData({
           ...profileData,
-          profilePicture: reader.result, 
+          profilePicture: reader.result,
         });
       };
       reader.readAsDataURL(file);
@@ -56,28 +56,42 @@ export default function Setting() {
 
 
 
-  const getProfile = async (e) => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`
-      );
+  // const getProfile = async (e) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`
+  //     );
 
-      console.log("API Response:", response.data); 
+  //     console.log("API Response:", response.data); 
 
-      setProfileData({
-        username: response.data.username || "", 
-        firstName: response.data.firstName || "" 
-      });
-    } catch (err) {
-      console.error("Error fetching profile:", err);
-    }
-  };
+  //     setProfileData({
+  //       username: response.data.username || "", 
+  //       firstName: response.data.firstName || "" 
+  //     });
+  //   } catch (err) {
+  //     console.error("Error fetching profile:", err);
+  //   }
+  // };
 
   useEffect(() => {
-    getProfile(); 
+    const fetchData = async () => {
+      const response = await getProfile();
+      setProfileData({
+        username: response.data.username,
+        firstName: response.data.firstName,
+        lastName: response.data.lastName,
+        school: "KMITL",
+        email: response.data.email,
+        newPassword: "**********************",
+        confirmPassword: "**********************",
+        gender: response.data.gender,
+        profilePicture: response.data.picture,
+      });
+    }
+    fetchData() 
   }, []);
 
- 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prev) => ({ ...prev, [name]: value }));
@@ -92,8 +106,10 @@ export default function Setting() {
         <div className="rounded-lg p-6 flex flex-col bg-[#16233A] shadow-xl border border-[#1E293B] h-3/4">
           <div className="flex items-center mb-6">
             <Image
-              src={profileData.profilePicture} // แสดงภาพโปรไฟล์
+              src={profileData.profilePicture !== "" ? profileData.profilePicture:profile} // แสดงภาพโปรไฟล์
               className="w-32 h-32 rounded-full border-4 border-[#3b4f61] shadow-lg"
+              width={128}
+              height={128}
               alt="Profile Picture"
             />
             <div className="ml-4">
@@ -139,12 +155,12 @@ export default function Setting() {
               <div className="flex items-center space-x-4">
                 <GenderRadio
                   value="male"
-                  checked={profileData.gender === "male"}
+                  checked={profileData.gender === "MALE"}
                   onChange={handleChange}
                 />
                 <GenderRadio
                   value="female"
-                  checked={profileData.gender === "female"}
+                  checked={profileData.gender === "FEMALE"}
                   onChange={handleChange}
                 />
                 <GenderRadio

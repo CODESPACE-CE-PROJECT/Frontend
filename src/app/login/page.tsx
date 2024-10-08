@@ -7,6 +7,8 @@ import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie';
+import {login} from '../services/auth.service'
 
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
@@ -20,13 +22,13 @@ export default function Login() {
   const [loginError, setLoginError] = useState("");
   const router = useRouter();
 
-  const handleUserName = (e) => {
+  const handleUserName = (e:React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
     setUsernameError(false);
     setLoginError("");
   };
 
-  const handlePassword = (e) => {
+  const handlePassword = (e:React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     setPasswordError(false);
     setLoginError("");
@@ -36,7 +38,7 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = (e) => {
+  const handlelogin = async (e:Event) => {
     e.preventDefault();
 
     setUsernameError(false);
@@ -60,36 +62,24 @@ export default function Login() {
     if (!username || !password) return;
 
     setLoading(true);
-    axios
-      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
-        username,
-        password,
-      })
-      .then((response) => {
-        setLoading(false);
-        router.push("/student/courses");
-      })
-      .catch((err) => {
-        setLoading(false);
-        setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
-      });
+
+    const response = await login(username, password)
+    console.log(response.status)
+    if(response.status === 201){
+      setLoading(false)
+      router.push("/student/courses");
+    }else{
+      setLoading(false)
+      setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
+    }
   };
 
-  const handlegooglelogin = (e) => {
+  const handlegooglelogin = (e:Event) => {
     e.preventDefault();
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-    // if (!backendUrl) {
-    //   console.error("Backend URL is not defined.");
-    //   return;
-    // }
-
     window.location.href = `${backendUrl}/auth/google`;
   };
-
-
-
-
 
 
   return (
