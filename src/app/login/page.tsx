@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
@@ -19,6 +20,7 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState(false);
   const [loginError, setLoginError] = useState("");
   const router = useRouter();
+ 
 
   const handleUserName = (e) => {
     setUsername(e.target.value);
@@ -68,6 +70,7 @@ export default function Login() {
       .then((response) => {
         setLoading(false);
         router.push("/student/courses");
+        console.log(response);
       })
       .catch((err) => {
         setLoading(false);
@@ -79,15 +82,27 @@ export default function Login() {
     e.preventDefault();
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-    // if (!backendUrl) {
-    //   console.error("Backend URL is not defined.");
-    //   return;
-    // }
+
 
     window.location.href = `${backendUrl}/auth/google`;
   };
 
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await axios.get('/api/auth/status');
+        if (Response.status === 200) {
+          router.push('/');
+        }
 
+      } catch (error) {
+        console.error("Aut fail",error);
+      }
+
+    };
+    checkAuthStatus();
+
+  }, [router]);
 
 
 

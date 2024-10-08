@@ -65,7 +65,7 @@ export default function Courses() {
   const createCourse = async (formData) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/courses`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`,
         {
           title: formData.title,
           description: formData.description,

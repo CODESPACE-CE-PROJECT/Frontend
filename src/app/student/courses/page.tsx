@@ -5,8 +5,15 @@ import Image from "next/image";
 
 import Class101 from "@/app/assets/CoursesAssets/Class101.svg";
 import Class102 from "@/app/assets/CoursesAssets/Class102.svg";
+import Cookies from 'js-cookie';  
+
 
 export default function Courses() {
+
+  const token = Cookies.get('accessToken'); // Replace 'authToken' with your cookie name
+  
+  console.log(token + "test");
+
   return (
     <>
       <div className="flex flex-col text-[#FAFAFA] m-14 w-full">
