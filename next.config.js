@@ -2,7 +2,7 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-      domains: ["drive.google.com"],
+      domains: ["drive.google.com", "s3.minio.srv-demo-2.home.unixvextor.com"],
     },
     output: "standalone",
     
