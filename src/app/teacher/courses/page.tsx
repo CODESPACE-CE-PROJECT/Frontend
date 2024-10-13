@@ -1,28 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation"; // For redirecting after course creation
 import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import axios from "axios";
 
+interface CourseFormData {
+  title: string;
+  description: string;
+}
+
 export default function Courses() {
-  const [showCreateClass, setShowCreateClass] = useState(false);
-  const [profileImage, setProfileImage] = useState("/default-profile.png");
-  const [courseName, setCourseName] = useState("");
-  const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [showCreateClass, setShowCreateClass] = useState<boolean>(false);
+  const [profileImage, setProfileImage] = useState<string>("/default-profile.png");
+  const [courseName, setCourseName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter(); // Use router for navigation
 
   // Toggle the visibility of the create class form
   const toggleCreateClass = () => {
     setShowCreateClass(!showCreateClass);
+    // Reset form fields when hiding the form
+    if (showCreateClass) {
+      setCourseName("");
+      setDescription("");
+      setProfileImage("/default-profile.png"); // Reset image to default
+    }
   };
 
   // Handle image upload and preview
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; // Use optional chaining to avoid null reference
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setProfileImage(imageURL);
@@ -30,11 +41,11 @@ export default function Courses() {
   };
 
   // Handle form submission to create a course
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Prepare form data
-    const formData = {
+    const formData: CourseFormData = {
       title: courseName,
       description: description,
     };
@@ -53,8 +64,10 @@ export default function Courses() {
       // Reset form
       setCourseName("");
       setDescription("");
+      setProfileImage("/default-profile.png"); // Reset image to default
       setShowCreateClass(false); // Hide form after creating the course
     } catch (error) {
+      console.error("Error creating course:", error);
       alert("Failed to create course. Please try again.");
     } finally {
       setLoading(false);
@@ -62,7 +75,7 @@ export default function Courses() {
   };
 
   // Function to call the backend API for creating the course
-  const createCourse = async (formData) => {
+  const createCourse = async (formData: CourseFormData) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`,
@@ -78,8 +91,8 @@ export default function Courses() {
       );
       return response.data; // Assuming backend response contains the course ID
     } catch (error) {
-      console.error("Error creating course:", error.response || error.message);
-      throw error;
+      console.error("Error creating course:", error.response?.data || error.message);
+      throw error; // Rethrow error to handle it in the calling function
     }
   };
 

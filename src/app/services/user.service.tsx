@@ -9,3 +9,24 @@ export const getProfile = async () => {
           return response.data;
      }
 }
+
+export const createCourse = async (formData: String) => {
+     try {
+       const response = await axios.post(
+         `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`,
+         {
+           title: formData,
+           description: formData
+         },
+         {
+           headers: {
+             "Content-Type": "application/json", 
+           },
+         }
+       );
+       return response.data;
+     } catch (error) {
+       console.error("Error creating course:", error.response?.data || error.message);
+       throw error; 
+     }
+   };

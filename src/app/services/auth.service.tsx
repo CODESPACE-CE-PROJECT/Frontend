@@ -14,3 +14,26 @@ export const login = async (username: string, password: string) => {
      }
      return response
 }
+
+
+export const logout = async () => {
+     try {
+          const response: AxiosResponse = await axios.get(
+               `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+               {
+                    headers: {
+                         Authorization: `Bearer ${Cookies.get('accessToken')}`
+                    }
+               }
+          );
+
+          if (response.status === 200) {
+               Cookies.remove('accessToken');
+          }
+
+          return response;
+     } catch (error) {
+          console.error('Logout failed:', error);
+          throw new Error('Logout failed');
+     }
+};

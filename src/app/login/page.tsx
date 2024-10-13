@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import {login} from '../services/auth.service'
@@ -143,7 +142,6 @@ export default function Login() {
           </div>
           <div className="pt-0.5"></div>
 
-          {/* Combined login error message */}
           {loginError && (
             <p className="text-red-500 text-sm mb-1 mt-3 text-start">{loginError}</p>
           )}

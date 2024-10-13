@@ -10,9 +10,9 @@ import Cookies from 'js-cookie';
 
 export default function Courses() {
 
-  const token = Cookies.get('accessToken'); // Replace 'authToken' with your cookie name
+  // const token = Cookies.get('accessToken'); 
   
-  console.log(token + "test");
+  // console.log(token + "test");
 
   return (
     <>

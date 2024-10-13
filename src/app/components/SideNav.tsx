@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import Image from "next/image";
 import ClassIcon from "@mui/icons-material/Class";
@@ -5,12 +6,33 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CodeIcon from "@mui/icons-material/Code";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LogoutIcon from "@mui/icons-material/Logout";
-
 import AssignmentIcon from "@mui/icons-material/Assignment";
-
 import PlatformIcon from "../assets/CoursesAssets/PlatformIcon.svg";
+import { logout } from '../services/auth.service'
+import { useRouter } from "next/navigation";
+
 
 export default function SideNav() {
+  const router = useRouter();
+
+
+  const handleLogout = async (e: Event) => {
+    e.preventDefault();
+
+    try {
+      const response = await logout();
+      console.log(response.status)
+      if (response.status === 200) {
+
+        router.push("/login");
+      } else {
+        console.error('Unexpected status code:', response.status);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+
+    }
+  };
   return (
     <>
       <nav className="sticky top-0 flex flex-col justify-between bg-[#0B111B] text-white w-[6vw] h-screen">
@@ -76,10 +98,12 @@ export default function SideNav() {
           </li>
         </ul>
         {/* bottom */}
-
-        <a className="cursor-pointer flex flex-row justify-center font-bold rounded-lg pb-10 w-full">
+        <button
+          onClick={handleLogout}
+          className="cursor-pointer flex flex-row justify-center font-bold rounded-lg pb-10 w-full"
+        >
           <LogoutIcon className="text-3xl text-white rotate-180" />
-        </a>
+        </button>
       </nav>
     </>
   );

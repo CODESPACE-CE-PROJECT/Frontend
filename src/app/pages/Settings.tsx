@@ -55,45 +55,6 @@ export default function Setting() {
   };
 
 
-
-  // const getProfile = async (e) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`
-  //     );
-
-  //     console.log("API Response:", response.data); 
-
-  //     setProfileData({
-  //       username: response.data.username || "", 
-  //       firstName: response.data.firstName || "" 
-  //     });
-  //   } catch (err) {
-  //     console.error("Error fetching profile:", err);
-  //   }
-  // };
-
-  // const editProfile = (e, profileData) => {
-  //   e.preventDefault(); // Prevent the default form submission behavior
-
-  //   axios
-  //     .patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/edit`, {
-  //       email: profileData.email,
-  //       firstName: profileData.firstName,
-  //       lastName: profileData.lastName,
-  //       studentNo: profileData.studentNo,
-  //       gender: profileData.gender,
-  //     })
-  //     .then((response) => {
-  //       console.log("Profile updated successfully", response.data);
-  //       // You can handle additional actions here, such as showing a success message
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error updating profile", error);
-  //       // Handle the error, possibly showing an error message to the user
-  //     });
-  // };
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await getProfile();
