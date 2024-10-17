@@ -6,11 +6,7 @@ import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import axios from "axios";
-
-interface CourseFormData {
-  title: string;
-  description: string;
-}
+import { createCourse } from "../../services/user.service";
 
 export default function Courses() {
   const [showCreateClass, setShowCreateClass] = useState<boolean>(false);
@@ -18,81 +14,47 @@ export default function Courses() {
   const [courseName, setCourseName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter(); // Use router for navigation
-
-  // Toggle the visibility of the create class form
+  const router = useRouter();
+  
   const toggleCreateClass = () => {
     setShowCreateClass(!showCreateClass);
-    // Reset form fields when hiding the form
+   
     if (showCreateClass) {
       setCourseName("");
       setDescription("");
-      setProfileImage("/default-profile.png"); // Reset image to default
+      setProfileImage(""); 
     }
   };
 
-  // Handle image upload and preview
+ 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; // Use optional chaining to avoid null reference
+    const file = event.target.files?.[0]; 
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setProfileImage(imageURL);
     }
   };
 
-  // Handle form submission to create a course
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
-    // Prepare form data
-    const formData: CourseFormData = {
-      title: courseName,
-      description: description,
-    };
-
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
     setLoading(true);
 
     try {
-      // Call the API to create the course
-      const response = await createCourse(formData);
-      alert("Course created successfully!");
+      // Call createCourse API and pass the form data
+      await createCourse({
+        title: courseName,
+        description: description,
+      });
 
-      // Redirect to the created course page
-      const courseId = response.id; // Assuming the backend returns the course ID
-      router.push(`/courses/${courseId}`);
-
-      // Reset form
-      setCourseName("");
-      setDescription("");
-      setProfileImage("/default-profile.png"); // Reset image to default
-      setShowCreateClass(false); // Hide form after creating the course
+      // Reset form and close modal after successful creation
+      toggleCreateClass();
+      // Optionally, navigate to another page (e.g., courses list)
+      router.push("/teacher/courses"); // Change this route as necessary
     } catch (error) {
       console.error("Error creating course:", error);
-      alert("Failed to create course. Please try again.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Function to call the backend API for creating the course
-  const createCourse = async (formData: CourseFormData) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`,
-        {
-          title: formData.title,
-          description: formData.description,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json", // Sending data as JSON
-          },
-        }
-      );
-      return response.data; // Assuming backend response contains the course ID
-    } catch (error) {
-      console.error("Error creating course:", error.response?.data || error.message);
-      throw error; // Rethrow error to handle it in the calling function
     }
   };
 
@@ -106,7 +68,7 @@ export default function Courses() {
             className="bg-[#30363D80] hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center space-x-3 transition duration-300 ease-in-out"
           >
             <PersonAddIcon />
-            <div className="mt-2">สร้างชั้นเรียน</div>
+            <div className="">สร้างชั้นเรียน</div>
           </button>
         )}
       </div>
