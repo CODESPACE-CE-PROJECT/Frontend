@@ -11,7 +11,7 @@ export const getProfile = async () => {
   }
 };
 
-// ฟังก์ชันสำหรับสร้างหลักสูตร
+
 export const createCourse = async (formData: { title: string; description: string }) => {
   try {
     const token: string | undefined = Cookies.get('accessToken');
@@ -21,7 +21,7 @@ export const createCourse = async (formData: { title: string; description: strin
       return;
     }
 
-    // ตั้งค่าโทเค็นใน header แบบเดียวกับ getProfile
+   
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     const response: AxiosResponse = await axios.post(

@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useRouter } from "next/navigation"; // For redirecting after course creation
+import { useRouter } from "next/navigation"; 
 import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import axios from "axios";
 import { createCourse } from "../../services/user.service";
 
 export default function Courses() {
@@ -14,19 +13,19 @@ export default function Courses() {
   const [courseName, setCourseName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>(""); 
   const router = useRouter();
   
   const toggleCreateClass = () => {
     setShowCreateClass(!showCreateClass);
-   
     if (showCreateClass) {
       setCourseName("");
       setDescription("");
-      setProfileImage(""); 
+      setProfileImage("/default-profile.png"); 
+      setErrorMessage(""); 
     }
   };
 
- 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; 
     if (file) {
@@ -35,24 +34,26 @@ export default function Courses() {
     }
   };
 
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    setErrorMessage(""); 
 
     try {
-      // Call createCourse API and pass the form data
       await createCourse({
         title: courseName,
         description: description,
       });
 
-      // Reset form and close modal after successful creation
       toggleCreateClass();
-      // Optionally, navigate to another page (e.g., courses list)
-      router.push("/teacher/courses"); // Change this route as necessary
-    } catch (error) {
-      console.error("Error creating course:", error);
+      router.push("/teacher/courses");
+    } catch (error: any) {
+      if (error.response?.data?.message === "Over limit Create Course Per Teacher 3") {
+        setErrorMessage("คุณไม่สามารถสร้างชั้นเรียนเกิน 3 ชั้นเรียนได้"); 
+      } else {
+        console.error("Error creating course:", error);
+        setErrorMessage("ไม่สามารสร้างชั้นเรียนซ้ำได้"); 
+      }
     } finally {
       setLoading(false);
     }
@@ -73,13 +74,13 @@ export default function Courses() {
         )}
       </div>
 
-      {/* Create Class Form */}
+     
       {showCreateClass && (
         <div className="flex justify-center items-center">
           <div className="bg-[#16233A] p-6 rounded-lg shadow-lg text-white w-6/12">
             <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
               
-              {/* Image Upload Section */}
+              
               <div className="flex flex-col">
                 <label className="block mb-2">ปรับแต่งรูปภาพ:</label>
                 <div className="relative flex flex-col items-center justify-center h-32 bg-[#2A3A50] rounded-lg cursor-pointer">
@@ -103,7 +104,7 @@ export default function Courses() {
                 </div>
               </div>
 
-              {/* Course Name Input */}
+             
               <div>
                 <label className="block mb-2">ชื่อชั้นเรียน:</label>
                 <input
@@ -115,7 +116,7 @@ export default function Courses() {
                 />
               </div>
 
-              {/* Course Description Input */}
+              
               <div>
                 <label className="block mb-2">รายละเอียด:</label>
                 <textarea
@@ -126,7 +127,12 @@ export default function Courses() {
                 ></textarea>
               </div>
 
-              {/* Form Buttons */}
+              
+              {errorMessage && (
+                <div className="text-red-500 text-sm">{errorMessage}</div>
+              )}
+
+            
               <div className="flex justify-end space-x-4">
                 <button
                   type="button"
