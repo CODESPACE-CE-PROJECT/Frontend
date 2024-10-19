@@ -16,7 +16,7 @@ export default function SideNav() {
   const router = useRouter();
 
 
-  const handleLogout = async (e: Event) => {
+  const handleLogout = async (e:any) => {
     e.preventDefault();
 
     try {

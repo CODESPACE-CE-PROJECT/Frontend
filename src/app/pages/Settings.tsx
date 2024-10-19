@@ -21,8 +21,13 @@ export default function Setting() {
   });
 
   const handleEditClick = () => setIsEditing(!isEditing);
-  const handleProfileChangeClick = () => document.getElementById("fileInput").click();
-  const handleFileChange = (e) => {
+  const handleProfileChangeClick = () => {
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+  const handleFileChange = (e:any) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -59,7 +64,7 @@ export default function Setting() {
     fetchData();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     const { name, value } = e.target;
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
@@ -160,7 +165,7 @@ export default function Setting() {
   );
 }
 
-const ProfileField = ({ label, name, value, isEditing, onChange }) => (
+const ProfileField = ({ label, name, value, isEditing, onChange }:any) => (
   <div className="flex items-center">
     <span className="font-medium w-32 text-gray-300">{label}:</span>
     {isEditing ? (
@@ -177,7 +182,7 @@ const ProfileField = ({ label, name, value, isEditing, onChange }) => (
   </div>
 );
 
-const GenderRadio = ({ value, checked, onChange }) => (
+const GenderRadio = ({ value, checked, onChange }:any) => (
   <label className="flex items-center space-x-2 cursor-pointer">
     <input
       type="radio"
@@ -194,7 +199,7 @@ const GenderRadio = ({ value, checked, onChange }) => (
   </label>
 );
 
-const ContactSection = ({ profileData, isEditing, handleChange }) => (
+const ContactSection = ({ profileData, isEditing, handleChange }:any) => (
   <>
     <h2 className="text-3xl text-white font-bold">ช่องทางติดต่อ</h2>
     <div className="bg-[#16233A] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-[#1E293B] space-y-6">
@@ -231,7 +236,7 @@ const ContactSection = ({ profileData, isEditing, handleChange }) => (
   </>
 );
 
-const ResetPasswordSection = ({ profileData, isEditing, handleChange }) => (
+const ResetPasswordSection = ({ profileData, isEditing, handleChange }:any) => (
   <>
     <h2 className="text-3xl text-white">รีเซ็ตรหัสผ่าน</h2>
     <div className="bg-[#16233A] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-[#1E293B]">

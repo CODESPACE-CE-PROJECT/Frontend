@@ -5,6 +5,8 @@ const nextConfig = {
       domains: ["drive.google.com", "s3.minio.srv-demo-2.home.unixvextor.com"],
     },
     output: "standalone",
-    
+    experimental: {
+      appDir: true,  
+    },
 }
 module.exports = nextConfig
