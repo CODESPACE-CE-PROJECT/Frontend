@@ -68,7 +68,6 @@ export default function Login() {
     console.log(response.status)
     if(response.status === 201){
       setLoading(false)
-      router.push("/student/courses");
     }else{
       setLoading(false)
       setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");

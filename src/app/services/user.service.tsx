@@ -40,7 +40,7 @@ export const getAllCourseById = async (): Promise<any | null> => {
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     try {
-      const response: AxiosResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/course/school/myid`);
+      const response: AxiosResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/course/username/myid`);
       return response.data;
     } catch (error) {
       console.error("Error fetching courses:", error);
