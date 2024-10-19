@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+
 import Cookies from 'js-cookie';
 
 
@@ -12,8 +13,29 @@ export const getProfile = async () => {
 };
 
 
+export const editProfile = async (profileData: object) => {
+  const token: string | undefined = Cookies.get('accessToken');
+  
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+    try {
+      const response: AxiosResponse = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/edit`, profileData);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error; // Re-throw the error for handling it later
+    }
+  } else {
+    throw new Error("No access token found");
+  }
+};
 
-export const getAllCourseById = async (schoolId: string): Promise<any | null> => {
+
+
+
+
+export const getAllCourseById = async (): Promise<any | null> => {
   const token: string | undefined = Cookies.get('accessToken'); 
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -57,7 +79,8 @@ export const createCourse = async (formData: { title: string; description: strin
 
     return response.data;
   } catch (error) {
-    console.error("Error creating course:", error.response?.data || error.message);
+    const axiosError = error as AxiosError;
+    console.error("Error creating course:", axiosError.response?.data || axiosError.message);
     throw error;
   }
 };

@@ -23,13 +23,13 @@ export default function Login() {
   const router = useRouter();
  
 
-  const handleUserName = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserName = (e:any) => {
     setUsername(e.target.value);
     setUsernameError(false);
     setLoginError("");
   };
 
-  const handlePassword = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handlePassword = (e:any) => {
     setPassword(e.target.value);
     setPasswordError(false);
     setLoginError("");
@@ -39,7 +39,7 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = async (e:Event) => {
+  const handlelogin = async (e:any) => {
     e.preventDefault();
 
     setUsernameError(false);
@@ -75,7 +75,7 @@ export default function Login() {
     }
   };
 
-  const handlegooglelogin = (e:Event) => {
+  const handlegooglelogin = (e:any) => {
     e.preventDefault();
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
