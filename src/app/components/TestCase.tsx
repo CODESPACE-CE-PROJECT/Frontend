@@ -21,7 +21,7 @@ export default function TestCase() {
     },
   ];
 
-  const renderCase = (testCase) => (
+  const renderCase = (testCase:any) => (
     <div className="pt-3 pb-3">
       <div className="pb-4">Input =</div>
       <div className="bg-[#2b3445] rounded-md pl-4 pt-3 pb-3">

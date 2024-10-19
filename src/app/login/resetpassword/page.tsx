@@ -30,7 +30,7 @@ export default function ResetPassword() {
               <input
                 type="email"
                 id="email"
-                className="shadow-sm rounded-md w-full px-3 py-2 border border-[#BCBEC0] border-2  focus:outline-none "
+                className="shadow-sm rounded-md w-full px-3 py-2  border-[#BCBEC0] border-2  focus:outline-none "
                 placeholder="Email"
                 required
                 value={email}

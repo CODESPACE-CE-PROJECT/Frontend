@@ -23,13 +23,13 @@ export default function Login() {
   const router = useRouter();
  
 
-  const handleUserName = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserName = (e:any) => {
     setUsername(e.target.value);
     setUsernameError(false);
     setLoginError("");
   };
 
-  const handlePassword = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handlePassword = (e:any) => {
     setPassword(e.target.value);
     setPasswordError(false);
     setLoginError("");
@@ -39,7 +39,7 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = async (e:Event) => {
+  const handlelogin = async (e:any) => {
     e.preventDefault();
 
     setUsernameError(false);
@@ -75,7 +75,7 @@ export default function Login() {
     }
   };
 
-  const handlegooglelogin = (e:Event) => {
+  const handlegooglelogin = (e:any) => {
     e.preventDefault();
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -88,7 +88,7 @@ export default function Login() {
         <div className="flex justify-center mb-6">
           <Image src={Logo} alt="Logo" width={100} height={100} />
         </div>
-        <h1 className="text-4xl font-bold text-center mb-6 dark:text-gray-200">
+        <h1 className="text-3xl font-bold text-center mb-6 dark:text-gray-200">
           SIGN IN TO CODE SPACE
         </h1>
 
@@ -100,8 +100,8 @@ export default function Login() {
             <input
               type="email"
               id="username"
-              className={`shadow-sm rounded-md w-full px-3 py-2 border ${usernameError ? "border-red-500" : "border-[#BCBEC0]"
-                } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
+              className={`shadow-sm rounded-md w-full px-3 py-2 border ${usernameError ? "border-red-500" : "border-[#262F50]"
+                } text-[#BCBEC0] focus:outline-none bg-[#262F50]`}
               placeholder="Username"
               required
               onChange={handleUserName}
@@ -119,8 +119,8 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className={`shadow-sm rounded-md w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-[#BCBEC0]"
-                } text-[#BCBEC0] focus:outline-none bg-[#2A3A50]`}
+              className={`shadow-sm rounded-md w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-[#262F50]"
+                } text-[#BCBEC0] focus:outline-none bg-[#262F50]`}
               placeholder="Password"
               required
               onChange={handlePassword}
@@ -148,7 +148,7 @@ export default function Login() {
 
           <Link
             href="/login/resetpassword"
-            className="my-3 flex justify-end text-xs text-white hover:text-indigo-500"
+            className="my-3 flex justify-end text-xs text-[#36ABFF] hover:text-indigo-500"
           >
             <p>Reset password</p>
           </Link>
@@ -156,7 +156,7 @@ export default function Login() {
           <button
             onClick={handlelogin}
             type="button"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#0053A6] hover:bg-indigo-700"
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#1367C8] hover:bg-indigo-700"
               }`}
             disabled={loading}
           >
@@ -171,7 +171,7 @@ export default function Login() {
 
         <button
           onClick={handlegooglelogin}
-          className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 border-white"
+          className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium  border-white bg-[#FAFAFA]"
         >
           <Image
             src={"https://logopng.com.br/logos/google-37.svg"}
@@ -179,7 +179,7 @@ export default function Login() {
             width={24}
             height={24}
           />
-          <span className="ml-2 text-white">Or sign in with Google</span>
+          <span className="ml-2 text-[]">Or sign in with Google</span>
         </button>
       </div>
     </div>

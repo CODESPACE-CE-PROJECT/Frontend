@@ -61,8 +61,8 @@ export default function Courses() {
         description: description,
       });
 
-      // Add the new course to the list
-      setCourses((prevCourses) => [...prevCourses, newCourse]); // Update the courses list
+
+      setCourses((prevCourses) => [...prevCourses, newCourse]); 
       toggleCreateClass();
     } catch (error: any) {
       if (
@@ -189,13 +189,13 @@ export default function Courses() {
         </div>
       )}
 
-      {/* Display the list of courses */}
+    
 
       <div className="flex flex-row flex-wrap gap-5">
         {courses.map((course) => (
           <div
-            key={course.id} // Ensure the course object has an 'id' field
-            className="flex flex-col items-center bg-[#16233A] hover:bg-[#2C3A4E] cursor-pointer rounded-md space-y-3 px-7 py-5 w-80 h-auto"
+            key={course.id} 
+            className="flex flex-col items-center bg-[#16233A] hover:bg-[#2C3A4E] cursor-pointer rounded-md space-y-3 px-7 py-5 w-80 h-auto my-5"
             onClick={() => handleCourseClick(course.id)}
           >
             <Image className="w-20" src={profileImage} alt={course.title} />
