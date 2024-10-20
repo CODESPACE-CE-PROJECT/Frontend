@@ -82,7 +82,7 @@ export default function Setting() {
               <div className="flex items-center mb-6">
                 <Image
                   src={profileData.profilePicture !== "" ? profileData.profilePicture : profile}
-                  className="w-36 h-36 rounded-full border-4 border-[#3b4f61] shadow-lg"
+                  className="w-36 h-36 rounded-full border-4 border-[#3b4f61] shadow-lg object-cover"
                   width={144}
                   height={144}
                   alt="Profile Picture"
