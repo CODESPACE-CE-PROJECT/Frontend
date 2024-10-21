@@ -80,7 +80,7 @@ export default function CoursesPage() {
 
   const handleCourseClick = (id: string) => {
     if (id && typeof id === 'string' && id.trim() !== '') {
-      router.push(`/teacher/courses/${id}`); 
+      router.push(`/teacher/courses/${id}/general`); 
     } else {
       console.error("Invalid course ID:", id);
     }

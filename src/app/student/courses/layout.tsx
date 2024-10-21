@@ -1,5 +1,5 @@
-import StudentLayout from "@/app/layout/StudentLayout";
+import UserLayout from "@/app/layout/UserLayout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <StudentLayout>{children}</StudentLayout>;
+  return <UserLayout>{children}</UserLayout>;
 }
