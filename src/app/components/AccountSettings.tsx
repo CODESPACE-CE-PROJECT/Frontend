@@ -120,7 +120,7 @@ export default function AccountSettings() {
                       รหัสใหม่
                     </label>
                     <input
-                      className="w-full mt-2 px-3 py-2 bg-[#1C2333] border-2 border-[#3C445C] rounded-md hover:bg-[#3C445C] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="w-full mt-2 px-3 py-2 bg-[#1C2333] border-2 border-[#3C445C] hover:bg-[#3C445C] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="รหัสใหม่"
@@ -131,7 +131,7 @@ export default function AccountSettings() {
                       ยืนยันรหัสใหม่
                     </label>
                     <input
-                      className="w-full mt-2 px-3 py-2 bg-[#1C2333] border-2 border-[#3C445C] rounded-md hover:bg-[#3C445C] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="w-full mt-2 px-3 py-2 bg-[#1C2333] border-2 border-[#3C445C] hover:bg-[#3C445C] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="ยืนยันรหัสใหม่"

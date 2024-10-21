@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
     switch (decoded.role) {
       case "ADMIN":
         if (!currentPath.startsWith("/admin") || currentPath.includes('/login')) {
-          return NextResponse.redirect(new URL("/admin", request.url));
+          return NextResponse.redirect(new URL("/admin/dashboard", request.url));
         }
         break;
       case "TEACHER":
