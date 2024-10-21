@@ -39,38 +39,46 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = async (e:any) => {
+  const handlelogin = async (e: any) => {
     e.preventDefault();
-
+  
     setUsernameError(false);
     setPasswordError(false);
     setLoginError("");
-
-
+  
+    
     if (!username && !password) {
       setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
       return;
     }
-
-
+  
     if (!username) {
       setUsernameError(true);
     }
+  
     if (!password) {
       setPasswordError(true);
     }
-
+  
+    // ถ้าช่องไหนยังว่าง ให้หยุดทำงาน
     if (!username || !password) return;
-
+  
     setLoading(true);
-
-    const response = await login(username, password) 
-    if(response.status === 201){
-      setLoading(false)
-      router.push('/')
-    }else{
-      setLoading(false)
-      setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
+  
+    try {
+      const response = await login(username, password);
+  
+      
+      if (response.status === 201) {
+        setLoading(false);
+        router.push('/');
+      } else if (response.status === 401) {
+        setLoading(false);
+        setLoginError(response.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      setLoginError("เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง");
     }
   };
 
