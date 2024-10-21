@@ -35,7 +35,7 @@ export const editProfile = async (profileData: object) => {
 
 
 
-export const getAllCourseById = async (): Promise<any | null> => {
+export const getAllCourseById = async (id: string): Promise<any | null> => {
   const token: string | undefined = Cookies.get('accessToken'); 
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
