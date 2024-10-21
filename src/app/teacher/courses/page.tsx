@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { createCourse, getAllCourseById } from "../../services/user.service"; // Assuming this gets all courses
+import { getAllCourseById, createCourse } from "../../services/user.service"; 
 
 import Class102 from "@/app/assets/CoursesAssets/Class102.svg";
 
-export default function Courses() {
+export default function CoursesPage() {
   const [showCreateClass, setShowCreateClass] = useState<boolean>(false);
   const [profileImage, setProfileImage] = useState<string>(Class102);
   const [courseName, setCourseName] = useState<string>("");
@@ -42,7 +42,7 @@ export default function Courses() {
     }
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
@@ -50,7 +50,7 @@ export default function Courses() {
     }
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
     setErrorMessage("");
@@ -60,7 +60,6 @@ export default function Courses() {
         title: courseName,
         description: description,
       });
-
 
       setCourses((prevCourses) => [...prevCourses, newCourse]); 
       toggleCreateClass();
@@ -80,7 +79,11 @@ export default function Courses() {
   };
 
   const handleCourseClick = (id: string) => {
-    router.push(`/teacher/courses/${id}`);
+    if (id && typeof id === 'string' && id.trim() !== '') {
+      router.push(`/teacher/courses/${id}`); 
+    } else {
+      console.error("Invalid course ID:", id);
+    }
   };
 
   return (
@@ -189,14 +192,12 @@ export default function Courses() {
         </div>
       )}
 
-    
-
       <div className="flex flex-row flex-wrap gap-5">
         {courses.map((course) => (
           <div
-            key={course.id} 
+            key={course.courseId}
             className="flex flex-col items-center bg-[#16233A] hover:bg-[#2C3A4E] cursor-pointer rounded-md space-y-3 px-7 py-5 w-80 h-auto my-5"
-            onClick={() => handleCourseClick(course.id)}
+            onClick={() => handleCourseClick(course.courseId)}
           >
             <Image className="w-20" src={profileImage} alt={course.title} />
             <h2 className="font-medium text-wrap text-xl">{course.title}</h2>
