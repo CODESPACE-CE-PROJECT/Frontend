@@ -20,9 +20,9 @@ export default function CoursesPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchCourses = async (id: string) => {
       try {
-        const response = await getAllCourseById(); // Fetch courses
+        const response = await getAllCourseById(id); 
         setCourses(response.data); // Set the courses
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -30,7 +30,7 @@ export default function CoursesPage() {
     };
 
     fetchCourses();
-  }, []); // Run once on component mount
+  }, []); 
 
   const toggleCreateClass = () => {
     setShowCreateClass(!showCreateClass);
