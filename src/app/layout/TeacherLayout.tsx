@@ -9,7 +9,7 @@ interface LayoutProps {
   role: string;
 }
 
-const StudentLayout: React.FC<LayoutProps> = ({ children, role }) => {
+const TeacherLayout: React.FC<LayoutProps> = ({ children, role }) => {
   return (
     <div className="flex flex-row">
       <SideNav role={role} />
@@ -21,4 +21,4 @@ const StudentLayout: React.FC<LayoutProps> = ({ children, role }) => {
   );
 };
 
-export default StudentLayout;
+export default TeacherLayout;
