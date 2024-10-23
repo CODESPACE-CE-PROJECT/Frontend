@@ -7,8 +7,8 @@ import Logo from "../../app/assets/Login/logo.svg";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
-import {login} from '../services/auth.service'
-
+import { login } from '../services/auth.service'
+import Swal from 'sweetalert2'
 
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
@@ -21,15 +21,15 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState(false);
   const [loginError, setLoginError] = useState("");
   const router = useRouter();
- 
 
-  const handleUserName = (e:any) => {
+
+  const handleUserName = (e: any) => {
     setUsername(e.target.value);
     setUsernameError(false);
     setLoginError("");
   };
 
-  const handlePassword = (e:any) => {
+  const handlePassword = (e: any) => {
     setPassword(e.target.value);
     setPasswordError(false);
     setLoginError("");
@@ -41,40 +41,50 @@ export default function Login() {
 
   const handlelogin = async (e: any) => {
     e.preventDefault();
-  
+
     setUsernameError(false);
     setPasswordError(false);
     setLoginError("");
-  
-    
+
     if (!username && !password) {
       setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
       return;
     }
-  
+
     if (!username) {
       setUsernameError(true);
     }
-  
+
     if (!password) {
       setPasswordError(true);
     }
-  
+
     // ถ้าช่องไหนยังว่าง ให้หยุดทำงาน
     if (!username || !password) return;
-  
+
     setLoading(true);
-  
+
     try {
       const response = await login(username, password);
-  
-      
+
       if (response.status === 201) {
         setLoading(false);
-        router.push('/');
+
+        // Show success alert using SweetAlert2
+        Swal.fire({
+          title: "success!",
+          text: "You have successfully logged in!",
+          showConfirmButton: false,
+          icon: "success",
+          timer: 2000
+        }).then(() => {
+          router.push('/');
+        });
+
       } else if (response.status === 401) {
         setLoading(false);
-        setLoginError(response.message);
+        const errorMessage = 'message' in response ? response.message : "Unauthorized access";
+        setLoginError(errorMessage);
       }
     } catch (error) {
       setLoading(false);
@@ -82,7 +92,8 @@ export default function Login() {
     }
   };
 
-  const handlegooglelogin = (e:any) => {
+
+  const handlegooglelogin = (e: any) => {
     e.preventDefault();
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
