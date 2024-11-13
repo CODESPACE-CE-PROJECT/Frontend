@@ -29,6 +29,17 @@ export const getAssignment = async (courseId: string) => {
   }
 };
 
+export const getpeople = async (courseId: string) => {
+  const token = Cookies.get("accessToken");
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/people/${courseId}`
+    );
+    return response.data;
+  }
+  throw new Error("No token available");
+};
 
 
 
