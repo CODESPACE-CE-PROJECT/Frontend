@@ -1,65 +1,57 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import Cookies from 'js-cookie';
-import { login } from '../services/auth.service'
-import Swal from 'sweetalert2'
-
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { login } from "../services/auth.service";
+import Swal from "sweetalert2";
+import { AiFillEye, AiFillEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [loginError, setLoginError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
 
-
-  const handleUserName = (e: any) => {
+  const handleUserName = (e) => {
     setUsername(e.target.value);
-    setUsernameError(false);
-    setLoginError("");
+    setUsernameError("");
   };
 
-  const handlePassword = (e: any) => {
+  const handlePassword = (e) => {
     setPassword(e.target.value);
-    setPasswordError(false);
-    setLoginError("");
+    setPasswordError("");
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = async (e: any) => {
+  const handlelogin = async (e) => {
     e.preventDefault();
 
-    setUsernameError(false);
-    setPasswordError(false);
-    setLoginError("");
+    setUsernameError("");
+    setPasswordError("");
 
     if (!username && !password) {
-      setLoginError("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
+      setUsernameError("ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
+      setPasswordError("รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
       return;
     }
 
     if (!username) {
-      setUsernameError(true);
+      setUsernameError("ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
     }
 
     if (!password) {
-      setPasswordError(true);
+      setPasswordError("รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
     }
 
-    // ถ้าช่องไหนยังว่าง ให้หยุดทำงาน
     if (!username || !password) return;
 
     setLoading(true);
@@ -69,33 +61,33 @@ export default function Login() {
 
       if (response.status === 201) {
         setLoading(false);
-
-        // Show success alert using SweetAlert2
         Swal.fire({
-          title: "success!",
+          title: "Success!",
           text: "You have successfully logged in!",
           showConfirmButton: false,
           icon: "success",
-          timer: 2000
+          timer: 2000,
         }).then(() => {
-          router.push('/');
+          router.push("/");
         });
-
       } else if (response.status === 401) {
         setLoading(false);
-        const errorMessage = 'message' in response ? response.message : "Unauthorized access";
-        setLoginError(errorMessage);
+        const errorMessage = "message" in response ? response.message : "Unauthorized access";
+        setUsernameError(
+          errorMessage.includes("username") ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง" : ""
+        );
+        setPasswordError(
+          errorMessage.includes("password") ? "รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง" : ""
+        );
       }
     } catch (error) {
       setLoading(false);
-      setLoginError("เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง");
+      setUsernameError("เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง");
     }
   };
 
-
-  const handlegooglelogin = (e: any) => {
+  const handlegooglelogin = (e) => {
     e.preventDefault();
-
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     window.location.href = `${backendUrl}/auth/google`;
   };
@@ -107,78 +99,82 @@ export default function Login() {
           <Image src={Logo} alt="Logo" width={100} height={100} />
         </div>
         <h1 className="text-3xl font-bold text-center mb-6 dark:text-gray-200">
-          SIGN IN TO CODE SPACE
+          CODE SPACE
         </h1>
 
         <form className="flex flex-col" action="#">
           <div className="mb-6">
-            <label htmlFor="username" className="block text-sm font-medium text-white mb-2">
-              Username
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-white mb-2"
+            >
+              บัญชีผู้ใช้ <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
               id="username"
-              className={`shadow-sm rounded-md w-full px-3 py-2 border ${usernameError ? "border-red-500" : "border-[#262F50]"
-                } text-[#BCBEC0] focus:outline-none bg-[#262F50]`}
+              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
               placeholder="Username"
               required
               onChange={handleUserName}
             />
-            {usernameError && (
-              <p className="text-red-500 text-xs mt-2">ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง</p>
-            )}
           </div>
 
-          <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
-            Password
-          </label>
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              className={`shadow-sm rounded-md w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-[#262F50]"
-                } text-[#BCBEC0] focus:outline-none bg-[#262F50]`}
-              placeholder="Password"
-              required
-              onChange={handlePassword}
-            />
-            {passwordError && (
-              <p className="text-red-500 text-xs mt-2">รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง</p>
-            )}
-
-            <span
-              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-              onClick={togglePasswordVisibility}
+          <div className="mb-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-white mb-2"
             >
-              {showPassword ? (
-                <AiFillEyeInvisible size={24} className="text-[#BCBEC0]" />
-              ) : (
-                <AiFillEye size={24} className="text-[#BCBEC0]" />
-              )}
-            </span>
-          </div>
-          <div className="pt-0.5"></div>
+              รหัสผ่าน <span className="text-red-500">*</span>
+            </label>
 
-          {loginError && (
-            <p className="text-red-500 text-sm mb-1 mt-3 text-start">{loginError}</p>
-          )}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+                placeholder="Password"
+                required
+                onChange={handlePassword}
+              />
+              <span
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? (
+                  <AiFillEyeInvisible size={24} className="text-[#BCBEC0]" />
+                ) : (
+                  <AiFillEye size={24} className="text-[#BCBEC0]" />
+                )}
+              </span>
+            </div>
+          </div>
 
           <Link
             href="/login/resetpassword"
-            className="my-3 flex justify-end text-xs text-[#36ABFF] hover:text-indigo-500"
+            className="flex justify-end text-xs text-[#5572FA] hover:text-indigo-500 mt-2"
           >
-            <p>Reset password</p>
+            <p>รีเซ็ตรหัสผ่าน</p>
           </Link>
 
+
           <button 
+          {(usernameError || passwordError) && (
+            <div className="text-xs text-[#FF8484] mt-2 flex items-center">
+              <AiOutlineExclamationCircle size={16} className="mr-1" />
+              <p>{usernameError || passwordError}</p>
+            </div>
+          )}
+
+          <button
             onClick={handlelogin}
             type="button"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#1367C8] hover:bg-indigo-700"
-              }`}
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white mt-4 ${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5572FA] hover:bg-indigo-700"
+            }`}
             disabled={loading}
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Signing in..." : "เข้าสู่ระบบ"}
           </button>
         </form>
 
@@ -189,7 +185,7 @@ export default function Login() {
 
         <button
           onClick={handlegooglelogin}
-          className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium  border-white bg-[#FAFAFA]"
+          className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium border-white bg-[#FAFAFA]"
         >
           <Image
             src={"https://logopng.com.br/logos/google-37.svg"}
@@ -197,7 +193,7 @@ export default function Login() {
             width={24}
             height={24}
           />
-          <span className="ml-2 text-[]">Or sign in with Google</span>
+          <span className="ml-2 text-gray-800">หรือเข้าสู่ระบบด้วย Google</span>
         </button>
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function Courses() {
       }
     };
 
-    const id = 'your-id-here'; // Replace with the actual logic to get the ID
+    const id = 'your-id-here'; 
     if (id) {
       fetchCourses(id);
     } else {
