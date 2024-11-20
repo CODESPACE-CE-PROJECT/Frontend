@@ -35,7 +35,7 @@ export default function Assignment() {
   }, [courseId]);
 
 
-  
+
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -43,11 +43,18 @@ export default function Assignment() {
 
   return (
     <>
-      <div className="relative w-full">
-        <div className="flex pl-10">
+      <div className="relative w-full flex">
+        <div className="flex pl-10 ">
           <h1 className="z-10 border-[#1E90FF] border-b-2 font-semibold text-lg py-4">
             การบ้าน
           </h1>
+
+        </div>
+        <div className="flex pl-10">
+          <h1 className="z-10 border-[#1E90FF] border-b-2 font-semibold text-lg py-4">
+            การทดสอบ
+          </h1>
+
         </div>
         <span className="z-0 absolute bottom-0 bg-[#090B11] p-[1px] w-full"></span>
       </div>
@@ -89,9 +96,9 @@ export default function Assignment() {
                     <div className="flex flex-row justify-center gap-x-4 px-5">
                       {Array.from({ length: assignment.problemQuantities }).map((_, index) => {
                         const problem = assignment.problem[index];
-                        const score = problem ? problem.score : 0; 
-                        const href = problem ? "/student/homeworkspace" : "#"; 
-                        const bgColor = problem ? "#1E9733" : "#808080"; 
+                        const score = problem ? problem.score : 0;
+                        const href = problem ? "/student/homeworkspace" : "#";
+                        const bgColor = problem ? "#1E9733" : "#808080";
 
                         return (
                           <a
@@ -106,7 +113,7 @@ export default function Assignment() {
                             <h2>
                               <span>{score}</span>
                               <span>{"/"}</span>
-                              <span>2</span> 
+                              <span>2</span>
                             </h2>
                           </a>
                         );
