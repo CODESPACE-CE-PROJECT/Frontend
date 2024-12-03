@@ -32,8 +32,8 @@ const ClassLayout: React.FC<LayoutProps> = ({ children, id }) => {
 
   return (
     <div className="flex flex-row">
-      <ClassRoomNav id={id} role={role} /> {/* Pass role to ClassRoomNav */}
-      <div className="text-[#FAFAFA] h-full w-full shadow-[-10px_0px_10px_-5px_rgba(0,0,0,0.3)]">
+      <ClassRoomNav  id={id} role={role} /> {/* Pass role to ClassRoomNav */}
+      <div className="text-[#FAFAFA] h-full w-full">
         {children}
       </div>
     </div>
