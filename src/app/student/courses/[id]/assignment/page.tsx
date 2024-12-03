@@ -1,8 +1,7 @@
-"use client"; // Add this line at the very top
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import AssignmentItemBox from "@/app/components/AssignmentItems/AssignmentItemBox";
 import { getAssignment } from "../../../../services/user.service";
 
 export default function Assignment() {
@@ -29,122 +28,91 @@ export default function Assignment() {
       setLoading(false);
     };
 
-    if (courseId) {
-      fetchAssignments();
-    }
+    fetchAssignments();
   }, [courseId]);
 
-
-  
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      <div className="relative w-full">
+      {/* Header */}
+      <div className="relative w-full flex">
         <div className="flex pl-10">
           <h1 className="z-10 border-[#1E90FF] border-b-2 font-semibold text-lg py-4">
-            การบ้าน
+            แบบฝึกหัด
+          </h1>
+        </div>
+        <div className="flex pl-10">
+          <h1 className="z-10 border-[#1E90FF] font-semibold text-lg py-4">
+            การทดสอบ
           </h1>
         </div>
         <span className="z-0 absolute bottom-0 bg-[#090B11] p-[1px] w-full"></span>
       </div>
 
-      <div className="flex flex-col items-center space-y-10 px-40 py-5">
-        <div className="border border-[#94ABD7]">
-          <table className="min-w-full bg-[#16233A] ">
-            <thead className="text-lg bg-[#1F304B] h-12">
-              <tr>
-                <th className="border border-[#94ABD7] w-96">
-                  <span className="font-normal">บท</span>
-                </th>
-                <th className="border border-[#94ABD7] px-3">
-                  <span className="font-normal">อนุญาตให้ส่ง</span>
-                </th>
-                <th className="border border-[#94ABD7]">
-                  <span className="font-normal">รายการการบ้าน</span>
-                </th>
-                <th className="border border-[#94ABD7] px-3">
-                  <span className="font-normal">คะแนน</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments.map((assignment) => (
-                <tr key={assignment.assignmentId}>
-                  <td className="border border-[#94ABD7] pl-3">
-                    {assignment.title}
-                  </td>
-                  <td className="border border-[#94ABD7] h-24">
-                    <h2 className="flex justify-center">
-                      <span className={assignment.isLock ? "text-[#FE4E3C]" : "text-[#00DB32]"}>
-                        {assignment.isLock ? "ไม่อนุญาตให้ส่ง" : "เปิด"}
-                      </span>
-                    </h2>
-                  </td>
-
-                  <td className="border border-[#94ABD7] h-24">
-                    <div className="flex flex-row justify-center gap-x-4 px-5">
-                      {Array.from({ length: assignment.problemQuantities }).map((_, index) => {
-                        const problem = assignment.problem[index];
-                        const score = problem ? problem.score : 0; 
-                        const href = problem ? "/student/homeworkspace" : "#"; 
-                        const bgColor = problem ? "#1E9733" : "#808080"; 
-
-                        return (
-                          <a
-                            key={index}
-                            href={href}
-                            className={`bg-[${bgColor}] flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16`}
-                          >
-                            <h1 className="space-x-1">
-                              <span>ข้อ</span>
-                              <span>{index + 1}</span>
-                            </h1>
-                            <h2>
-                              <span>{score}</span>
-                              <span>{"/"}</span>
-                              <span>2</span> 
-                            </h2>
-                          </a>
-                        );
-                      })}
-                    </div>
-                  </td>
-
-                  <td className="border border-[#94ABD7]">
-                    <h2 className="flex justify-center">
-                      {assignment.problem.length > 0 ? (
-                        assignment.problem.map((problem: any) => (
-                          <span key={problem.problemId}>
-                            {problem.score} / {assignment.problemQuantities}
-                          </span>
-                        ))
-                      ) : (
-                        <span>0 / {assignment.problemQuantities}</span>
-                      )}
-                    </h2>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot className="text-lg bg-[#1F304B] h-12">
-              <tr>
-                <td colSpan={3} className="border border-[#94ABD7]">
-                  <h1 className="flex justify-center">คะแนนรวม</h1>
-                </td>
-                <td className="border border-[#94ABD7]">
-                  <h2 className="flex justify-center">
-                    <span>testคะแนน</span>
-                  </h2>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+      {/* Table Header */}
+      <div className="flex justify-between items-center px-8 rounded-lg pt-3">
+        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center mr-4 w-1/2">
+          การทดสอบ
+        </div>
+        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] text-center mr-4 w-4/12">
+          ข้อย่อย
+        </div>
+        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] w-48 text-center ">
+          คะแนน
         </div>
       </div>
+
+      {/* Assignment List */}
+      {assignments.map((assignment) => (
+        <div
+          key={assignment.assignmentId}
+          className="flex justify-between items-center px-8 py-6 rounded-lg"
+        >
+          {/* Assignment Title */}
+          <div className="text-white text-lg px-3 rounded-md flex text-start w-1/2 ml-3">
+            {assignment.title}
+          </div>
+
+          {/* Problem Count (Box Style) */}
+          <div className="flex gap-2 justify-start w-4/12 text-center">
+            {Array.from({ length: assignment.problemQuantities }).map((_, index) => {
+              const problem = assignment.problem[index];
+              const score = problem ? problem.score : 0;
+              const maxScore = 2;
+              const href = problem ? "/student/homeworkspace" : "#";
+              const bgColor = problem ? "bg-[#1E9733]" : "bg-[#808080]";
+              const textColor = problem ? "text-white" : "text-gray-400";
+
+              return (
+                <a
+                  key={index}
+                  href={href}
+                  className={`${bgColor} ${textColor} flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16`}
+                >
+                  <h1 className="space-x-1">
+                    <span>ข้อ</span>
+                    <span>{index + 1}</span>
+                  </h1>
+                  <h2>
+                    <span>{score}</span>
+                    <span>{"/"}</span>
+                    <span>{maxScore}</span>
+                  </h2>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Total Score */}
+          <div className="text-white text-lg py-3 rounded-md w-48 text-center">
+            {assignment.problem.length > 0
+              ? assignment.problem.reduce((acc: number, curr: any) => acc + curr.score, 0)
+              : 0}
+          </div>
+        </div>
+      ))}
     </>
   );
 }

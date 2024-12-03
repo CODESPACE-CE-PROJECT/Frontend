@@ -31,8 +31,8 @@ const commonLinks = (id: string, role: string) => (
       </Link>
     </li>
     <li className="pl-10 py-1 hover:bg-[#2B3245] cursor-pointer">
-      <Link href={`/${role.toLowerCase()}/courses/${id}/announcement`} className="flex items-center">
-        ประกาศ
+      <Link href={`/${role.toLowerCase()}/courses/${id}/score`} className="flex items-center">
+        คะแนน
       </Link>
     </li>
     <li className="pl-10 py-1 hover:bg-[#2B3245] cursor-pointer">
