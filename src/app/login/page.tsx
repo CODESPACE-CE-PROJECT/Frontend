@@ -157,8 +157,6 @@ export default function Login() {
             <p>รีเซ็ตรหัสผ่าน</p>
           </Link>
 
-
-          <button 
           {(usernameError || passwordError) && (
             <div className="text-xs text-[#FF8484] mt-2 flex items-center">
               <AiOutlineExclamationCircle size={16} className="mr-1" />

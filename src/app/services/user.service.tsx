@@ -75,13 +75,13 @@ export const editProfile = async (profileData: object) => {
   }
 };
 
-export const getAllCourseById = async (id: string): Promise<any | null> => {
+export const getAllCourseById = async (): Promise<any | null> => {
   const token: string | undefined = Cookies.get("accessToken");
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
       const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/username/myid`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`
       );
       console.log("Course Data:", response.data); // Log the response to see its structure
       return response.data; // Ensure this includes the courseId

@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
     code: 'editor-code bg-gray-100 p-1 text-sm font-mono', // Background for code, padding, small font, monospace
     heading: {
