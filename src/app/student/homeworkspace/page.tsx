@@ -8,7 +8,7 @@ import TestCase from "@/app/components/TestCase";
 import Home from "@/app/page";
 import HomeworkNav from "@/app/components/HomeworkNav";
 import axios from "axios";
-
+import ListIcon from '@mui/icons-material/List';
 export default function HomeWorkSpace() {
   const [sourceCode, setSourceCode] = useState("");
   const [input, setInput] = useState("");
@@ -49,23 +49,40 @@ export default function HomeWorkSpace() {
 
   return (
     <>
+
       {/* Popup */}
-      <HomeworkNav />
+      {/* <HomeworkNav /> */}
       {/* Popup */}
 
-      <div className="flex">
-        <div className=" w-9/12	pl-4 pb-5">
-          <Description />
-        </div>
-        <div className="flex flex-col pr-4 ">
-          <div className="pl-4">
-            <TextEditter />
+      <div className="text-white text-2xl ml-4 mb-5">
+
+        ทดสอบความรู้เบื้องต้น
+      </div>
+
+      <button className="flex items-center gap-2 px-2 py-3 mb-5 ml-4 text-white bg-[#161f2e] rounded-lg hover:bg-[#1e2a3b] ">
+        <ListIcon />
+        <span>โจทย์ปัญหา</span>
+      </button>
+
+
+      <div className="flex flex-row">
+        
+        <div className="flex flex-col w-8/12 pl-4">
+          <div className="">
+            <Description />
           </div>
-          <div className="pl-4 pt-5 ">
+          <div className="pt-5">
             <TestCase />
           </div>
         </div>
+
+        <div className=" pr-4 ml-5">
+          <TextEditter />
+        </div>
       </div>
+
+
+
     </>
   );
 }
