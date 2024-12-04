@@ -1,64 +1,84 @@
-"use client"; 
+"use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; 
-import Image from "next/image"; 
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { getAllCourseById } from "../../services/user.service";
-import Class102 from "@/app/assets/CoursesAssets/Class102.svg"; 
+import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
+import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 
 export default function Courses() {
-  const router = useRouter(); 
-  const [courses, setCourses] = useState([]);  
-  
+  const router = useRouter();
+  const [courses, setCourses] = useState([]);
+
   useEffect(() => {
-    const fetchCourses = async (id: string) => {
+    const fetchCourses = async () => {
       try {
-        const response = await getAllCourseById(id); 
-        console.log(response.data); 
+        const response = await getAllCourseById();
+        console.log(response.data);
         if (response && response.data) {
-          setCourses(response.data || []); 
+          setCourses(response.data || []);
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
 
-    const id = 'your-id-here'; 
+    const id = "your-id-here";
     if (id) {
-      fetchCourses(id);
+      fetchCourses();
     } else {
       console.error("ID is required to fetch courses");
     }
   }, []);
 
-  
   const handleCourseClick = (id: string) => {
-    router.push(`/student/courses/${id}/general`); 
+    router.push(`/student/courses/${id}/general`);
   };
 
   return (
     <div className="flex flex-col text-[#FAFAFA] m-14 w-full">
-      <h1 className="text-lg font-medium mb-6">คอร์สเรียน</h1>
+      <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
       <div className="flex flex-row flex-wrap gap-5">
         {courses.length > 0 ? (
           courses.map((course: any) => (
             <div
-              key={course.courseId} 
-              onClick={() => handleCourseClick(course.courseId)} 
-              className="flex flex-col items-center bg-[#16233A] hover:bg-[#2C3A4E] cursor-pointer rounded-md space-y-3 px-7 py-5 w-80 h-auto"
+              key={course.courseId}
+              onClick={() => handleCourseClick(course.courseId)}
+              className="relative flex flex-col text-[#0B111B] cursor-pointer w-auto h-auto"
             >
-              
               {course.backgroundUrl ? (
-                <img className="w-20 h-20" src={course.backgroundUrl} alt={course.title} />
+                <Image
+                  className="self-center rounded-t-2xl w-auto min-h-48"
+                  src={course.backgroundUrl}
+                  alt={course.title}
+                  width={100}
+                  height={100}
+                />
               ) : (
-                <Image className="w-20 h-20" src={Class102} alt={course.title} />
+                <Image
+                  className="self-center rounded-t-2xl w-auto min-h-48"
+                  src={CourseBg}
+                  alt={course.title}
+                  width={100}
+                  height={100}
+                />
               )}
-              <h2 className="font-medium text-wrap text-xl">{course.title}</h2>
-              <p className="line-clamp-2 text-sm">{course.description}</p>
+              <Image
+                className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
+                src={UserProfile}
+                alt={course.title}
+              />
+              <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
+                <h1 className="w-48 text-xl font-semibold text-wrap">
+                  {course.title}
+                </h1>
+                <h2 className="text-sm">จิระศักดิ์ สิทธิกร</h2>
+              </div>
             </div>
           ))
         ) : (
-          <p>No courses available at the moment.</p> 
+          <p>No courses available at the moment.</p>
         )}
       </div>
     </div>
