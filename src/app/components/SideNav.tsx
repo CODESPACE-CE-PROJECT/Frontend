@@ -36,7 +36,7 @@ export default function SideNav({ role }: SideNavProps) {
   };
 
   return (
-    <nav className="sticky top-0 flex flex-col justify-between bg-[#0B111B] text-white w-[6vw] h-screen">
+    <nav className="sticky top-0 flex flex-col justify-between border-r-[1px] border-[#D7D7D71A] bg-[#0B111B] text-white w-[6vw] h-screen">
       {/* Navigation Links */}
       <ul className="space-y-10 mt-8">
         <li>
