@@ -38,21 +38,12 @@ export default function Login() {
     setUsernameError("");
     setPasswordError("");
 
-    if (!username && !password) {
-      setUsernameError("ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
-      setPasswordError("รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
+    if (!username || !password) {
+      const errorMessage = "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง";
+      setUsernameError(errorMessage);
+      setPasswordError(errorMessage);
       return;
     }
-
-    if (!username) {
-      setUsernameError("ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
-    }
-
-    if (!password) {
-      setPasswordError("รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง");
-    }
-
-    if (!username || !password) return;
 
     setLoading(true);
 
@@ -72,13 +63,9 @@ export default function Login() {
         });
       } else if (response.status === 401) {
         setLoading(false);
-        const errorMessage = "message" in response ? response.message : "Unauthorized access";
-        setUsernameError(
-          errorMessage.includes("username") ? "ชื่อผู้ใช้ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง" : ""
-        );
-        setPasswordError(
-          errorMessage.includes("password") ? "รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง" : ""
-        );
+        const errorMessage = "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง";
+        setUsernameError(errorMessage);
+        setPasswordError(errorMessage);
       }
     } catch (error) {
       setLoading(false);
