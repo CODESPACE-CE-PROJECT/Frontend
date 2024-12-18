@@ -178,7 +178,7 @@ export default function Login() {
             width={24}
             height={24}
           />
-          <span className="ml-2 text-gray-800">หรือเข้าสู่ระบบด้วย Google</span>
+          <span className="ml-2 text-gray-800">เข้าสู่ระบบด้วย Google</span>
         </button>
       </div>
     </div>
