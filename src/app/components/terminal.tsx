@@ -22,7 +22,6 @@ const XtermTerminal = () => {
     terminal.loadAddon(attachAddon);
     // @ts-ignore
     terminal.open(terminalRef.current);
-
     fitAddon.fit();
 
     return () => {

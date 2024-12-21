@@ -16,11 +16,11 @@ import logos_cpp from "@/app/assets/WorkingAssets/logos_cpp.svg";
 import closeIcon from "@/app/assets/WorkingAssets/closeIcon.svg";
 import TerminalIcon from "@mui/icons-material/Terminal";
 
+
 export default function WorkingSpace() {
   const [sourceCode, setSourceCode] = useState("");
   const [input, setInput] = useState("");
   const [showOutput, setShowOutput]: any = useState("");
-
   const sendCode = () => {
     axios
       .post("https://compiler-api.unixvextor.com/compiler/", {
@@ -156,6 +156,10 @@ int main() {
   return 0;
 }`}
               theme="vs-dark"
+              options={{
+                fontSize: 16,
+                fontFamily: "JetBrains Mono"
+              }}
             />
           </div>
 
