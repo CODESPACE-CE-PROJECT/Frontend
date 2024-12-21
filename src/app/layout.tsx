@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Thai } from "next/font/google";
-import { Mulish } from "next/font/google";
+import { Noto_Sans_Thai, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const noto = Noto_Sans_Thai({ subsets: ["latin"] });
-const mulish = Mulish({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Web Application Platfrom for Programming Classroom",
