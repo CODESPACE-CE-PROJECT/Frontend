@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { jwtDecode } from "jwt-decode"; // Corrected import
+import Cookies from 'js-cookie';
 
 interface IJwt {
   username: string;
@@ -23,6 +24,7 @@ export function middleware(request: NextRequest) {
   try {
     const decoded = jwtDecode<IJwt>(token);
     if (Date.now() >= decoded.exp * 1000) {
+      Cookies.remove('accessToken');
       return NextResponse.redirect(new URL("/login", request.url));
     }
     const currentPath = request.nextUrl.pathname;
