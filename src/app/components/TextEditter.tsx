@@ -2,17 +2,36 @@ import React, { useState } from "react";
 import Codeicon from "../../../src/app/assets/HomeworkAssets/CodeIcon.svg";
 import Image from "next/image";
 import Editor from "@monaco-editor/react";
-
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import UploadIcon from '@mui/icons-material/Upload';
 export default function TextEditter() {
   return (
     <>
       <div>
-        <div className="bg-[#161e2e] rounded-t-lg text-[#a2a5ab] flex flex-row pt-1 pb-1 pl-2 ">
-          <Image src={Codeicon} alt="" className="w-4" />
-          <div className="pl-2">Code</div>
+        <div className="flex justify-between items-center mb-3">
+          {/* ปุ่ม Code ด้านซ้าย */}
+          <div className="bg-[#161f2e] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#1d2738] w-24 text-center">
+            Code
+          </div>
+
+          {/* ปุ่ม อัพโค้ด และ บันทึก ด้านขวา */}
+          <div className="flex space-x-4">
+            <button className="border border-[#2A3A50] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#2A3A50] w-28 flex items-center justify-center space-x-2">
+              <UploadIcon className="w-5 h-5" />
+              <span>อัพโค้ด</span>
+            </button>
+            <button className="bg-[#5572FA] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#3a59d7] w-24 flex items-center justify-center space-x-2">
+              <CloudUploadIcon className="w-5 h-5" />
+              <span>บันทึก</span>
+            </button>
+          </div>
+
         </div>
+
+
+
         <Editor
-          height="50vh"
+          height="50vw"
           width="50vw"
           defaultLanguage="cpp"
           defaultValue={`#include <iostream>
