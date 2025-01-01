@@ -75,9 +75,28 @@ export default function Login() {
 
   const handlegooglelogin = (e) => {
     e.preventDefault();
+
+    const urlparams = new URLSearchParams(window.location.search);
+    const token = urlparams.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      console.warn("Token not found in URL parameters.");
+    }
+
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!backendUrl) {
+      console.error("Backend URL is not defined.");
+      return;
+    }
+
+   
     window.location.href = `${backendUrl}/auth/google`;
   };
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
@@ -154,9 +173,8 @@ export default function Login() {
           <button
             onClick={handlelogin}
             type="button"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white mt-4 ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5572FA] hover:bg-indigo-700"
-            }`}
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white mt-4 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5572FA] hover:bg-indigo-700"
+              }`}
             disabled={loading}
           >
             {loading ? "Signing in..." : "เข้าสู่ระบบ"}
@@ -170,6 +188,7 @@ export default function Login() {
 
         <button
           onClick={handlegooglelogin}
+
           className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium border-white bg-[#FAFAFA]"
         >
           <Image

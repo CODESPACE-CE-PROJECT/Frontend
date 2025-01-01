@@ -34,7 +34,7 @@ export const getpeople = async (courseId: string) => {
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/people/${courseId}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}/people`
     );
     return response.data;
   }
