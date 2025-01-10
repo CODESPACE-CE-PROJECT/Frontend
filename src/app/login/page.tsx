@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "../../app/assets/Login/logo.svg";
 import { useRouter } from "next/navigation";
 import { login } from "../services/auth.service";
 import Swal from "sweetalert2";
 import { AiFillEye, AiFillEyeInvisible, AiOutlineExclamationCircle } from "react-icons/ai";
+import Cookies from 'js-cookie';
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -73,31 +74,30 @@ export default function Login() {
     }
   };
 
-  const handlegooglelogin = (e) => {
-    e.preventDefault();
-
-    const urlparams = new URLSearchParams(window.location.search);
-    const token = urlparams.get("token");
-
-    if (token) {
-      localStorage.setItem("token", token);
-    } else {
-      console.warn("Token not found in URL parameters.");
-    }
-
+  const handlegooglelogin = () => {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-    if (!backendUrl) {
-      console.error("Backend URL is not defined.");
-      return;
-    }
-
-   
     window.location.href = `${backendUrl}/auth/google`;
+  
   };
 
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("accessToken");
+    const refreshToken = urlParams.get("refreshToken");
 
-
+    
+    if (accessToken && refreshToken) {
+    
+      Cookies.set('accessToken', accessToken);
+      Cookies.set('refreshToken', refreshToken);
+    
+      window.location.href = "/"
+    } else {
+      console.log("No tokens found in URL");
+    }
+  }, []);
+  
   return (
     <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
       <div className="shadow-md rounded-lg px-8 py-6 max-w-md w-full">
@@ -187,8 +187,7 @@ export default function Login() {
         </div>
 
         <button
-          onClick={handlegooglelogin}
-
+          onClick={handlegooglelogin} // ตรวจสอบว่าฟังก์ชันนี้ผูกกับปุ่มแล้ว
           className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium border-white bg-[#FAFAFA]"
         >
           <Image
@@ -199,6 +198,7 @@ export default function Login() {
           />
           <span className="ml-2 text-gray-800">เข้าสู่ระบบด้วย Google</span>
         </button>
+
       </div>
     </div>
   );
