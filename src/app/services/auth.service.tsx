@@ -10,9 +10,11 @@ export const login = async (username: string, password: string) => {
        });
    
        if (response.status === 201) {
-         const token: string | null = response.data.accessToken;
-         if (token) {
-           Cookies.set('accessToken', token);
+         const accesstoken: string | null = response.data.accessToken;
+         const refreshtoken: string | null = response.data.refreshToken;
+         if (accesstoken && refreshtoken) {
+           Cookies.set('accessToken', accesstoken);
+           Cookies.set('refreshToken', refreshtoken);
          }
        }
        return response;
@@ -32,13 +34,16 @@ export const logout = async () => {
                `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
                {
                     headers: {
-                         Authorization: `Bearer ${Cookies.get('accessToken')}`
+                         AuthorizationaccessToken: `Bearer ${Cookies.get('accessToken')}`
+                         
                     }
                }
           );
 
           if (response.status === 200) {
                Cookies.remove('accessToken');
+               Cookies.remove('refreshToken');
+               
           }
 
           return response;
