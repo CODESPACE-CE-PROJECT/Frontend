@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getAssignment } from "../../../../services/user.service";
+import { useRouter } from "next/navigation";
 
 export default function Assignment() {
+  const router = useRouter();
   const params = useParams();
   const courseId = params.id;
 
@@ -77,19 +79,25 @@ export default function Assignment() {
 
           {/* Problem Count (Box Style) */}
           <div className="flex gap-2 justify-start w-4/12 text-center">
-            {Array.from({ length: assignment.problemQuantities }).map((_, index) => {
-              const problem = assignment.problem[index];
-              const score = problem ? problem.score : 0;
-              const maxScore = 2;
-              const href = problem ? "/student/homeworkspace" : "#";
-              const bgColor = problem ? "bg-[#1E9733]" : "bg-[#808080]";
-              const textColor = problem ? "text-white" : "text-gray-400";
+            {assignment.problem.map((problem: any, index: number) => {
+              const score = problem.score || 0;
+              const maxScore = problem.score;
+              const bgColor =
+                problem.stateSubmission === "NOTSEND"
+                  ? "bg-[#808080]"
+                  : "bg-[#4CAF50]";
+              const textColor =
+                problem.stateSubmission === "NOTSEND"
+                  ? "text-white"
+                  : "text-white";
 
               return (
-                <a
-                  key={index}
-                  href={href}
-                  className={`${bgColor} ${textColor} flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16`}
+                <div
+                  key={problem.problemId}
+                  className={`${bgColor} ${textColor} flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16 cursor-pointer`}
+                  onClick={() =>
+                    router.push(`/student/courses/${courseId}/assignment/${problem.problemId}`)
+                  }
                 >
                   <h1 className="space-x-1">
                     <span>ข้อ</span>
@@ -100,7 +108,7 @@ export default function Assignment() {
                     <span>{"/"}</span>
                     <span>{maxScore}</span>
                   </h2>
-                </a>
+                </div>
               );
             })}
           </div>
@@ -108,7 +116,10 @@ export default function Assignment() {
           {/* Total Score */}
           <div className="text-white text-lg py-3 rounded-md w-48 text-center">
             {assignment.problem.length > 0
-              ? assignment.problem.reduce((acc: number, curr: any) => acc + curr.score, 0)
+              ? assignment.problem.reduce(
+                  (acc: number, curr: any) => acc + curr.score,
+                  0
+                )
               : 0}
           </div>
         </div>

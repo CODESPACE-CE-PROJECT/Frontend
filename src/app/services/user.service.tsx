@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 
 
-export const getAssignment = async (courseId: string) => {
+export const getAssignment = async (courseId: string, p0: string) => {
   const token: string | undefined = Cookies.get("accessToken");
 
   if (!courseId) {
