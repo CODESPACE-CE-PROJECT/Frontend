@@ -6,6 +6,8 @@ import WorkHeadNav from "@/app/components/WorkHeadNav";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
 import XtermTerminal from "@/app/components/terminal";
+import FileExplorer from "@/app/components/WorkingSpaceItems/FileExplorer";
+
 
 import dropDownIcon from "@/app/assets/WorkingAssets/dropDownIcon.svg";
 import dirIcon from "@/app/assets/WorkingAssets/dirIcon.svg";
@@ -83,39 +85,9 @@ export default function WorkingSpace() {
 
   return (
     <>
-      <div className="flex flex-col text-white m-4">
-        {/* head */}
-        <WorkHeadNav />
-
+      <div className="flex flex-col text-white">
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col w-[15vw]">
-            <input
-              className="bg-[#21293B] text-[#C2C8CC] text-lg rounded-md p-2 mb-5 w-full"
-              placeholder="ค้นหา"
-              type="text"
-            />
-
-            <div className="flex flex-row justify-between mb-3">
-              <div className="flex flex-row items-center space-x-2 ml-2">
-                <Image className="w-3" src={dropDownIcon} alt=""></Image>
-                <p className="text-lg">ไฟล์</p>
-                <Image className="w-5" src={dirIcon} alt=""></Image>
-              </div>
-
-              <div className="flex flex-row items-center space-x-3 pr-2">
-                <Image className="w-5" src={newFileIcon} alt=""></Image>
-                <Image className="w-6" src={newDirIcon} alt=""></Image>
-                <Image className="w-1" src={dotIcon} alt=""></Image>
-              </div>
-            </div>
-
-            <div className="flex flex-row bg-[#2B3245] text-[#C2C8CC] rounded-md space-x-2 p-2 mb-3">
-              <Image className="w-5" src={logos_cpp} alt=""></Image>
-              <p>main.cpp</p>
-            </div>
-            <div className="self-center border border-dashed border-b opacity-60 border-gray-400 w-[97%] mb-2"></div>
-            <div className="text-[#C2C8CC] ml-2">Packager files</div>
-          </div>
+          <FileExplorer/>
 
           {/* Text Editor */}
           <div className=" w-[45vw]">
