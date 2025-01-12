@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-import { NextResponse } from 'next/server';
 
 export const login = async (username: string, password: string) => {
      try {

@@ -7,12 +7,15 @@ import Logo from "../../app/assets/Login/logo.svg";
 import { useRouter } from "next/navigation";
 import { login } from "../services/auth.service";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import { navbarSelector, setIsCloseNavbar } from "../store/slices/navbarSlice";
 import {
   AiFillEye,
   AiFillEyeInvisible,
   AiOutlineExclamationCircle,
 } from "react-icons/ai";
 import Cookies from "js-cookie";
+import { useAppDispatch } from "../store/store";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -22,13 +25,19 @@ export default function Login() {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
+  
+  const navbarReducer = useSelector(navbarSelector)
+  const dispatch = useAppDispatch();
 
-  const handleUserName = (e) => {
+  console.log(`navbar value: ${navbarReducer.isCloseNav}`)
+
+  const handleUserName = (e:any) => {
     setUsername(e.target.value);
     setUsernameError("");
+    dispatch(setIsCloseNavbar(true))
   };
 
-  const handlePassword = (e) => {
+  const handlePassword = (e:any) => {
     setPassword(e.target.value);
     setPasswordError("");
   };
@@ -37,7 +46,7 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = async (e) => {
+  const handlelogin = async (e:any) => {
     e.preventDefault();
 
     setUsernameError("");

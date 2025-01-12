@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Thai, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from '@/app/components/ReduxProvider'
 
 const noto = Noto_Sans_Thai({ subsets: ["latin"] });
 
@@ -17,8 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={noto.className}>
-      {children}
-
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );
