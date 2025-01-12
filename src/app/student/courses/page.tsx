@@ -48,8 +48,8 @@ export default function Courses() {
               className="relative flex flex-col text-[#0B111B] cursor-pointer w-auto h-auto"
             >
               {course.backgroundUrl ? (
-                <Image
-                  className="self-center rounded-t-2xl w-auto min-h-48"
+                <Image  
+                  className="self-center rounded-t-2xl w-full min-h-48"
                   src={course.backgroundUrl}
                   alt={course.title}
                   width={100}
@@ -57,7 +57,7 @@ export default function Courses() {
                 />
               ) : (
                 <Image
-                  className="self-center rounded-t-2xl w-auto min-h-48"
+                  className="self-center rounded-t-2xl w-full min-h-48"
                   src={CourseBg}
                   alt={course.title}
                   width={100}
