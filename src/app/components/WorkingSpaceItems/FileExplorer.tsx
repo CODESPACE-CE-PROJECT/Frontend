@@ -25,7 +25,7 @@ export default function FileExplorer() {
   const [editingFile, setEditingFile] = useState<string | null>(null);
   const [focusedFile, setFocusedFile] = useState<string | null>(null);
 
-  const createNewFile = () => {
+  const createNewFile = () => { 
     let baseName = "untitled";
     let newFileName = baseName;
     let counter = 1;
