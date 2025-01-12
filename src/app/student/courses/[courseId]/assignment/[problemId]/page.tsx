@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation"; // using next/navigation for the params hook
-import { getAssignment } from "../../../../../services/user.service"; // API service for fetching data
+import { getProblemById } from "../../../../../services/problem.service"; // API service for fetching data
 
 export default function AssignmentPage() {
-  const params = useParams(); // Accessing dynamic route params
-  const courseId = params.id; // Get courseId from the URL
+  const params = useParams<{courseId: string,problemId: string}>(); // Accessing dynamic route params
   const problemId = params.problemId; // Get problemId from the URL
 
   const [assignmentDetails, setAssignmentDetails] = useState<any>(null);
@@ -15,10 +14,10 @@ export default function AssignmentPage() {
 
   useEffect(() => {
     const fetchAssignmentDetails = async () => {
-      if (!courseId || !problemId) return;
+      if (!problemId) return;
       setLoading(true);
       try {
-        const data = await getAssignment(courseId as string, problemId as string);
+        const data = await getProblemById(problemId);
         if (data?.data) {
           setAssignmentDetails(data.data);
         }
@@ -30,7 +29,7 @@ export default function AssignmentPage() {
     };
 
     fetchAssignmentDetails();
-  }, [courseId, problemId]);
+  }, [problemId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -40,7 +39,7 @@ export default function AssignmentPage() {
       {/* Display the assignment details */}
       <div>
         <h1 className="text-white text-2xl mb-4">{assignmentDetails?.title}</h1>
-        <p className="text-white">{assignmentDetails?.description}</p>
+        <p className="text-white">{assignmentDetails?.description}</p>  
         {/* More details about the assignment can go here */}
       </div>
     </>

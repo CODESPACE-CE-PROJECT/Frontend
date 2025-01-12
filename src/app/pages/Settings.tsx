@@ -1,25 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import Image from "next/image";
 import Profileuser from "../../../src/app/assets/setting/profileuser.svg";
 import { getProfile } from "../services/user.service";
+import { IProfile } from "../interfaces/user.interface";
+import { Role, Gender } from "../enum/enum";
 
 export default function Setting() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [profileData, setProfileData] = useState({
-    username: "",
-    firstName: "",
-    lastName: "",
-    school: "",
-    email: "",
-    newPassword: "**********************",
-    confirmPassword: "**********************",
-    gender: "",
-    role: "",
-    profilePicture: Profileuser,
+  const [profileData, setProfileData] = useState<IProfile | null>(null);
+
+  const updateProfile = (updates: Partial<IProfile>) => {
+  setProfileData((prev) => {
+    if (!prev) return null; // Handle null state safely
+
+    return {
+      ...prev,
+      ...updates,
+    };
   });
+};
 
   const handleEditClick = () => setIsEditing(!isEditing);
   const handleProfileChangeClick = () => {
@@ -34,7 +36,7 @@ export default function Setting() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileData({ ...profileData, profilePicture: reader.result });
+        // updateProfile({pictureUrl: reader})
       };
       reader.readAsDataURL(file);
     }
@@ -46,19 +48,8 @@ export default function Setting() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getProfile();
-        setProfileData({
-          username: response.data.username,
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          school: "KMITL",
-          email: response.data.email,
-          newPassword: "**********************",
-          confirmPassword: "**********************",
-          gender: response.data.gender,
-          role: response.data.role,
-          profilePicture: response.data.picture || Profileuser, // Use default if no picture
-        });
+        const response: IProfile = await getProfile();
+        setProfileData(response);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       } finally {
@@ -70,7 +61,7 @@ export default function Setting() {
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setProfileData((prev) => ({ ...prev, [name]: value }));
+    updateProfile({gender: value})
   };
 
   return (
@@ -87,13 +78,13 @@ export default function Setting() {
                 {/* profile */}
                 <div className="flex flex-col items-center justify w-1/5 ">
                   <div className="w-48 h-48 rounded-full border-4 border-[#3b4f61] shadow-lg overflow-hidden">
-                    <Image src={profileData.profilePicture} alt="Profile" width={192} height={192} className="object-cover" />
+                    <Image src={profileData?.pictureUrl || Profileuser} alt="Profile" width={192} height={192} className="object-cover" />
                   </div>
                   <button
-                    onClick={handleEditClick}
+                    onClick={handleFileChange}
                     className={`text-white py-2 px-6 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md mt-6 border border-[#2A3A50]`}
                   >
-                   เปลี่ยนโปรไฟล์
+                    เปลี่ยนโปรไฟล์
                   </button>
                 </div>
 
@@ -101,28 +92,27 @@ export default function Setting() {
 
                   {/* setting */}
                   <div className="flex flex-col text-white space-y-4 w-full pt-5 ml-7">
-                    <h1 className="text-4xl font-bold">{profileData.username}</h1>
-                    <p className="text-lg text-gray-400">{profileData.email}</p>
-                    <p className="text-lg pb-5">{profileData.role} สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
-
+                    <h1 className="text-4xl font-bold">{profileData?.username}</h1>
+                    <p className="text-lg text-gray-400">{profileData?.email}</p>
+                    <p className="text-lg pb-5">{profileData?.role === Role.STUDENT ? "ผู้เรียน" : ""} {profileData?.school.schoolName}</p>
                     <div className="flex flex-col space-y-6 pt-5 pb-5">
                       <div className="flex justify-between space-x-6 ">
-                        <ProfileField label="ชื่อผู้ใช้งาน" name="username" value={profileData.username} isEditing={isEditing} onChange={handleChange} />
-                        <ProfileField label="อีเมล" name="email" value={profileData.email} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="ชื่อผู้ใช้งาน" name="username" value={profileData?.username} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="อีเมล" name="email" value={profileData?.email} isEditing={isEditing} onChange={handleChange} />
                       </div>
 
                       <div className="flex justify-between space-x-6  ">
-                        <ProfileField label="ชื่อจริง" name="firstName" value={profileData.firstName} isEditing={isEditing} onChange={handleChange} />
-                        <ProfileField label="นามสกุล" name="lastName" value={profileData.lastName} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="ชื่อจริง" name="firstName" value={profileData?.firstName} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="นามสกุล" name="lastName" value={profileData?.lastName} isEditing={isEditing} onChange={handleChange} />
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-6 mt-7 w-full ">
                       <label className="text-lg font-medium text-gray-300">เพศ:</label>
                       <div className="flex items-center space-x-6">
-                        <GenderRadio value="male" checked={profileData.gender === "MALE"} onChange={handleChange} />
-                        <GenderRadio value="female" checked={profileData.gender === "FEMALE"} onChange={handleChange} />
-                        <GenderRadio value="other" checked={profileData.gender === "other"} onChange={handleChange} />
+                        <GenderRadio value={Gender.MALE} checked={profileData?.gender === Gender.MALE} onChange={handleChange} disable={isEditing} />
+                        <GenderRadio value={Gender.FEMALE} checked={profileData?.gender === Gender.FEMALE} onChange={handleChange} disable={isEditing}/>
+                        <GenderRadio value={Gender.OTHER} checked={profileData?.gender === Gender.OTHER} onChange={handleChange} disable={isEditing}/>
                       </div>
                     </div>
                   </div>
@@ -132,13 +122,13 @@ export default function Setting() {
                       onClick={handleSave} // หรือฟังก์ชันอื่นๆ ตามต้องการ
                       className="text-white py-2 px-6 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md  border  border-[#2A3A50]"
                     >
-                     เปลี่ยนรหัสผ่าน
+                      เปลี่ยนรหัสผ่าน
                     </button>
                     <button
-                      onClick={handleSave} // หรือฟังก์ชันที่เกี่ยวข้องกับการเปลี่ยนรหัสผ่าน
+                      onClick={handleEditClick} // หรือฟังก์ชันที่เกี่ยวข้องกับการเปลี่ยนรหัสผ่าน
                       className="text-white py-2 px-6 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md bg-[#5572FA] "
                     >
-                       แก้ไขข้อมูล 
+                      แก้ไขข้อมูล
                     </button>
                   </div>
                 </div>
@@ -171,20 +161,21 @@ const ProfileField = ({ label, name, value, isEditing, onChange }: any) => (
   </div>
 );
 
-const GenderRadio = ({ value, checked, onChange }: any) => (
+const GenderRadio = ({ value, checked, onChange, disable }: any) => (
   <label className="flex items-center space-x-2 cursor-pointer">
     <input
       type="radio"
-      name="gender"
+      name={value}
       value={value}
       checked={checked}
       onChange={onChange}
       className="hidden peer"
+      disabled={!disable}
     />
     <div className={`w-6 h-6 flex items-center justify-center border-2 rounded-full ${checked ? "bg-[#15A7D5] border-transparent" : "border-[#15A7D5]"}`}>
       {checked && <div className="w-3 h-3 bg-[#2A3A50] rounded-full"></div>}
     </div>
-    <span className="text-white">{value === "male" ? "ชาย" : value === "female" ? "หญิง" : "อื่นๆ"}</span>
+    <span className="text-white">{value === Gender.MALE ? "ชาย" : value === Gender.FEMALE ? "หญิง" : "อื่นๆ"}</span>
   </label>
 );
 

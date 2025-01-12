@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
@@ -67,8 +67,8 @@ const AssignBox = ({
 );
 
 export default function General() {
-  const { id } = useParams(); // Capture the course ID from URL
-
+  const { courseId } = useParams(); // Capture the course ID from URL
+  
   // Mock course data
   const courseData: Record<string, any> = {
     class101: {
@@ -97,11 +97,14 @@ export default function General() {
     },
   };
 
-  const courseId = Array.isArray(id) ? id[0] : id; // Ensure it's a string
-  const course = courseData[courseId]; // Get the data for the specific course
-  if (!course) {
-    return <h1>Course not found</h1>; // Handle invalid course IDs
-  }
+  // const courseId = Array.isArray(id) ? id[0] : id; // Ensure it's a string
+  // const course = courseData[courseId]; // Get the data for the specific course
+  // if (!course) {
+  //   return <h1>Course not found</h1>; // Handle invalid course IDs
+  // }
+  useEffect(() => {
+    
+  }, [])
 
   return (
     <>
@@ -116,18 +119,18 @@ export default function General() {
 
       <div className="flex flex-col items-center space-y-10 px-40 py-5">
         {/* Render InfoBox */}
-        <InfoBox
+        {/* <InfoBox
           title={course.info.title}
           date={course.info.date}
           content={course.info.content}
-        />
+        /> */}
 
         {/* Render AssignBox */}
-        <AssignBox
+        {/* <AssignBox
           title={course.assign.title}
           date={course.assign.date}
           content={course.assign.content}
-        />
+        /> */}
       </div>
     </>
   );
