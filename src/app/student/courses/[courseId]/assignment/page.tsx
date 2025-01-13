@@ -20,8 +20,8 @@ export default function Assignment() {
       setLoading(true);
       try {
         const data = await getAssignment(courseId);
-        if (data?.data) {
-          setAssignments(data.data.assigment);
+        if (data) {
+          setAssignments(data.data.assignment);
         }
       } catch (err: any) {
         console.error("Error fetching assignments:", err);

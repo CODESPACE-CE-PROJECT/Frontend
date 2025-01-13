@@ -124,7 +124,7 @@ export default function People() {
           <div key={index} className="flex justify-between items-center px-8 py-6 rounded-lg">
             <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
               <Image
-                src={student.pictureUrl || "https://via.placeholder.com/100"}
+                src={student.pictureUrl || Profileuser}
                 alt="Profile"
                 className="w-16 h-16 rounded-full"
                 width={100}

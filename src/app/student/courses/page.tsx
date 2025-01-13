@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { getAllCourseById } from "../../services/course.service";
+import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 
@@ -14,8 +14,7 @@ export default function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await getAllCourseById();
-        console.log(response.data);
+        const response = await getAllCourse();
         if (response && response.data) {
           setCourses(response.data || []);
         }
