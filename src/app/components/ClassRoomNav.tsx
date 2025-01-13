@@ -31,7 +31,19 @@ const commonLinks = (id: string, role: string, pathname: string) => (
           href={`/${role.toLowerCase()}/courses/${id}/general`}
           className="flex items-center"
         >
-          ทั่วไป
+          ประกาศ
+        </Link>
+      </li>
+      <li
+        className={`px-8 py-4 rounded-md ${
+          pathname.includes("/announcement") ? "bg-[#3049724D]" : ""
+        } hover:bg-[#3049724D] cursor-pointer`}
+      >
+        <Link
+          href={`/${role.toLowerCase()}/courses/${id}/announcement`}
+          className="flex items-center"
+        >
+          การแจ้งเตือน
         </Link>
       </li>
       <li
