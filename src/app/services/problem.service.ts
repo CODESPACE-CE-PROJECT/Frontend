@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 
 export const getProblemById = async (problemId: string) => {
-     const token: string | undefined = Cookies.get("accessToken");
+     const token = Cookies.get('accessToken')
    
      if (!problemId) {
        console.error("No courseId provided.");

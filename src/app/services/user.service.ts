@@ -1,10 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-
 import Cookies from "js-cookie";
 
-
 export const getProfile = async () => {
-  const token: string | undefined = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken')
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response: AxiosResponse = await axios.get(
@@ -15,7 +13,7 @@ export const getProfile = async () => {
 };
 
 export const editProfile = async (profileData: object) => {
-  const token: string | undefined = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken')
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -42,7 +40,7 @@ export const createCourse = async (formData: {
   description: string;
 }) => {
   try {
-    const token: string | undefined = Cookies.get("accessToken");
+    const token = Cookies.get('accessToken')
 
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
@@ -78,7 +76,7 @@ export const createCourse = async (formData: {
 export const getAnnouncementsByCourseId = async (
   courseId: string
 ): Promise<any | null> => {
-  const token: string | undefined = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken')
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
