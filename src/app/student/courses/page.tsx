@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { getAllCourseById } from "../../services/user.service";
+import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
-import Cookies from 'js-cookie';
 
 export default function Courses() {
   const router = useRouter();
@@ -15,8 +14,7 @@ export default function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await getAllCourseById();
-        console.log(response.data);
+        const response = await getAllCourse();
         if (response && response.data) {
           setCourses(response.data || []);
         }
@@ -33,8 +31,8 @@ export default function Courses() {
     }
   }, []);
 
-  const handleCourseClick = (id: string) => {
-    router.push(`/student/courses/${id}/general`);
+  const handleCourseClick = (courseId: string) => {
+    router.push(`/student/courses/${courseId}/general`);
   };
 
   return (

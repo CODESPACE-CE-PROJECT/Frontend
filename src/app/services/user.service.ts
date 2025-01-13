@@ -1,61 +1,19 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-
 import Cookies from "js-cookie";
 
-
-export const getAssignment = async (courseId: string, p0: string) => {
-  const token: string | undefined = Cookies.get("accessToken");
-
-  if (!courseId) {
-    console.error("No courseId provided.");
-    return null;
-  }
-
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching assignment:", error);
-      return null;
-    }
-  } else {
-    console.error("No access token found.");
-    return null;
-  }
-};
-
-export const getpeople = async (courseId: string) => {
-  const token = Cookies.get("accessToken");
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}/people`
-    );
-    return response.data;
-  }
-  throw new Error("No token available");
-};
-
-
-
 export const getProfile = async () => {
-  const token: string | undefined = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken')
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response: AxiosResponse = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`
     );
-    return response.data;
+    return response.data.data;
   }
 };
 
 export const editProfile = async (profileData: object) => {
-  const token: string | undefined = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken')
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -75,23 +33,6 @@ export const editProfile = async (profileData: object) => {
   }
 };
 
-export const getAllCourseById = async (): Promise<any | null> => {
-  const token: string | undefined = Cookies.get("accessToken");
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`
-      );
-      console.log("Course Data:", response.data); // Log the response to see its structure
-      return response.data; // Ensure this includes the courseId
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-      return null;
-    }
-  }
-  return null;
-};
 
 
 export const createCourse = async (formData: {
@@ -99,7 +40,7 @@ export const createCourse = async (formData: {
   description: string;
 }) => {
   try {
-    const token: string | undefined = Cookies.get("accessToken");
+    const token = Cookies.get('accessToken')
 
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
@@ -135,7 +76,7 @@ export const createCourse = async (formData: {
 export const getAnnouncementsByCourseId = async (
   courseId: string
 ): Promise<any | null> => {
-  const token: string | undefined = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken')
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

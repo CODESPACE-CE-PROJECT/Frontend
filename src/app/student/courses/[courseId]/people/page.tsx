@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getpeople } from "../../../../services/user.service";
+import { getpeople } from "../../../../services/course.service";
+import Image from 'next/image'
+import Profileuser from "../../../../assets/setting/Profileuser.svg";
 
 export default function People() {
-  const params = useParams();
-  const courseId = params.id;
+  const params = useParams<{courseId: string}>();
+  const courseId = params.courseId;
 
   const [teacher, setTeacher] = useState<any | null>(null);
   const [students, setStudents] = useState<any[]>([]);
@@ -18,7 +20,7 @@ export default function People() {
       if (!courseId) return;
       setLoading(true);
       try {
-        const data = await getpeople(courseId as string);
+        const data = await getpeople(courseId);
 
         // ตรวจสอบข้อมูลที่ได้จาก API
         console.log("API Response:", data);
@@ -82,10 +84,12 @@ export default function People() {
       {teacher ? (
         <div className="flex justify-between items-center px-8 py-6 rounded-lg">
           <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-            <img
-              src={teacher.pictureUrl || "https://via.placeholder.com/100"}
+            <Image
+              src={teacher.pictureUrl || Profileuser}
               alt="Profile"
               className="w-16 h-16 rounded-full"
+              width={100}
+              height={100}
             />
             <div className="flex flex-col text-left">
               <div className="font-semibold">{teacher.username || "ชื่อผู้ใช้งาน"}</div>
@@ -119,10 +123,12 @@ export default function People() {
         students.map((student, index) => (
           <div key={index} className="flex justify-between items-center px-8 py-6 rounded-lg">
             <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-              <img
-                src={student.pictureUrl || "https://via.placeholder.com/100"}
+              <Image
+                src={student.pictureUrl || Profileuser}
                 alt="Profile"
                 className="w-16 h-16 rounded-full"
+                width={100}
+                height={100}
               />
               <div className="flex flex-col text-left">
                 <div className="font-semibold">{student.username || "ชื่อผู้ใช้งาน"}</div>

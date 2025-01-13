@@ -1,5 +1,4 @@
-"use client";
-
+'use client'
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -7,11 +6,14 @@ import Logo from "../../app/assets/Login/logo.svg";
 import { useRouter } from "next/navigation";
 import { login } from "../services/auth.service";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import { navbarSelector, setIsCloseNavbar } from "../store/slices/navbarSlice";
 import {
   AiFillEye,
   AiFillEyeInvisible,
   AiOutlineExclamationCircle,
 } from "react-icons/ai";
+import { useAppDispatch } from "../store/store";
 import Cookies from "js-cookie";
 
 export default function Login() {
@@ -23,12 +25,18 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
 
-  const handleUserName = (e) => {
+  const navbarReducer = useSelector(navbarSelector)
+  const dispatch = useAppDispatch();
+
+  console.log(`navbar value: ${navbarReducer.isCloseNav}`)
+
+  const handleUserName = (e: any) => {
     setUsername(e.target.value);
     setUsernameError("");
+    dispatch(setIsCloseNavbar(true))
   };
 
-  const handlePassword = (e) => {
+  const handlePassword = (e: any) => {
     setPassword(e.target.value);
     setPasswordError("");
   };
@@ -37,7 +45,7 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handlelogin = async (e) => {
+  const handlelogin = async (e: any) => {
     e.preventDefault();
 
     setUsernameError("");
@@ -55,12 +63,11 @@ export default function Login() {
 
     try {
       const response = await login(username, password);
-
       if (response.status === 201) {
         setLoading(false);
         Swal.fire({
-          title: "Success!",
-          text: "You have successfully logged in!",
+          title: "เข้าสู่ระบบเสร็จสิ้น",
+          text: "",
           showConfirmButton: false,
           icon: "success",
           timer: 2000,
@@ -75,6 +82,7 @@ export default function Login() {
         setPasswordError(errorMessage);
       }
     } catch (error) {
+      console.log(error)
       setLoading(false);
       setUsernameError("เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง");
     }
@@ -87,16 +95,33 @@ export default function Login() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("accessToken");
-    const refreshToken = urlParams.get("refreshToken");
+    const accessToken = urlParams.get("accessToken") || null;
+    const refreshToken = urlParams.get("refreshToken") || null;
+    const error = urlParams.get('error') || ""
 
-    if (accessToken && refreshToken) {
+
+    if (error !== "") {
+      Swal.fire({
+        title: "เข้าสู่ระบบไม่สมบูรณ์",
+        text: "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง",
+        showConfirmButton: false,
+        icon: "error",
+        timer: 3000,
+      })
+    }
+
+    if (accessToken && refreshToken && error === "") {
       Cookies.set("accessToken", accessToken);
       Cookies.set("refreshToken", refreshToken);
-
-      window.location.href = "/";
-    } else {
-      console.log("No tokens found in URL");
+      Swal.fire({
+        title: "เข้าสู่ระบบเสร็จสิ้น",
+        text: "",
+        showConfirmButton: false,
+        icon: "success",
+        timer: 2000,
+      }).then(() => {
+        router.push('/')
+      })
     }
   }, []);
 
@@ -181,11 +206,10 @@ export default function Login() {
           <button
             onClick={handlelogin}
             type="button"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white mt-4 ${
-              loading
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white mt-4 ${loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-[#5572FA] hover:bg-indigo-700"
-            }`}
+              }`}
             disabled={loading}
           >
             {loading ? "Signing in..." : "เข้าสู่ระบบ"}

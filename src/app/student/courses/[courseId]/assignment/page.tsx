@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getAssignment } from "../../../../services/user.service";
+import { getAssignment } from "../../../../services/assignment.service";
 import { useRouter } from "next/navigation";
 
 export default function Assignment() {
   const router = useRouter();
-  const params = useParams();
-  const courseId = params.id;
+  const param = useParams<{courseId: string}>();
+  const courseId = param.courseId
 
   const [assignments, setAssignments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,9 +19,9 @@ export default function Assignment() {
       if (!courseId) return;
       setLoading(true);
       try {
-        const data = await getAssignment(courseId as string);
-        if (data?.data) {
-          setAssignments(data.data);
+        const data = await getAssignment(courseId);
+        if (data) {
+          setAssignments(data.data.assignment);
         }
       } catch (err: any) {
         console.error("Error fetching assignments:", err);
