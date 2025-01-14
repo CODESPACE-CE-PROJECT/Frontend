@@ -6,12 +6,18 @@ import Image from "next/image";
 import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
+import { useDispatch } from "react-redux";
+import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
 
 export default function Courses() {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
+    dispatch(setIsCloseCourseNav(true)); // Set the visibility to 'off'
+
     const fetchCourses = async () => {
       try {
         const response = await getAllCourse();
@@ -23,13 +29,13 @@ export default function Courses() {
       }
     };
 
-    const id = "your-id-here";
+    const id = "your-id-here"; // Make sure to replace this with the actual ID
     if (id) {
       fetchCourses();
     } else {
       console.error("ID is required to fetch courses");
     }
-  }, []);
+  }, [dispatch]);
 
   const handleCourseClick = (courseId: string) => {
     router.push(`/student/courses/${courseId}/general`);
@@ -47,7 +53,7 @@ export default function Courses() {
               className="relative flex flex-col text-[#0B111B] cursor-pointer w-auto h-auto"
             >
               {course.backgroundUrl ? (
-                <Image  
+                <Image
                   className="self-center rounded-t-2xl w-full min-h-48"
                   src={course.backgroundUrl}
                   alt={course.title}

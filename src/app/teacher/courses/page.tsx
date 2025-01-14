@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { getAllCourseById, createCourse } from "../../services/user.service";
+import { createCourse } from "../../services/user.service";
+import { getAllCourseById } from "../../services/course.service";
 
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
@@ -194,7 +195,6 @@ export default function CoursesPage() {
       )}
 
       <div className="flex flex-row flex-wrap gap-5">
-
         {/* new */}
         {courses.length > 0 ? (
           courses.map((course: any) => (
