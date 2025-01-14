@@ -4,6 +4,10 @@ import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
+import { useDispatch } from "react-redux";
+import { courseNavSelector, setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
+import { useSelector } from "react-redux";
+
 
 // Reusable InfoBox Component
 const InfoBox = ({
@@ -68,7 +72,9 @@ const AssignBox = ({
 
 export default function General() {
   const { courseId } = useParams(); // Capture the course ID from URL
-  
+  const courseNavReducer = useSelector(courseNavSelector)
+  const dispatch = useDispatch();
+
   // Mock course data
   const courseData: Record<string, any> = {
     class101: {
@@ -103,8 +109,8 @@ export default function General() {
   //   return <h1>Course not found</h1>; // Handle invalid course IDs
   // }
   useEffect(() => {
-    
-  }, [])
+    dispatch(setIsCloseCourseNav(false));
+  }, [dispatch])
 
   return (
     <>

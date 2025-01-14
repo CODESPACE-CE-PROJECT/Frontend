@@ -21,7 +21,7 @@ export default function Assignment() {
       try {
         const data = await getAssignment(courseId);
         if (data?.data) {
-          setAssignments(data.data.assigment);
+          setAssignments(data.data.assignment);
         }
       } catch (err: any) {
         console.error("Error fetching assignments:", err);
