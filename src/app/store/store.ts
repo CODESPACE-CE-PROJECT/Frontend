@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import navbarSlice  from "./slices/navbarSlice";
+import navbarSlice from "./slices/navbarSlice";
+import courseNavSlice from "./slices/courseNavSlice";
 
 export const store = configureStore({
-    reducer: {navbarSlice},
+  reducer: {
+    navbarSlice,
+    courseNavSlice,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

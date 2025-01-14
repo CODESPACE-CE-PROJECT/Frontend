@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
+
+import { useDispatch } from "react-redux";
+import { courseNavSelector, setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
+import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { getAnnouncement } from "../../../../services/announcement.service";
@@ -15,15 +19,18 @@ export default function Announcement() {
   const [courseDetails, setCourseDetails] = useState<any>(null); // Add state for course details
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  
+  const courseNavReducer = useSelector(courseNavSelector)
+  const dispatch = useDispatch();
+  
   useEffect(() => {
+    dispatch(setIsCloseCourseNav(false));
     const fetchAnnouncementsAndCourseDetails = async () => {
       if (!courseId) return;
       setLoading(true);
       try {
         const data = await getAnnouncement(courseId);
         console.log("Fetched data:", data);
-
         if (data?.data) {
           setAnnouncement(data.data.courseAnnounce);
           setCourseDetails({
@@ -39,7 +46,7 @@ export default function Announcement() {
     };
 
     fetchAnnouncementsAndCourseDetails();
-  }, [courseId]);
+  }, [courseId,dispatch]);
 
   return (
     <>
