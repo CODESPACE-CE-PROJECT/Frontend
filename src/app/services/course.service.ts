@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-
 import Cookies from "js-cookie";
 
-export const getAllCourseById = async (): Promise<any | null> => {
-     const token: string | undefined = Cookies.get("accessToken");
+export const getAllCourse = async (): Promise<any | null> => {
+     const token = Cookies.get('accessToken')
      if (token) {
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           try {
@@ -21,7 +20,7 @@ export const getAllCourseById = async (): Promise<any | null> => {
 };
 
 export const getpeople = async (courseId: string) => {
-     const token = Cookies.get("accessToken");
+     const token = Cookies.get('accessToken')
      if (token) {
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           const response = await axios.get(

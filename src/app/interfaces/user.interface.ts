@@ -8,7 +8,7 @@ export interface IProfile {
     gender: Gender,
     role: Role,
     pictureUrl: string ,
-    IpAddress: string,
+    IpAddress: string ,
     isActived: boolean,
     allowLogin: boolean,
     isEnable: boolean,

@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from "axios";
+
 import Cookies from "js-cookie";
 
-export const getAssignment = async (courseId: string) => {
-     const token = Cookies.get('accessToken')
+export const getAnnouncement = async (courseId: string) => {
+     const token: string | undefined = Cookies.get("accessToken");
    
      if (!courseId) {
        console.error("No courseId provided.");
@@ -14,11 +15,11 @@ export const getAssignment = async (courseId: string) => {
    
        try {
          const response: AxiosResponse = await axios.get(
-           `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}`
+           `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}`
          );
          return response.data;
        } catch (error) {
-         console.error("Error fetching assignment:", error);
+         console.error("Error fetching course:", error);
          return null;
        }
      } else {

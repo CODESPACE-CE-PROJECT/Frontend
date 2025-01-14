@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { getAllCourseById } from "../../services/course.service";
+import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 import { useDispatch } from "react-redux";
@@ -20,8 +20,7 @@ export default function Courses() {
 
     const fetchCourses = async () => {
       try {
-        const response = await getAllCourseById();
-        console.log("Courses fetched:", response.data); // Log the response data
+        const response = await getAllCourse();
         if (response && response.data) {
           setCourses(response.data || []);
         }

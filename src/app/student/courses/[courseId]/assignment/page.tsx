@@ -20,7 +20,7 @@ export default function Assignment() {
       setLoading(true);
       try {
         const data = await getAssignment(courseId);
-        if (data?.data) {
+        if (data) {
           setAssignments(data.data.assignment);
         }
       } catch (err: any) {
