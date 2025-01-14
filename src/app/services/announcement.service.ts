@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 
 import Cookies from "js-cookie";
 
-export const getAnnouncement = async (courseId: string) => {
+export const getCoursesById = async (courseId: string) => {
      const token: string | undefined = Cookies.get("accessToken");
    
      if (!courseId) {

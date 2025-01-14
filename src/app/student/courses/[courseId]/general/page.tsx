@@ -9,7 +9,7 @@ import { courseNavSelector, setIsCloseCourseNav } from "@/app/store/slices/cours
 import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { getAnnouncement } from "../../../../services/announcement.service";
+import {  getCoursesById } from "../../../../services/announcement.service";
 
 export default function Announcement() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function Announcement() {
       if (!courseId) return;
       setLoading(true);
       try {
-        const data = await getAnnouncement(courseId);
+        const data = await  getCoursesById(courseId);
         console.log("Fetched data:", data);
         if (data?.data) {
           setAnnouncement(data.data.courseAnnounce);

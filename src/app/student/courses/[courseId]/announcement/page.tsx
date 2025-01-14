@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonIcon from "@mui/icons-material/Person";
 import { useRouter } from "next/navigation";
-import { getAnnouncement } from "../../../../services/announcement.service";
+import { getCoursesById } from "../../../../services/announcement.service";
 
 const AssignBox = ({
   title,
@@ -61,14 +61,14 @@ export default function General() {
       setLoading(true);
       setError(null);
       try {
-        const data = await getAnnouncement(courseId);
+        const data = await getCoursesById(courseId);
         console.log("Fetched data:", data);
 
         if (data?.data) {
           setAssignments(data.data.assignment || []);
           setUsername(data.data.username || "Unknown");
           setCourseDetails({
-            title: data.data.title, // Save course title
+            title: data.data.title, 
           });
         }
       } catch (err: any) {
