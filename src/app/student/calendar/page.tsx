@@ -57,7 +57,7 @@ export default function Calendar() {
       allDay: false,
       backgroundColor: "#800080",
       textColor: "#FFFFFF",
-      url: "https://www.google.co.th",
+      // url: "https://www.google.co.th",
     },
     {
       id: "6",
