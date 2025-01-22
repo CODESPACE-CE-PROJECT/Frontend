@@ -1,69 +1,40 @@
 "use client"; 
 
 import React from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export default function Score() {
+  const params = useParams<{ courseId: string }>(); // ดึงค่า courseId จาก URL
+  const { courseId } = params;
+
   return (
     <>
-      <div className="relative w-full flex">
-        <div className="flex pl-10 ">
-          <h1 className="z-10 border-[#1E90FF] border-b-2 font-semibold text-lg py-4">
-            แบบฝึกหัด
-          </h1>
-        </div>
-        <div className="flex pl-10">
-          <h1 className="z-10 font-semibold text-lg py-4">การทดสอบ</h1>
-        </div>
-        <span className="z-0 absolute bottom-0 bg-[#090B11] p-[1px] w-full"></span>
-      </div>
-
-      <div className="flex justify-between items-center px-8 rounded-lg py-7">
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center mr-4">
-          แบบฝึกหัด
-        </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] w-48 text-center mr-4">
-          คะแนน
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center px-8 py-4 rounded-lg">
-        <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-          <div className="font-semibold">1. ทดสอบความรู้เบื้องต้น</div>
-        </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-          10 / 10
-        </div>
-      </div>
-      <div className="flex justify-between items-center px-8 py-4 rounded-lg">
-        <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-          <div className="font-semibold">2. ทดสอบความรู้เบื้องต้น</div>
-        </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-          10 / 10
-        </div>
-      </div>
-      <div className="flex justify-between items-center px-8 py-4 rounded-lg">
-        <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-          <div className="font-semibold">3. ทดสอบความรู้เบื้องต้น</div>
-        </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-          10 / 10
-        </div>
-      </div>
-      <div className="flex justify-between items-center px-8 py-4 rounded-lg">
-        <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-          <div className="font-semibold">4. ทดสอบความรู้เบื้องต้น</div>
-        </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-          10 / 10
+      <div className="relative w-full ">
+        <div className="flex gap-12 pl-10">
+          <Link href={`/student/courses/${courseId}/score/homeworkscore`}>
+            <h1
+              className={`text-lg font-semibold cursor-pointer pb-2 ${window.location.pathname.includes("homeworkscore")
+                  ? "text-white border-b-4 border-[#1E90FF]"
+                  : "text-gray-400"
+                }`}
+            >
+              แบบฝึกหัด
+            </h1>
+          </Link>
+          <Link href={`/student/courses/${courseId}/score/testscore`}>
+            <h1
+              className={`text-lg font-semibold cursor-pointer pb-2 ${window.location.pathname.includes("testscore")
+                  ? "text-white border-b-4 border-[#1E90FF]"
+                  : "text-gray-400"
+                }`}
+            >
+              การทดสอบ
+            </h1>
+          </Link>
         </div>
       </div>
 
-      <div className="flex justify-end px-8 py-4">
-        <div className="text-white text-lg px-4 py-3 rounded-md  w-48 text-center mr-8">
-          คะแนนรวม  15/30
-        </div>
-      </div>
     </>
   );
 }

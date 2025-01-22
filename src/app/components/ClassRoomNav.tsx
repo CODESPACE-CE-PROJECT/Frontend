@@ -23,9 +23,8 @@ const commonLinks = (id: string, role: string, pathname: string) => (
     </li>
     <div className="flex flex-col gap-3">
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/general") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/general") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/general`}
@@ -35,9 +34,8 @@ const commonLinks = (id: string, role: string, pathname: string) => (
         </Link>
       </li>
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/announcement") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/announcement") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/announcement`}
@@ -47,33 +45,39 @@ const commonLinks = (id: string, role: string, pathname: string) => (
         </Link>
       </li>
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/assignment") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/assignment") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
-        <Link
-          href={`/${role.toLowerCase()}/courses/${id}/assignment`}
+       <Link
+          href={
+            role === "STUDENT"
+              ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
+              : `/${role.toLowerCase()}/courses/${id}/assignment`
+          }
           className="flex items-center"
         >
-          การบ้าน
+          แบบฝึกหัด
         </Link>
       </li>
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/score") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/score") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
-          href={`/${role.toLowerCase()}/courses/${id}/score`}
+          href={
+            role === "STUDENT"
+              ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
+              : `/${role.toLowerCase()}/courses/${id}/score`
+          }
           className="flex items-center"
         >
           คะแนน
         </Link>
       </li>
+
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/people") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/people") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/people`}
@@ -97,9 +101,8 @@ export default function ClassRoomNav({ id, role }: ClassRoomNavProps) {
 
         {role === "ADMIN" && (
           <li
-            className={`px-8 py-4 rounded-md ${
-              pathname.includes("/people") ? "bg-[#3049724D]" : ""
-            } hover:bg-[#3049724D] cursor-pointer`}
+            className={`px-8 py-4 rounded-md ${pathname.includes("/people") ? "bg-[#3049724D]" : ""
+              } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
               href={`/${role.toLowerCase()}/courses/${id}/people`}
