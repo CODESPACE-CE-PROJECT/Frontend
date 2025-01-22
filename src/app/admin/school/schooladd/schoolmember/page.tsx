@@ -8,6 +8,8 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import CircleIcon from '@mui/icons-material/Circle';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 
 export default function schoolmember() {
     return (
@@ -62,7 +64,7 @@ export default function schoolmember() {
                             {/* บัญชีผู้สอน */}
                             <div className="flex flex-col items-start gap-9 w-full">
                                 <div className="flex flex-col items-start gap-6 self-stretch ">
-                                    <div className="flex h-16 items-center gap-2.5 self-stretch p-2 px-6 rounded-md bg-[#2A3A50] bg-opacity-30">
+                                    <div className="flex h-16 items-center gap-2.5 self-stretch p-2 px-6 rounded-xl bg-[#2A3A50] bg-opacity-30">
                                         <span className="text-zinc-50 text-xl">บัญชีผู้สอน</span>
                                     </div>
                                     {/* ข้อมูลรายชื่อผู้สอน */}
@@ -75,12 +77,88 @@ export default function schoolmember() {
                                             </div>
                                         </div>
                                         {/* more */}
-                                        <div className="flex align-center gap-4 p-3 px-4 rounded-[6px] border border-[#00DACC]">
-                                            <CircleIcon className=" w-1 h-1 text-[#00DACC]" />
-                                            <span className="flex  justify-center items-center text-[#00DACC]">ออนไลน์</span>
+                                        <div className="flex align-center gap-4">
+                                            <div className="flex align-center gap-4 py-2 px-4 rounded-md border border-[#00DACC]">
+                                                <CircleIcon className="text-[#00DACC]" />
+                                                <span className="flex  justify-center items-center text-[#00DACC]">ออนไลน์</span>
+                                            </div>
+                                            <div className="flex items-center justify-center px-2 rounded-md border border-[#2A3A50]">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </div>
                                         </div>
                                     </div>
-                                    
+
+                                </div>
+                            </div>
+
+                            {/* บัญชีผู้เรียน */}
+                            <div className="flex flex-col items-start gap-9 w-full">
+                                <div className="flex flex-col items-start gap-6 self-stretch ">
+                                    <div className="flex h-16 items-center gap-2.5 self-stretch p-2 px-6 rounded-xl bg-[#2A3A50] bg-opacity-30">
+                                        <span className="text-zinc-50 text-xl">บัญชีผู้เรียน</span>
+                                    </div>
+                                    {/* ข้อมูลรายชื่อผู้เรียน */}
+                                    <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
+                                        <div className="flex items-center gap-5">
+                                            <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-zinc-50 text-xl">รัตนพร สมใจนึก</span>
+                                                <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
+                                            </div>
+                                        </div>
+                                        {/* more */}
+                                        <div className="flex align-center gap-4">
+                                            <div className="flex align-center gap-4 py-2 px-4 rounded-md border border-[#00DACC]">
+                                                <CircleIcon className="text-[#00DACC]" />
+                                                <span className="flex  justify-center items-center text-[#00DACC]">ออนไลน์</span>
+                                            </div>
+                                            <div className="flex items-center justify-center px-2 rounded-md border border-[#2A3A50]">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* ข้อมูลรายชื่อผู้เรียน */}
+                                    <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
+                                        <div className="flex items-center gap-5">
+                                            <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-zinc-50 text-xl">รัตนพร สมใจนึก</span>
+                                                <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
+                                            </div>
+                                        </div>
+                                        {/* more */}
+                                        <div className="flex align-center gap-4">
+                                            <div className="flex align-center gap-4 py-2 px-4 rounded-md border border-[#fafafa]">
+                                                <CircleOutlinedIcon className="text-zinc-50" />
+                                                <span className="flex  justify-center items-center text-zinc-50">ออฟไลน์</span>
+                                            </div>
+                                            <div className="flex items-center justify-center px-2 rounded-md border border-[#2A3A50]">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* ข้อมูลรายชื่อผู้เรียน */}
+                                    <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
+                                        <div className="flex items-center gap-5">
+                                            <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-zinc-50 text-xl">รัตนพร สมใจนึก</span>
+                                                <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
+                                            </div>
+                                        </div>
+                                        {/* more */}
+                                        <div className="flex align-center gap-4">
+                                            <div className="flex align-center gap-4 py-2 px-4 border rounded-md border-[#EF4343]">
+                                                <HighlightOffRoundedIcon className="text-[#EF4343]" />
+                                                <span className="flex  justify-center items-center text-[#EF4343]">ปิดใช้งานชั่วคราว</span>
+                                            </div>
+                                            <div className="flex items-center justify-center px-2 rounded-md border border-[#2A3A50]">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

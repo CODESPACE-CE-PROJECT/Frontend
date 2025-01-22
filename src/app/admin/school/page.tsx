@@ -46,7 +46,9 @@ export default function school() {
                 <span className="flex w-[658px] h-[60px] items-center gap-5 text-[14px]	text-neutral-50">1 ซอยฉลองกรุง 1 เขตลาดกระบัง อำเภอลาดกระบัง จังหวัดกรุงเทพมหานคร 10520</span>
                 <span className="flex w-[170px] h-[60px] justify-center items-center gap-5 text-[20px]	text-neutral-50">1</span>
                 <span className="flex w-[170px] h-[60px] justify-center items-center gap-5 text-[20px]	text-neutral-50">2</span>
-                <MoreHorizOutlinedIcon className="flex w-[36px] h-[36px] items-center rounded-md border-gray-100 text-[#FAFAFA]" />
+                <div className="flex items-center justify-center h-9 w-9 rounded-md border border-[#2A3A50]">
+                  <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                </div>
               </div>
             </div>
 
