@@ -184,26 +184,6 @@ export default function schooladd() {
                     </div>
                   </div>
 
-
-
-
-
-                  {/* ที่อยู่
-                  <div className="flex items-start gap-[35px] self-stretch w-full h-[76px]">
-                    <div className="flex flex-col items-start gap-2.5 w-full justify-between">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">ที่อยู่</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-[72px] py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">1 ซอย ฉลองกรุง 1 </span>
-                      </div>
-                    </div>
-                  </div> */}
-
-
-
                 </div>
                 <div className="flex align-center gap-4">
                   <button className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border border-[#2A3A50] text-zinc-50" >ยกเลิก</button>

@@ -66,17 +66,27 @@ export default function schoolmember() {
                                         <span className="text-zinc-50 text-xl">บัญชีผู้สอน</span>
                                     </div>
                                     {/* ข้อมูลรายชื่อผู้สอน */}
-                                    <div className="flex h-16 items-center gap-2.5 self-stretch p-2 px-6 rounded-md bg-[#2A3A50] bg-opacity-30">
-                                        <span className="text-zinc-50 text-xl">บัญชีผู้สอน</span>
-                                        <img src="https://www.eng.kmitl.ac.th/wp-content/uploads/2024/06/About-4-B.png" alt="icon" className="w-[140px] h-[140px]" />
-
+                                    <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
+                                        <div className="flex items-center gap-5">
+                                            <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-zinc-50 text-xl">รัตนพร สมใจนึก</span>
+                                                <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
+                                            </div>
+                                        </div>
+                                        {/* more */}
+                                        <div className="flex align-center gap-4 p-3 px-4 rounded-[6px] border border-[#00DACC]">
+                                            <CircleIcon className=" w-1 h-1 text-[#00DACC]" />
+                                            <span className="flex  justify-center items-center text-[#00DACC]">ออนไลน์</span>
+                                        </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
-        </div >
+            </div >
 
         </>
     );
