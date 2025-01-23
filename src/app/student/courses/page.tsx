@@ -29,12 +29,9 @@ export default function Courses() {
       }
     };
 
-    const id = "your-id-here"; // Make sure to replace this with the actual ID
-    if (id) {
-      fetchCourses();
-    } else {
-      console.error("ID is required to fetch courses");
-    }
+  
+    fetchCourses();
+  
   }, [dispatch]);
 
   const handleCourseClick = (courseId: string) => {
