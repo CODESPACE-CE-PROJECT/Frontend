@@ -76,6 +76,7 @@ export default function AssignmentPage() {
 
     const handleBack = () => {
       router.back();
+     
     };
 
     return (

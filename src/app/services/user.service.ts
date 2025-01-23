@@ -73,23 +73,23 @@ export const createCourse = async (formData: {
   }
 };
 
-export const getAnnouncementsByCourseId = async (
-  courseId: string
-): Promise<any | null> => {
-  const token = Cookies.get('accessToken')
+// export const getAnnouncementsByCourseId = async (
+//   courseId: string
+// ): Promise<any | null> => {
+//   const token = Cookies.get('accessToken')
 
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/announce/${courseId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching announcements:", error);
-      return null;
-    }
-  }
+//   if (token) {
+//     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+//     try {
+//       const response: AxiosResponse = await axios.get(
+//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/announce/${courseId}`
+//       );
+//       return response.data;
+//     } catch (error) {
+//       console.error("Error fetching announcements:", error);
+//       return null;
+//     }
+//   }
 
-  return null;
-};
+//   return null;
+// };

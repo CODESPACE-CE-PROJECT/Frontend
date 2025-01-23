@@ -6,7 +6,9 @@ import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { createCourse } from "../../services/user.service";
-import { getAllCourseById } from "../../services/course.service";
+import { getAllCourse } from "../../services/course.service";
+import { useDispatch } from "react-redux";
+import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
 
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
@@ -20,19 +22,27 @@ export default function CoursesPage() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [courses, setCourses] = useState<any[]>([]); // Store the list of courses
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setIsCloseCourseNav(true)); // Set the visibility to 'off'
+
     const fetchCourses = async () => {
       try {
-        const response = await getAllCourseById();
-        setCourses(response.data); // Set the courses
+        const response = await getAllCourse();
+        console.log(response.data); // Log the response to check the structure
+
+        if (response && response.data) {
+          setCourses(response.data || []);
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
 
     fetchCourses();
-  }, []);
+
+  }, [dispatch]);
 
   const toggleCreateClass = () => {
     setShowCreateClass(!showCreateClass);
@@ -80,13 +90,15 @@ export default function CoursesPage() {
     }
   };
 
-  const handleCourseClick = (id: string) => {
-    if (id && typeof id === "string" && id.trim() !== "") {
-      router.push(`/teacher/courses/${id}/general`);
+  const handleCourseClick = (courseId?: string) => {
+    if (courseId) {
+      router.push(`/teacher/courses/${courseId}/general`);
     } else {
-      console.error("Invalid course ID:", id);
+      console.error("Course ID is missing");
     }
   };
+
+
 
   return (
     <div className="flex flex-col text-[#FAFAFA] m-14 min-w-screen">
@@ -104,13 +116,17 @@ export default function CoursesPage() {
       </div>
 
       {showCreateClass && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-[#16233A] p-6 rounded-lg shadow-lg text-white w-11/12 max-w-2xl">
-            <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-              <fieldset className="flex flex-col">
-                <legend className="block mb-2">ปรับแต่งรูปภาพ:</legend>
+        <div className="fixed inset-0 z-10 flex justify-center items-center bg-black bg-opacity-50 ">
+          <div className="bg-white p-8 rounded-lg shadow-lg  w-11/12 max-w-2xl">
+            <h2 className="text-center text-lg font-semibold mb-6 text-gray-900">
+              สร้างคอร์สในโรงเรียน
+            </h2>
+
+            <form onSubmit={handleSubmit} className="flex flex-col space-y-6 ">
+              <fieldset className="flex flex-col h-full">
+
                 <div
-                  className="relative flex flex-col items-center justify-center h-32 bg-[#2A3A50] rounded-lg cursor-pointer"
+                  className="relative flex flex-col items-center justify-center h-32 bg-white rounded-lg cursor-pointer border-2 border-dashed border-gray-300 "
                   role="button"
                   aria-label="เลือกรูปภาพ"
                 >
@@ -120,13 +136,16 @@ export default function CoursesPage() {
                       alt="Profile Picture"
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-lg"
+                      className="rounded-lg "
                     />
                   ) : (
-                    <div className="flex flex-col items-center">
-                      <AddPhotoAlternateIcon className="text-white mb-1" />
-                      <span className="text-white">เลือกรูปภาพ</span>
+
+                    <div className="text-center text-gray-500">
+                      <AddPhotoAlternateIcon className="text-4xl mb-2" />
+                      <p className="text-base text-black pb-2">เลือกรูปภาพพื้นหลังของคอร์สเรียน *</p>
+                      <p className="pb-2 text-sm text-[#CED4DA]">JPEG, PNG ขนาดไม่เกิน 50MB</p>
                     </div>
+
                   )}
                   <input
                     type="file"
@@ -135,44 +154,52 @@ export default function CoursesPage() {
                     onChange={handleImageUpload}
                     aria-hidden="true"
                   />
+                  <button className="text-sm font-semibold text-[#54575C] border border-[#CED4DA] rounded-lg w-20 h-20 flex items-center justify-center   mb-3">
+                    เลือกไฟล์
+                  </button>
+
                 </div>
               </fieldset>
 
               <div>
-                <label htmlFor="courseName" className="block mb-2">
+                <label htmlFor="courseName" className="block text-sm font-medium text-gray-700 mb-2">
                   ชื่อชั้นเรียน:
                 </label>
                 <input
                   id="courseName"
                   type="text"
                   value={courseName}
+                  placeholder="ชื่อชั้นเรียน"
                   onChange={(e) => setCourseName(e.target.value)}
-                  className="w-full px-4 py-2 bg-[#2A3A50] text-white rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+                  className="w-full px-4 py-2 shadow-sm border border-[#CED4DA] text-black rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="description" className="block mb-2">
-                  รายละเอียด:
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                  รายละเอียด
                 </label>
                 <textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-4 py-2 bg-[#2A3A50] text-white rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                  required
+                  className="w-full border border-[#CED4DA] rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black pl-3 pt-3"
+
+                  placeholder="รายละเอียด"
+                  maxLength={200}
                 ></textarea>
+                <div className="text-right text-sm mt-1 text-black">{description.length}/200</div>
               </div>
 
               {errorMessage && (
                 <div className="text-red-500 text-sm">{errorMessage}</div>
               )}
 
-              <div className="flex justify-end space-x-4">
+              <div className="flex  items-center justify-center space-x-7 ">
                 <button
                   type="button"
-                  className="hover:bg-red-700 text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+                  className="border border-[#CED4DA] text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 w-32"
                   onClick={toggleCreateClass}
                 >
                   ยกเลิก
@@ -180,11 +207,10 @@ export default function CoursesPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`py-2 px-4 rounded-lg transition duration-300 ease-in-out ${
-                    loading
-                      ? "bg-gray-500 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
-                  } text-white`}
+                  className={`py-2 px-4 rounded-lg text-white w-32 ${loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#5572FA] hover:bg-blue-700"
+                    }`}
                 >
                   {loading ? "กำลังสร้าง..." : "สร้าง"}
                 </button>
