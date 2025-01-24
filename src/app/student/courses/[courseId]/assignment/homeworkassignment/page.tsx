@@ -7,6 +7,8 @@ import { getCoursesById } from "../../../../../services/announcement.service";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
 
 export default function Assignment() {
   const router = useRouter();
@@ -17,7 +19,9 @@ export default function Assignment() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [courseDetails, setCourseDetails] = useState<any>(null);
+  const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(setIsCloseCourseNav(false));
     const fetchAssignments = async () => {
       if (!courseId) return;
       setLoading(true);
@@ -39,7 +43,7 @@ export default function Assignment() {
     };
 
     fetchAssignments();
-  }, [courseId]);
+  }, [courseId,dispatch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -48,7 +52,7 @@ export default function Assignment() {
 
   return (
     <>
-      <div className="text-2xl pl-10 pb-5 mt-6">{courseDetails?.title}</div>
+      <div className="text-2xl text-[#FAFAFA] pl-10 pb-5 mt-6">{courseDetails?.title}</div>
 
       <div className="relative w-full ">
         <div className="flex gap-12 pl-14">

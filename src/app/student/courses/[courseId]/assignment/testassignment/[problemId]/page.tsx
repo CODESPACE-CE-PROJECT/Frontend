@@ -80,7 +80,7 @@ export default function AssignmentPage() {
 
     return (
       <>
-        <div className="text-white text-2xl ml-4 mb-5 flex items-center">
+        <div className="text-[#FAFAFA] text-2xl ml-4 mb-5 flex items-center">
           <button onClick={handleBack} className="focus:outline-none mr-2">
             <ArrowBackIosIcon />
           </button>
