@@ -19,6 +19,25 @@ xterm-viewport {
   background-color: #2A3A50;
 }
 
+/* .fc-day:hover {
+  background: #ff0000;
+  color: #fff000;
+} */
+
+.fc .fc-daygrid-day:hover {
+  background: #2A3A50AA;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 2px solid;
+  border-color: #3049724d;
+}
+
+.fc .fc-list-event.fc-event-forced-url:hover {
+  background: #2A3A50AA;
+  cursor: pointer;
+}
+
 /* Scrollbar width */
 ::-webkit-scrollbar {
   width: 8px;

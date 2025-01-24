@@ -56,7 +56,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className=" text-3xl " />
-                <span className=" text-sm ">คอร์สเรียน</span>
+                <span className=" text-sm text-center">คอร์สเรียน</span>
               </a>
             </li>
 
@@ -66,7 +66,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
-                <span className="text-sm">เขียนโปรแกรม</span>
+                <span className="text-sm text-center">เขียนโปรแกรม</span>
               </a>
             </li>
 
@@ -76,7 +76,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
-                <span className="text-sm">ปฏิทิน</span>
+                <span className="text-sm text-center">ปฏิทิน</span>
               </a>
             </li>
 
@@ -86,7 +86,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
-                <span className="text-sm">แบบฝึกหัด</span>
+                <span className="text-sm text-center">แบบฝึกหัด</span>
               </a>
             </li>
 
@@ -96,7 +96,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
-                <span className="text-sm">โปรไฟล์</span>
+                <span className="text-sm text-center">โปรไฟล์</span>
               </a>
             </li>
           </>
@@ -110,7 +110,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className=" text-3xl " />
-                <span className=" text-sm ">คอร์สเรียน</span>
+                <span className=" text-sm text-center">คอร์สเรียน</span>
               </a>
             </li>
 
@@ -120,7 +120,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
-                <span className="text-sm">เขียนโปรแกรม</span>
+                <span className="text-sm text-center">เขียนโปรแกรม</span>
               </a>
             </li>
 
@@ -130,7 +130,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
-                <span className="text-sm">ปฏิทิน</span>
+                <span className="text-sm text-center">ปฏิทิน</span>
               </a>
             </li>
 
@@ -140,7 +140,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
-                <span className="text-sm">แบบฝึกหัด</span>
+                <span className="text-sm text-center">แบบฝึกหัด</span>
               </a>
             </li>
 
@@ -150,7 +150,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
-                <span className="text-sm">โปรไฟล์</span>
+                <span className="text-sm text-center">โปรไฟล์</span>
               </a>
             </li>
           </>
@@ -164,7 +164,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className="text-3xl" />
-                <span className=" text-sm ">แดชบอร์ด</span>
+                <span className=" text-sm text-center">แดชบอร์ด</span>
               </a>
             </li>
             <li>
@@ -173,7 +173,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <SchoolIcon className="text-3xl" />
-                <span className=" text-sm ">โรงเรียน/สถาบัน</span>
+                <span className=" text-sm text-center">โรงเรียน/สถาบัน</span>
               </a>
             </li>
             <li>
@@ -182,7 +182,7 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
-                <span className="text-sm">โปรไฟล์</span>
+                <span className="text-sm text-center">โปรไฟล์</span>
               </a>
             </li>
           </>
