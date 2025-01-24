@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getAssignment } from "../../../../../services/assignment.service";
 import { getCoursesById } from "../../../../../services/announcement.service";
+import { useDispatch } from "react-redux";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
 
 export default function Assignment() {
   const router = useRouter();
@@ -17,18 +19,19 @@ export default function Assignment() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [courseDetails, setCourseDetails] = useState<any>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+     dispatch(setIsCloseCourseNav(false));
     const fetchAssignments = async () => {
       if (!courseId) return;
       setLoading(true);
       try {
         const data = await getAssignment(courseId);
         if (data) {
-          // Filter assignments with type "EXAMONSITE" or "EXAMONLINE"
+          
           const filteredAssignments = data.data.assignment.filter(
-            (assignment: any) =>
-              assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
+            (assignment: any) => assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
           );
           setAssignments(filteredAssignments);
         }
@@ -43,7 +46,7 @@ export default function Assignment() {
     };
 
     fetchAssignments();
-  }, [courseId]);
+  }, [courseId,dispatch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
