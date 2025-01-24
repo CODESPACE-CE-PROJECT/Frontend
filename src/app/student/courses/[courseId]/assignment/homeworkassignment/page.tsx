@@ -17,6 +17,7 @@ export default function Assignment() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [courseDetails, setCourseDetails] = useState<any>(null);
+
   useEffect(() => {
     const fetchAssignments = async () => {
       if (!courseId) return;
@@ -24,13 +25,15 @@ export default function Assignment() {
       try {
         const data = await getAssignment(courseId);
         if (data) {
-          console.log(data)
-          setAssignments(data.data.assignment);
+          // Filter assignments to only include type "EXERCISE"
+          const filteredAssignments = data.data.assignment.filter(
+            (assignment: any) => assignment.type === "EXERCISE"
+          );
+          setAssignments(filteredAssignments);
         }
 
         const courseData = await getCoursesById(param.courseId);
         setCourseDetails(courseData.data);
-
       } catch (err: any) {
         console.error("Error fetching assignments:", err);
         setError(err.message);
@@ -44,30 +47,30 @@ export default function Assignment() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-
-
   return (
     <>
       <div className="text-2xl pl-10 pb-5 mt-6">{courseDetails?.title}</div>
 
-      <div className="relative w-full ">
+      <div className="relative w-full">
         <div className="flex gap-12 pl-14">
           <Link href={`/student/courses/${courseId}/assignment/homeworkassignment`}>
             <h1
-              className={`text-lg font-semibold cursor-pointer pb-2 ${window.location.pathname.includes("homeworkassignment")
-                ? "text-white border-b-4 border-[#1E90FF]"
-                : "text-gray-400"
-                }`}
+              className={`text-lg font-semibold cursor-pointer pb-2 ${
+                window.location.pathname.includes("homeworkassignment")
+                  ? "text-white border-b-4 border-[#1E90FF]"
+                  : "text-gray-400"
+              }`}
             >
               แบบฝึกหัด
             </h1>
           </Link>
           <Link href={`/student/courses/${courseId}/assignment/testassignment`}>
             <h1
-              className={`text-lg font-semibold cursor-pointer pb-2 ${window.location.pathname.includes("testassignment")
-                ? "text-white border-b-4 border-[#1E90FF]"
-                : "text-gray-400"
-                }`}
+              className={`text-lg font-semibold cursor-pointer pb-2 ${
+                window.location.pathname.includes("testassignment")
+                  ? "text-white border-b-4 border-[#1E90FF]"
+                  : "text-gray-400"
+              }`}
             >
               การทดสอบ
             </h1>
@@ -77,12 +80,12 @@ export default function Assignment() {
       {/* Table Header */}
       <div className="flex justify-between items-center px-8 rounded-lg pt-3">
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center mr-4 w-1/2">
-          การทดสอบ
+          แบบฝึกหัด
         </div>
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] text-center mr-4 w-4/12">
           ข้อย่อย
         </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] w-48 text-center ">
+        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] w-48 text-center">
           คะแนน
         </div>
       </div>
@@ -117,7 +120,9 @@ export default function Assignment() {
                   key={problem.problemId}
                   className={`${bgColor} ${textColor} flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16 cursor-pointer`}
                   onClick={() =>
-                    router.push(`/student/courses/${courseId}/assignment/homeworkassignment/${problem.problemId}`)
+                    router.push(
+                      `/student/courses/${courseId}/assignment/homeworkassignment/${problem.problemId}`
+                    )
                   }
                 >
                   <h1 className="space-x-1">
@@ -138,9 +143,9 @@ export default function Assignment() {
           <div className="text-white text-lg py-3 rounded-md w-48 text-center">
             {assignment.problem.length > 0
               ? assignment.problem.reduce(
-                (acc: number, curr: any) => acc + curr.score,
-                0
-              )
+                  (acc: number, curr: any) => acc + curr.score,
+                  0
+                )
               : 0}
           </div>
         </div>
