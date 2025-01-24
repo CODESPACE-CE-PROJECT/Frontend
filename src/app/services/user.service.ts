@@ -64,11 +64,11 @@ export const createCourse = async (formData: {
 
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-    console.error(
-      "Error creating course:",
-      axiosError.response?.data || axiosError.message
-    );
+    // const axiosError = error as AxiosError;
+    // console.error(
+    //   "Error creating course:",
+    //   axiosError.response?.data || axiosError.message
+    // );
     throw error;
   }
 };
