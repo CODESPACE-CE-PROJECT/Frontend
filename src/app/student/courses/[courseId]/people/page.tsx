@@ -6,6 +6,7 @@ import { getpeople } from "../../../../services/course.service";
 import Image from "next/image";
 import Profileuser from "../../../../assets/setting/Profileuser.svg";
 import SearchIcon from "@mui/icons-material/Search";
+import { Role } from "@/app/enum/enum";
 
 export default function People() {
   const params = useParams<{ courseId: string }>();
@@ -62,12 +63,12 @@ export default function People() {
       </div>
 
       <div className="flex items-center my-3 mx-8 px-4 py-3 space-x-4 w-auto rounded-md focus:border-[#1E90FF] duration-200 border border-[#2A3A50]">
-          <SearchIcon />
-          <input
-            type="text"
-            placeholder="ค้นหาชื่อ"
-            className="bg-transparent text-white focus:outline-none placeholder:text-white w-full"
-          />
+        <SearchIcon />
+        <input
+          type="text"
+          placeholder="ค้นหาชื่อ"
+          className="bg-transparent text-white focus:outline-none placeholder:text-white w-full"
+        />
       </div>
 
       <div className="flex justify-between items-center px-8 rounded-lg">
@@ -94,9 +95,15 @@ export default function People() {
               height={100}
             />
             <div className="flex flex-col text-left">
-              <div className="font-semibold">
-                {teacher.username || "ชื่อผู้ใช้งาน"}
+              <div className="flex flex-row space-x-2">
+                <div className="font-semibold">
+                  {teacher.firstName || "ชื่อผู้ใช้งาน"}
+                </div>
+                <div className="font-semibold">
+                  {teacher.lastName || "ชื่อผู้ใช้งาน"}
+                </div>
               </div>
+
               <div className="text-sm text-gray-300">
                 {teacher.email || "email@example.com"}
               </div>
@@ -104,11 +111,11 @@ export default function People() {
           </div>
 
           <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-            ผู้สอน
+            {teacher.role === Role.TEACHER ? "ผู้สอน" : ""}
           </div>
 
           <div
-            className={`flex text-white text-lg py-3 rounded-md border mx-6 w-36 text-center items-center justify-center ${
+            className={`flex text-white text-lg py-3 rounded-md border mx-6 w-36 space-x-2 text-center items-center justify-center ${
               teacher.isActived ? "border-[#00DACC]" : "border-[#FAFAFA]"
             }`}
           >
@@ -117,7 +124,7 @@ export default function People() {
                 teacher.isActived ? "bg-[#00DACC]" : "bg-[#FAFAFA]"
               }`}
             ></div>
-            {teacher.isActived ? "ออนไลน์" : "ออฟไลน์"}
+            <div>{teacher.isActived ? "ออนไลน์" : "ออฟไลน์"}</div>
           </div>
         </div>
       ) : (
@@ -140,9 +147,15 @@ export default function People() {
                 height={100}
               />
               <div className="flex flex-col text-left">
-                <div className="font-semibold">
-                  {student.username || "ชื่อผู้ใช้งาน"}
+                <div className="flex flex-row space-x-2">
+                  <div className="font-semibold">
+                    {student.firstName || "ชื่อผู้ใช้งาน"}
+                  </div>
+                  <div className="font-semibold">
+                    {student.lastName || "ชื่อผู้ใช้งาน"}
+                  </div>
                 </div>
+
                 <div className="text-sm text-gray-300">
                   {student.email || "email@example.com"}
                 </div>
@@ -150,11 +163,11 @@ export default function People() {
             </div>
 
             <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-              ผู้เรียน
+              {student.role === Role.STUDENT ? "ผู้เรียน" : ""}
             </div>
 
             <div
-              className={`text-white text-lg py-3 rounded-md border w-36 mx-6 text-center flex items-center justify-center ${
+              className={`text-white text-lg py-3 rounded-md border w-36 mx-6 space-x-2 text-center flex items-center justify-center ${
                 student.isActived ? "border-[#00DACC]" : "border-[#FAFAFA]"
               }`}
             >
@@ -163,7 +176,7 @@ export default function People() {
                   student.isActived ? "bg-[#00DACC]" : "bg-[#FAFAFA]"
                 }`}
               ></div>
-              {student.isActived ? "ออนไลน์" : "ออฟไลน์"}
+              <div>{student.isActived ? "ออนไลน์" : "ออฟไลน์"}</div>
             </div>
           </div>
         ))
