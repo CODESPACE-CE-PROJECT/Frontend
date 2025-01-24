@@ -31,7 +31,7 @@ const AssignBox = ({
       <div className="mx-8 mb-5 space-y-5 p-5 bg-[#2C3A4E] rounded">
         <div className="font-bold text-wrap">{title}</div>
         <div className="text-sm text-wrap justify-between flex">
-          วันสิ้นสุดการบ้าน {new Date(expireAt).toLocaleString()}
+          วันสิ้นสุดการบ้าน {new Date(expireAt).toLocaleString("th-TH")}
           <Link href={`/student/courses/${courseId}/assignment/homeworkassignment`}>
             <button className="text-sm rounded">ดูงานที่ได้รับมอบหมาย</button>
           </Link>
