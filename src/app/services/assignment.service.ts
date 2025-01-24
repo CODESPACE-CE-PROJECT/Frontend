@@ -25,3 +25,29 @@ export const getAssignment = async (courseId: string) => {
     return null;  // Return null if there's no token
   }
 };
+
+
+export const getAssignmentscore = async (courseId: string) => {
+  const token = Cookies.get('accessToken'); // Retrieve the token from cookies
+  
+  if (token) {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}/score`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the Authorization header for this request
+          },
+        }
+      );
+      return response.data; 
+    } catch (error) {
+      console.error("Error fetching assignment:", error);
+      return null;
+    }
+  } else {
+    console.error("No access token found.");
+    return null; 
+  }
+};
+
