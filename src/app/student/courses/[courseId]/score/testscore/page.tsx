@@ -1,20 +1,71 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { getAssignment } from "@/app/services/assignment.service";
 
 export default function Score() {
-  const params = useParams<{ courseId: string }>(); // ดึงค่า courseId จาก URL
+  const params = useParams<{ courseId: string }>();
   const { courseId } = params;
+
+  const [scores, setScores] = useState<any[]>([]);
+  const [totalScore, setTotalScore] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const [assignments, setAssignments] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      setIsLoading(true);
+      if (courseId) {
+        try {
+          const data = await getAssignment(courseId);
+          console.log(data); // Debugging log
+
+          if (data && data.data && Array.isArray(data.data.assignment)) {
+            // Filter assignments with type "EXERCISE"
+            const exerciseAssignments = data.data.assignment.filter(
+              (assignment: any) => assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
+            );
+
+            // Calculate total scores for filtered assignments
+            const updatedAssignments = exerciseAssignments.map((assignment: any) => {
+              const totalScore = assignment.problem.reduce(
+                (acc: number, problem: any) => acc + problem.score,
+                0
+              );
+              return { ...assignment, totalScore };
+            });
+
+            setAssignments(updatedAssignments);
+
+            // Calculate total score across all "EXERCISE" assignments
+            const totalScore = updatedAssignments.reduce(
+              (acc: number, assignment: any) => acc + assignment.totalScore,
+              0
+            );
+
+            setTotalScore(totalScore);
+          } else {
+            setError("Failed to fetch assignments or data is not in expected format.");
+          }
+        } catch (err) {
+          setError("An error occurred while fetching assignments.");
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchAssignments();
+  }, [courseId]);
 
   return (
     <>
-
       <div className="text-2xl pl-10 pb-5 mt-6">
         คะแนน
       </div>
-
 
       <div className="relative w-full ">
         <div className="flex gap-12 pl-14">
@@ -41,8 +92,6 @@ export default function Score() {
         </div>
       </div>
 
-
-
       <div className="flex justify-between items-center px-8 rounded-lg py-7">
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center mr-4">
           แบบฝึกหัด
@@ -52,23 +101,28 @@ export default function Score() {
         </div>
       </div>
 
-      {[1, 2, 3, 4].map((index) => (
-        <div
-          key={index}
-          className="flex justify-between items-center px-8 py-4 rounded-lg"
-        >
-          <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
-            <div className="font-semibold">{`${index}. ทดสอบความรู้เบื้องต้น`}</div>
+      {isLoading ? (
+        <div className="text-white text-lg px-8 py-4 text-center">กำลังโหลดข้อมูล...</div>
+      ) : error ? (
+        <div className="text-red-500 text-lg px-8 py-4 text-center">{error}</div>
+      ) : assignments.length > 0 ? (
+        assignments.map((assignment, index) => (
+          <div key={index} className="flex justify-between items-center px-8 py-4 rounded-lg">
+            <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
+              <div className="font-semibold">{`${index + 1}. ${assignment.title}`}</div>
+            </div>
+            <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4 ">
+              {assignment.totalScore} / {assignment.problem.reduce((acc: number, problem: any) => acc + problem.score, 0)}
+            </div>
           </div>
-          <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-            10 / 10
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <div className="text-white text-lg px-8 py-4 text-center">ไม่มีข้อมูล</div>
+      )}
 
       <div className="flex justify-end px-8 py-4">
         <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-8">
-          คะแนนรวม 15/30
+          คะแนนรวม {totalScore}
         </div>
       </div>
     </>
