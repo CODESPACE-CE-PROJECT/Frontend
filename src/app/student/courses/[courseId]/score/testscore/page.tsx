@@ -63,7 +63,7 @@ export default function Score() {
 
   return (
     <>
-      <div className="text-2xl pl-10 pb-5 mt-6">
+      <div className="text-3xl pl-10 pb-5 mt-6">
         คะแนน
       </div>
 
