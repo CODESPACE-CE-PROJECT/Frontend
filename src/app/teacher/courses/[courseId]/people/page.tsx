@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getpeople } from "../../../../services/course.service";
-import Image from 'next/image'
+import Image from "next/image";
 import Profileuser from "../../../../assets/setting/Profileuser.svg";
+import SearchIcon from "@mui/icons-material/Search";
+import { Role } from "@/app/enum/enum";
 
 export default function People() {
-  const params = useParams<{courseId: string}>();
+  const params = useParams<{ courseId: string }>();
   const courseId = params.courseId;
 
   const [teacher, setTeacher] = useState<any | null>(null);
@@ -22,6 +24,7 @@ export default function People() {
       try {
         const data = await getpeople(courseId);
 
+        // ตรวจสอบข้อมูลที่ได้จาก API
         console.log("API Response:", data);
 
         const teacherData =
@@ -59,16 +62,17 @@ export default function People() {
         <span className="z-0 absolute bottom-0 bg-[#090B11] p-[1px] w-full"></span>
       </div>
 
-      <div className="flex items-center rounded-md py-3 mb-2 w-full max-w-4xl mx-auto">
+      <div className="flex items-center my-3 mx-8 px-4 py-3 space-x-4 w-auto rounded-md focus:border-[#1E90FF] duration-200 border border-[#2A3A50]">
+        <SearchIcon />
         <input
           type="text"
           placeholder="ค้นหาชื่อ"
-          className="bg-transparent text-white focus:outline-none placeholder:text-white w-full py-2 px-4 rounded-md focus:border-[#1E90FF] duration-200 border border-[#2A3A50]"
+          className="bg-transparent text-white focus:outline-none placeholder:text-white w-full"
         />
       </div>
 
       <div className="flex justify-between items-center px-8 rounded-lg">
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] flex-1 text-center mr-4">
+        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-2/3 text-center mr-4">
           ชื่อผู้เรียน
         </div>
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-48 text-center mr-4">
@@ -82,7 +86,7 @@ export default function People() {
       {/* แสดงข้อมูลผู้สอน */}
       {teacher ? (
         <div className="flex justify-between items-center px-8 py-6 rounded-lg">
-          <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
+          <div className="flex text-white text-lg px-4 py-3 rounded-md text-center mr-4 w-2/3 space-x-4 items-center">
             <Image
               src={teacher.pictureUrl || Profileuser}
               alt="Profile"
@@ -91,26 +95,36 @@ export default function People() {
               height={100}
             />
             <div className="flex flex-col text-left">
-              <div className="font-semibold">{teacher.username || "ชื่อผู้ใช้งาน"}</div>
-              <div className="text-sm text-gray-300">{teacher.email || "email@example.com"}</div>
+              <div className="flex flex-row space-x-2">
+                <div className="font-semibold">
+                  {teacher.firstName || "ชื่อผู้ใช้งาน"}
+                </div>
+                <div className="font-semibold">
+                  {teacher.lastName || "ชื่อผู้ใช้งาน"}
+                </div>
+              </div>
+
+              <div className="text-sm text-gray-300">
+                {teacher.email || "email@example.com"}
+              </div>
             </div>
           </div>
 
           <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-            ผู้สอน
+            {teacher.role === Role.TEACHER ? "ผู้สอน" : ""}
           </div>
 
           <div
-            className={`text-white text-lg py-3 rounded-md border w-36 mr-6 text-center flex items-center justify-center ${
+            className={`flex text-white text-lg py-3 rounded-md border mx-6 w-36 space-x-2 text-center items-center justify-center ${
               teacher.isActived ? "border-[#00DACC]" : "border-[#FAFAFA]"
             }`}
           >
             <div
-              className={`w-3 h-3 rounded-full mr-2 ${
+              className={`w-3 h-3 rounded-full ${
                 teacher.isActived ? "bg-[#00DACC]" : "bg-[#FAFAFA]"
               }`}
             ></div>
-            {teacher.isActived ? "ออนไลน์" : "ออฟไลน์"}
+            <div>{teacher.isActived ? "ออนไลน์" : "ออฟไลน์"}</div>
           </div>
         </div>
       ) : (
@@ -120,8 +134,11 @@ export default function People() {
       {/* แสดงข้อมูลผู้เรียน */}
       {students.length > 0 ? (
         students.map((student, index) => (
-          <div key={index} className="flex justify-between items-center px-8 py-6 rounded-lg">
-            <div className="text-white text-lg px-4 py-3 rounded-md flex-1 text-center mr-4 flex items-center gap-4">
+          <div
+            key={index}
+            className="flex justify-between items-center px-8 py-6 rounded-lg"
+          >
+            <div className="flex text-white text-lg px-4 py-3 rounded-md text-center mr-4 items-center w-2/3 space-x-4">
               <Image
                 src={student.pictureUrl || Profileuser}
                 alt="Profile"
@@ -130,26 +147,36 @@ export default function People() {
                 height={100}
               />
               <div className="flex flex-col text-left">
-                <div className="font-semibold">{student.username || "ชื่อผู้ใช้งาน"}</div>
-                <div className="text-sm text-gray-300">{student.email || "email@example.com"}</div>
+                <div className="flex flex-row space-x-2">
+                  <div className="font-semibold">
+                    {student.firstName || "ชื่อผู้ใช้งาน"}
+                  </div>
+                  <div className="font-semibold">
+                    {student.lastName || "ชื่อผู้ใช้งาน"}
+                  </div>
+                </div>
+
+                <div className="text-sm text-gray-300">
+                  {student.email || "email@example.com"}
+                </div>
               </div>
             </div>
 
             <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4">
-              ผู้เรียน
+              {student.role === Role.STUDENT ? "ผู้เรียน" : ""}
             </div>
 
             <div
-              className={`text-white text-lg py-3 rounded-md border w-36 mr-6 text-center flex items-center justify-center ${
+              className={`text-white text-lg py-3 rounded-md border w-36 mx-6 space-x-2 text-center flex items-center justify-center ${
                 student.isActived ? "border-[#00DACC]" : "border-[#FAFAFA]"
               }`}
             >
               <div
-                className={`w-3 h-3 rounded-full mr-2 ${
+                className={`w-3 h-3 rounded-full ${
                   student.isActived ? "bg-[#00DACC]" : "bg-[#FAFAFA]"
                 }`}
               ></div>
-              {student.isActived ? "ออนไลน์" : "ออฟไลน์"}
+              <div>{student.isActived ? "ออนไลน์" : "ออฟไลน์"}</div>
             </div>
           </div>
         ))

@@ -48,16 +48,19 @@ const commonLinks = (id: string, role: string, pathname: string) => (
         className={`px-8 py-4 rounded-md ${pathname.includes("/assignment") ? "bg-[#3049724D]" : ""
           } hover:bg-[#3049724D] cursor-pointer`}
       >
-       <Link
+        <Link
           href={
             role === "STUDENT"
               ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
-              : `/${role.toLowerCase()}/courses/${id}/assignment`
+              : role === "TEACHER"
+                ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
+                : `/${role.toLowerCase()}/courses/${id}/assignment`
           }
           className="flex items-center"
         >
           แบบฝึกหัด
         </Link>
+
       </li>
       <li
         className={`px-8 py-4 rounded-md ${pathname.includes("/score") ? "bg-[#3049724D]" : ""
@@ -67,12 +70,15 @@ const commonLinks = (id: string, role: string, pathname: string) => (
           href={
             role === "STUDENT"
               ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
-              : `/${role.toLowerCase()}/courses/${id}/score`
+              : role === "TEACHER"
+                ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
+                : `/${role.toLowerCase()}/courses/${id}/score`
           }
           className="flex items-center"
         >
           คะแนน
         </Link>
+
       </li>
 
       <li

@@ -9,7 +9,7 @@ import { createCourse } from "../../services/user.service";
 import { getAllCourse } from "../../services/course.service";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
-
+import Profiler from "../../../../src/app/assets/setting/profileuser.svg";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 
@@ -103,7 +103,7 @@ export default function CoursesPage() {
   return (
     <div className="flex flex-col text-[#FAFAFA] m-14 min-w-screen">
       <div className="flex flex-row justify-between items-center">
-        <h1 className="text-lg font-medium mb-6">คอร์สเรียน</h1>
+      <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
         {!showCreateClass && (
           <button
             onClick={toggleCreateClass}
@@ -220,8 +220,7 @@ export default function CoursesPage() {
         </div>
       )}
 
-      <div className="flex flex-row flex-wrap gap-5">
-        {/* new */}
+<div className="flex flex-row flex-wrap gap-5">
         {courses.length > 0 ? (
           courses.map((course: any) => (
             <div
@@ -231,7 +230,7 @@ export default function CoursesPage() {
             >
               {course.backgroundUrl ? (
                 <Image
-                  className="self-center rounded-t-2xl w-auto min-h-48"
+                  className="self-center rounded-t-2xl w-full min-h-48"
                   src={course.backgroundUrl}
                   alt={course.title}
                   width={100}
@@ -239,25 +238,23 @@ export default function CoursesPage() {
                 />
               ) : (
                 <Image
-                  className="self-center rounded-t-2xl w-auto min-h-48"
+                  className="self-center rounded-t-2xl w-full min-h-48"
                   src={CourseBg}
                   alt={course.title}
                   width={100}
-                  height={50}
+                  height={100}
                 />
               )}
               <Image
-                className="absolute inset-y-40 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
-                src={UserProfile}
+                className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
+                src={course.user.pictureUrl || Profiler}
                 alt={course.title}
-                width={100}
-                height={100}
               />
               <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
                 <h1 className="w-48 text-xl font-semibold text-wrap">
                   {course.title}
                 </h1>
-                <h2 className="text-sm">จิระศักดิ์ สิทธิกร</h2>
+                <h2 className="text-sm">{course.user.firstName} {course.user.lastName}</h2>
               </div>
             </div>
           ))
