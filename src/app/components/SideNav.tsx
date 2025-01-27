@@ -12,6 +12,7 @@ import PlatformIcon from "../assets/CoursesAssets/PlatformIcon.svg";
 import SchoolIcon from '@mui/icons-material/School';
 import { logout } from "../services/auth.service";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface SideNavProps {
   role: string; // Accept role as a prop
@@ -40,64 +41,64 @@ export default function SideNav({ role }: SideNavProps) {
       {/* Navigation Links */}
       <ul className="space-y-10 mt-8">
         <li>
-          <a
+          <Link
             href="/"
             className="flex flex-col items-center rounded-lg space-y-2 w-full"
           >
             <Image className="w-16" src={PlatformIcon} alt=""></Image>
-          </a>
+          </Link>
         </li>
 
         {role === "STUDENT" && (
           <>
             <li>
-              <a
+              <Link
                 href="/student/courses"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className=" text-3xl " />
                 <span className=" text-sm text-center">คอร์สเรียน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/workingspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
                 <span className="text-sm text-center">เขียนโปรแกรม</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/calendar"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
                 <span className="text-sm text-center">ปฏิทิน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/homeworkspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
                 <span className="text-sm text-center">แบบฝึกหัด</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
                 <span className="text-sm text-center">โปรไฟล์</span>
-              </a>
+              </Link>
             </li>
           </>
         )}
@@ -105,53 +106,53 @@ export default function SideNav({ role }: SideNavProps) {
         {role === "TEACHER" && (
           <>
             <li>
-              <a
+              <Link
                 href="/teacher/courses"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className=" text-3xl " />
                 <span className=" text-sm text-center">คอร์สเรียน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/workingspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
                 <span className="text-sm text-center">เขียนโปรแกรม</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/calendar"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
                 <span className="text-sm text-center">ปฏิทิน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/homeworkspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
                 <span className="text-sm text-center">แบบฝึกหัด</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
                 <span className="text-sm text-center">โปรไฟล์</span>
-              </a>
+              </Link>
             </li>
           </>
         )}
@@ -159,31 +160,31 @@ export default function SideNav({ role }: SideNavProps) {
         {role === "ADMIN" && (
           <>
             <li>
-              <a
+              <Link
                 href="/admin/dashboard"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className="text-3xl" />
                 <span className=" text-sm text-center">แดชบอร์ด</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/admin/school"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <SchoolIcon className="text-3xl" />
                 <span className=" text-sm text-center">โรงเรียน/สถาบัน</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/admin/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
                 <span className="text-sm text-center">โปรไฟล์</span>
-              </a>
+              </Link>
             </li>
           </>
         )}

@@ -40,7 +40,7 @@ export default function Courses() {
   };
 
   return (
-    <div className="flex flex-col text-[#FAFAFA] m-14 w-full">
+    <div className="flex flex-col text-[#FAFAFA] w-full">
       <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
       <div className="flex flex-row flex-wrap gap-5">
         {courses.length > 0 ? (

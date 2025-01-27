@@ -4,10 +4,11 @@ import React from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Role } from "@/app/enum/enum";
 
 interface ClassRoomNavProps {
   id: string;
-  role: string;
+  role: Role | null;
 }
 
 const commonLinks = (id: string, role: string, pathname: string) => (
@@ -99,7 +100,7 @@ const commonLinks = (id: string, role: string, pathname: string) => (
 export default function ClassRoomNav({ id, role }: ClassRoomNavProps) {
   const pathname = usePathname();
   return (
-    <div className="border-r-[1px] border-[#D7D7D71A] w-1/4">
+    <div className="sticky top-0 border-r-[1px] border-[#D7D7D71A] w-1/4">
       <ul className="flex flex-col text-lg text-[#FAFAFA] mt-10 mx-8 h-[calc(100vh-2.5rem)]">
         {role === "STUDENT" || role === "TEACHER"
           ? commonLinks(id, role, pathname)
