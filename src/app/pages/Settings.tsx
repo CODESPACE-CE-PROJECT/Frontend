@@ -36,7 +36,7 @@ export default function Setting() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        // updateProfile({pictureUrl: reader})
+       
       };
       reader.readAsDataURL(file);
     }
