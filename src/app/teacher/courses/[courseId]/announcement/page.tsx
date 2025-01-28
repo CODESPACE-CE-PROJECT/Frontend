@@ -11,6 +11,7 @@ import TeacherProfile from "@/app/assets/CoursesAssets/TeacherIcon.svg";
 import Image from "next/image";
 import { IProfile } from "@/app/interfaces/user.interface";
 import { getProfile } from "@/app/services/user.service";
+import Profiler from "@/app/assets/setting/Profileuser.svg";
 
 const AssignBox = ({
   title,
@@ -29,7 +30,7 @@ const AssignBox = ({
   lastName: string;
   courseId: string;
   pictureUrl: string | null;
-  Profile: string; // Change type to string | null
+  Profile: string | null; // Change type to string | null
 }) => (
   <div className="bg-[#16233A] rounded-md border-2 border-slate-900 w-full">
     <div className="border-[#131823] border-b-2">
@@ -56,7 +57,7 @@ const AssignBox = ({
     </div>
     <div className="flex flex-row items-center gap-x-5 mx-8 my-3">
       <Image
-        src={Profile } // Fallback for reply profile
+        src={Profile || Profiler} // Fallback for reply profile
         width={40}
         height={40}
         alt="User Profile"

@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
+import Image from "next/image";
+import Profiler from "../../../../src/app/assets/setting/profileuser.svg";
 
 export default function Courses() {
   const router = useRouter();
@@ -29,12 +30,9 @@ export default function Courses() {
       }
     };
 
-    const id = "your-id-here"; // Make sure to replace this with the actual ID
-    if (id) {
-      fetchCourses();
-    } else {
-      console.error("ID is required to fetch courses");
-    }
+  
+    fetchCourses();
+  
   }, [dispatch]);
 
   const handleCourseClick = (courseId: string) => {
@@ -42,7 +40,7 @@ export default function Courses() {
   };
 
   return (
-    <div className="flex flex-col text-[#FAFAFA] m-14 w-full">
+    <div className="flex flex-col text-[#FAFAFA] w-full">
       <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
       <div className="flex flex-row flex-wrap gap-5">
         {courses.length > 0 ? (
@@ -71,14 +69,14 @@ export default function Courses() {
               )}
               <Image
                 className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
-                src={UserProfile}
+                src={course.user.pictureUrl || Profiler}
                 alt={course.title}
               />
               <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
                 <h1 className="w-48 text-xl font-semibold text-wrap">
                   {course.title}
                 </h1>
-                <h2 className="text-sm">จิระศักดิ์ สิทธิกร</h2>
+                <h2 className="text-sm">{course.user.firstName} {course.user.lastName}</h2>
               </div>
             </div>
           ))

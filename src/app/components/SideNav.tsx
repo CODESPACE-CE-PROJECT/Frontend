@@ -8,6 +8,7 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'; // no actio
 import SchoolIcon from '@mui/icons-material/School'; // action School
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'; //no action Bin
 import DeleteIcon from '@mui/icons-material/Delete'; // action Bin
+import ClassIcon from "@mui/icons-material/Class";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CodeIcon from "@mui/icons-material/Code";
@@ -63,49 +64,49 @@ export default function SideNav({ role }: SideNavProps) {
                 href="/student/courses"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
-                <SpaceDashboardOutlinedIcon className=" text-3xl " />
-                <span className=" text-sm ">คอร์สเรียน</span>
+                <ClassIcon className=" text-3xl " />
+                <span className=" text-sm text-center">คอร์สเรียน</span>
               </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/workingspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
-                <span className="text-sm">เขียนโปรแกรม</span>
-              </a>
+                <span className="text-sm text-center">เขียนโปรแกรม</span>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/calendar"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
-                <span className="text-sm">ปฏิทิน</span>
-              </a>
+                <span className="text-sm text-center">ปฏิทิน</span>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/homeworkspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
-                <span className="text-sm">แบบฝึกหัด</span>
-              </a>
+                <span className="text-sm text-center">แบบฝึกหัด</span>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
-                <span className="text-sm">โปรไฟล์</span>
-              </a>
+                <span className="text-sm text-center">โปรไฟล์</span>
+              </Link>
             </li>
           </>
         )}
@@ -117,49 +118,49 @@ export default function SideNav({ role }: SideNavProps) {
                 href="/teacher/courses"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
-                {/* <ClassIcon className=" text-3xl " /> */}
-                <span className=" text-sm ">คอร์สเรียน</span>
+                <ClassIcon className=" text-3xl " />
+                <span className=" text-sm text-center">คอร์สเรียน</span>
               </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/workingspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
-                <span className="text-sm">เขียนโปรแกรม</span>
-              </a>
+                <span className="text-sm text-center">เขียนโปรแกรม</span>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/calendar"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
-                <span className="text-sm">ปฏิทิน</span>
-              </a>
+                <span className="text-sm text-center">ปฏิทิน</span>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/homeworkspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
-                <span className="text-sm">แบบฝึกหัด</span>
-              </a>
+                <span className="text-sm text-center">แบบฝึกหัด</span>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
-                <span className="text-sm">โปรไฟล์</span>
-              </a>
+                <span className="text-sm text-center">โปรไฟล์</span>
+              </Link>
             </li>
           </>
         )}
@@ -167,31 +168,31 @@ export default function SideNav({ role }: SideNavProps) {
         {role === "ADMIN" && (
           <>
             <li>
-              <a
+              <Link
                 href="/admin/dashboard"
                 className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
-                <SpaceDashboardIcon className="text-3xl" />
-                <span className=" text-sm ">แดชบอร์ด</span>
-              </a>
+                <ClassIcon className="text-3xl" />
+                <span className=" text-sm text-center">แดชบอร์ด</span>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/admin/school"
                 className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
-                <SchoolOutlinedIcon className="text-3xl" />
-                <span className=" text-sm ">โรงเรียน</span>
-              </a>
+                <SchoolIcon className="text-3xl" />
+                <span className=" text-sm text-center">โรงเรียน/สถาบัน</span>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/admin/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
-                <DeleteOutlineOutlinedIcon className="text-3xl" />
-                <span className="text-sm">ถังขยะ</span>
-              </a>
+                <PermIdentityIcon className="text-3xl" />
+                <span className="text-sm text-center">โปรไฟล์</span>
+              </Link>
             </li>
           </>
         )}
@@ -206,8 +207,6 @@ export default function SideNav({ role }: SideNavProps) {
         <LogoutIcon className="text-3xl text-white rotate-180" />
       </button>
     </nav>
-  
-      
 
   );
 }

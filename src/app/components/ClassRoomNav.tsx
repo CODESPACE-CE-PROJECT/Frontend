@@ -4,10 +4,11 @@ import React from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Role } from "@/app/enum/enum";
 
 interface ClassRoomNavProps {
   id: string;
-  role: string;
+  role: Role | null;
 }
 
 const commonLinks = (id: string, role: string, pathname: string) => (
@@ -23,9 +24,8 @@ const commonLinks = (id: string, role: string, pathname: string) => (
     </li>
     <div className="flex flex-col gap-3">
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/general") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/general") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/general`}
@@ -35,9 +35,8 @@ const commonLinks = (id: string, role: string, pathname: string) => (
         </Link>
       </li>
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/announcement") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/announcement") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/announcement`}
@@ -47,33 +46,45 @@ const commonLinks = (id: string, role: string, pathname: string) => (
         </Link>
       </li>
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/assignment") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/assignment") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
-          href={`/${role.toLowerCase()}/courses/${id}/assignment`}
+          href={
+            role === "STUDENT"
+              ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
+              : role === "TEACHER"
+                ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
+                : `/${role.toLowerCase()}/courses/${id}/assignment`
+          }
           className="flex items-center"
         >
-          การบ้าน
+          แบบฝึกหัด
         </Link>
+
       </li>
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/score") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/score") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
-          href={`/${role.toLowerCase()}/courses/${id}/score`}
+          href={
+            role === "STUDENT"
+              ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
+              : role === "TEACHER"
+                ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
+                : `/${role.toLowerCase()}/courses/${id}/score`
+          }
           className="flex items-center"
         >
           คะแนน
         </Link>
+
       </li>
+
       <li
-        className={`px-8 py-4 rounded-md ${
-          pathname.includes("/people") ? "bg-[#3049724D]" : ""
-        } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/people") ? "bg-[#3049724D]" : ""
+          } hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/people`}
@@ -89,7 +100,7 @@ const commonLinks = (id: string, role: string, pathname: string) => (
 export default function ClassRoomNav({ id, role }: ClassRoomNavProps) {
   const pathname = usePathname();
   return (
-    <div className="border-r-[1px] border-[#D7D7D71A] w-1/4">
+    <div className="sticky top-0 border-r-[1px] border-[#D7D7D71A] w-1/4">
       <ul className="flex flex-col text-lg text-[#FAFAFA] mt-10 mx-8 h-[calc(100vh-2.5rem)]">
         {role === "STUDENT" || role === "TEACHER"
           ? commonLinks(id, role, pathname)
@@ -97,9 +108,8 @@ export default function ClassRoomNav({ id, role }: ClassRoomNavProps) {
 
         {role === "ADMIN" && (
           <li
-            className={`px-8 py-4 rounded-md ${
-              pathname.includes("/people") ? "bg-[#3049724D]" : ""
-            } hover:bg-[#3049724D] cursor-pointer`}
+            className={`px-8 py-4 rounded-md ${pathname.includes("/people") ? "bg-[#3049724D]" : ""
+              } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
               href={`/${role.toLowerCase()}/courses/${id}/people`}

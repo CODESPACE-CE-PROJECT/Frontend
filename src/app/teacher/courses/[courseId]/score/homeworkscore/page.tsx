@@ -9,11 +9,10 @@ export default function Score() {
   const params = useParams<{ courseId: string }>();
   const { courseId } = params;
 
-  const [scores, setScores] = useState<any[]>([]);
-  const [totalScore, setTotalScore] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [assignments, setAssignments] = useState<any[]>([]);
+  const [totalScore, setTotalScore] = useState<number>(0);
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -24,29 +23,20 @@ export default function Score() {
           console.log(data); // Debugging log
 
           if (data && data.data && Array.isArray(data.data.assignment)) {
-            // Filter assignments with type "EXERCISE"
+            // Filter assignments of type EXERCISE
             const exerciseAssignments = data.data.assignment.filter(
-              (assignment: any) => assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
+              (assignment: any) => assignment.type === "EXERCISE"
             );
 
-            // Calculate total scores for filtered assignments
-            const updatedAssignments = exerciseAssignments.map((assignment: any) => {
-              const totalScore = assignment.problem.reduce(
-                (acc: number, problem: any) => acc + problem.score,
-                0
-              );
-              return { ...assignment, totalScore };
-            });
+            setAssignments(exerciseAssignments);
 
-            setAssignments(updatedAssignments);
-
-            // Calculate total score across all "EXERCISE" assignments
-            const totalScore = updatedAssignments.reduce(
+            // Calculate total score directly from assignments
+            const overallTotalScore = exerciseAssignments.reduce(
               (acc: number, assignment: any) => acc + assignment.totalScore,
               0
             );
 
-            setTotalScore(totalScore);
+            setTotalScore(overallTotalScore);
           } else {
             setError("Failed to fetch assignments or data is not in expected format.");
           }
@@ -63,28 +53,28 @@ export default function Score() {
 
   return (
     <>
-      <div className="text-3xl pl-10 pb-5 mt-6">
-        คะแนน
-      </div>
+      <div className="text-3xl pl-10 pb-5 mt-6">คะแนน</div>
 
       <div className="relative w-full ">
         <div className="flex gap-12 pl-14">
-          <Link href={`/student/courses/${courseId}/score/homeworkscore`}>
+          <Link href={`/teacher/courses/${courseId}/score/homeworkscore`}>
             <h1
-              className={`text-lg font-semibold cursor-pointer pb-2 ${window.location.pathname.includes("homeworkscore")
-                ? "text-white border-b-4 border-[#1E90FF]"
-                : "text-gray-400"
-                }`}
+              className={`text-lg font-semibold cursor-pointer pb-2 ${
+                window.location.pathname.includes("homeworkscore")
+                  ? "text-white border-b-4 border-[#1E90FF]"
+                  : "text-gray-400"
+              }`}
             >
               แบบฝึกหัด
             </h1>
           </Link>
-          <Link href={`/student/courses/${courseId}/score/testscore`}>
+          <Link href={`/teacher/courses/${courseId}/score/testscore`}>
             <h1
-              className={`text-lg font-semibold cursor-pointer pb-2 ${window.location.pathname.includes("testscore")
-                ? "text-white border-b-4 border-[#1E90FF]"
-                : "text-gray-400"
-                }`}
+              className={`text-lg font-semibold cursor-pointer pb-2 ${
+                window.location.pathname.includes("testscore")
+                  ? "text-white border-b-4 border-[#1E90FF]"
+                  : "text-gray-400"
+              }`}
             >
               การทดสอบ
             </h1>
@@ -112,7 +102,8 @@ export default function Score() {
               <div className="font-semibold">{`${index + 1}. ${assignment.title}`}</div>
             </div>
             <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-4 ">
-              {assignment.totalScore} / {assignment.problem.reduce((acc: number, problem: any) => acc + problem.score, 0)}
+              {assignment.totalScore} /{" "}
+              {assignment.problem.reduce((acc: number, problem: any) => acc + problem.score, 0)}
             </div>
           </div>
         ))
