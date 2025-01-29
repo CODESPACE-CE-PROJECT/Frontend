@@ -212,7 +212,7 @@ export default function Login() {
               }`}
             disabled={loading}
           >
-            {loading ? "Signing in..." : "เข้าสู่ระบบ"}
+            {loading ? "กำลังเข้าสู่ระบบ" : "เข้าสู่ระบบ"}
           </button>
         </form>
 
