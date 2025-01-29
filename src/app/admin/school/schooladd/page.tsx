@@ -1,17 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
+import { useRouter } from "next/navigation";
+import { getProvinceData } from "@/app/services/school.service";
+import { IProvince } from "@/app/interfaces/school.interface";
 
-export default function schooladd() {
+export default function Schooladd() {
+  const router = useRouter()
+
+
+  useEffect(() => {
+    const fetchProvinceData = async () => {
+      const response:IProvince[] = await getProvinceData()
+      console.log(response)
+    }
+    fetchProvinceData()
+  }, [])
+
   return (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen">
         <div className="flex justify-between items-center self-stretch">
-          <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
+          <div className="cursor-pointer" onClick={() => router.back()}>
+            <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
+          </div>
           <span className="flex w-full p-[10px] text-3xl text-zinc-50">เพิ่มโรงเรียน</span>
         </div>
 
@@ -195,7 +211,6 @@ export default function schooladd() {
           </div>
         </div>
       </div>
-
     </>
   );
 }

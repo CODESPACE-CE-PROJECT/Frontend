@@ -46,7 +46,7 @@ export default function SideNav({ role }: SideNavProps) {
   return (
     <nav className="sticky top-0 flex flex-col justify-between bg-[#0B111B] text-white w-[6vw] h-screen">
       {/* Navigation Links */}
-      <ul className="flex flex-col items-center gap-[72px] self-stretch">
+      <ul className="flex flex-col items-center gap-[72px] self-stretch mt-11">
         <li>
           <Link
             href="/"
@@ -182,7 +182,16 @@ export default function SideNav({ role }: SideNavProps) {
                 className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
                 <SchoolIcon className="text-3xl" />
-                <span className=" text-sm text-center">โรงเรียน/สถาบัน</span>
+                <span className=" text-sm text-center">โรงเรียน</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/admin/bin"
+                className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
+              >
+                <DeleteOutlineOutlinedIcon className="text-3xl" />
+                <span className="text-sm text-center">ถังขยะ</span>
               </Link>
             </li>
             <li>
@@ -198,8 +207,6 @@ export default function SideNav({ role }: SideNavProps) {
         )}
       </ul>
       </ul>
-
-
       <button
         onClick={handleLogout}
         className="cursor-pointer flex justify-center items-center font-bold rounded-lg w-[88px] h-[72px]"

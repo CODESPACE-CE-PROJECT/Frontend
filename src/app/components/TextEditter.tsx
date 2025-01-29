@@ -55,24 +55,7 @@ export default function TextEditter({sourceCode, language}:Props){
           width="50vw"
           defaultLanguage={language ? languageEditor(language): 'cpp'}
           value={sourceCode}
-          defaultValue={`#include <iostream>
-using namespace std;
-
-int main() {
-
-  int first_number, second_number, sum;
-    
-  cout << "Enter two integers: ";
-  cin >> first_number >> second_number;
-
-  // sum of two numbers in stored in variable sumOfTwoNumbers
-  sum = first_number + second_number;
-
-  // prints sum 
-  cout << first_number << " + " <<  second_number << " = " << sum;     
-
-  return 0;
-}`}
+          defaultValue="" 
           theme="vs-dark"
         />
       </div>
