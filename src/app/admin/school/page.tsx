@@ -51,9 +51,6 @@ export default function school() {
             </div>
 
           </div>
-
-
-
         </div>
       </div>
     </>

@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { jwtDecode } from "jwt-decode"; // Corrected import
 import { cookies } from 'next/headers'
 import axios, { AxiosResponse } from "axios";
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 interface IJwt {
   username: string;
@@ -37,35 +38,38 @@ const getAccessToken = async (refreshToken: string) => {
 
 
 export default async function middleware(request: NextRequest) {
-  const token = (await cookies()).get('accessToken')?.value || null
+  const accessToken = (await cookies()).get('accessToken')?.value || null
   const refreshToken = (await cookies()).get('refreshToken')?.value || null
 
-  if (!token && refreshToken) {
+  if (!accessToken && refreshToken) {
     await getAccessToken(refreshToken)
   }
 
-  if (!token || !refreshToken) {
-    if (request.url.includes('/login')) {
+  const newAccessToken = (await cookies()).get('accessToken')?.value || null;
+
+  if (!newAccessToken || !refreshToken) {
+    if (request.nextUrl.pathname === "/login") {
       return NextResponse.next()
     }
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   try {
-    const decodedToken = jwtDecode<IJwt>(token);
+    const decodedToken = jwtDecode<IJwt>(newAccessToken);
     const decodedRefreshToken = jwtDecode<IJwt>(refreshToken)
-    const currentTime = Date.now()
+    const currentTime = Math.floor(Date.now() / 1000);
 
-    if (currentTime >= decodedRefreshToken.exp * 1000) {
+    if (currentTime >= decodedRefreshToken.exp) {
       (await cookies()).delete('refreshToken')
     }
 
-    if (currentTime >= decodedToken.exp * 1000) {
+    if (currentTime >= decodedToken.exp) {
       (await cookies()).delete('accessToken')
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
     const currentPath = request.nextUrl.pathname;
+
     switch (decodedToken.role) {
       case "ADMIN":
         if (!currentPath.startsWith("/admin") || currentPath.includes('/login')) {
@@ -87,7 +91,6 @@ export default async function middleware(request: NextRequest) {
         }
         break;
       default:
-        console.warn("Invalid role, redirecting to login.");
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
