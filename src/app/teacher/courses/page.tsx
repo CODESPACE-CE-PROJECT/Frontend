@@ -136,7 +136,10 @@ export default function CoursesPage() {
                       alt="Profile Picture"
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-lg "
+                      className="rounded-lg"
+                      width={100}
+                      height={100}
+                      priority={true}
                     />
                   ) : (
 
@@ -235,6 +238,7 @@ export default function CoursesPage() {
                   alt={course.title}
                   width={100}
                   height={100}
+                  priority={true}
                 />
               ) : (
                 <Image
@@ -243,12 +247,16 @@ export default function CoursesPage() {
                   alt={course.title}
                   width={100}
                   height={100}
+                  priority={true}
                 />
               )}
               <Image
                 className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
                 src={course.user.pictureUrl || Profiler}
                 alt={course.title}
+                width={100}
+                height={100}
+                priority={true}
               />
               <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
                 <h1 className="w-48 text-xl font-semibold text-wrap">

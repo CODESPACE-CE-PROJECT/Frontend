@@ -4,13 +4,15 @@ import React, { ReactNode, useEffect, useState } from "react";
 import StudentLayout from "./StudentLayout";
 import TeacherLayout from "./TeacherLayout";
 import AdminLayout from "./AdminLayout";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import RoleLayout from "./RoleLayout";
+import { Role } from "@/app/enum/enum";
 
 interface IJwt {
   username: string;
-  role: string;
+  role: Role;
   schoolId: string;
   iat: number;
   exp: number;
@@ -54,16 +56,7 @@ const UserLayout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   // Render layout based on the role
-  switch (role) {
-    case "STUDENT":
-      return <StudentLayout role={role}>{children}</StudentLayout>;
-    case "TEACHER":
-      return <TeacherLayout role={role}>{children}</TeacherLayout>;
-    case "ADMIN":
-      return <AdminLayout role={role}>{children}</AdminLayout>;
-    default:
-      return <div>Invalid role</div>; // Handle invalid role
-  }
+  return <RoleLayout role={role}>{children}</RoleLayout>;
 };
 
 export default UserLayout;

@@ -2,16 +2,24 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'; // no action DashBoard
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard'; // action DashBoard
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'; // no action School
+import SchoolIcon from '@mui/icons-material/School'; // action School
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'; //no action Bin
+import DeleteIcon from '@mui/icons-material/Delete'; // action Bin
 import ClassIcon from "@mui/icons-material/Class";
+
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CodeIcon from "@mui/icons-material/Code";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PlatformIcon from "../assets/CoursesAssets/PlatformIcon.svg";
-import SchoolIcon from '@mui/icons-material/School';
+
 import { logout } from "../services/auth.service";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface SideNavProps {
   role: string; // Accept role as a prop
@@ -36,68 +44,69 @@ export default function SideNav({ role }: SideNavProps) {
   };
 
   return (
-    <nav className="sticky top-0 flex flex-col justify-between border-r-[1px] border-[#D7D7D71A] bg-[#0B111B] text-white w-[6vw] h-screen">
+    <nav className="sticky top-0 flex flex-col justify-between bg-[#0B111B] text-white w-[6vw] h-screen">
       {/* Navigation Links */}
-      <ul className="space-y-10 mt-8">
+      <ul className="flex flex-col items-center gap-[72px] self-stretch">
         <li>
-          <a
+          <Link
             href="/"
-            className="flex flex-col items-center rounded-lg space-y-2 w-full"
+            className="flex w-[82px] h-[51px] justify-center items-center"
           >
             <Image className="w-16" src={PlatformIcon} alt=""></Image>
-          </a>
+          </Link>
         </li>
 
+        <ul className="flex flex-col items-center gap-5 self-stretch ">
         {role === "STUDENT" && (
           <>
             <li>
-              <a
+              <Link
                 href="/student/courses"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className=" text-3xl " />
                 <span className=" text-sm text-center">คอร์สเรียน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/workingspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
                 <span className="text-sm text-center">เขียนโปรแกรม</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/calendar"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
                 <span className="text-sm text-center">ปฏิทิน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/homeworkspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
                 <span className="text-sm text-center">แบบฝึกหัด</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/student/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
                 <span className="text-sm text-center">โปรไฟล์</span>
-              </a>
+              </Link>
             </li>
           </>
         )}
@@ -105,53 +114,53 @@ export default function SideNav({ role }: SideNavProps) {
         {role === "TEACHER" && (
           <>
             <li>
-              <a
+              <Link
                 href="/teacher/courses"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <ClassIcon className=" text-3xl " />
                 <span className=" text-sm text-center">คอร์สเรียน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/workingspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CodeIcon className="text-3xl " />
                 <span className="text-sm text-center">เขียนโปรแกรม</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/calendar"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <CalendarTodayIcon className="text-3xl" />
                 <span className="text-sm text-center">ปฏิทิน</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/homeworkspace"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <AssignmentIcon className="text-3xl " />
                 <span className="text-sm text-center">แบบฝึกหัด</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
+              <Link
                 href="/teacher/profile"
                 className="flex flex-col items-center rounded-lg space-y-2 w-full"
               >
                 <PermIdentityIcon className="text-3xl" />
                 <span className="text-sm text-center">โปรไฟล์</span>
-              </a>
+              </Link>
             </li>
           </>
         )}
@@ -159,42 +168,45 @@ export default function SideNav({ role }: SideNavProps) {
         {role === "ADMIN" && (
           <>
             <li>
-              <a
+              <Link
                 href="/admin/dashboard"
-                className="flex flex-col items-center rounded-lg space-y-2 w-full"
+                className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
                 <ClassIcon className="text-3xl" />
                 <span className=" text-sm text-center">แดชบอร์ด</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/admin/school"
-                className="flex flex-col items-center rounded-lg space-y-2 w-full"
+                className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
                 <SchoolIcon className="text-3xl" />
                 <span className=" text-sm text-center">โรงเรียน/สถาบัน</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/admin/profile"
-                className="flex flex-col items-center rounded-lg space-y-2 w-full"
+                className="flex flex-col items-center rounded-lg space-y-2 w-[88px] h-[72px] pt-[16px] pr-[8px] pb-[12px] pl-[8px]"
               >
                 <PermIdentityIcon className="text-3xl" />
                 <span className="text-sm text-center">โปรไฟล์</span>
-              </a>
+              </Link>
             </li>
           </>
         )}
       </ul>
+      </ul>
+
 
       <button
         onClick={handleLogout}
-        className="cursor-pointer flex flex-row justify-center font-bold rounded-lg pb-10 w-full"
+        className="cursor-pointer flex justify-center items-center font-bold rounded-lg w-[88px] h-[72px]"
       >
         <LogoutIcon className="text-3xl text-white rotate-180" />
       </button>
     </nav>
+
   );
 }

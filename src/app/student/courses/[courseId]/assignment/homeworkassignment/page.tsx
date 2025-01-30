@@ -46,7 +46,7 @@ export default function Assignment() {
     };
 
     fetchAssignments();
-  }, [courseId,dispatch]);
+  }, [courseId,param.courseId,dispatch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

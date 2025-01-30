@@ -40,7 +40,7 @@ export default function Courses() {
   };
 
   return (
-    <div className="flex flex-col text-[#FAFAFA] m-14 w-full">
+    <div className="flex flex-col text-[#FAFAFA] w-full">
       <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
       <div className="flex flex-row flex-wrap gap-5">
         {courses.length > 0 ? (
@@ -57,6 +57,7 @@ export default function Courses() {
                   alt={course.title}
                   width={100}
                   height={100}
+                  priority={true}
                 />
               ) : (
                 <Image
@@ -65,12 +66,16 @@ export default function Courses() {
                   alt={course.title}
                   width={100}
                   height={100}
+                  priority={true}
                 />
               )}
               <Image
                 className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
                 src={course.user.pictureUrl || Profiler}
                 alt={course.title}
+                width={100}
+                height={100}
+                priority={true}
               />
               <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
                 <h1 className="w-48 text-xl font-semibold text-wrap">
