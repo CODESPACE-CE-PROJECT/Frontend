@@ -63,10 +63,10 @@ export default function School() {
 
             {
               schools?.map((school) => {
-                return <div key={school.schoolId} className="flex flex-col items-start gap-6 self-stretch">
-                  <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch">
-                    <span className="flex w-[540px] h-[60px] items-center gap-5 text-[18px]	text-neutral-50 cursor-pointer" onClick={() => router.push(`/admin/school/${school.schoolId}`)}>
-                      <Image src={school.pictureUrl} alt="icon" className="w-[60px] h-[60px]" width={100} height={100} />
+                return <div key={school.schoolId} className="flex flex-col items-start gap-6 self-stretch w-full">
+                  <div className="flex flex-row items-center gap-2.5 p-2 px-6 rounded-md justify-evenly">
+                    <span className="flex flex-row w-[540px] h-[60px] items-center gap-5 text-[18px]	text-neutral-50 cursor-pointer" onClick={() => router.push(`/admin/school/${school.schoolId}`)}>
+                      <Image src={school.pictureUrl} alt="icon" className="w-[80px] h-[80px] object-cover" width={100} height={100} />
                       {school.schoolName}
                     </span>
                     <span className="flex w-[658px] h-[60px] items-center gap-5 text-[14px]	text-neutral-50">{school.address} {school.district} {school.subDistrict} {school.province} {school.postCode}</span>

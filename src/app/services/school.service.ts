@@ -36,12 +36,3 @@ export const getSchoolBinInfo = async () => {
          console.log(error) 
      }
 }
-
-export const getProvinceData = async () => {
-     try {
-          return await axios.get('https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json',{
-          }).then((res) => res.data)
-     } catch (error) {
-         console.log(error) 
-     }
-}

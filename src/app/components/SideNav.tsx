@@ -32,11 +32,10 @@ export default function SideNav({ role }: SideNavProps) {
     e.preventDefault();
     try {
       const response = await logout();
-      console.log(response.status);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         router.push("/login");
       } else {
-        console.error("Unexpected status code:", response.status);
+        console.log("Unexpected status code:", response?.status);
       }
     } catch (error) {
       console.error("Logout error:", error);
