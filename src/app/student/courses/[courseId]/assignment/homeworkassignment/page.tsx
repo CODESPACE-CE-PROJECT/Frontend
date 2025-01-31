@@ -46,14 +46,14 @@ export default function Assignment() {
     };
 
     fetchAssignments();
-  }, [courseId,dispatch]);
+  }, [courseId,param.courseId,dispatch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      <div className="text-2xl text-[#FAFAFA] pl-10 pb-5 mt-6">{courseDetails?.title}</div>
+      <div className="text-3xl text-[#FAFAFA] pl-10 pb-5 mt-6">{courseDetails?.title}</div>
 
       <div className="relative w-full">
         <div className="flex gap-12 pl-14">

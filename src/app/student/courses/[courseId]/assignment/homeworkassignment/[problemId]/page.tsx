@@ -9,18 +9,21 @@ import { getCoursesById } from "../../../../../../services/announcement.service"
 import { getAssignment } from "../../../../../../services/assignment.service";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/navigation";
+import { StateSubmission } from "@/app/enum/enum";
 
 export default function AssignmentPage() {
   const params = useParams<{ courseId: string; problemId: string }>();
   const { problemId } = params;
   const [assignmentDetails, setAssignmentDetails] = useState<any>(null);
   const [problemDetails, setProblemDetails] = useState<any>(null);
+  const [submission, setSubmission] = useState<any>(null);
   const [courseDetails, setCourseDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTitle, setSelectedTitle] = useState<string>("testAssigment");
   const dispatch = useDispatch();
   const [constraint, setProblemConstraint] = useState<any>(null);
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(setIsCloseCourseNav(true));
@@ -75,8 +78,10 @@ export default function AssignmentPage() {
     const router = useRouter();
 
     const handleBack = () => {
-      router.back();
-     
+      const { courseId } = params; 
+      if (courseId) {
+        router.push(`/student/courses/${courseId}/assignment/homeworkassignment`);
+      }
     };
 
     return (
@@ -88,18 +93,18 @@ export default function AssignmentPage() {
           {`${courseTitle} / ${assignmentTitle} / ${problemTitle}`}
         </div>
 
-        <div className="flex flex-wrap gap-4 px-2 py-3 mb-5 ml-4 text-white">
+        <div className="flex flex-wrap gap-4 py-3 mb-5 ml-4 text-white">
           {assignmentDetails?.assignment
             ?.find((assignment: any) => assignment.title === selectedTitle)
             ?.problem?.map((problem: any, index: number) => {
               const isCurrentProblem = problem.problemId === problemDetails?.problemId;
 
               let bgColor;
-              if (problem.stateSubmission === "NOTSEND") {
+              if (problem.stateSubmission === StateSubmission.NOTSEND) {
                 bgColor = "bg-[#16233A]";
-              } else if (problem.stateSubmission === "SUBMITTED") {
+              } else if (problem.stateSubmission === StateSubmission.PASS) {
                 bgColor = "bg-[#00DACC]";
-              } else if (problem.stateSubmission === "WRONG_SUBMISSION") {
+              } else if (problem.stateSubmission === StateSubmission.FAILED) {
                 bgColor = "bg-[#EF4343]";
               } else {
                 bgColor = isCurrentProblem ? "bg-[#16233A]" : "bg-[#16233A]";
@@ -110,8 +115,11 @@ export default function AssignmentPage() {
               return (
                 <div
                   key={problem.problemId}
-                  className={`px-4 py-2 rounded-lg ${bgColor} text-center`}
+                  className={`px-4 py-2 rounded-lg ${bgColor} text-center cursor-pointer`}
                   style={{ margin: "0.5rem" }}
+                  onClick={() =>
+                    router.push(`/student/courses/${params.courseId}/assignment/homeworkassignment/${problem.problemId}`)
+                  }
                 >
                   {isCurrentProblem ? problemDetails?.title : displayText}
                 </div>
@@ -149,7 +157,7 @@ export default function AssignmentPage() {
           </div>
 
           <div className="pt-5">
-            <div>
+            <div className="flex flex-col gap-y-5">
               {problemDetails?.testCases?.map((testCase: any, index: number) => (
                 <div key={testCase.testCaseId}>
                   <div className="bg-[#161e2e] rounded-lg text-white pt-3 pl-2 pb-3 w-24 mb-3">
@@ -168,17 +176,19 @@ export default function AssignmentPage() {
                       </div>
                     </div>
 
-                    <div className="w-1/2">
-                      <h1 className="font-bold mb-4 text-white">ผลลัพธ์</h1>
-                      <div className="bg-[#29394f] rounded-lg p-4 mb-4">
-                        <div className="text-gray-300 text-sm font-semibold">Input</div>
-                        <div className="text-white mt-2">Null</div>
+                    {problemDetails.submission?.result[index] &&
+                      <div className="w-1/2">
+                        <h1 className="font-bold mb-4 text-white">ผลลัพธ์</h1>
+                        <div className="bg-[#29394f] rounded-lg p-4 mb-4">
+                          <div className="text-gray-300 text-sm font-semibold">Input</div>
+                          <div className="text-white mt-2">{testCase.input}</div>
+                        </div>
+                        <div className="bg-[#29394f] rounded-lg p-4">
+                          <div className="text-gray-300 text-sm font-semibold">Output</div>
+                          <div className="text-white mt-2">{problemDetails.submission.result[index].output ? problemDetails.submission.result[index].output : ''}</div>
+                        </div>
                       </div>
-                      <div className="bg-[#29394f] rounded-lg p-4">
-                        <div className="text-gray-300 text-sm font-semibold">Output</div>
-                        <div className="text-white mt-2">Null</div>
-                      </div>
-                    </div>
+                    }
                   </div>
                 </div>
               ))}
@@ -187,7 +197,7 @@ export default function AssignmentPage() {
 
         </div>
         <div className="pr-4 ml-5">
-          <TextEditter />
+          <TextEditter sourceCode={problemDetails.submission?.sourceCode} language={problemDetails.language} />
         </div>
       </div>
     </div>

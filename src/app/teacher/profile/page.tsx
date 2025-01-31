@@ -1,44 +1,37 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Profileuser from "../../../../src/app/assets/setting/profileuser.svg";
+import Profiler from "../../../../src/app/assets/setting/profileuser.svg";
 import { getProfile } from "../../services/user.service";
 import { IProfile } from "../../interfaces/user.interface";
 import { Role, Gender } from "../../enum/enum";
+import { editProfile, uploadProfilePicture } from "../../services/user.service";
 
 export default function Setting() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState<IProfile | null>(null);
+  const [editData, setEditData] = useState<IProfile | null>(null)
+  const [isUpdate, setIsUpdate] = useState<boolean>(false)
 
-  const updateProfile = (updates: Partial<IProfile>) => {
-  setProfileData((prev) => {
-    if (!prev) return null; // Handle null state safely
-
-    return {
-      ...prev,
-      ...updates,
-    };
-  });
-};
-
-  const handleEditClick = () => setIsEditing(!isEditing);
-  const handleProfileChangeClick = () => {
-    const fileInput = document.getElementById("fileInput");
-    if (fileInput) {
-      fileInput.click();
+  const handleEditClick = async () => {
+    setIsEditing(!isEditing)
+    if (isUpdate && editData) {
+      const response: IProfile = await editProfile(editData)
+      setProfileData((prev) => ({
+        ...prev,
+        ...response
+      }))
+      setIsUpdate(false)
     }
   };
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (e: any) => {
+    const file: File = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // updateProfile({pictureUrl: reader})
-      };
-      reader.readAsDataURL(file);
+      await uploadProfilePicture(file)
+      window.location.reload()
     }
   };
 
@@ -49,7 +42,15 @@ export default function Setting() {
     const fetchData = async () => {
       try {
         const response: IProfile = await getProfile();
-        setProfileData(response);
+        setProfileData({
+          ...response,
+          IpAddress: response.IpAddress || "-",
+        });
+
+        setEditData({
+          ...response,
+          IpAddress: response.IpAddress || '-'
+        })
       } catch (error) {
         console.error("Error fetching profile data:", error);
       } finally {
@@ -61,8 +62,16 @@ export default function Setting() {
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    updateProfile({gender: value})
+    setEditData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        [name in Gender ? 'gender' : name]: value,
+      };
+    });
+    setIsUpdate(true)
   };
+
 
   return (
     <div className="gap-10 p-8 h-full w-full">
@@ -78,41 +87,52 @@ export default function Setting() {
                 {/* profile */}
                 <div className="flex flex-col items-center justify w-1/5 ">
                   <div className="w-48 h-48 rounded-full border-4 border-[#3b4f61] shadow-lg overflow-hidden">
-                    <Image src={profileData?.pictureUrl || Profileuser} alt="Profile" width={192} height={192} className="object-cover" />
+                    <Image src={profileData?.pictureUrl || Profiler} alt="Profile" width={100} height={100} priority={true} style={{width: "100%", height: "100%"}} className="object-cover" />
                   </div>
-                  <button
-                    onClick={handleFileChange}
-                    className={`text-white py-2 px-6 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md mt-6 border border-[#2A3A50]`}
-                  >
-                    เปลี่ยนโปรไฟล์
-                  </button>
+                  <div onClick={() => document.getElementById("fileInput")?.click()} className="{`text-white py-2 px-6 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md mt-6 border border-[#2A3A50]`} cursor-pointer">
+                    <p className="text-white">เปลี่ยนรูปโปรไฟล์</p>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      onInput={handleFileChange}
+                      style={{ display: 'none' }}
+                      accept="image/png, image/jpg"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex flex-col w-full">
 
                   {/* setting */}
                   <div className="flex flex-col text-white space-y-4 w-full pt-5 ml-7">
-                    <h1 className="text-4xl font-bold">{profileData?.username}</h1>
+                    <h1 className="text-4xl font-bold">{`${profileData?.firstName} ${profileData?.lastName}`}</h1>
                     <p className="text-lg text-gray-400">{profileData?.email}</p>
-                    <p className="text-lg pb-5">{profileData?.role === Role.TEACHER ? "ผู้สอน" : ""} {profileData?.school.schoolName}</p>
+                    <div className="flex flex-row items-center gap-x-4">
+                      <p className="text-lg pb-5">{profileData?.role === Role.TEACHER ? 'ผู้สอน' : ''}</p>
+                      <div className="bg-[#FAFAFA] size-2 rounded-full mb-5"/>
+                      <p className="text-lg pb-5">{profileData?.school.schoolName}</p>
+                    </div>
+
+                    <ProfileField label="IP" name="ip" value={editData?.IpAddress} isEditing={isEditing} onChange={handleChange} />
+
                     <div className="flex flex-col space-y-6 pt-5 pb-5">
                       <div className="flex justify-between space-x-6 ">
-                        <ProfileField label="ชื่อผู้ใช้งาน" name="username" value={profileData?.username} isEditing={isEditing} onChange={handleChange} />
-                        <ProfileField label="อีเมล" name="email" value={profileData?.email} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="ชื่อผู้ใช้งาน" name="username" value={editData?.username} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="อีเมล" name="email" value={editData?.email || ''} isEditing={isEditing} onChange={handleChange} />
                       </div>
 
-                      <div className="flex justify-between space-x-6  ">
-                        <ProfileField label="ชื่อจริง" name="firstName" value={profileData?.firstName} isEditing={isEditing} onChange={handleChange} />
-                        <ProfileField label="นามสกุล" name="lastName" value={profileData?.lastName} isEditing={isEditing} onChange={handleChange} />
+                      <div className="flex justify-between space-x-6">
+                        <ProfileField label="ชื่อจริง" name="firstName" value={editData?.firstName} isEditing={isEditing} onChange={handleChange} />
+                        <ProfileField label="นามสกุล" name="lastName" value={editData?.lastName} isEditing={isEditing} onChange={handleChange} />
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-6 mt-7 w-full ">
                       <label className="text-lg font-medium text-gray-300">เพศ:</label>
                       <div className="flex items-center space-x-6">
-                        <GenderRadio value={Gender.MALE} checked={profileData?.gender === Gender.MALE} onChange={handleChange} disable={isEditing} />
-                        <GenderRadio value={Gender.FEMALE} checked={profileData?.gender === Gender.FEMALE} onChange={handleChange} disable={isEditing}/>
-                        <GenderRadio value={Gender.OTHER} checked={profileData?.gender === Gender.OTHER} onChange={handleChange} disable={isEditing}/>
+                        <GenderRadio value={Gender.MALE} checked={editData?.gender === Gender.MALE} onChange={handleChange} disable={isEditing} />
+                        <GenderRadio value={Gender.FEMALE} checked={editData?.gender === Gender.FEMALE} onChange={handleChange} disable={isEditing} />
+                        <GenderRadio value={Gender.OTHER} checked={editData?.gender === Gender.OTHER} onChange={handleChange} disable={isEditing} />
                       </div>
                     </div>
                   </div>
@@ -128,38 +148,36 @@ export default function Setting() {
                       onClick={handleEditClick} // หรือฟังก์ชันที่เกี่ยวข้องกับการเปลี่ยนรหัสผ่าน
                       className="text-white py-2 px-6 rounded-md font-semibold text-lg transition-colors duration-300 shadow-md bg-[#5572FA] "
                     >
-                      แก้ไขข้อมูล
+                      {isEditing ? "บันทึก" : "แก้ไขข้อมูล"}
                     </button>
                   </div>
                 </div>
               </div>
-
             </>
           )}
         </div>
-
       </div>
     </div>
-
   );
 }
 
-const ProfileField = ({ label, name, value, isEditing, onChange }: any) => (
-  <div className="flex flex-col items-start space-y-1 w-full">
-    <span className="font-medium text-gray-300">{label}:</span>
+const ProfileField = ({ label, name, value, isEditing, onChange }: any) => {
+  return <div className="flex flex-col items-start space-y-1 w-full">
+    <span className="font-medium text-gray-300">{label}</span>
     {isEditing ? (
       <input
         type="text"
         name={name}
         value={value}
         onChange={onChange}
-        className="pl-5 py-3 w-full text-white bg-[#2A3A50] rounded-md border border-gray-300 shadow-inner"
+        disabled={(name === 'username') || (name === 'ip')}
+        className="pl-5 py-3 w-full text-white bg-[#2A3A50] rounded-md border border-gray-300 shadow-inner disabled:border-[#2A3A50] disabled:bg-transparent"
       />
     ) : (
-      <div className="pl-3 text-white border border-[#2A3A50] rounded-md py-3 w-full">{value}</div>
+      <div className="pl-3 text-white border border-[#2A3A50] rounded-md py-3 w-full">{value || '-'}</div>
     )}
   </div>
-);
+};
 
 const GenderRadio = ({ value, checked, onChange, disable }: any) => (
   <label className="flex items-center space-x-2 cursor-pointer">

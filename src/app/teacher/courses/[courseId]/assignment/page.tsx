@@ -1,24 +1,70 @@
-"use client"; // Add this line at the top
+"use client";
 
-import React, { useState } from "react";
-import ClassAssignmentTable from "@/app/components/AssignmentItems/ClassAssignmentTable";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { getAssignment } from "../../../../services/assignment.service";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Assignment() {
+  const router = useRouter();
+  const param = useParams<{ courseId: string }>();
+  const courseId = param.courseId
+
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      if (!courseId) return;
+      setLoading(true);
+      try {
+        const data = await getAssignment(courseId);
+        if (data) {
+          setAssignments(data.data.assignment);
+        }
+      } catch (err: any) {
+        console.error("Error fetching assignments:", err);
+        setError(err.message);
+      }
+      setLoading(false);
+    };
+
+    fetchAssignments();
+  }, [courseId]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  const getLinkClass = (path: string) =>
+    window.location.pathname.includes(path)
+      ? "text-white border-b-4 border-[#1E90FF]"
+      : "text-gray-400";
+
   return (
     <>
-      <div className="relative w-full">
-        <div className="flex pl-10">
-          <h1 className="z-10 border-[#1E90FF] border-b-2 font-semibold text-lg py-4">
-            การบ้าน
-          </h1>
-        </div>
-        <span className="z-0 absolute bottom-0 bg-[#090B11] p-[1px] w-full"></span>
+      {/* Header */}
+      <div className="text-2xl pl-10 pb-5 mt-6">
+        คะแนน
       </div>
 
-      {/* head */}
-      <div className="flex flex-col items-center space-y-10 px-40 py-5">
-        <ClassAssignmentTable />
+      <div className="relative w-full">
+        <div className="flex gap-12 pl-14">
+          <Link href={`/student/courses/${courseId}/assignment/homeworkassignment`}>
+            <h1 className={`text-lg font-semibold cursor-pointer pb-2 ${getLinkClass("homeworkscore")}`}>
+              แบบฝึกหัด
+            </h1>
+          </Link>
+          <Link href={`/student/courses/${courseId}/assignment/testassignment`}>
+            <h1 className={`text-lg font-semibold cursor-pointer pb-2 ${getLinkClass("testscore")}`}>
+              การทดสอบ
+            </h1>
+          </Link>
+        </div>
       </div>
+
+
     </>
   );
 }

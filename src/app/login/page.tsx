@@ -25,10 +25,7 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
 
-  const navbarReducer = useSelector(navbarSelector)
   const dispatch = useAppDispatch();
-
-  console.log(`navbar value: ${navbarReducer.isCloseNav}`)
 
   const handleUserName = (e: any) => {
     setUsername(e.target.value);
@@ -129,7 +126,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
       <div className="shadow-md rounded-lg px-8 py-6 max-w-md w-full">
         <div className="flex justify-center mb-6">
-          <Image src={Logo} alt="Logo" width={100} height={100} />
+          <Image src={Logo} alt="Logo" width={100} height={100} priority={true} />
         </div>
         <h1 className="text-3xl font-bold text-center mb-6 dark:text-gray-200">
           CODE SPACE
@@ -212,7 +209,7 @@ export default function Login() {
               }`}
             disabled={loading}
           >
-            {loading ? "Signing in..." : "เข้าสู่ระบบ"}
+            {loading ? "กำลังเข้าสู่ระบบ" : "เข้าสู่ระบบ"}
           </button>
         </form>
 

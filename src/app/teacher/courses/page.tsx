@@ -9,7 +9,7 @@ import { createCourse } from "../../services/user.service";
 import { getAllCourse } from "../../services/course.service";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
-
+import Profiler from "../../../../src/app/assets/setting/profileuser.svg";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 import CoursesMap from "@/app/components/CoursesItems/CoursesMap";
@@ -104,7 +104,7 @@ export default function CoursesPage() {
   return (
     <div className="flex flex-col text-[#FAFAFA] m-14 min-w-screen">
       <div className="flex flex-row justify-between items-center">
-        <h1 className="text-lg font-medium mb-6">คอร์สเรียน</h1>
+      <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
         {!showCreateClass && (
           <button
             onClick={toggleCreateClass}
@@ -137,7 +137,10 @@ export default function CoursesPage() {
                       alt="Profile Picture"
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-lg "
+                      className="rounded-lg"
+                      width={100}
+                      height={100}
+                      priority={true}
                     />
                   ) : (
 
