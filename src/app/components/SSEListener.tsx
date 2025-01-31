@@ -31,7 +31,7 @@ const SSEListener = () => {
      if (accessToken){
           startSSE();
      }
-  }, [accessToken]);
+  }, [accessToken, startSSE]);
 
   return null;
 };

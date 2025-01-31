@@ -1,11 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import { ISchool } from "@/app/interfaces/school.interface";
+import { getAllSchool } from "@/app/services/school.service";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-export default function school() {
+export default function School() {
+  const [schools, setSchools] = useState<ISchool[]>()
+  const [schoolsData, setSchoolsDate] = useState<ISchool[]>()
+  const [search, setSearch] = useState<string>("")
+  const router = useRouter()
+
+  useEffect(() => {
+    const fetchSchools = async () => {
+      const response: ISchool[] = await getAllSchool()
+      setSchoolsDate(response)
+      setSchools(response)
+    }
+    fetchSchools()
+  }, [])
+
+  useEffect(() => {
+    setSchools(schoolsData?.filter((school) => school.schoolName.toLowerCase().includes(search)))
+  }, [search, schoolsData])
+
   return (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen bg-[#0B111B]">
@@ -16,13 +38,13 @@ export default function school() {
 
           {/* Search */}
           <div className="flex gap-9 self-stretch">
-            <div className="flex items-center flex-grow gap-4 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto">
-              <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
-              <span className="text-[18px]	text-neutral-50">ค้นหา</span>
-            </div>
+            <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto">
+                <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
+                <input type="text" className="text-[18px] text-neutral-50 bg-transparent outline-none w-full" placeholder="ค้นหา" onChange={(e) => setSearch(e.target.value)} />
+            </div> 
 
             {/* Button */}
-            <div className="flex items-center justify-center gap-4 py-3 px-4 rounded-md bg-[#5572FA] w-auto ">
+            <div className="flex items-center justify-center gap-4 py-3 px-4 rounded-md bg-[#5572FA] w-auto cursor-pointer hover:bg-blue-300" onClick={() => router.push("/admin/school/schooladd")}>
               <AddRoundedIcon className="text-neutral-50 w-6 h-6" />
               <span className="text-[16px] text-neutral-50">เพิ่มโรงเรียน</span>
             </div>
@@ -38,17 +60,25 @@ export default function school() {
             </div>
 
             {/* card data school */}
-            <div className="flex flex-col items-start gap-6 self-stretch">
-              <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch">
-                <span className="flex w-[540px] h-[60px] items-center gap-5 text-[18px]	text-neutral-50">
-                  <img src="https://www.eng.kmitl.ac.th/wp-content/uploads/2024/06/About-4-B.png" alt="icon" className="w-[60px] h-[60px]" />
-                  สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
-                <span className="flex w-[658px] h-[60px] items-center gap-5 text-[14px]	text-neutral-50">1 ซอยฉลองกรุง 1 เขตลาดกระบัง อำเภอลาดกระบัง จังหวัดกรุงเทพมหานคร 10520</span>
-                <span className="flex w-[170px] h-[60px] justify-center items-center gap-5 text-[20px]	text-neutral-50">1</span>
-                <span className="flex w-[170px] h-[60px] justify-center items-center gap-5 text-[20px]	text-neutral-50">2</span>
-                <MoreHorizOutlinedIcon className="flex w-[36px] h-[36px] items-center rounded-md border-gray-100 text-[#FAFAFA]" />
-              </div>
-            </div>
+
+            {
+              schools?.map((school) => {
+                return <div key={school.schoolId} className="flex flex-col items-start gap-6 self-stretch w-full">
+                  <div className="flex flex-row items-center gap-2.5 p-2 px-6 rounded-md justify-evenly">
+                    <span className="flex flex-row w-[540px] h-[60px] items-center gap-5 text-[18px]	text-neutral-50 cursor-pointer" onClick={() => router.push(`/admin/school/${school.schoolId}`)}>
+                      <Image src={school.pictureUrl} alt="icon" className="w-[80px] h-[80px] object-cover" width={100} height={100} />
+                      {school.schoolName}
+                    </span>
+                    <span className="flex w-[658px] h-[60px] items-center gap-5 text-[14px]	text-neutral-50">{school.address} {school.district} {school.subDistrict} {school.province} {school.postCode}</span>
+                    <span className="flex w-[170px] h-[60px] justify-center items-center gap-5 text-[20px]	text-neutral-50">{school.count.teacher}</span>
+                    <span className="flex w-[170px] h-[60px] justify-center items-center gap-5 text-[20px]	text-neutral-50">{school.count.student}</span>
+                    <div className="flex items-center justify-center h-9 w-9 rounded-md border border-[#2A3A50]">
+                      <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                    </div>
+                  </div>
+                </div>
+              })
+            }
 
           </div>
         </div>
@@ -56,5 +86,3 @@ export default function school() {
     </>
   );
 }
-
-{/* <div className="flex items-center px-4"> */ }

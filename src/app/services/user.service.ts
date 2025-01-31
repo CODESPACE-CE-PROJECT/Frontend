@@ -68,8 +68,6 @@ export const uploadProfilePicture = async (picture: File) => {
   }
 }
 
-
-
 export const createCourse = async (formData: {
   title: string;
   description: string;
@@ -99,32 +97,6 @@ export const createCourse = async (formData: {
 
     return response.data;
   } catch (error) {
-    // const axiosError = error as AxiosError;
-    // console.error(
-    //   "Error creating course:",
-    //   axiosError.response?.data || axiosError.message
-    // );
     throw error;
   }
 };
-
-// export const getAnnouncementsByCourseId = async (
-//   courseId: string
-// ): Promise<any | null> => {
-//   const token = Cookies.get('accessToken')
-
-//   if (token) {
-//     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-//     try {
-//       const response: AxiosResponse = await axios.get(
-//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/announce/${courseId}`
-//       );
-//       return response.data;
-//     } catch (error) {
-//       console.error("Error fetching announcements:", error);
-//       return null;
-//     }
-//   }
-
-//   return null;
-// };

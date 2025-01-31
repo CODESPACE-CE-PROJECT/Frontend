@@ -96,7 +96,7 @@ export default function Setting() {
                       id="fileInput"
                       onInput={handleFileChange}
                       style={{ display: 'none' }}
-                      accept="image/png, image/jpg"
+                      accept="image/png, image/jpeg"
                     />
                   </div>
                 </div>

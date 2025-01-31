@@ -1,60 +1,261 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
 
-export default function schooladd() {
+import { useRouter } from "next/navigation";
+import { getProvinceData } from "@/app/services/province.service";
+import { ICreateSchool } from "@/app/interfaces/school.interface";
+import { IProvince } from "@/app/interfaces/province.interface"
+import { Label } from "@/app/components/Input/Label";
+import { Dropdown } from "@/app/components/Input/Dropdown";
+import { TextField } from "@/app/components/Input/TextField";
+import { CheckBox } from "@/app/components/Input/CheckBox";
+import { TextArea } from "@/app/components/Input/TextArea";
+import { ZipCode } from "@/app/components/Input/ZipCode";
+import { UploadFile } from "@/app/components/Input/UploadFile";
+
+export default function Schooladd() {
+  const router = useRouter()
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [provinceData, setProvinceData] = useState<IProvince[] | undefined>([])
+  const [provinceFilterData, setProvinceFilterData] = useState<{
+    provinces: string[],
+    districts: string[]
+    subDistricts: string[]
+  }>({
+    provinces: [],
+    districts: [],
+    subDistricts: []
+  })
+  const [isOpenDropDown, setIsOpenDropdown] = useState<{
+    package: boolean,
+    province: boolean,
+    district: boolean,
+    subDistrict: boolean
+  }>({
+    package: false,
+    province: false,
+    district: false,
+    subDistrict: false
+  })
+  const [createForm, setCreateForm] = useState<ICreateSchool>({
+    province: "",
+    district: "",
+    subDistrict: "",
+    postCode: "",
+    address: "",
+    canCreateUser: false,
+    canDeleteUser: false,
+    canUpdateUser: false,
+    schoolName: ""
+  })
+  const [isDropdownSelect, setIsDropdownSelect] = useState(false)
+
+  const handleFileInput = (file: File) => {
+      setCreateForm((prev) => {
+        if(!prev) return prev
+        return{
+          ...prev,
+          file: file
+        }
+      })
+  };
+
+  const handleDropDownChange = (value: string, name: string) => {
+    if (name) {
+      setCreateForm((prev) => {
+        return {
+          ...prev,
+          [name]: value
+        } as ICreateSchool;
+      })
+
+      if (name === "package") {
+        if (value === "Standard") {
+          setCreateForm((prev) => {
+            return {
+              ...prev,
+              maxCreateCoursePerTeacher: 1,
+              maxCreateStudent: 50,
+              maxCreateTeacher: 3
+            }
+          })
+        } else if (value === "Premium") {
+          setCreateForm((prev) => {
+            return {
+              ...prev,
+              maxCreateCoursePerTeacher: 3,
+              maxCreateStudent: 100,
+              maxCreateTeacher: 10
+            }
+          })
+        }
+      }
+
+      if (name === "province") {
+        setProvinceFilterData((prev) => {
+          if (!prev) return prev
+          return {
+            ...prev,
+            districts: [...new Set(provinceData?.filter((item) => item.province === value).map(item => item.district))],
+          }
+        })
+        if (createForm?.district) {
+          setCreateForm((prev) => {
+            if (!prev) return prev
+            return {
+              ...prev,
+              district: "",
+              subDistrict: "",
+              postCode: ""
+            }
+          })
+        }
+      } else if (name === 'district') {
+        setProvinceFilterData((prev) => {
+          if (!prev) return prev
+          return {
+            ...prev,
+            subDistricts: [...new Set(provinceData?.filter((item) => item.province === createForm?.province && item.district === value).map(item => item.subDistrict))]
+          }
+        })
+        if (createForm?.subDistrict) {
+          setCreateForm((prev) => {
+            if (!prev) return prev
+            return {
+              ...prev,
+              subDistrict: "",
+              postCode: ""
+            }
+          })
+        }
+      } else if (name === "subDistrict") {
+        setCreateForm((prev) => {
+          if (!prev) return prev
+          return {
+            ...prev,
+            postCode: provinceData?.filter((item) => item.province === createForm?.province && item.district === createForm.district && item.subDistrict === value)[0].zipCode || ""
+          }
+        })
+        setIsDropdownSelect(true)
+      }
+    }
+  }
+
+  const handleOpenChange = (name: string) => {
+    setIsOpenDropdown((prev) => ({
+      package: name === "package" ? !prev.package : false,
+      province: name === "province" ? !prev.province : false,
+      district: name === "district" ? !prev.district : false,
+      subDistrict: name === "subDistrict" ? !prev.subDistrict : false,
+    }));
+  }
+
+  const handleZipCodeChange = (value: string) => {
+    if (value.length === 5 && !isDropdownSelect) {
+      const data = provinceData?.filter((item) => item.zipCode === value)
+      const provinces = [...new Set(data?.map(item => item.province))]
+      const distrcts = [...new Set(data?.map(item => item.district))]
+      const subDistricts = [...new Set(data?.map(item => item.subDistrict))]
+
+      setCreateForm((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          postCode: value,
+          province: provinces.length === 1 ? provinces[0] : "",
+          district: distrcts.length === 1 ? distrcts[0] : "",
+          subDistrict: subDistricts.length === 1 ? subDistricts[0] : ""
+        }
+      })
+
+      setProvinceFilterData({
+        provinces: provinces,
+        districts: distrcts,
+        subDistricts: subDistricts
+      })
+    } else {
+      setIsDropdownSelect(false)
+      setProvinceFilterData((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          provinces: [...new Set(provinceData?.map(item => item.province))]
+        }
+      })
+    }
+  }
+
+  const handleTextFieldChange = (value: string | number, name: string) => {
+    setCreateForm((prev) => !prev ? prev : { ...prev, [name]: value })
+  }
+
+  useEffect(() => {
+    const fetchProvinceData = async () => {
+      const response = await getProvinceData()
+      setProvinceData(response)
+
+      setProvinceFilterData((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          provinces: [...new Set(response?.map(item => item.province))]
+        }
+      })
+    }
+    fetchProvinceData()
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpenDropdown({
+          package: false,
+          province: false,
+          district: false,
+          subDistrict: false,
+        });
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+
   return (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen">
         <div className="flex justify-between items-center self-stretch">
-          <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
+          <div className="cursor-pointer" onClick={() => router.back()}>
+            <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
+          </div>
           <span className="flex w-full p-[10px] text-3xl text-zinc-50">เพิ่มโรงเรียน</span>
         </div>
 
         {/* container Search and Button */}
         <div className="flex w- py-[32px] flex-col items-center gap-[149px]">
-          <div className="flex w-[840px] flex-col items-center gap-[32px]">
+          <div className="flex w-[840px] flex-col items-center gap-[32px]" ref={dropdownRef}>
             <div className="flex flex-col items-start gap-[10px] self-stretch">
               <div className="flex flex-col justify-end items-end gap-[51px] self-stretch">
                 <div className="flex flex-col items-start gap-[32px] self-stretch">
-                  <div className="flex w-[840px] py-[24px] flex-col items-center gap-[16px] rounded-[12px] border-2 border-dashed border-[#2A3A50]">
-                    <div className="flex w-[450px] h-[116px] flex-col items-center gap-[20px]">
-                      <CloudUploadOutlinedIcon className="w-8 h-8 text-zinc-50" />
-                      <span className=" text-zinc-50">เลือกรูปภาพโปรไฟล์ของโรงเรียน</span>
-                      <span className=" text-[#CED4DA]">JPEG, PNG ขนาดไม่เกิน 50MB</span>
-                    </div>
-                    <button className="flex justify-center items-center py-3 px-6 rounded-[6px] border border-[#2A3A50] text-zinc-50" >เลือกไฟล์</button>
-                  </div>
+                  <UploadFile onInput={handleFileInput}/>
 
                   {/* รวม */}
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     {/* แพ็กเกจการใช้งาน */}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">แพ็กเกจการใช้งาน</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">เลือกแพ็กเกจการใช้งาน</span>
-                        <KeyboardArrowDownRoundedIcon className="text-zinc-50" />
-                      </div>
+                      <Label text="แพ็กเกจการใช้งาน" isRequired={true} />
+                      <Dropdown isOpen={isOpenDropDown.package} value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">จำกัดจำนวนคอร์ส</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4 gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">โปรดใส่จำนวนคอร์ส</span>
-                      </div>
+                      <Label text="จำกัดจำนวนคอร์ส" isRequired={true} />
+                      <TextField name="maxCreateCoursePerTeacher" value={createForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={3} />
                     </div>
                   </div>
 
@@ -62,27 +263,14 @@ export default function schooladd() {
                   <div className="flex items-start gap-[35px] self-stretch w-full">
                     {/* จำกัดจำนวนผู้สอน*/}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">จำกัดจำนวนผู้สอน</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">โปรดใส่จำนวนผู้สอน</span>
-                        {/* <KeyboardArrowDownRoundedIcon className="text-zinc-50" /> */}
-                      </div>
+                      <Label text="จำกัดจำนวนผู้สอน" isRequired={true} />
+                      <TextField name="maxCreateTeacher" value={createForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} />
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">จำกัดจำนวนผู้เรียน</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4 gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">โปรดใส่จำนวนผู้เรียน</span>
-                      </div>
+                      <Label text="จำกัดจำนวนผู้เรียน" isRequired={true} />
+                      <TextField name="maxCreateStudent" value={createForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} />
                     </div>
                   </div>
 
@@ -95,127 +283,65 @@ export default function schooladd() {
                       </div>
 
                       <div className="flex gap-5">
-                        <div className="flex gap-2.5 align-center">
-                          <CheckBoxRoundedIcon className="text-[#5572FA]" />
-                          <span className="text-zinc-50">สร้างผู้ใช้งาน</span>
-                        </div>
-                        <div className="flex gap-2.5 align-center">
-                          <CheckBoxRoundedIcon className="text-[#5572FA]" />
-                          <span className="text-zinc-50">แก้ไขข้อมูลผู้ใช้งาน</span>
-                        </div>
-                        <div className="flex gap-2.5 align-center">
-                          <CheckBoxRoundedIcon className="text-[#5572FA]" />
-                          <span className="text-zinc-50">ลบผู้ใช้งาน</span>
-                        </div>
+                        <CheckBox isChecked={createForm.canCreateUser} onChange={(value) => setCreateForm((prev) => !prev ? prev : { ...prev, canCreateUser: value })} label="สร้างผู้ใช้งาน" />
+                        <CheckBox isChecked={createForm.canUpdateUser} onChange={(value) => setCreateForm((prev) => !prev ? prev : { ...prev, canUpdateUser: value })} label="แก้ไขข้อมูลผู้ใช้งาน" />
+                        <CheckBox isChecked={createForm.canDeleteUser} onChange={(value) => setCreateForm((prev) => !prev ? prev : { ...prev, canDeleteUser: value })} label="ลบผู้ใช้งาน" />
                       </div>
                     </div>
                   </div>
 
-                  {/* ที่อยู่ */}
-                  <div className="flex items-start gap-[32px] self-stretch w-full ">
+                  {/* โรงเรียน */}
+                  <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">ที่อยู่</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
+                      <Label text="ชื่อโรงเรียน / สถาบัน" isRequired={true} />
+                      <TextField name="schoolName" value={createForm.schoolName} onChange={handleTextFieldChange} isNumberic={false} />
+                    </div>
+                  </div>
 
-                      <div className="flex h-[72px] py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">1 ซอย ฉลองกรุง 1 </span>
-                      </div>
+                  {/* ที่อยู่ */}
+                  <div className="flex items-start gap-[32px] self-stretch w-full">
+                    <div className="flex flex-col items-start gap-2.5 w-full ">
+                      <Label text="ที่อยู่" isRequired={true} />
+                      <TextArea name="address" value={createForm.address} onChange={handleTextFieldChange} />
                     </div>
                   </div>
 
                   {/* ตำบล อำเภอ */}
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">แขวง / ตำบล</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4  gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">ลาดกระบัง</span>
-                        <KeyboardArrowDownRoundedIcon className="text-zinc-50" />
-                      </div>
+                      <Label text="แขวง / ตำบล" isRequired={true} />
+                      <Dropdown isOpen={isOpenDropDown.subDistrict} name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
                     </div>
 
-                    {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">เขต / อำเภอ</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">ลาดกระบัง</span>
-                        <KeyboardArrowDownRoundedIcon className="text-zinc-50" />
-                      </div>
+                      <Label text="เขต / อำเภอ" isRequired={true} />
+                      <Dropdown isOpen={isOpenDropDown.district} name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
                     </div>
                   </div>
 
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     {/* จังหวัด / รหัสไปรษณีย์ */}
                     <div className="flex flex-col items-start gap-2.5 w-full ">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">จังหวัด</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-10 py-2 px-4 justify-between self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">กรุงเทพ ฯ</span>
-                        <KeyboardArrowDownRoundedIcon className="text-zinc-50" />
-                      </div>
+                      <Label text="จังหวัด" isRequired={true} />
+                      <Dropdown isOpen={isOpenDropDown.province} name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">รหัสไปรษณีย์</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex w-full gap-3 self-stretch ">
-                        <span className="flex w-4 h-10 px-4 py-2 justify-center items-center gap-3 text-zinc-50 rounded-[6px] bg-[#2A3A50]">1</span>
-                        <span className="flex w-4 h-10 px-4 py-2 justify-center items-center gap-3 text-zinc-50 rounded-[6px] bg-[#2A3A50]">0</span>
-                        <span className="flex w-4 h-10 px-4 py-2 justify-center items-center gap-3 text-zinc-50 rounded-[6px] bg-[#2A3A50]">2</span>
-                        <span className="flex w-4 h-10 px-4 py-2 justify-center items-center gap-3 text-zinc-50 rounded-[6px] bg-[#2A3A50]">5</span>
-                        <span className="flex w-4 h-10 px-4 py-2 justify-center items-center gap-3 text-zinc-50 rounded-[6px] bg-[#2A3A50]">0</span>
-                      </div>
+                      <Label text="รหัสไปรษณีย์" isRequired={true} />
+                      <ZipCode value={createForm?.postCode} onChange={handleZipCodeChange} />
                     </div>
                   </div>
-
-
-
-
-
-                  {/* ที่อยู่
-                  <div className="flex items-start gap-[35px] self-stretch w-full h-[76px]">
-                    <div className="flex flex-col items-start gap-2.5 w-full justify-between">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">ที่อยู่</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
-
-                      <div className="flex h-[72px] py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50]">
-                        <span className="text-zinc-50">1 ซอย ฉลองกรุง 1 </span>
-                      </div>
-                    </div>
-                  </div> */}
-
-
-
                 </div>
                 <div className="flex align-center gap-4">
                   <button className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border border-[#2A3A50] text-zinc-50" >ยกเลิก</button>
-                  <button className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border bg-[#5572FA] border-[#5572FA] text-zinc-50" >เพิ่ม</button>
+                  <button onClick={() => console.log(createForm)}className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border bg-[#5572FA] border-[#5572FA] text-zinc-50" >เพิ่ม</button>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </>
   );
 }
