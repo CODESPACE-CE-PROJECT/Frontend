@@ -26,6 +26,39 @@ xterm-viewport {
   color: #fff000;
 } */
 
+/* disable dot on dayGridMonth*/
+.fc-daygrid-event-dot {
+  display: none !important;
+}
+
+/* change bg event on dayGridMonth*/
+.fc-daygrid-dot-event.fc-event-mirror, .fc-daygrid-dot-event {
+  background: #5572FA;
+}
+/* change bg event on dayGridMonth(hover)*/
+.fc-daygrid-dot-event.fc-event-mirror, .fc-daygrid-dot-event:hover {
+  background: #5572FA;
+}
+
+/* fix timeGridWeek,timeGridDay*/
+.fc-event-main{
+  display: flex;
+  height: inherit;
+  justify-content: center;
+  align-items: center;
+}
+.fc .fc-timegrid-col:hover{
+  background: #2A3A50AA;
+}
+/* change bg today on timeGridWeek,timeGridDay*/
+.fc-day-today {
+  --fc-today-bg-color:#2A3A50
+}
+/* fix listMonth event hover*/
+.fc-event {
+  --fc-list-event-hover-bg-color:#2A3A50
+}
+
 .fc .fc-daygrid-day:hover {
   background: #2A3A50AA;
 }

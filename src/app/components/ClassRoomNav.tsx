@@ -24,8 +24,7 @@ const commonLinks = (id: string, role: string, pathname: string) => (
     </li>
     <div className="flex flex-col gap-3">
       <li
-        className={`px-8 py-4 rounded-md ${pathname.includes("/general") ? "bg-[#3049724D]" : ""
-          } hover:bg-[#3049724D] cursor-pointer`}
+        className={`px-8 py-4 rounded-md ${pathname.includes("/general") ? "bg-[#3049724D]" : ""} hover:bg-[#3049724D] cursor-pointer`}
       >
         <Link
           href={`/${role.toLowerCase()}/courses/${id}/general`}
