@@ -2,19 +2,13 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'; // no action DashBoard
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard'; // action DashBoard
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'; // no action School
 import SchoolIcon from '@mui/icons-material/School'; // action School
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'; //no action Bin
-import DeleteIcon from '@mui/icons-material/Delete'; // action Bin
 import ClassIcon from "@mui/icons-material/Class";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CodeIcon from "@mui/icons-material/Code";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LogoutIcon from "@mui/icons-material/Logout";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import PlatformIcon from "../assets/CoursesAssets/PlatformIcon.svg";
 import { logout } from "../services/auth.service";
 import { usePathname, useRouter } from "next/navigation";
@@ -54,7 +48,7 @@ export default function SideNav({ role }: SideNavProps) {
           </Link>
         </li>
 
-        <ul className="flex flex-col items-center gap-5 self-stretch ">
+        <ul className="flex flex-col gap-y-5 items-stretch">
         {role === "STUDENT" && (
           <>
             <li>

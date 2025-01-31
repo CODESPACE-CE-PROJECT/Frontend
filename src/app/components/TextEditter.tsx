@@ -85,14 +85,12 @@ export default function TextEditor({ sourceCode, language }: Props) {
               onChange={handleFileUpload}
             />
           </label>
-        <Editor
-          height="50vw"
-          width="50vw"
-          defaultLanguage={language ? languageEditor(language): 'cpp'}
-          value={sourceCode}
-          defaultValue="" 
-          theme="vs-dark"
-        />
+
+          <button className="bg-[#5572FA] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#3a59d7] w-24 flex items-center justify-center space-x-2">
+            <CloudUploadIcon className="w-6 h-6" />
+            <span>บันทึก</span>
+          </button>
+        </div>
       </div>
 
       {/* 🔹 Editor */}

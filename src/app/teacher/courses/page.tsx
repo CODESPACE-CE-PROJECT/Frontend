@@ -42,7 +42,6 @@ export default function CoursesPage() {
     };
 
     fetchCourses();
-
   }, [dispatch]);
 
   const toggleCreateClass = () => {
@@ -93,18 +92,16 @@ export default function CoursesPage() {
 
   const handleCourseClick = (courseId?: string) => {
     if (courseId) {
-      router.push(`/teacher/courses/${courseId}/general`);
+      router.push(`/courses/${courseId}/general`);
     } else {
       console.error("Course ID is missing");
     }
   };
 
-
-
   return (
     <div className="flex flex-col text-[#FAFAFA] m-14 min-w-screen">
       <div className="flex flex-row justify-between items-center">
-      <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
+        <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
         {!showCreateClass && (
           <button
             onClick={toggleCreateClass}
@@ -125,7 +122,6 @@ export default function CoursesPage() {
 
             <form onSubmit={handleSubmit} className="flex flex-col space-y-6 ">
               <fieldset className="flex flex-col h-full">
-
                 <div
                   className="relative flex flex-col items-center justify-center h-32 bg-white rounded-lg cursor-pointer border-2 border-dashed border-gray-300 "
                   role="button"
@@ -143,13 +139,15 @@ export default function CoursesPage() {
                       priority={true}
                     />
                   ) : (
-
                     <div className="text-center text-gray-500">
                       <AddPhotoAlternateIcon className="text-4xl mb-2" />
-                      <p className="text-base text-black pb-2">เลือกรูปภาพพื้นหลังของคอร์สเรียน *</p>
-                      <p className="pb-2 text-sm text-[#CED4DA]">JPEG, PNG ขนาดไม่เกิน 50MB</p>
+                      <p className="text-base text-black pb-2">
+                        เลือกรูปภาพพื้นหลังของคอร์สเรียน *
+                      </p>
+                      <p className="pb-2 text-sm text-[#CED4DA]">
+                        JPEG, PNG ขนาดไม่เกิน 50MB
+                      </p>
                     </div>
-
                   )}
                   <input
                     type="file"
@@ -161,12 +159,14 @@ export default function CoursesPage() {
                   <button className="text-sm font-semibold text-[#54575C] border border-[#CED4DA] rounded-lg w-20 h-20 flex items-center justify-center   mb-3">
                     เลือกไฟล์
                   </button>
-
                 </div>
               </fieldset>
 
               <div>
-                <label htmlFor="courseName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="courseName"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   ชื่อชั้นเรียน:
                 </label>
                 <input
@@ -181,7 +181,10 @@ export default function CoursesPage() {
               </div>
 
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   รายละเอียด
                 </label>
                 <textarea
@@ -189,11 +192,12 @@ export default function CoursesPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full border border-[#CED4DA] rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black pl-3 pt-3"
-
                   placeholder="รายละเอียด"
                   maxLength={200}
                 ></textarea>
-                <div className="text-right text-sm mt-1 text-black">{description.length}/200</div>
+                <div className="text-right text-sm mt-1 text-black">
+                  {description.length}/200
+                </div>
               </div>
 
               {errorMessage && (
@@ -211,10 +215,11 @@ export default function CoursesPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`py-2 px-4 rounded-lg text-white w-32 ${loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-[#5572FA] hover:bg-blue-700"
-                    }`}
+                  className={`py-2 px-4 rounded-lg text-white w-32 ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-[#5572FA] hover:bg-blue-700"
+                  }`}
                 >
                   {loading ? "กำลังสร้าง..." : "สร้าง"}
                 </button>
