@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
@@ -7,7 +7,8 @@ import Profiler from "@/app/assets/setting/profileuser.svg";
 
 export default function CoursesMap() {
   const router = useRouter();
-
+  const pathname = usePathname();
+  
   const [courses, setCourses] = useState([]);
   useEffect(() => {
     const fetchCourses = async () => {
@@ -24,9 +25,18 @@ export default function CoursesMap() {
     fetchCourses();
   }, []);
 
-  const handleCourseClick = (courseId: string) => {
-    router.push(`/student/courses/${courseId}/general`);
+  const handleCourseClick = (courseId?: string) => {
+    if (!courseId) {
+      console.error("Course ID is missing");
+      return;
+    }
+  
+    const currentPath = pathname;
+    const role = currentPath.startsWith("/teacher") ? "teacher" : "student";
+  
+    router.push(`/${role}/courses/${courseId}/general`);
   };
+  
 
   return (
     <div className="flex flex-row flex-wrap gap-5">

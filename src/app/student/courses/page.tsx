@@ -14,7 +14,7 @@ import CoursesMap from "@/app/components/CoursesItems/CoursesMap";
 export default function Courses() {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
@@ -33,10 +33,6 @@ export default function Courses() {
 
     fetchCourses();
   }, [dispatch]);
-
-  const handleCourseClick = (courseId: string) => {
-    router.push(`/student/courses/${courseId}/general`);
-  };
 
   return (
     <div className="flex flex-col text-[#FAFAFA] w-full">
