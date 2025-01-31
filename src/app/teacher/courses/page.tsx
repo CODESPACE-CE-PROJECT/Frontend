@@ -12,6 +12,7 @@ import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
 
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
+import CoursesMap from "@/app/components/CoursesItems/CoursesMap";
 
 export default function CoursesPage() {
   const [showCreateClass, setShowCreateClass] = useState<boolean>(false);
@@ -220,51 +221,7 @@ export default function CoursesPage() {
         </div>
       )}
 
-      <div className="flex flex-row flex-wrap gap-5">
-        {/* new */}
-        {courses.length > 0 ? (
-          courses.map((course: any) => (
-            <div
-              key={course.courseId}
-              onClick={() => handleCourseClick(course.courseId)}
-              className="relative flex flex-col text-[#0B111B] cursor-pointer w-auto h-auto"
-            >
-              {course.backgroundUrl ? (
-                <Image
-                  className="self-center rounded-t-2xl w-auto min-h-48"
-                  src={course.backgroundUrl}
-                  alt={course.title}
-                  width={100}
-                  height={100}
-                />
-              ) : (
-                <Image
-                  className="self-center rounded-t-2xl w-auto min-h-48"
-                  src={CourseBg}
-                  alt={course.title}
-                  width={100}
-                  height={50}
-                />
-              )}
-              <Image
-                className="absolute inset-y-40 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
-                src={UserProfile}
-                alt={course.title}
-                width={100}
-                height={100}
-              />
-              <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
-                <h1 className="w-48 text-xl font-semibold text-wrap">
-                  {course.title}
-                </h1>
-                <h2 className="text-sm">จิระศักดิ์ สิทธิกร</h2>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No courses available at the moment.</p>
-        )}
-      </div>
+      <CoursesMap />
     </div>
   );
 }

@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { getAllCourse } from "../../services/course.service";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
+import Image from "next/image";
+import Profiler from "@/app/assets/setting/profileuser.svg";
+import CoursesMap from "@/app/components/CoursesItems/CoursesMap";
 
 export default function Courses() {
   const router = useRouter();
@@ -29,9 +31,7 @@ export default function Courses() {
       }
     };
 
-  
     fetchCourses();
-  
   }, [dispatch]);
 
   const handleCourseClick = (courseId: string) => {
@@ -41,48 +41,7 @@ export default function Courses() {
   return (
     <div className="flex flex-col text-[#FAFAFA] w-full">
       <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
-      <div className="flex flex-row flex-wrap gap-5">
-        {courses.length > 0 ? (
-          courses.map((course: any) => (
-            <div
-              key={course.courseId}
-              onClick={() => handleCourseClick(course.courseId)}
-              className="relative flex flex-col text-[#0B111B] cursor-pointer w-auto h-auto"
-            >
-              {course.backgroundUrl ? (
-                <Image
-                  className="self-center rounded-t-2xl w-full min-h-48"
-                  src={course.backgroundUrl}
-                  alt={course.title}
-                  width={100}
-                  height={100}
-                />
-              ) : (
-                <Image
-                  className="self-center rounded-t-2xl w-full min-h-48"
-                  src={CourseBg}
-                  alt={course.title}
-                  width={100}
-                  height={100}
-                />
-              )}
-              <Image
-                className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
-                src={UserProfile}
-                alt={course.title}
-              />
-              <div className="px-7 py-5 bg-[#FAFAFA] rounded-b-2xl pt-10 h-full">
-                <h1 className="w-48 text-xl font-semibold text-wrap">
-                  {course.title}
-                </h1>
-                <h2 className="text-sm">จิระศักดิ์ สิทธิกร</h2>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No courses available at the moment.</p>
-        )}
-      </div>
+      <CoursesMap />
     </div>
   );
 }
