@@ -52,23 +52,64 @@ export default function schooladdedfiles() {
                             <span className="flex w-28 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">เพศ</span>
                             <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้ใช้งาน</span>
                             <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">อีเมล</span>
-                            <span className="flex w-40 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ประเภท</span>
-                            <span className="flex w-52 h-[45px] items-center gap-5text-[18px] text-neutral-50"></span>
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ประเภท</span>
+                            <span className="flex w-56 h-[45px] items-center gap-5text-[18px] text-neutral-50"></span>
                         </div>
                     </div>
-
-                    <div className="flex flex-col items-start gap-6 self-stretch bg-orange-600">
-                        <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch bg-[#304972] bg-opacity-30">
+                    {/* ข้อมูลปกติ */}
+                    <div className="flex flex-col items-start gap-6 self-stretch">
+                        <div className="flex items-center gap-2.5 p-2 px-6 self-stretch ">
                             <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726</span>
                             <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">รัตนพร</span>
                             <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">สมใจนึก</span>
                             <span className="flex w-28 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">หญิง</span>
                             <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">rattanaporn.ratta</span>
                             <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726@kmitl.ac.th</span>
-                            <span className="flex w-40 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้เรียน</span>
-                            <div className="flex w-52 file:items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] ">
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้เรียน</span>
+                            <div className="flex w-56 items-center gap-2  ">
                                 <CheckCircleOutlineRoundedIcon className=" text-[#00DACC] w-4 h-4" />
-                                <span className="text-[18px] text-neutral-50">ค้นหา</span>
+                                <div className="flex justify-center items-center gap-7">
+                                    <span className="text-[18px] text-[#00DACC]">สามารถเพิ่มได้</span>
+                                    {/* <span className="text-[18px] underline text-[#00DACC]">ลบ</span> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* รายชื่อซ้ำจากไฟล์ */}
+                    <div className="flex flex-col items-start gap-6 self-stretch">
+                        <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch bg-[#EF4343] bg-opacity-10">
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">รัตนพร</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">สมใจนึก</span>
+                            <span className="flex w-28 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">หญิง</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">rattanaporn.ratta</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726@kmitl.ac.th</span>
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้เรียน</span>
+                            <div className="flex w-56 items-center gap-2  ">
+                                <CheckCircleOutlineRoundedIcon className=" text-[#EF4343] w-4 h-4" />
+                                <div className="flex justify-center items-center gap-7">
+                                    <span className="text-[18px] text-[#EF4343]">รายชื่อซ้ำจากไฟล์</span>
+                                    <span className="text-[18px] underline text-[#EF4343]">ลบ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* รายชื่อซ้ำในระบบ */}
+                    <div className="flex flex-col items-start gap-6 self-stretch">
+                        <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch bg-[#FF9000] bg-opacity-10">
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">รัตนพร</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">สมใจนึก</span>
+                            <span className="flex w-28 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">หญิง</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">rattanaporn.ratta</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726@kmitl.ac.th</span>
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้เรียน</span>
+                            <div className="flex w-56 items-center gap-2  ">
+                                <CheckCircleOutlineRoundedIcon className=" text-[#EFA443] w-4 h-4" />
+                                <div className="flex justify-center items-center gap-7">
+                                    <span className="text-[18px] text-[#EFA443]">สามารถเพิ่มได้</span>
+                                    <span className="text-[18px] underline text-[#EFA443]">ลบ</span>
+                                </div>
                             </div>
 
                         </div>
