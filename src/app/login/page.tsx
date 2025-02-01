@@ -147,9 +147,9 @@ export default function Login() {
               บัญชีผู้ใช้ <span className="text-red-500">*</span>
             </label>
             <input
-              type="email"
+              type="text"
               id="username"
-              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-[#5572FA] bg-[#2A3A50]"
               placeholder="Username"
               required
               onChange={handleUserName}
@@ -168,7 +168,7 @@ export default function Login() {
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
-                className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-none bg-[#2A3A50]"
+                className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-[#5572FA] bg-[#2A3A50]"
                 placeholder="Password"
                 required
                 onChange={handlePassword}

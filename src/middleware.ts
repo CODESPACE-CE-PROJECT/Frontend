@@ -3,7 +3,6 @@ import { NextRequest } from "next/server";
 import { jwtDecode } from "jwt-decode"; // Corrected import
 import { cookies } from 'next/headers'
 import axios, { AxiosResponse } from "axios";
-import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 interface IJwt {
   username: string;
@@ -32,7 +31,7 @@ const getAccessToken = async (refreshToken: string) => {
       }
     }
   } catch (error) {
-    throw new Error('Error Fetch Refresh Token')
+    console.log(error)
   }
 };
 

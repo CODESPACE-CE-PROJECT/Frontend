@@ -14,11 +14,13 @@ import { CheckBox } from "@/app/components/Input/CheckBox";
 import { TextArea } from "@/app/components/Input/TextArea";
 import { ZipCode } from "@/app/components/Input/ZipCode";
 import { UploadFile } from "@/app/components/Input/UploadFile";
+import { createSchool } from "@/app/services/school.service";
 
 export default function Schooladd() {
   const router = useRouter()
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [provinceData, setProvinceData] = useState<IProvince[] | undefined>([])
+  const [isSubmited, setIsSubmited] = useState<boolean>(false)
   const [provinceFilterData, setProvinceFilterData] = useState<{
     provinces: string[],
     districts: string[]
@@ -50,6 +52,7 @@ export default function Schooladd() {
     canUpdateUser: false,
     schoolName: ""
   })
+
   const [isDropdownSelect, setIsDropdownSelect] = useState(false)
 
   const handleFileInput = (file: File) => {
@@ -57,7 +60,7 @@ export default function Schooladd() {
         if(!prev) return prev
         return{
           ...prev,
-          file: file
+          picture: file
         }
       })
   };
@@ -191,6 +194,26 @@ export default function Schooladd() {
     setCreateForm((prev) => !prev ? prev : { ...prev, [name]: value })
   }
 
+  const handleSubmit = async () => {
+    setIsSubmited(true)
+    if(!createForm.schoolName || 
+      !createForm.province || 
+      !createForm.district || 
+      !createForm.subDistrict || 
+      !createForm.postCode || 
+      !createForm.address ||
+      !createForm.package ||
+      createForm.maxCreateCoursePerTeacher && createForm.maxCreateCoursePerTeacher < 1 ||
+      createForm.maxCreateTeacher && createForm.maxCreateTeacher < 1 || 
+      createForm.maxCreateStudent && createForm.maxCreateStudent < 1
+    ){
+      return
+    }
+    console.log(createForm)
+    const res = await createSchool(createForm)
+    router.push('/admin/school')
+  }
+
   useEffect(() => {
     const fetchProvinceData = async () => {
       const response = await getProvinceData()
@@ -249,13 +272,13 @@ export default function Schooladd() {
                     {/* แพ็กเกจการใช้งาน */}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="แพ็กเกจการใช้งาน" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.package} value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
+                      <Dropdown isOpen={isOpenDropDown.package} value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited}/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="จำกัดจำนวนคอร์ส" isRequired={true} />
-                      <TextField name="maxCreateCoursePerTeacher" value={createForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={3} />
+                      <TextField name="maxCreateCoursePerTeacher" value={createForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={3} validateText="จำนวนคอร์สต้องมากกว่า 0" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -264,13 +287,13 @@ export default function Schooladd() {
                     {/* จำกัดจำนวนผู้สอน*/}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="จำกัดจำนวนผู้สอน" isRequired={true} />
-                      <TextField name="maxCreateTeacher" value={createForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} />
+                      <TextField name="maxCreateTeacher" value={createForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} validateText="จำนวนผู้สอนต้องมากกว่า 0" isSubmited={isSubmited}/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="จำกัดจำนวนผู้เรียน" isRequired={true} />
-                      <TextField name="maxCreateStudent" value={createForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} />
+                      <TextField name="maxCreateStudent" value={createForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} validateText="จำนวนผู้เรียนต้องมากกว่า 0" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -294,7 +317,7 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="ชื่อโรงเรียน / สถาบัน" isRequired={true} />
-                      <TextField name="schoolName" value={createForm.schoolName} onChange={handleTextFieldChange} isNumberic={false} />
+                      <TextField name="schoolName" value={createForm.schoolName} onChange={handleTextFieldChange} isNumberic={false} validateText="กรุณากรอกชื่อโรงเรียน" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -302,7 +325,7 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="ที่อยู่" isRequired={true} />
-                      <TextArea name="address" value={createForm.address} onChange={handleTextFieldChange} />
+                      <TextArea name="address" value={createForm.address} onChange={handleTextFieldChange} validateText="กรุณากรอกที่อยู่" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -310,12 +333,12 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="แขวง / ตำบล" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.subDistrict} name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
+                      <Dropdown isOpen={isOpenDropDown.subDistrict} name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited}/>
                     </div>
 
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="เขต / อำเภอ" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.district} name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
+                      <Dropdown isOpen={isOpenDropDown.district} name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -323,7 +346,7 @@ export default function Schooladd() {
                     {/* จังหวัด / รหัสไปรษณีย์ */}
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="จังหวัด" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.province} name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} />
+                      <Dropdown isOpen={isOpenDropDown.province} name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited}/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
@@ -334,8 +357,8 @@ export default function Schooladd() {
                   </div>
                 </div>
                 <div className="flex align-center gap-4">
-                  <button className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border border-[#2A3A50] text-zinc-50" >ยกเลิก</button>
-                  <button onClick={() => console.log(createForm)}className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border bg-[#5572FA] border-[#5572FA] text-zinc-50" >เพิ่ม</button>
+                  <button onClick={() => router.back()} className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border border-[#2A3A50] text-zinc-50" >ยกเลิก</button>
+                  <button onClick={() => handleSubmit()} className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border bg-[#5572FA] border-[#5572FA] text-zinc-50 hover:bg-blue-300" >เพิ่ม</button>
                 </div>
               </div>
             </div>

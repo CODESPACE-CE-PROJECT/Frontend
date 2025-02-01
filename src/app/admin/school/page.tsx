@@ -38,7 +38,7 @@ export default function School() {
 
           {/* Search */}
           <div className="flex gap-9 self-stretch">
-            <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto">
+            <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto focus-within:border-[#5572FA]">
                 <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
                 <input type="text" className="text-[18px] text-neutral-50 bg-transparent outline-none w-full" placeholder="ค้นหา" onChange={(e) => setSearch(e.target.value)} />
             </div> 
@@ -66,7 +66,7 @@ export default function School() {
                 return <div key={school.schoolId} className="flex flex-col items-start gap-6 self-stretch w-full">
                   <div className="flex flex-row items-center gap-2.5 p-2 px-6 rounded-md justify-evenly">
                     <span className="flex flex-row w-[540px] h-[60px] items-center gap-5 text-[18px]	text-neutral-50 cursor-pointer" onClick={() => router.push(`/admin/school/${school.schoolId}`)}>
-                      <Image src={school.pictureUrl} alt="icon" className="w-[80px] h-[80px] object-cover" width={100} height={100} />
+                      <Image src={school?.pictureUrl} alt="icon" className="w-[80px] h-[80px] object-cover" width={100} height={100} />
                       {school.schoolName}
                     </span>
                     <span className="flex w-[658px] h-[60px] items-center gap-5 text-[14px]	text-neutral-50">{school.address} {school.district} {school.subDistrict} {school.province} {school.postCode}</span>

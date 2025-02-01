@@ -110,7 +110,7 @@ export default function School() {
           <div className="flex-col contents self-stretch gap-[36px] w-full lg:flex-row">
             {/* Search */}
             <div className="flex gap-9 self-stretch">
-              <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto">
+              <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto focus-within:border-[#5572FA]">
                 <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
                 <input
                   type="text"

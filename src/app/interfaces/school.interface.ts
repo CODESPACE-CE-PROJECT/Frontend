@@ -41,7 +41,7 @@ export interface ISchoolBin {
 
 export interface ICreateSchool {
      schoolName?: string,
-     picture?: File,
+     picture?: File | null,
      package?: string,
      address: string,
      district: string,

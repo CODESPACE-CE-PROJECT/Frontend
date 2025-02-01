@@ -9,9 +9,11 @@ interface Props {
      value?: string;
      className?: string;
      isOpen?: boolean;
+     validateText?: string,
+     isSubmited?: boolean
 }
 
-export const Dropdown: React.FC<Props> = ({options, onChange, value, className, name, isOpen, onOpenCahnge}) => {
+export const Dropdown: React.FC<Props> = ({options, onChange, value, className, name, isOpen, onOpenCahnge, validateText, isSubmited}) => {
      const [displayText, setDisplayText] = useState<string | undefined>("")
 
      useEffect(() => {
@@ -28,6 +30,7 @@ export const Dropdown: React.FC<Props> = ({options, onChange, value, className, 
                <span className={value ? `text-zinc-50` : 'text-zinc-200'}>{displayText}</span>
                <KeyboardArrowDownRoundedIcon className="text-zinc-50" />
           </div>
+          {validateText && !displayText  && isSubmited && <p className='mt-2 text-sm text-[#EF4343]'>{validateText}</p>}
 
           {
                isOpen && <div className="absolute w-full max-h-[200px] overflow-y-auto dropdown top-12 bg-[#2A3A50] border-[1px] border-[#5572FA] rounded-[6px]">
