@@ -3,13 +3,7 @@
 import React, { useState } from "react";
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import CircleIcon from '@mui/icons-material/Circle';
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 
 export default function schooladdedfiles() {
     return (
@@ -49,10 +43,38 @@ export default function schooladdedfiles() {
                     </button>
                 </div>
 
-                <div className="overflow-x-auto ">
-                    
-                </div>
+                <div className="overflow-x-auto flex flex-col w-full justify-center items-start gap-9">
+                    <div className="flex flex-col items-start gap-6 self-stretch">
+                        <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch bg-[#304972] bg-opacity-30">
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">รหัสประจำตัว</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ชื่อ</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">นามสกุล</span>
+                            <span className="flex w-28 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">เพศ</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้ใช้งาน</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">อีเมล</span>
+                            <span className="flex w-40 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ประเภท</span>
+                            <span className="flex w-52 h-[45px] items-center gap-5text-[18px] text-neutral-50"></span>
+                        </div>
+                    </div>
 
+                    <div className="flex flex-col items-start gap-6 self-stretch bg-orange-600">
+                        <div className="flex items-center gap-2.5 p-2 px-6 rounded-md self-stretch bg-[#304972] bg-opacity-30">
+                            <span className="flex w-36 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">รัตนพร</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">สมใจนึก</span>
+                            <span className="flex w-28 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">หญิง</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">rattanaporn.ratta</span>
+                            <span className="flex w-80 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">64010726@kmitl.ac.th</span>
+                            <span className="flex w-40 h-[45px] justify-center items-center gap-5 text-[18px] text-neutral-50">ผู้เรียน</span>
+                            <div className="flex w-52 file:items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] ">
+                                <CheckCircleOutlineRoundedIcon className=" text-[#00DACC] w-4 h-4" />
+                                <span className="text-[18px] text-neutral-50">ค้นหา</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
 
 
             </div >
