@@ -6,6 +6,7 @@ import Cookies from "js-cookie"; // Import js-cookie
 import { jwtDecode } from "jwt-decode"; // Import jwt-decode
 import UserNav from "@/app/components/UserNav";
 import { Role } from "@/app/enum/enum";
+import { usePathname } from "next/navigation";
 
 interface IJwt {
   role: Role;
@@ -17,19 +18,21 @@ interface LayoutProps {
 }
 
 const ClassLayout: React.FC<LayoutProps> = ({ children, id }) => {
-  // Get the token from cookies
-  const token = Cookies.get("accessToken");
+  const pathname = usePathname();
+  let role: Role | null = null;
 
-  let role: Role | null = null ; // Set a default role to null
-
-  if (token) {
-    try {
-      const decoded = jwtDecode<IJwt>(token);
-      role = decoded.role; // Extract the role from the decoded token
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      // Optionally handle the error case here
-    }
+  switch (true) {
+    case /^\/student(\/|$)/.test(pathname):
+      role = Role.STUDENT;
+      break;
+    case /^\/teacher(\/|$)/.test(pathname):
+      role = Role.TEACHER; 
+      break;
+    case /^\/admin(\/|$)/.test(pathname):
+      role = Role.ADMIN;
+      break;
+    default:
+      role = null;
   }
 
   return (

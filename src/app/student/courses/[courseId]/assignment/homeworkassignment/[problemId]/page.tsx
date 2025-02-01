@@ -23,6 +23,7 @@ export default function AssignmentPage() {
   const [selectedTitle, setSelectedTitle] = useState<string>("testAssigment");
   const dispatch = useDispatch();
   const [constraint, setProblemConstraint] = useState<any>(null);
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(setIsCloseCourseNav(true));
@@ -77,8 +78,10 @@ export default function AssignmentPage() {
     const router = useRouter();
 
     const handleBack = () => {
-      router.back();
-
+      const { courseId } = params; 
+      if (courseId) {
+        router.push(`/student/courses/${courseId}/assignment/homeworkassignment`);
+      }
     };
 
     return (
@@ -112,8 +115,11 @@ export default function AssignmentPage() {
               return (
                 <div
                   key={problem.problemId}
-                  className={`px-4 py-2 rounded-lg ${bgColor} text-center`}
+                  className={`px-4 py-2 rounded-lg ${bgColor} text-center cursor-pointer`}
                   style={{ margin: "0.5rem" }}
+                  onClick={() =>
+                    router.push(`/student/courses/${params.courseId}/assignment/homeworkassignment/${problem.problemId}`)
+                  }
                 >
                   {isCurrentProblem ? problemDetails?.title : displayText}
                 </div>
@@ -191,7 +197,7 @@ export default function AssignmentPage() {
 
         </div>
         <div className="pr-4 ml-5">
-          <TextEditter sourceCode={problemDetails.submission?.sourceCode} language={problemDetails.language}/>
+          <TextEditter sourceCode={problemDetails.submission?.sourceCode} language={problemDetails.language} />
         </div>
       </div>
     </div>
