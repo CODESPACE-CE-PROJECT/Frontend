@@ -34,4 +34,4 @@ jobs:
                 url: 'https://discord.com/api/webhooks/1204992482962833408/hu0daelau0uY8lIpQjmlub6q8-E5PdkfUTt1O_8uN8aPrS-Nj4C2r9POCvxkahW1NHzW'
                 method: 'POST'
                 customHeaders: '{"Content-Type": "application/json"}'
-                data: '{"content": "CEPP Frontend Build ✅","embeds": [{"title": "Preview[Frontend]","url": "http://10.10.10.246:3000","color": "655172"}]}'
+                data: '{"content": "Frontend Build ✅","embeds": [{"title": "Preview[Frontend]","url": "https://codespace.srv-demo-2.home.unixvextor.com","color": "655172"}]}'

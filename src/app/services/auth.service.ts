@@ -40,7 +40,7 @@ export const logout = async () => {
                `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
                {
                     headers: {
-                         AuthorizationaccessToken: `Bearer ${token}`
+                         Authorization: `Bearer ${token}`
                     }
                }
           );
@@ -49,10 +49,8 @@ export const logout = async () => {
                Cookies.remove('accessToken')
                Cookies.remove('refreshToken')
           }
-
           return response;
      } catch (error) {
           console.log(error)
-          throw new Error('Logout failed');
      }
 };
