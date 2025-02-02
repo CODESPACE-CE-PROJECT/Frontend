@@ -14,7 +14,127 @@ import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 export default function schoolmember() {
     return (
         <>
-            <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen">
+            <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full min-h-screen">
+                <div className="flex justify-between items-center self-stretch">
+                    <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
+                    <span className="flex w-full p-[10px] text-3xl text-zinc-50">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
+                </div>
+
+                <div className="flex flex-col w-full max-w-[1670px] gap-[48px] pt-5 pr-6 pb-5">
+                    <div className="flex flex-col items-start gap-9 self-stretch">
+                        <div className="flex pt-[20px] pr-6 pb-5 pl-12 justify-between items-start self-stretch rounded-xl bg-[#2A3A50] bg-opacity-30">
+                            <div className="flex gap-12">
+                                <img src="https://www.eng.kmitl.ac.th/wp-content/uploads/2024/06/About-4-B.png" alt="icon" className="w-[140px] h-[140px]" />
+                                <div className="flex flex-col items-start gap-4">
+                                    <button className="flex justify-center items-center py-2 px-3 rounded-[6px] border border-[#2A3A50] text-zinc-50">Standard</button>
+                                    <span className="flex w-full text-2xl text-zinc-50">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
+                                    <span className="flex w-full text-xl text-zinc-50">1 ซอยฉลองกรุง 1 เขตลาดกระบัง อำเภอลาดกระบัง จังหวัดกรุงเทพมหานคร 10520</span>
+                                    <div className="flex gap-4">
+                                        <span className="text-xl text-zinc-50">ผู้สอน 2 คน</span>
+                                        <CircleIcon className="text-[#FAFAFA]" />
+                                        <span className="text-xl text-zinc-50">ผู้เรียน 1 คน</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <ModeEditOutlineOutlinedIcon className="text-[#FAFAFA]" />
+                        </div>
+
+                        {/* <!-- Container for Search and Button --> */}
+                        <div className="flex flex-col lg:flex-row w-full gap-[36px]">
+                            {/* <!-- Search --> */}
+                            <div className="flex gap-9 w-full lg:w-auto">
+                                <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50]">
+                                    <SearchTwoToneIcon className="text-neutral-50 w-4 h-4" />
+                                    <span className="text-[18px] text-neutral-50">ค้นหา</span>
+                                </div>
+
+                                {/* <!-- Button --> */}
+                                <button className="flex items-center justify-center gap-2 py-3 px-4 rounded-md bg-[#FAFAFA]">
+                                    <NoteAddRoundedIcon className="text-[#5572FA] w-6 h-6" />
+                                    <span className="text-lg text-[#5572FA]">นำเข้าไฟล์</span>
+                                </button>
+
+                                {/* <!-- Button --> */}
+                                <button className="flex items-center justify-center gap-4 py-3 px-4 rounded-md bg-[#5572FA]">
+                                    <AddRoundedIcon className="text-neutral-50 w-6 h-6" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* <!-- Tables for Teachers and Students --> */}
+                        <div className="w-full overflow-x-auto flex flex-col md:flex-row justify-between gap-6">
+                            {/* <!-- Teacher Table --> */}
+                            <div className="w-full md:w-1/2">
+                                <table className="table-auto w-full border-collapse">
+                                    <thead className="bg-[#304972] bg-opacity-30 text-neutral-50 text-[16px] md:text-[18px]">
+                                        <tr>
+                                            <th className="p-3 px-4 md:px-6 text-center">บัญชีผู้สอน</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">ชื่อ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">อีเมล</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">สถานะ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="border-b border-gray-200 text-neutral-50">
+                                            <td className="p-3 px-4 md:px-6 text-center">บัญชีผู้สอน</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">รัตนพร สมใจนึก</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">rattanaporn@kmitl.ac.th</td>
+                                            <td className="p-3 px-4 md:px-6 text-center text-[#00DACC] flex items-center justify-center gap-2">
+                                                <CircleIcon className="text-[#00DACC]" /> ออนไลน์
+                                            </td>
+                                            <td className="p-3 px-4 md:px-6 text-center">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* <!-- Student Table --> */}
+                            <div className="w-full md:w-1/2">
+                                <table className="table-auto w-full border-collapse">
+                                    <thead className="bg-[#304972] bg-opacity-30 text-neutral-50 text-[16px] md:text-[18px]">
+                                        <tr>
+                                            <th className="p-3 px-4 md:px-6 text-center">บัญชีผู้เรียน</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">ชื่อ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">อีเมล</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">สถานะ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="border-b border-gray-200 text-neutral-50">
+                                            <td className="p-3 px-4 md:px-6 text-center">บัญชีผู้เรียน</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">รัตนพร สมใจนึก</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">rattanaporn@kmitl.ac.th</td>
+                                            <td className="p-3 px-4 md:px-6 text-center text-zinc-50 flex items-center justify-center gap-2">
+                                                <CircleOutlinedIcon className="text-zinc-50" /> ออฟไลน์
+                                            </td>
+                                            <td className="p-3 px-4 md:px-6 text-center">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200 text-neutral-50">
+                                            <td className="p-3 px-4 md:px-6 text-center">บัญชีผู้เรียน</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">รัตนพร สมใจนึก</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">rattanaporn@kmitl.ac.th</td>
+                                            <td className="p-3 px-4 md:px-6 text-center text-[#EF4343] flex items-center justify-center gap-2">
+                                                <HighlightOffRoundedIcon className="text-[#EF4343]" /> ปิดใช้งานชั่วคราว
+                                            </td>
+                                            <td className="p-3 px-4 md:px-6 text-center">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen">
                 <div className="flex justify-between items-center self-stretch">
                     <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
                     <span className="flex w-full p-[10px] text-3xl text-zinc-50">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
@@ -37,38 +157,104 @@ export default function schoolmember() {
                                 </div>
                             </div>
                             <ModeEditOutlineOutlinedIcon className="text-[#FAFAFA]" />
-                        </div>
-                        {/* container Search and Button */}
-                        <div className="flex-col contents self-stretch gap-[36px] w-full lg:flex-row">
+                        </div> */}
+            {/* container Search and Button */}
+            {/* <div className="flex-col contents self-stretch gap-[36px] w-full lg:flex-row"> */}
 
-                            {/* Search */}
-                            <div className="flex gap-9 self-stretch">
+            {/* Search */}
+            {/* <div className="flex gap-9 self-stretch">
                                 <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto">
                                     <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
                                     <span className="text-[18px] text-neutral-50">ค้นหา</span>
-                                </div>
+                                </div> */}
 
-                                {/* Button */}
-                                <button className="flex items-center justify-center gap-2 py-3 px-4 rounded-md bg-[#FAFAFA] w-auto ">
+            {/* Button */}
+            {/* <button className="flex items-center justify-center gap-2 py-3 px-4 rounded-md bg-[#FAFAFA] w-auto ">
                                     <NoteAddRoundedIcon className="text-[#5572FA] w-6 h-6" />
                                     <span className="text-lg text-[#5572FA]">นำเข้าไฟล์</span>
-                                </button>
+                                </button> */}
 
-                                {/* Button */}
-                                <button className="flex items-center justify-center gap-4 py-3 px-4 rounded-md bg-[#5572FA] w-auto ">
+            {/* Button */}
+            {/* <button className="flex items-center justify-center gap-4 py-3 px-4 rounded-md bg-[#5572FA] w-auto ">
                                     <AddRoundedIcon className="text-neutral-50 w-6 h-6" />
                                 </button>
                             </div>
-                        </div>
-                        
-                        <div className="flex  items-start gap-9 w-full justify-between">
-                            {/* บัญชีผู้สอน */}
+                        </div> */}
+
+            {/* <div className="w-full overflow-x-auto flex flex-col md:flex-row justify-between gap-6"> */}
+            {/* บัญชีผู้สอน */}
+            {/* <div className="w-full md:w-1/2">
+                                <table className="table-auto w-full border-collapse">
+                                    <thead className="bg-[#304972] bg-opacity-30 text-neutral-50 text-[16px] md:text-[18px]">
+                                        <tr>
+                                            <th className="p-3 px-4 md:px-6 text-center">บัญชีผู้สอน</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">ชื่อ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">อีเมล</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">สถานะ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="border-b border-gray-200 text-neutral-50">
+                                            <td className="p-3 px-4 md:px-6 text-center">บัญชีผู้สอน</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">รัตนพร สมใจนึก</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">rattanaporn@kmitl.ac.th</td>
+                                            <td className="p-3 px-4 md:px-6 text-center text-[#00DACC] flex items-center justify-center gap-2">
+                                                <CircleIcon className="text-[#00DACC]" /> ออนไลน์
+                                            </td>
+                                            <td className="p-3 px-4 md:px-6 text-center">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> */}
+
+            {/* บัญชีผู้เรียน */}
+            {/* <div className="w-full md:w-1/2">
+                                <table className="table-auto w-full border-collapse">
+                                    <thead className="bg-[#304972] bg-opacity-30 text-neutral-50 text-[16px] md:text-[18px]">
+                                        <tr>
+                                            <th className="p-3 px-4 md:px-6 text-center">บัญชีผู้เรียน</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">ชื่อ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">อีเมล</th>
+                                            <th className="p-3 px-4 md:px-6 text-center">สถานะ</th>
+                                            <th className="p-3 px-4 md:px-6 text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="border-b border-gray-200 text-neutral-50">
+                                            <td className="p-3 px-4 md:px-6 text-center">บัญชีผู้เรียน</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">รัตนพร สมใจนึก</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">rattanaporn@kmitl.ac.th</td>
+                                            <td className="p-3 px-4 md:px-6 text-center text-zinc-50 flex items-center justify-center gap-2">
+                                                <CircleOutlinedIcon className="text-zinc-50" /> ออฟไลน์
+                                            </td>
+                                            <td className="p-3 px-4 md:px-6 text-center">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200 text-neutral-50">
+                                            <td className="p-3 px-4 md:px-6 text-center">บัญชีผู้เรียน</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">รัตนพร สมใจนึก</td>
+                                            <td className="p-3 px-4 md:px-6 text-center">rattanaporn@kmitl.ac.th</td>
+                                            <td className="p-3 px-4 md:px-6 text-center text-[#EF4343] flex items-center justify-center gap-2">
+                                                <HighlightOffRoundedIcon className="text-[#EF4343]" /> ปิดใช้งานชั่วคราว
+                                            </td>
+                                            <td className="p-3 px-4 md:px-6 text-center">
+                                                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> */}
+            {/* <div className="flex  items-start gap-9 w-full justify-between">
                             <div className="flex flex-col items-start gap-9 w-full">
                                 <div className="flex flex-col items-start gap-6 self-stretch ">
                                     <div className="flex h-16 items-center gap-2.5 self-stretch p-2 px-6 rounded-xl bg-[#2A3A50] bg-opacity-30">
                                         <span className="text-zinc-50 text-xl">บัญชีผู้สอน</span>
                                     </div>
-                                    {/* ข้อมูลรายชื่อผู้สอน */}
                                     <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
                                         <div className="flex items-center gap-5">
                                             <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
@@ -77,7 +263,6 @@ export default function schoolmember() {
                                                 <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
                                             </div>
                                         </div>
-                                        {/* more */}
                                         <div className="flex align-center gap-4">
                                             <div className="flex align-center gap-4 py-2 px-4 rounded-md border border-[#00DACC]">
                                                 <CircleIcon className="text-[#00DACC]" />
@@ -92,13 +277,11 @@ export default function schoolmember() {
                                 </div>
                             </div>
 
-                            {/* บัญชีผู้เรียน */}
                             <div className="flex flex-col items-start gap-9 w-full">
                                 <div className="flex flex-col items-start gap-6 self-stretch ">
                                     <div className="flex h-16 items-center gap-2.5 self-stretch p-2 px-6 rounded-xl bg-[#2A3A50] bg-opacity-30">
                                         <span className="text-zinc-50 text-xl">บัญชีผู้เรียน</span>
                                     </div>
-                                    {/* ข้อมูลรายชื่อผู้เรียน */}
                                     <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
                                         <div className="flex items-center gap-5">
                                             <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
@@ -107,7 +290,6 @@ export default function schoolmember() {
                                                 <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
                                             </div>
                                         </div>
-                                        {/* more */}
                                         <div className="flex align-center gap-4">
                                             <div className="flex align-center gap-4 py-2 px-4 rounded-md border border-[#00DACC]">
                                                 <CircleIcon className="text-[#00DACC]" />
@@ -118,7 +300,7 @@ export default function schoolmember() {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* ข้อมูลรายชื่อผู้เรียน */}
+
                                     <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
                                         <div className="flex items-center gap-5">
                                             <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
@@ -127,7 +309,7 @@ export default function schoolmember() {
                                                 <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
                                             </div>
                                         </div>
-                                        {/* more */}
+
                                         <div className="flex align-center gap-4">
                                             <div className="flex align-center gap-4 py-2 px-4 rounded-md border border-[#fafafa]">
                                                 <CircleOutlinedIcon className="text-zinc-50" />
@@ -139,7 +321,6 @@ export default function schoolmember() {
                                         </div>
                                     </div>
 
-                                    {/* ข้อมูลรายชื่อผู้เรียน */}
                                     <div className="flex items-center justify-between gap-2.5 self-stretch p-2 px-6">
                                         <div className="flex items-center gap-5">
                                             <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
@@ -148,7 +329,7 @@ export default function schoolmember() {
                                                 <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
                                             </div>
                                         </div>
-                                        {/* more */}
+
                                         <div className="flex align-center gap-4">
                                             <div className="flex align-center gap-4 py-2 px-4 border rounded-md border-[#EF4343]">
                                                 <HighlightOffRoundedIcon className="text-[#EF4343]" />
@@ -162,10 +343,10 @@ export default function schoolmember() {
 
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div >
+                        </div> */}
+            {/* </div> */}
+            {/* </div> */}
+            {/* </div > */}
 
         </>
     );
