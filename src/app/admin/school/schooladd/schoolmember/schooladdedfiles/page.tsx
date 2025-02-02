@@ -34,15 +34,15 @@ export default function schooladdedfiles() {
                 <div className="w-full overflow-x-auto pb-4">
                     <table className="table-auto w-full  border-separate border-spacing-y-[12px]">
                         {/* Table Header */}
-                        <thead className="  bg-[#304972] bg-opacity-30 text-neutral-50 text-[16px] md:text-[18px]">
-                            <tr className="">
-                                <th className="p-3 px-4 md:px-6 text-center rounded-l-md truncate">รหัสประจำตัว</th>
-                                <th className="p-3 px-4 md:px-6 text-center truncate">ชื่อ</th>
-                                <th className="p-3 px-4 md:px-6 text-center truncate">นามสกุล</th>
-                                <th className="p-3 px-4 md:px-6 text-center truncate">เพศ</th>
-                                <th className="p-3 px-4 md:px-6 text-center truncate">ผู้ใช้งาน</th>
-                                <th className="p-3 px-4 md:px-6 text-center truncate">อีเมล</th>
-                                <th className="p-3 px-4 md:px-6 text-center truncate">ประเภท</th>
+                        <thead className="bg-[#304972] bg-opacity-30  text-neutral-50 text-[16px] md:text-xl">
+                            <tr>
+                                <th className="p-3 px-4 md:px-6 text-center rounded-l-md truncate !font-normal">รหัสประจำตัว</th>
+                                <th className="p-3 px-4 md:px-6 text-center truncate !font-normal">ชื่อ</th>
+                                <th className="p-3 px-4 md:px-6 text-center truncate !font-normal">นามสกุล</th>
+                                <th className="p-3 px-4 md:px-6 text-center truncate !font-normal">เพศ</th>
+                                <th className="p-3 px-4 md:px-6 text-center truncate !font-normal">ผู้ใช้งาน</th>
+                                <th className="p-3 px-4 md:px-6 text-center truncate !font-normal">อีเมล</th>
+                                <th className="p-3 px-4 md:px-6 text-center truncate !font-normal">ประเภท</th>
                                 <th className="p-3 px-4 md:px-6 text-center rounded-r-md"></th>
                             </tr>
                         </thead>
