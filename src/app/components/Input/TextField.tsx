@@ -8,10 +8,12 @@ interface Props {
     numberDigit?: number;
     onChange: (value: string | number, name: string) => void;
     validateText?: string;
-    isSubmited?:boolean
+    isSubmited?:boolean,
+    textColor?: string,
+    bgColor?: string
 }
 
-export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, numberDigit, validateText, isSubmited}) => {
+export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, numberDigit, validateText, isSubmited, textColor, bgColor}) => {
      const [displayText, setDisplayText] = useState<string>("")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,7 @@ export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value,
             value={displayText}
             maxLength={numberDigit}
             placeholder={placeholder}
-            className="h-10 py-2 px-4 gap-2.5 self-stretch rounded-[6px] bg-[#2A3A50] focus:outline-[#5572FA] text-zinc-50"
+            className={`h-10 py-2 px-4 gap-2.5 self-stretch rounded-[6px] ${bgColor ? bgColor : 'bg-[#2A3A50]'} focus:outline-[#5572FA] ${textColor ? textColor:'text-zinc-50'}`}
             onChange={handleChange}
             inputMode={isNumberic ? "numeric" : "text"}
             pattern={isNumberic ? "\\d*" : undefined}

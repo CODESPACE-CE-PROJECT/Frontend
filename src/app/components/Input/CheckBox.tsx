@@ -5,11 +5,13 @@ interface Props {
      onChange: (value: boolean) => void;
      isChecked: boolean;
      label?: string;
+     className?: string;
+     textColor?: string
 }
 
-export const CheckBox: React.FC<Props> = ({ onChange, isChecked, label }) => {
+export const CheckBox: React.FC<Props> = ({ onChange, isChecked, label, className, textColor }) => {
 
-     return <div className="flex flex-row gap-x-2">
+     return <div className={`flex flex-row gap-x-2 ${className} ${textColor ? textColor: 'text-zinc-50'}`}>
           <CheckBoxMUI 
                     checked={isChecked}
                     onChange={(e) => onChange(e.target.checked)}
@@ -22,6 +24,6 @@ export const CheckBox: React.FC<Props> = ({ onChange, isChecked, label }) => {
                          margin: "0px"
                     }
                } />
-          <p className="text-zinc-50">{label}</p>
+          <p>{label}</p>
      </div> 
 };

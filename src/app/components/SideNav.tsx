@@ -13,6 +13,7 @@ import PlatformIcon from "../assets/CoursesAssets/PlatformIcon.svg";
 import { logout } from "../services/auth.service";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface SideNavProps {
   role: string; // Accept role as a prop
@@ -182,7 +183,7 @@ export default function SideNav({ role }: SideNavProps) {
                   pathname.includes("/bin") ? "bg-[#0E2244]" : ""
                 }`}
               >
-                <PermIdentityIcon className="text-3xl" />
+                <DeleteIcon className="text-3xl" />
                 <span className="text-sm text-center text-nowrap">ถังขยะ</span>
               </Link>
             </li>

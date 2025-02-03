@@ -15,6 +15,7 @@ import { TextArea } from "@/app/components/Input/TextArea";
 import { ZipCode } from "@/app/components/Input/ZipCode";
 import { UploadFile } from "@/app/components/Input/UploadFile";
 import { createSchool } from "@/app/services/school.service";
+import Swal from 'sweetalert2'
 
 export default function Schooladd() {
   const router = useRouter()
@@ -209,8 +210,9 @@ export default function Schooladd() {
     ){
       return
     }
-    console.log(createForm)
-    const res = await createSchool(createForm)
+    Swal.isLoading()
+    await createSchool(createForm)
+    Swal.hideLoading()
     router.push('/admin/school')
   }
 
@@ -272,7 +274,7 @@ export default function Schooladd() {
                     {/* แพ็กเกจการใช้งาน */}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="แพ็กเกจการใช้งาน" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.package} value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited}/>
+                      <Dropdown isOpen={isOpenDropDown.package} value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited} className="w-full"/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
@@ -333,12 +335,12 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="แขวง / ตำบล" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.subDistrict} name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited}/>
+                      <Dropdown  isOpen={isOpenDropDown.subDistrict} name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10 w-full" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited}/>
                     </div>
 
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="เขต / อำเภอ" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.district} name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited}/>
+                      <Dropdown isOpen={isOpenDropDown.district} name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0 w-full" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -346,7 +348,7 @@ export default function Schooladd() {
                     {/* จังหวัด / รหัสไปรษณีย์ */}
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="จังหวัด" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.province} name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited}/>
+                      <Dropdown className="w-full" isOpen={isOpenDropDown.province} name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited}/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}

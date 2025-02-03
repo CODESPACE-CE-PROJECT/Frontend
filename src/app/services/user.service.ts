@@ -63,7 +63,7 @@ export const uploadProfilePicture = async (picture: File) => {
       );
       return response.data.data;
     } catch (error) {
-      throw error
+      console.log(error)
     }
   }
 }

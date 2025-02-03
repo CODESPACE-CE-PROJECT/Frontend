@@ -12,7 +12,7 @@ export const getAllCourse = async (): Promise<any | null> => {
                console.log("Course Data:", response.data); // Log the response to see its structure
                return response.data; // Ensure this includes the courseId
           } catch (error) {
-               console.error("Error fetching courses:", error);
+               console.log("Error fetching courses:", error);
                return null;
           }
      }
@@ -28,6 +28,6 @@ export const getpeople = async (courseId: string) => {
           );
           return response.data;
      }
-     throw new Error("No token available");
+     console.log("No token available");
 };
 

@@ -5,15 +5,17 @@ interface Props {
      onChange: (value: string, name: string) => void
      name?: string,
      validateText?: string,
-     isSubmited?: boolean
+     isSubmited?: boolean,
+     textColor?: string,
+     bgColor?: string
 }
 
-export const TextArea: React.FC<Props> = ({ value, onChange, name, validateText, isSubmited }) => {
+export const TextArea: React.FC<Props> = ({ value, onChange, name, validateText, isSubmited, textColor, bgColor }) => {
      return <>
           <textarea
                value={value}
                name={name}
-               className='w-full bg-[#2A3A50] rounded-md p-2 text-zinc-50 focus:outline-[#5572FA]'
+               className={`w-full ${bgColor ? bgColor: 'bg-[#2A3A50] '} rounded-md p-2 ${textColor ? textColor: 'text-zinc-50'} focus:outline-[#5572FA]`}
                onChange={(e) => onChange(e.target.value, e.target.name)}
           />
           {validateText && !value && isSubmited && <p className="mt-2 text-sm text-[#EF4343]">{validateText}</p>}

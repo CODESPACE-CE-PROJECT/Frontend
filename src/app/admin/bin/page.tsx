@@ -2,27 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { getSchoolBinInfo } from "@/app/services/school.service";
 import { ISchools, ISchoolBin } from "@/app/interfaces/school.interface";
 import Image from "next/image";
 import { Role } from "@/app/enum/enum";
 import Profiler from "@/app/assets/setting/Profileuser.svg";
 import { IProfile } from "@/app/interfaces/user.interface";
+import { Option } from "@/app/components/Input/Option";
+import { Dropdown } from "@/app/components/Input/Dropdown";
 
 export default function SchoolBin() {
   const [schoolBinInfo, setSchoolBinInfo] = useState<ISchoolBin>();
   const [search, setSearch] = useState<string>("");
   const [user, setUser] = useState<IProfile[]>();
-  const [school, setSchool] = useState<ISchools[]>();
+  const [schools, setSchools] = useState<ISchools[]>();
+  const [isOpenDropDown, setIsOpenDropdown] = useState<boolean>(false)
+  const [valueDropDown, setValueDropdown] = useState<string>("ทั้งหมด")
 
   useEffect(() => {
     const fetchData = async () => {
       const response: ISchoolBin = await getSchoolBinInfo();
       setSchoolBinInfo(response);
       setUser(response.user);
-      setSchool(response.school);
+      setSchools(response.school);
     };
     fetchData();
   }, []);
@@ -36,12 +38,32 @@ export default function SchoolBin() {
           user.email.toLowerCase().includes(search),
       ),
     );
-    setSchool(
+    setSchools(
       schoolBinInfo?.school?.filter((school) =>
         school.schoolName.toLowerCase().includes(search),
       ),
     );
   }, [search, schoolBinInfo]);
+
+  useEffect(() => {
+    if(valueDropDown === "ผู้สอน"){
+      setUser(
+        schoolBinInfo?.user.filter((user) => user.role === Role.TEACHER)
+      )
+      setSchools([])
+    }else if(valueDropDown === 'ผู้เรียน'){
+      setUser(
+        schoolBinInfo?.user.filter((user) => user.role === Role.STUDENT)
+      )
+      setSchools([])
+    } else if(valueDropDown === 'โรงเรียน'){
+      setSchools(schoolBinInfo?.school)
+      setUser([])
+    } else {
+      setSchools(schoolBinInfo?.school)
+      setUser(schoolBinInfo?.user)
+    }
+  }, [valueDropDown])
 
   return (
     <>
@@ -55,7 +77,7 @@ export default function SchoolBin() {
           <div className="flex-col contents self-stretch gap-[36px] w-full lg:flex-row">
             {/* Search */}
             <div className="flex gap-9 self-stretch">
-              <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto">
+              <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-full">
                 <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
                 <input
                   type="text"
@@ -66,107 +88,79 @@ export default function SchoolBin() {
               </div>
 
               {/* Button */}
-              <div className="flex justify-between items-center gap-3 py-2 px-4 rounded-md bg-[#2A3A50] w-40 ">
-                <span className="text-xl text-neutral-50">ทั้งหมด</span>
-                <KeyboardArrowDownRoundedIcon className="text-neutral-50 w-6 h-6" />
-              </div>
+              <Dropdown name="type" isOpen={isOpenDropDown} value={valueDropDown} onOpenCahnge={() => setIsOpenDropdown((prev) => !prev)} onChange={(value) => setValueDropdown(value)} options={['ทั้งหมด', 'โรงเรียน', 'ผู้สอน', 'ผู้เรียน']} className="w-[160px]" topClass="top-16"/>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-start gap-6 self-stretch">
-          <div className="flex flex-col w-full items-start gap-3 px-6 py-2 align-self-stretch rounded-xl bg-[#2A3A50]">
-            <div className="flex h-[45px] items-start gap-[12px] self-stretch">
-              <div className="flex w-[560px] h-12 gap-3 self-stretch items-center">
-                <span className="text-xl text-neutral-50">ชื่อ</span>
-              </div>
-              <div className="flex w-[800px] h-12 gap-3 self-stretch items-center">
-                <span className="text-xl text-neutral-50">ที่ตั้ง</span>
-              </div>
-              <div className="flex w-[240px] h-12 gap-3 self-stretch justify-center items-center">
-                <span className="text-xl text-neutral-50">ประเภท</span>
-              </div>
-              <div className="flex w-[36px] h-12 gap-3 self-stretch ml-auto justify-center items-center">
-                <span className="text-xl text-neutral-50"></span>
-              </div>
-            </div>
-          </div>
+        <div className="w-full overflow-x-auto">
+            <table className="table-auto w-full border-collapse text-neutral-50">
+              <thead>
+                <tr className="bg-[#304972] bg-opacity-30 text-[18px]">
+                  <th className="text-start px-6 py-3 rounded-l-md !font-normal truncate">ชื่อ</th>
+                  <th className="text-start px-6 py-3 !font-normal truncate">ที่ตั้ง</th>
+                  <th className="text-center px-6 py-3 !font-normal truncate">ประเภท</th>
+                  <th className="px-2 py-3 rounded-r-md !font-normal"></th>
+                </tr>
+              </thead>
 
-          {user?.map((user) => {
-            return (
-              <div
-                key={user.username}
-                className="flex flex-col items-start gap-6 self-stretch"
-              >
-                <div className="flex flex-col w-full items-start gap-3 px-6 py-2 align-self-stretch rounded-xl">
-                  <div className="flex h-[45px] items-start gap-[12px] self-stretch">
-                    <div className="flex w-[560px] h-12 gap-3 self-stretch items-center">
-                      <Image
-                        src={user.pictureUrl || Profiler}
-                        alt="icon"
-                        className="w-16 h-16 rounded-full"
-                        width={100}
-                        height={100}
-                      />
-                      <div className="flex flex-col gap-y-2 text-xl text-neutral-50">
-                        <span>
-                          {user.firstName} {user.lastName}
-                        </span>
-                        <p className="text-sm">{user.email}</p>
+              <tbody className="text-base">
+                {/* data in Table */}
+                <tr>
+                  <td className="h-6" />
+                </tr>
+                {
+                  user?.map((user) => <tr key={user.username} className="justify-center">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-5 truncate">
+                        <Image
+                          src={user.pictureUrl || Profiler}
+                          alt="school logo"
+                          className="w-[64px] h-[64px] min-w-[64px] min-h-[64px] object-cover"
+                          width={100}
+                          height={100}
+                        />
+                        <span className="truncate">{user.firstName} {user.lastName}</span>
                       </div>
-                    </div>
-                    <div className="flex w-[800px] h-12 gap-3 self-stretch items-center">
-                      <span className="text-xl text-neutral-50">-</span>
-                    </div>
-                    <div className="flex w-[240px] h-12 gap-3 self-stretch justify-center items-center">
-                      <span className="text-xl text-neutral-50">
-                        {user.role == Role.TEACHER ? "ผู้สอน" : "ผู้เรียน"}
-                      </span>
-                    </div>
-                    <div className="flex w-8 h-8 gap-3 ml-auto justify-center items-center rounded-md border border-[#2A3A50]">
-                      <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                    </td>
 
-          {school?.map((school) => {
-            return (
-              <div
-                key={school.schoolId}
-                className="flex flex-col items-start gap-6 self-stretch"
-              >
-                <div className="flex flex-col w-full items-start gap-3 px-6 py-2 align-self-stretch rounded-xl">
-                  <div className="flex h-[45px] items-start gap-[12px] self-stretch">
-                    <div className="flex w-[560px] h-12 gap-3 self-stretch items-center">
-                      <Image
-                        src={school.pictureUrl}
-                        alt="icon"
-                        className="w-16 h-16 rounded-full"
-                        width={100}
-                        height={100}
-                      />
-                      <span className="text-xl text-neutral-50">
-                        {school.schoolName}
-                      </span>
-                    </div>
-                    <div className="flex w-[800px] h-12 gap-3 self-stretch items-center">
-                      <span className="text-xl text-neutral-50">-</span>
-                    </div>
-                    <div className="flex w-[240px] h-12 gap-3 self-stretch justify-center items-center">
-                      <span className="text-xl text-neutral-50">โรงเรียน</span>
-                    </div>
-                    <div className="flex w-8 h-8 gap-3 ml-auto justify-center items-center rounded-md border border-[#2A3A50]">
-                      <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    <td className="px-6 py-4 text-[16px] truncate">-</td>
+                    <td className="text-center">{user.role === Role.STUDENT ? "ผู้เรียน":"ผู้สอน"}</td>
+                    <td className="flex w-full h-[92px] items-center justify-center">
+                      <Option />
+                    </td>
+                  </tr>
+                  )
+                }
+
+                {
+                  schools?.map((school) => <tr key={school.schoolId} className="justify-center">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-5 truncate">
+                        <Image
+                          src={school.pictureUrl}
+                          alt="school logo"
+                          className="w-[64px] h-[64px] min-w-[64px] min-h-[64px] object-cover"
+                          width={100}
+                          height={100}
+                        />
+                        <span className="truncate">{school.schoolName}</span>
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 text-[16px] truncate">
+                      {school.address} {school.subDistrict} {school.district} {school.province} {school.postCode}
+                    </td>
+                    <td className="text-center">โรงเรียน</td>
+                    <td className="flex w-full h-[92px] items-center justify-center">
+                      <Option />
+                    </td>
+                  </tr>
+                  )
+                }
+              </tbody>
+            </table>
+          </div>
       </div>
     </>
   );

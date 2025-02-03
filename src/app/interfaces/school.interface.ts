@@ -55,3 +55,20 @@ export interface ICreateSchool {
      canUpdateUser: boolean,
      canDeleteUser: boolean
 }
+
+export interface IUpdateSchool {
+     schoolName?: string,
+     picture?: File | null,
+     package?: string,
+     address: string,
+     district: string,
+     subDistrict?: string,
+     province: string,
+     postCode: string,
+     maxCreateTeacher?: number,
+     maxCreateStudent?: number,
+     maxCreateCoursePerTeacher?: number,
+     canCreateUser: boolean,
+     canUpdateUser: boolean,
+     canDeleteUser: boolean
+}
