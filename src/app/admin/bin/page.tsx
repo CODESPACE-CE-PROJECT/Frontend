@@ -32,54 +32,68 @@ export default function bin() {
           </div>
         </div>
 
-        <div className="flex flex-col items-start gap-6 self-stretch">
-          <div className="flex flex-col w-full items-start gap-3 px-6 py-2 align-self-stretch rounded-xl bg-[#2A3A50]">
+        <div className="w-full overflow-x-auto pb-4">
+          <table className="table-auto w-full text-neutral-50">
+            <thead>
+              <tr className="bg-[#304972] bg-opacity-30 text-[18px]">
+                <th className="px-6 py-3 rounded-l-md !font-normal truncate">ชื่อ</th>
+                <th className="px-6 py-3 !font-normal">ที่ตั้ง</th>
+                <th className="px-6 py-3 !font-normal">ประเภท</th>
+                <th className="px-6 py-3 rounded-r-md !font-normal truncate"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Data */}
+              <tr className="items-cente truncate">
+                <td className="px-6 py-4 flex items-center gap-3 truncate">
+                  <img
+                    src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg"
+                    alt="icon"
+                    className="w-14 h-12 rounded-full"
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-base text-zinc-50 truncate">รัตนพร สมใจนึก</span>
+                    <span className="text-base text-zinc-50 truncate">rattanaporn@kmitl.ac.th</span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-base truncate">
+                  Uplace เลขที่ 655/11 ฉลองกรุง 1 ซอย RNP แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพฯ.
+                </td>
+                <td className="px-6 py-4 text-center text-base truncate">ผู้เรียน</td>
+                <td className="px-6 py-4 text-center justify-center">
+                  <div className="h-9 w-9 flex items-center justify-center rounded-md border border-[#2A3A50]">
+                    <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                  </div>
+                </td>
+              </tr>
 
-            <div className="flex h-[45px] items-start gap-[12px] self-stretch">
-              <div className="flex w-[560px] h-12 gap-3 self-stretch items-center">
-                <span className="text-xl text-neutral-50">ชื่อ</span>
-              </div>
-              <div className="flex w-[800px] h-12 gap-3 self-stretch items-center">
-                <span className="text-xl text-neutral-50">ที่ตั้ง</span>
-              </div>
-              <div className="flex w-[240px] h-12 gap-3 self-stretch justify-center items-center">
-                <span className="text-xl text-neutral-50">ประเภท</span>
-              </div>
-              <div className="flex w-[36px] h-12 gap-3 self-stretch ml-auto justify-center items-center">
-                <span className="text-xl text-neutral-50"></span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-center items-start gap-4 w-full self-stretch">
-            <div className="flex px-6 py-2 items-center gap-4 self-stretch">
-              <div className="flex w-[560px] items-center gap-6">
-                <img src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg" alt="icon" className="w-16 h-16 rounded-full" />
-                <div className="flex flex-col gap-1">
-                  <span className="text-zinc-50 text-xl">รัตนพร สมใจนึก</span>
-                  <span className="text-zinc-50 text-base">rattanaporn@kmitl.ac.th</span>
-                </div>
-              </div>
-              <div className="flex w-[800px] h-12 gap-3 items-center">
-                <span className="text-xl items-center text-neutral-50">Uplace เลขที่ 655/11 ฉลองกรุง 1 ซอย RNP แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพฯ.</span>
-              </div>
-
-              <div className="flex w-[240px] h-12 gap-3 justify-center items-center">
-                <span className="text-xl items-center text-neutral-50">ผู้เรียน</span>
-              </div>
-
-              <div className="flex w-8 h-8 gap-3 ml-auto justify-center items-center rounded-md border border-[#2A3A50]">
-                <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
-              </div>
-
-            </div>
-          </div>
+              {/* Data */}
+              <tr className="items-cente truncate">
+                <td className="px-6 py-4 flex items-center gap-3 truncate">
+                  <img
+                    src="https://undubzapp.com/wp-content/uploads/2023/04/01-most-beautiful-korean-actress.jpg"
+                    alt="icon"
+                    className="w-14 h-12 rounded-full"
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-base text-zinc-50 truncate">รัตนพร สมใจนึก</span>
+                    <span className="text-base text-zinc-50 truncate">rattanaporn@kmitl.ac.th</span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-base truncate">
+                  Uplace เลขที่ 655/11 ฉลองกรุง 1 ซอย RNP แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพฯ.
+                </td>
+                <td className="px-6 py-4 text-center text-base truncate">ผู้เรียน</td>
+                <td className="px-6 py-4 text-center justify-center">
+                  <div className="h-9 w-9 flex items-center justify-center rounded-md border border-[#2A3A50]">
+                    <MoreHorizOutlinedIcon className="text-[#FAFAFA]" />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
-
-
       </div>
-
     </>
   );
 }
