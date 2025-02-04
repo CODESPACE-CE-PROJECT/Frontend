@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getAssignment } from "../../../../../services/assignment.service";
 import { getCoursesById } from "../../../../../services/announcement.service";
-
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";
@@ -29,7 +27,6 @@ export default function Assignment() {
       try {
         const data = await getAssignment(courseId);
         if (data) {
-          // Filter assignments to only include type "EXERCISE"
           const filteredAssignments = data.data.assignment.filter(
             (assignment: any) => assignment.type === "EXERCISE"
           );
@@ -46,7 +43,7 @@ export default function Assignment() {
     };
 
     fetchAssignments();
-  }, [courseId,param.courseId,dispatch]);
+  }, [courseId, param.courseId, dispatch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -81,6 +78,7 @@ export default function Assignment() {
           </Link>
         </div>
       </div>
+      
       {/* Table Header */}
       <div className="flex justify-between items-center px-8 rounded-lg pt-3">
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center mr-4 w-1/2">
@@ -110,24 +108,19 @@ export default function Assignment() {
             {assignment.problem.map((problem: any, index: number) => {
               const score = problem.score || 0;
               const maxScore = problem.score;
-              const bgColor =
-                problem.stateSubmission === "NOTSEND"
-                  ? "bg-[#808080]"
-                  : "bg-[#4CAF50]";
-              const textColor =
-                problem.stateSubmission === "NOTSEND"
-                  ? "text-white"
-                  : "text-white";
-
+              const isLocked = assignment.isLock;
               return (
                 <div
                   key={problem.problemId}
-                  className={`${bgColor} ${textColor} flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16 cursor-pointer`}
-                  onClick={() =>
-                    router.push(
-                      `/student/courses/${courseId}/assignment/homeworkassignment/${problem.problemId}`
-                    )
+                  className={`flex flex-col items-center justify-center rounded-sm p-2 h-16 w-16 cursor-pointer ${
+                    isLocked ? "bg-[#808080] text-white border-[#2A3A50] " : ""
+                  }`}
+                  onClick={
+                    !isLocked
+                      ? undefined
+                      : () => router.push(`/student/courses/${courseId}/assignment/homeworkassignment/${problem.problemId}`)
                   }
+                  style={!isLocked ? { border: "2px solid #2A3A50", borderStyle: "dotted" } : {}}
                 >
                   <h1 className="space-x-1">
                     <span>ข้อ</span>
