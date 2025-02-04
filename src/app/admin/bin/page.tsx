@@ -8,15 +8,14 @@ import Image from "next/image";
 import { Role } from "@/app/enum/enum";
 import Profiler from "@/app/assets/setting/Profileuser.svg";
 import { IProfile } from "@/app/interfaces/user.interface";
-import { Option } from "@/app/components/Input/Option";
+import { Option } from "@/app/components/Options/Option";
 import { Dropdown } from "@/app/components/Input/Dropdown";
 
 export default function SchoolBin() {
   const [schoolBinInfo, setSchoolBinInfo] = useState<ISchoolBin>();
   const [search, setSearch] = useState<string>("");
   const [user, setUser] = useState<IProfile[]>();
-  const [schools, setSchools] = useState<ISchools[]>();
-  const [isOpenDropDown, setIsOpenDropdown] = useState<boolean>(false)
+  const [schools, setSchools] = useState<ISchools[]>(); 
   const [valueDropDown, setValueDropdown] = useState<string>("ทั้งหมด")
 
   useEffect(() => {
@@ -88,7 +87,7 @@ export default function SchoolBin() {
               </div>
 
               {/* Button */}
-              <Dropdown name="type" isOpen={isOpenDropDown} value={valueDropDown} onOpenCahnge={() => setIsOpenDropdown((prev) => !prev)} onChange={(value) => setValueDropdown(value)} options={['ทั้งหมด', 'โรงเรียน', 'ผู้สอน', 'ผู้เรียน']} className="w-[160px]" topClass="top-16"/>
+              <Dropdown name="type"  value={valueDropDown} onChange={(value) => setValueDropdown(value)} options={['ทั้งหมด', 'โรงเรียน', 'ผู้สอน', 'ผู้เรียน']} className="w-[160px]" topClass="top-16"/>
             </div>
           </div>
         </div>

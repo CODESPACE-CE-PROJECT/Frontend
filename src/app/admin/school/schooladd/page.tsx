@@ -31,17 +31,6 @@ export default function Schooladd() {
     districts: [],
     subDistricts: []
   })
-  const [isOpenDropDown, setIsOpenDropdown] = useState<{
-    package: boolean,
-    province: boolean,
-    district: boolean,
-    subDistrict: boolean
-  }>({
-    package: false,
-    province: false,
-    district: false,
-    subDistrict: false
-  })
   const [createForm, setCreateForm] = useState<ICreateSchool>({
     province: "",
     district: "",
@@ -147,15 +136,6 @@ export default function Schooladd() {
     }
   }
 
-  const handleOpenChange = (name: string) => {
-    setIsOpenDropdown((prev) => ({
-      package: name === "package" ? !prev.package : false,
-      province: name === "province" ? !prev.province : false,
-      district: name === "district" ? !prev.district : false,
-      subDistrict: name === "subDistrict" ? !prev.subDistrict : false,
-    }));
-  }
-
   const handleZipCodeChange = (value: string) => {
     if (value.length === 5 && !isDropdownSelect) {
       const data = provinceData?.filter((item) => item.zipCode === value)
@@ -232,25 +212,6 @@ export default function Schooladd() {
     fetchProvinceData()
   }, [])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpenDropdown({
-          package: false,
-          province: false,
-          district: false,
-          subDistrict: false,
-        });
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-
   return (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen">
@@ -274,7 +235,7 @@ export default function Schooladd() {
                     {/* แพ็กเกจการใช้งาน */}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="แพ็กเกจการใช้งาน" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.package} value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited} className="w-full"/>
+                      <Dropdown value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited} className="w-full"/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
@@ -335,12 +296,12 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="แขวง / ตำบล" isRequired={true} />
-                      <Dropdown  isOpen={isOpenDropDown.subDistrict} name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10 w-full" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited}/>
+                      <Dropdown name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10 w-full" onChange={handleDropDownChange}  validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited}/>
                     </div>
 
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="เขต / อำเภอ" isRequired={true} />
-                      <Dropdown isOpen={isOpenDropDown.district} name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0 w-full" onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited}/>
+                      <Dropdown name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0 w-full" onChange={handleDropDownChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -348,7 +309,7 @@ export default function Schooladd() {
                     {/* จังหวัด / รหัสไปรษณีย์ */}
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="จังหวัด" isRequired={true} />
-                      <Dropdown className="w-full" isOpen={isOpenDropDown.province} name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} onOpenCahnge={handleOpenChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited}/>
+                      <Dropdown className="w-full" name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited}/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}

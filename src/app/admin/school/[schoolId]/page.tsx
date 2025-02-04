@@ -22,7 +22,7 @@ import { Role } from "@/app/enum/enum";
 import Profiler from "@/app/assets/setting/Profileuser.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Option } from "@/app/components/Input/Option";
+import { OptionUser } from "@/app/components/Options/OptionUser";
 
 export default function School() {
   const param = useParams<{ schoolId: string }>();
@@ -62,8 +62,8 @@ export default function School() {
   }, [search, school?.users]);
 
   return (
-    <div className="flex flex-col items-center self-stretch p-[60px] w-full min-h-screen">
-      <div className="flex flex-row items-center self-stretch gap-x-4 mb-[80px]">
+    <div className="flex flex-col items-center justify-start p-[60px] w-full min-h-screen">
+      <div className="flex flex-row items-center gap-x-4 mb-[80px] w-full">
         <div className="cursor-pointer" onClick={() => router.back()}>
           <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
         </div>
@@ -71,8 +71,8 @@ export default function School() {
       </div>
 
       <div className="flex flex-col w-full gap-[48px] pt-5 pr-6 pb-5">
-        <div className="flex flex-col items-start gap-9 self-stretch">
-          <div className="flex pt-[20px] pr-6 pb-5 pl-12 justify-between items-start self-stretch rounded-xl bg-[#2A3A50] bg-opacity-30">
+        <div className="flex flex-col items-start gap-9">
+          <div className="flex pt-[20px] w-full pr-6 pb-5 pl-12 justify-between items-start rounded-xl bg-[#2A3A50] bg-opacity-30">
             <div className="flex gap-12 items-center">
               {
                 school?.pictureUrl ?
@@ -118,13 +118,13 @@ export default function School() {
             </div>
           </div>
 
-          <div className="2xl:flex 2xl:flex-row 2xl:justify-between 2xl:gap-12 border-spacing-y-4 w-full">
+          <div className="2xl:flex 2xl:flex-row 2xl:justify-between 2xl:gap-12 border-spacing-y-4 z-0">
             {/* <!-- Tables for Teachers --> */}
             <div className="w-full flex flex-col lg:flex-row justify-between gap-6 mb-4 lg:mb-0">
               {/* <!-- Teacher Table --> */}
               <div className="w-full lg:w-full overflow-x-auto">
                 {/* <div className="overflow-x-auto"> */}
-                <table className="min-w-[800px] w-full table-auto">
+                <table className="min-w-[800px] w-full">
                   <thead>
                     <tr className="bg-[#304972] text-left bg-opacity-30 text-neutral-50 text-[16px] lg:text-[18px]">
                       <th className="rounded-xl py-4 px-6 lg:px-6 !font-normal">บัญชีผู้สอน</th>
@@ -132,8 +132,8 @@ export default function School() {
                   </thead>
                   <tbody>
                     {teachers?.map((teacher) => {
-                      return <tr key={teacher.username} className="flex justify-between items-center self-stretch text-neutral-50 py-2 px-6">
-                      <td className="flex flex-row w-full justify-between mt-7">
+                      return <tr key={teacher.username} className="flex justify-between items-center text-neutral-50 py-2 px-6">
+                      <td className="flex flex-row w-full h-full justify-between mt-7">
                         <div className="flex flex-row gap-x-5 items-center">
                           <Image src={teacher.pictureUrl || Profiler} alt="icon" className="w-16 h-16 rounded-full" width={100} height={100}/>
                           <div className="flex flex-col justify-center items-start">
@@ -146,7 +146,7 @@ export default function School() {
                           <p className={`py-2 px-3 text-center flex items-center ${textStatusActiveColor(teacher.isActived, teacher.allowLogin)} justify-center gap-2 border-2 border-[${statusActiveColor(teacher.isActived, teacher.allowLogin)}] rounded-md`}>
                             <CircleIcon /> {textActivedUser(teacher.isActived, teacher.allowLogin)}
                           </p>
-                          < Option />
+                          <OptionUser />
                         </div>
                       </td>
                     </tr>
@@ -161,7 +161,7 @@ export default function School() {
               {/* <!-- Teacher Table --> */}
               <div className="w-full lg:w-full overflow-x-auto">
                 {/* <div className="overflow-x-auto"> */}
-                <table className="min-w-[800px] w-full table-auto">
+                <table className="min-w-[800px] w-full table-auto z-0">
                   <thead>
                     <tr className="bg-[#304972] text-left bg-opacity-30 text-neutral-50 text-[16px] lg:text-[18px]">
                       <th className="rounded-xl py-4 px-6 lg:px-6 !font-normal">บัญชีผู้เรียน</th>
@@ -169,7 +169,7 @@ export default function School() {
                   </thead>
                   <tbody>
                     {students?.map((student) => {
-                      return <tr key={student.username} className="flex justify-between items-center self-stretch text-neutral-50 py-2 px-6">
+                      return <tr key={student.username} className="flex justify-between items-center text-neutral-50 py-2 px-6">
                       <td className="flex flex-row w-full justify-between mt-7">
                         <div className="flex flex-row gap-x-5 items-center">
                           <Image src={student.pictureUrl || Profiler} alt="icon" className="w-16 h-16 rounded-full" width={100} height={100}/>
@@ -183,7 +183,7 @@ export default function School() {
                           <p className={`py-2 px-3 text-center flex items-center ${textStatusActiveColor(student.isActived, student.allowLogin)} justify-center gap-2 border-2 border-[${statusActiveColor(student.isActived, student.allowLogin)}] rounded-md`}>
                             <CircleIcon /> {textActivedUser(student.isActived, student.allowLogin)}
                           </p>
-                          <Option />
+                          <OptionUser />
                         </div>
                       </td>
                     </tr>

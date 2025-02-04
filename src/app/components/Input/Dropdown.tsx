@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 interface Props {
      name: string;
      options?: string[];
      onChange?: (value: string, name: string) => void;
-     onOpenCahnge?: (name: string) => void;
      value?: string;
      className?: string;
-     isOpen?: boolean;
      validateText?: string,
      isSubmited?: boolean,
      topClass?: string,
@@ -16,19 +14,32 @@ interface Props {
      textColor?: string
 }
 
-export const Dropdown: React.FC<Props> = ({options, onChange, value, className, name, isOpen, onOpenCahnge, validateText, isSubmited, topClass, bgColor, textColor}) => {
+export const Dropdown: React.FC<Props> = ({options, onChange, value, className, name, validateText, isSubmited, topClass, bgColor, textColor}) => {
      const [displayText, setDisplayText] = useState<string | undefined>("")
+     const [isOpen, setIsOpen] = useState(false)
+     
+     const dropDownRef = useRef<HTMLDivElement>(null);
+
+     const handleClickOutside = (event: MouseEvent) => {
+          if (dropDownRef.current && !dropDownRef.current?.contains(event.target as Node)) {
+               setIsOpen(false)
+          }
+     };
+
+     useEffect(() => {
+          document.addEventListener("mousedown", handleClickOutside)
+          return () => document.removeEventListener("mousedown", handleClickOutside)
+     }, [isOpen])
+
 
      useEffect(() => {
           setDisplayText(value)
      }, [value])
 
-     return <div className={`relative ${className}`}>
+     return <div className={`relative ${className}`} ref={dropDownRef}>
           <div
                className={`flex flex-row h-full ${textColor ? textColor : 'text-zinc-50'} items-center py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] ${bgColor ? bgColor : 'bg-[#2A3A50]'}  cursor-pointer`}
-               onClick={() => {
-                    onOpenCahnge && onOpenCahnge(name)
-               }}
+               onClick={() => setIsOpen(prev => !prev)}
           >
                <span className={value ? '' : 'text-zinc-200'}>{displayText}</span>
                <KeyboardArrowDownRoundedIcon />
@@ -40,8 +51,8 @@ export const Dropdown: React.FC<Props> = ({options, onChange, value, className, 
                     {
                          options?.map((option, index) => {
                               return <div key={index} className="py-2 px-4 hover:bg-[#5572FA] cursor-pointer" onClick={() => {
-                                   onOpenCahnge && onOpenCahnge(name)
                                    onChange && onChange(option, name)
+                                   setIsOpen(false)
                               }}>
                                    <span>{option}</span>
                               </div>

@@ -3,12 +3,11 @@
 import React, { useEffect, useState } from "react";
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import { ISchool } from "@/app/interfaces/school.interface";
 import { getAllSchool } from "@/app/services/school.service";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Option } from "@/app/components/Input/Option";
+import { OptionSchool } from "@/app/components/Options/OptionSchool";
 
 export default function School() {
   const [schools, setSchools] = useState<ISchool[]>()
@@ -39,7 +38,7 @@ export default function School() {
         <div className="flex-col contents self-stretch gap-[36px] w-full lg:flex-row">
 
           {/* Search */}
-          <div className="flex gap-9 self-stretch">
+          <div className="flex gap-x-4 w-full">
             <div className="flex items-center flex-grow gap-2 px-4 py-3 rounded-md border-2 border-[#2A3A50] w-auto focus-within:border-blue-300">
               <SearchTwoToneIcon className=" text-neutral-50 w-4 h-4" />
               <input type="text" className="text-[18px] text-neutral-50 bg-transparent outline-none w-full" placeholder="ค้นหา" onChange={(e) => setSearch(e.target.value)} />
@@ -91,7 +90,7 @@ export default function School() {
                     <td className="text-center">{school.count.teacher}</td>
                     <td className="px-6 py-4 text-center">{school.count.student}</td>
                     <td className="flex w-full h-[92px] items-center justify-center">
-                      <Option />
+                      <OptionSchool />
                     </td>
                   </tr>
                   )

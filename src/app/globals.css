@@ -100,3 +100,8 @@ xterm-viewport {
     margin-top: 2px;
     margin-bottom: 2px;
 }
+
+.apexcharts-tooltip {
+    background: #000;
+    color: #fafafa;
+}  
