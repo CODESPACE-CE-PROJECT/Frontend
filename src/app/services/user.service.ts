@@ -68,35 +68,3 @@ export const uploadProfilePicture = async (picture: File) => {
   }
 }
 
-export const createCourse = async (formData: {
-  title: string;
-  description: string;
-}) => {
-  try {
-    const token = Cookies.get('accessToken')
-
-    if (!token) {
-      alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
-      return;
-    }
-
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-    const response: AxiosResponse = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`,
-      {
-        title: formData.title,
-        description: formData.description,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};

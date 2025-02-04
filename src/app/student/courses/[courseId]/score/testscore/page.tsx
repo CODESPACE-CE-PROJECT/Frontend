@@ -14,6 +14,7 @@ export default function Score() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [assignments, setAssignments] = useState<any[]>([]);
+  const [maxTotalScore, setMaxTotalScore] = useState<number>(0);
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -47,6 +48,14 @@ export default function Score() {
             );
 
             setTotalScore(totalScore);
+
+            const overallMaxTotalScore = exerciseAssignments.reduce(
+              (acc: number, assignment: any) =>
+                acc + assignment.problem.reduce((sum: number, problem: any) => sum + problem.score, 0),
+              0
+            );
+
+            setMaxTotalScore(overallMaxTotalScore);
           } else {
             setError("Failed to fetch assignments or data is not in expected format.");
           }
@@ -122,7 +131,7 @@ export default function Score() {
 
       <div className="flex justify-end px-8 py-4">
         <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-8">
-          คะแนนรวม {totalScore}
+          คะแนนรวม {totalScore} / {maxTotalScore}
         </div>
       </div>
     </>

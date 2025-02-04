@@ -3,10 +3,11 @@ import { NextRequest } from "next/server";
 import { jwtDecode } from "jwt-decode"; // Corrected import
 import { cookies } from 'next/headers'
 import axios, { AxiosResponse } from "axios";
+import { Role } from "./app/enum/enum";
 
 interface IJwt {
   username: string;
-  role: string;
+  role: Role;
   schoolId: string;
   iat: number;
   exp: number;

@@ -24,7 +24,7 @@ export default function Calendar() {
           backgroundColor: "#5572FA",
           textColor: "#FAFAFA",
           borderColor: "#5572FA",
-          className: "text-sm font-bold text-center text-wrap 2xl:py-5",
+          className: "text-sm font-bold text-wrap",
         }));
         setEvents(formattedEvents);
     };

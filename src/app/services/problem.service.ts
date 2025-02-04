@@ -5,7 +5,7 @@ export const getProblemById = async (problemId: string) => {
      const token = Cookies.get('accessToken')
    
      if (!problemId) {
-       console.error("No courseId provided.");
+      //  console.error("No courseId provided.");
        return null;
      }
    
