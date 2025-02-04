@@ -6,7 +6,7 @@ export const getCoursesById = async (courseId: string) => {
      const token: string | undefined = Cookies.get("accessToken");
    
      if (!courseId) {
-       console.error("No courseId provided.");
+      //  console.error("No courseId provided.");
        return null;
      }
    

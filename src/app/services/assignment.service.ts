@@ -4,6 +4,11 @@ import Cookies from "js-cookie";
 export const getAssignment = async (courseId: string) => {
   const token = Cookies.get('accessToken'); // Retrieve the token from cookies
   
+  if (!courseId) {
+    //  console.error("No courseId provided.");
+     return null;
+   }
+
   if (token) {
     // Set the Authorization header with the token if it's available
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
