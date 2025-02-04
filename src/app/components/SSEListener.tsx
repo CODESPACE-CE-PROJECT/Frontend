@@ -19,11 +19,11 @@ const SSEListener = () => {
           }
         },
         onerror(err) {
-          console.error("SSE Error:", err);
+          console.log("SSE Error:", err);
         },
       });
     } catch (error) {
-      console.error("Error Connecting to SSE", error);
+      console.log("Error Connecting to SSE", error);
     }
   }, [accessToken]);
   
