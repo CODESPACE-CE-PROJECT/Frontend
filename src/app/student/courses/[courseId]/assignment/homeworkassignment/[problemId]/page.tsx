@@ -10,6 +10,7 @@ import { getAssignment } from "../../../../../../services/assignment.service";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/navigation";
 import { StateSubmission } from "@/app/enum/enum";
+import Header from "@/app/components/ProblemItems/Headerproblem";
 
 export default function AssignmentPage() {
   const params = useParams<{ courseId: string; problemId: string }>();
@@ -23,7 +24,6 @@ export default function AssignmentPage() {
   const [selectedTitle, setSelectedTitle] = useState<string>("testAssigment");
   const dispatch = useDispatch();
   const [constraint, setProblemConstraint] = useState<any>(null);
-  const router = useRouter();
 
   useEffect(() => {
     dispatch(setIsCloseCourseNav(true));
@@ -74,68 +74,15 @@ export default function AssignmentPage() {
     )?.title || "N/A";
   const problemTitle = problemDetails?.title || "N/A";
 
-  const Header = ({ courseTitle, assignmentTitle, problemTitle }: any) => {
-    const router = useRouter();
 
-    const handleBack = () => {
-      const { courseId } = params; 
-      if (courseId) {
-        router.push(`/student/courses/${courseId}/assignment/homeworkassignment`);
-      }
-    };
-
-    return (
-      <>
-        <div className="text-white text-2xl ml-4 mb-5 flex items-center">
-          <button onClick={handleBack} className="focus:outline-none mr-2">
-            <ArrowBackIosIcon />
-          </button>
-          {`${courseTitle} / ${assignmentTitle} / ${problemTitle}`}
-        </div>
-
-        <div className="flex flex-wrap gap-4 py-3 mb-5 ml-4 text-white">
-          {assignmentDetails?.assignment
-            ?.find((assignment: any) => assignment.title === selectedTitle)
-            ?.problem?.map((problem: any, index: number) => {
-              const isCurrentProblem = problem.problemId === problemDetails?.problemId;
-
-              let bgColor;
-              if (problem.stateSubmission === StateSubmission.NOTSEND) {
-                bgColor = "bg-[#16233A]";
-              } else if (problem.stateSubmission === StateSubmission.PASS) {
-                bgColor = "bg-[#00DACC]";
-              } else if (problem.stateSubmission === StateSubmission.FAILED) {
-                bgColor = "bg-[#EF4343]";
-              } else {
-                bgColor = isCurrentProblem ? "bg-[#16233A]" : "bg-[#16233A]";
-              }
-
-              const displayText = problem.title || `${index + 1}`;
-
-              return (
-                <div
-                  key={problem.problemId}
-                  className={`px-4 py-2 rounded-lg ${bgColor} text-center cursor-pointer`}
-                  style={{ margin: "0.5rem" }}
-                  onClick={() =>
-                    router.push(`/student/courses/${params.courseId}/assignment/homeworkassignment/${problem.problemId}`)
-                  }
-                >
-                  {isCurrentProblem ? problemDetails?.title : displayText}
-                </div>
-              );
-            })}
-        </div>
-      </>
-    );
-  };
 
   return (
     <div className="mt-7 ml-4">
-      <Header
-        courseTitle={courseTitle}
-        assignmentTitle={assignmentTitle}
-        problemTitle={problemTitle}
+       <Header
+        assignmentDetails={assignmentDetails}
+        selectedTitle={selectedTitle}
+        problemDetails={problemDetails}
+        params={params}
       />
       <div className="flex flex-row">
         <div className="flex flex-col w-8/12 pl-4">
@@ -192,7 +139,7 @@ export default function AssignmentPage() {
                   </div>
                 </div>
               ))}
-              
+
             </div>
           </div>
 
