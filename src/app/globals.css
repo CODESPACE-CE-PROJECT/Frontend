@@ -26,6 +26,11 @@ xterm-viewport {
   color: #fff000;
 } */
 
+.fc-daygrid-event{
+  padding: 1rem;
+  text-wrap: wrap;
+}
+
 /* disable dot on dayGridMonth*/
 .fc-daygrid-event-dot {
   display: none !important;
@@ -43,9 +48,8 @@ xterm-viewport {
 /* fix timeGridWeek,timeGridDay*/
 .fc-event-main{
   display: flex;
-  height: inherit;
-  justify-content: center;
   align-items: center;
+  text-wrap: wrap;
 }
 .fc .fc-timegrid-col:hover{
   background: #2A3A50AA;
