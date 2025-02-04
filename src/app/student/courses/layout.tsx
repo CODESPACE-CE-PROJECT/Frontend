@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <UserLayout>
       {isCloseCourseNav ? (
-        <div className="my-10 mx-[3.75rem]">
+        <div className="mt-10 mx-[3.75rem]">
           <UserNav role={Role.STUDENT} />
           {children}
         </div>

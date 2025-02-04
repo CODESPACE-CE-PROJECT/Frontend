@@ -81,13 +81,6 @@ export default function AssignmentPage() {
 
     return (
       <>
-        <div className="text-white text-2xl ml-4 mb-5 flex items-center">
-          <button onClick={handleBack} className="focus:outline-none mr-2">
-            <ArrowBackIosIcon />
-          </button>
-          {`${courseTitle} / ${assignmentTitle} / ${problemTitle}`}
-        </div>
-
         <div className="flex flex-wrap gap-4 px-2 py-3 mb-5 ml-4 text-white">
           {assignmentDetails?.assignment
             ?.find((assignment: any) => assignment.title === selectedTitle)
@@ -149,7 +142,7 @@ export default function AssignmentPage() {
           </div>
 
           <div className="pt-5">
-            <div>
+            <div className="flex flex-col gap-y-5 max-h-[80vh] overflow-y-auto">
               {problemDetails?.testCases?.map((testCase: any, index: number) => (
                 <div key={testCase.testCaseId}>
                   <div className="bg-[#161e2e] rounded-lg text-white pt-3 pl-2 pb-3 w-24 mb-3">
@@ -186,7 +179,7 @@ export default function AssignmentPage() {
           </div>
 
         </div>
-        <div className="pr-4 ml-5">
+        <div className="ml-5">
           <TextEditter />
         </div>
       </div>
