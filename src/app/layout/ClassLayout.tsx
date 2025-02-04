@@ -25,7 +25,7 @@ const ClassLayout: React.FC<LayoutProps> = ({ children, id }) => {
   return (
     <div className="flex flex-row overflow-y-hidden overscroll-none">
       <ClassRoomNav id={id} role={role} />
-      <div className="text-[#FAFAFA] my-10 mx-[3.75rem] h-full w-full">
+      <div className="text-[#FAFAFA] mt-10 mx-[3.75rem] h-full w-full">
         <UserNav role={role} />
         {children}
       </div>

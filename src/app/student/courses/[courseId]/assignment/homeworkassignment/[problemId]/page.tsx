@@ -86,14 +86,7 @@ export default function AssignmentPage() {
 
     return (
       <>
-        <div className="text-white text-2xl ml-4 mb-5 flex items-center">
-          <button onClick={handleBack} className="focus:outline-none mr-2">
-            <ArrowBackIosIcon />
-          </button>
-          {`${courseTitle} / ${assignmentTitle} / ${problemTitle}`}
-        </div>
-
-        <div className="flex flex-wrap gap-4 py-3 mb-5 ml-4 text-white">
+        <div className="flex flex-wrap gap-x-4 text-white">
           {assignmentDetails?.assignment
             ?.find((assignment: any) => assignment.title === selectedTitle)
             ?.problem?.map((problem: any, index: number) => {
@@ -115,8 +108,7 @@ export default function AssignmentPage() {
               return (
                 <div
                   key={problem.problemId}
-                  className={`px-4 py-2 rounded-lg ${bgColor} text-center cursor-pointer`}
-                  style={{ margin: "0.5rem" }}
+                  className={`px-4 py-2 mb-6 rounded-lg ${bgColor} text-center cursor-pointer`}
                   onClick={() =>
                     router.push(`/student/courses/${params.courseId}/assignment/homeworkassignment/${problem.problemId}`)
                   }
@@ -131,14 +123,14 @@ export default function AssignmentPage() {
   };
 
   return (
-    <div className="mt-7 ml-4">
+    <div className="">
       <Header
         courseTitle={courseTitle}
         assignmentTitle={assignmentTitle}
         problemTitle={problemTitle}
       />
       <div className="flex flex-row">
-        <div className="flex flex-col w-8/12 pl-4">
+        <div className="flex flex-col w-8/12">
           <div className="p-2 pt-0 border border-[#2A3A50] text-xl text-[#C2C8CC] rounded-b-lg rounded-t-lg">
             <div className="text-white pt-5 pl-4 pr-4">
               <h2 className="font-bold mb-4 text-white text-center">{problemTitle}</h2>
@@ -148,7 +140,6 @@ export default function AssignmentPage() {
           <div className="bg-[#3A1617] mt-3 p-4 rounded-md flex">
             <div className="text-xl text-white font-bold mb-2">ข้อจำกัด</div>
             <ul className="text-white text-lg list-disc list-inside ml-3">
-
               {constraint?.map((constraintItem: any) => (
 
                 <li key={constraintItem.constraintId}>{constraintItem.keyword}</li>
@@ -156,8 +147,8 @@ export default function AssignmentPage() {
             </ul>
           </div>
 
-          <div className="pt-5  ">
-            <div className="flex flex-col gap-y-5 max-h-[80vh] overflow-y-auto">
+          <div className="pt-5">
+            <div className="flex flex-col gap-y-5 max-h-[35vh] overflow-y-auto scroll-smooth">
               {problemDetails?.testCases?.map((testCase: any, index: number) => (
                 <div key={testCase.testCaseId} >
                   <div className="bg-[#161e2e] rounded-lg text-white pt-3 pl-2 pb-3 w-24 mb-3">
@@ -197,7 +188,7 @@ export default function AssignmentPage() {
           </div>
 
         </div>
-        <div className="pr-4 ml-5">
+        <div className="ml-5">
           <TextEditter sourceCode={problemDetails.submission?.sourceCode} language={problemDetails.language} />
         </div>
       </div>

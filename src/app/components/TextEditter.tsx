@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Editor from "@monaco-editor/react";
+import { Editor, Monaco } from "@monaco-editor/react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import UploadIcon from "@mui/icons-material/Upload";
 import { LanguageType } from "../enum/enum";
-import { 
-  CplusplusOriginal, 
-  PythonOriginal, 
-  COriginal, 
-  JavascriptOriginal, 
-  JavaOriginal 
+import {
+  CplusplusOriginal,
+  PythonOriginal,
+  COriginal,
+  JavascriptOriginal,
+  JavaOriginal,
 } from "devicons-react";
 
 interface Props {
@@ -64,6 +64,21 @@ export default function TextEditor({ sourceCode, language }: Props) {
     }
   };
 
+  const handleEditorWillMount = (monaco: Monaco) => {
+    monaco.editor.defineTheme("custom-vs-dark", {
+      base: "vs-dark", // Base theme
+      inherit: true, // Inherit the base theme's rules
+      rules: [],
+      colors: {
+        "editor.background": "#2A3A50",
+      },
+    });
+  };
+
+  const handleEditorDidMount = (editor: any, monaco: Monaco) => {
+    monaco.editor.setTheme("custom-vs-dark");
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-3">
@@ -95,12 +110,14 @@ export default function TextEditor({ sourceCode, language }: Props) {
 
       {/* 🔹 Editor */}
       <Editor
-        height="50vw"
+        height="40vw"
         width="50vw"
         defaultLanguage={language ? languageEditor(language) : "cpp"}
         value={code}
         onChange={(newValue) => setCode(newValue || "")}
-        theme="vs-dark"
+        options={{ fontSize: 16, fontFamily: "JetBrains Mono" }}
+        beforeMount={handleEditorWillMount}
+        onMount={handleEditorDidMount}
       />
     </div>
   );

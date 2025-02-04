@@ -3,10 +3,11 @@
 import React, { ReactNode } from "react";
 import UserNav from "@/app/components/UserNav";
 import SideNav from "@/app/components/SideNav";
+import { Role } from "@/app/enum/enum";
 
 interface LayoutProps {
   children: ReactNode;
-  role: string;
+  role: Role;
 }
 
 const TeacherLayout: React.FC<LayoutProps> = ({ children, role }) => {
