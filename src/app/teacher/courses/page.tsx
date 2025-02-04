@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { createCourse } from "../../services/user.service";
+import { createCourse } from "../../services/course.service";
 import { getAllCourse } from "../../services/course.service";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/app/store/slices/courseNavSlice";

@@ -156,10 +156,10 @@ export default function AssignmentPage() {
             </ul>
           </div>
 
-          <div className="pt-5">
-            <div className="flex flex-col gap-y-5">
+          <div className="pt-5  ">
+            <div className="flex flex-col gap-y-5 max-h-[80vh] overflow-y-auto">
               {problemDetails?.testCases?.map((testCase: any, index: number) => (
-                <div key={testCase.testCaseId}>
+                <div key={testCase.testCaseId} >
                   <div className="bg-[#161e2e] rounded-lg text-white pt-3 pl-2 pb-3 w-24 mb-3">
                     <div className="pl-2">ตัวอย่าง {index + 1}</div>
                   </div>
@@ -192,6 +192,7 @@ export default function AssignmentPage() {
                   </div>
                 </div>
               ))}
+              
             </div>
           </div>
 
