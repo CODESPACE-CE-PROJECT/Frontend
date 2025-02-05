@@ -1,56 +1,40 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
+import { IAuth, IResponseAuth } from '../interfaces/auth.interface';
 import Cookies from 'js-cookie';
 
-export const login = async (username: string, password: string) => {
-     try {
-          const response: AxiosResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
-               username,
-               password,
-          });
-
-          if (response.status === 201) {
-               const accessToken: string | null = response.data.accessToken;
-               const refreshToken: string | null = response.data.refreshToken;
-
-               if (accessToken && refreshToken) {
-                    const accessTokenExpiration = 60 * 60; // seconds
-                    const refreshTokenExpiration = 7 * 24 * 60 * 60; // seconds
-
-                    Cookies.set('accessToken', accessToken, { expires: accessTokenExpiration / (24 * 60 * 60) });
-                    Cookies.set('refreshToken', refreshToken, { expires: refreshTokenExpiration / (24 * 60 * 60) });
-               }
-          }
-          console.log(response)
-          return response;
-     } catch (error) {
-          if (axios.isAxiosError(error) && error.response?.status === 401) {
-               return { status: 401, message: "ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง" };
-          }
-          console.log(error)
-          throw error;
-     }
-};
-
-
-
-export const logout = async () => {
-     try {
-          const token = Cookies.get('accessToken')
-          const response: AxiosResponse = await axios.get(
-               `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
-               {
-                    headers: {
-                         Authorization: `Bearer ${token}`
+export const login = async (formData: IAuth) => {
+     return await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, formData).then(
+          (res) => {
+               if (res.status === 201) {
+                    const token: IResponseAuth = res.data
+                    if (token.accessToken && token.refreshToken) {
+                         Cookies.set('accessToken', token.accessToken, { expires: 1 })
+                         Cookies.set('refreshToken', token.refreshToken, { expires: 7 })
                     }
                }
-          );
-
-          if (response.status === 200) {
-               Cookies.remove('accessToken')
-               Cookies.remove('refreshToken')
           }
-          return response;
-     } catch (error) {
-          console.log(error)
-     }
+     );
 };
+
+export const logout = async () => {
+     return await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+          {
+               headers: {
+                    Authorization: `Bearer ${Cookies.get('accessToken')}`
+               }
+          }
+     ).then(() => {
+          Cookies.remove('accessToken')
+          Cookies.remove('refreshToken')
+     });
+};
+
+export const forgotPassword = async (email: string) => {
+     return await await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password`,
+          {
+              email: email 
+          }
+     )
+}

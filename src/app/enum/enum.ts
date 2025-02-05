@@ -51,3 +51,9 @@ export enum ConstraintType {
     METHOD = "METHOD",
     CLASS = "CLASS"
 }
+
+export enum NotifyType {
+    SUCCESS,
+    ERROR,
+    WARNING
+}

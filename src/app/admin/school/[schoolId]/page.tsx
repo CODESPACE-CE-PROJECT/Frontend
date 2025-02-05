@@ -23,6 +23,7 @@ import Profiler from "@/app/assets/setting/Profileuser.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { OptionUser } from "@/app/components/Options/OptionUser";
+import {AddUserModal} from "@/app/components/Modals/AddUserModal";
 
 export default function School() {
   const param = useParams<{ schoolId: string }>();
@@ -195,6 +196,7 @@ export default function School() {
           </div>
         </div>
       </div>
+      {/* <AddUserModal /> */}
     </div>
   );
 }

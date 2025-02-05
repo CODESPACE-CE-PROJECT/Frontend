@@ -1,67 +1,52 @@
 'use client'
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Logo from "../../app/assets/Login/logo.svg";
+import Logo from "@/app/assets/Login/logo.svg";
 import { useRouter } from "next/navigation";
-import { login } from "../services/auth.service";
+import { login } from "@/app/services/auth.service";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
-import { navbarSelector, setIsCloseNavbar } from "../store/slices/navbarSlice";
-import {
-  AiFillEye,
-  AiFillEyeInvisible,
-  AiOutlineExclamationCircle,
-} from "react-icons/ai";
-import { useAppDispatch } from "../store/store";
+import { TextField } from "@/app/components/Input/TextField/TextField";
+import { Label } from "@/app/components/Input/Label";
+import { TextFieldPassword } from "../components/Input/TextField/TextFieldPassword";
+import { ConfirmButton } from "@/app/components/Input/Button/ConfirmButton";
+import { GoogleButton } from "@/app/components/Input/Button/GoogleButton";
 import Cookies from "js-cookie";
+import { IAuth } from "@/app/interfaces/auth.interface";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { AxiosError } from "axios";
+import { Loading } from "@/app/components/Loading/Loading";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
+  const [textError, setTextError] = useState<string>()
+  const [formData, setFormData] = useState<IAuth>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const dispatch = useAppDispatch();
+  const handleInputChange = (value: string | number, name: string) => {
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [name]: value as string
+      } as IAuth
+    })
+  }
 
-  const handleUserName = (e: any) => {
-    setUsername(e.target.value);
-    setUsernameError("");
-    dispatch(setIsCloseNavbar(true))
-  };
+  const handleLogin = async () => {
 
-  const handlePassword = (e: any) => {
-    setPassword(e.target.value);
-    setPasswordError("");
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handlelogin = async (e: any) => {
-    e.preventDefault();
-
-    setUsernameError("");
-    setPasswordError("");
-
-    if (!username || !password) {
-      const errorMessage =
-        "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง";
-      setUsernameError(errorMessage);
-      setPasswordError(errorMessage);
-      return;
+    setIsLoading(true)
+    if (!formData?.username && !formData?.password) {
+      setTextError("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง")
+      setIsLoading(false)
+      return
+    } else {
+      setTextError('')
     }
 
-    setLoading(true);
-
     try {
-      const response = await login(username, password);
-      if (response.status === 201) {
-        setLoading(false);
+      if (formData) {
+        await login(formData);
+        setIsLoading(false)
         Swal.fire({
           title: "เข้าสู่ระบบเสร็จสิ้น",
           text: "",
@@ -69,23 +54,19 @@ export default function Login() {
           icon: "success",
           timer: 2000,
         }).then(() => {
-          router.push("/");
-        });
-      } else if (response.status === 401) {
-        setLoading(false);
-        const errorMessage =
-          "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง";
-        setUsernameError(errorMessage);
-        setPasswordError(errorMessage);
+          router.push('/')
+        })
       }
-    } catch (error) {
-      console.log(error)
-      setLoading(false);
-      setUsernameError("เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง");
+    } catch (error: any) {
+      setIsLoading(false)
+      const err: AxiosError = error
+      if (err.response?.status === 401) {
+        setTextError("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง")
+      }
     }
   };
 
-  const handlegooglelogin = () => {
+  const handleGooleLogin = () => {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     window.location.href = `${backendUrl}/auth/google`;
   };
@@ -95,7 +76,6 @@ export default function Login() {
     const accessToken = urlParams.get("accessToken") || null;
     const refreshToken = urlParams.get("refreshToken") || null;
     const error = urlParams.get('error') || ""
-
 
     if (error !== "") {
       Swal.fire({
@@ -120,117 +100,48 @@ export default function Login() {
         router.push('/')
       })
     }
-  }, []);
+  }, [router]);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
-      <div className="shadow-md rounded-lg px-8 py-6 max-w-md w-full">
-        <div className="flex justify-center mb-6">
-          <Image src={Logo} alt="Logo" width={100} height={100} priority={true} />
-        </div>
-        <h1 className="text-3xl font-bold text-center mb-6 dark:text-gray-200">
-          CODE SPACE
-        </h1>
+  return <div className="flex flex-col items-center justify-center w-[100vw] h-[100vh] p-10">
+    <Image
+      src={Logo}
+      alt='logo'
+      width={100}
+      height={100}
+    />
+    <p className="text-4xl mt-6 font-semibold">CODE SPACE</p>
+    <div className="flex flex-col items-start w-full max-w-[540px] mt-14 gap-y-5">
 
-        <form
-          className="flex flex-col"
-          action="#"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handlelogin(e);
-          }}
-        >
-          <div className="mb-6">
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-white mb-2"
-            >
-              บัญชีผู้ใช้ <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="username"
-              className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-[#5572FA] bg-[#2A3A50]"
-              placeholder="Username"
-              required
-              onChange={handleUserName}
-            />
-          </div>
-
-          <div className="mb-2">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-white mb-2"
-            >
-              รหัสผ่าน <span className="text-red-500">*</span>
-            </label>
-
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                className="shadow-sm rounded-md w-full px-3 py-2 border border-[#2A3A50] text-[#BCBEC0] focus:outline-[#5572FA] bg-[#2A3A50]"
-                placeholder="Password"
-                required
-                onChange={handlePassword}
-              />
-              <span
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? (
-                  <AiFillEyeInvisible size={24} className="text-[#BCBEC0]" />
-                ) : (
-                  <AiFillEye size={24} className="text-[#BCBEC0]" />
-                )}
-              </span>
-            </div>
-          </div>
-
-          <Link
-            href="/login/resetpassword"
-            className="flex justify-end text-xs text-[#5572FA] hover:text-indigo-500 mt-2"
-          >
-            <p>รีเซ็ตรหัสผ่าน</p>
-          </Link>
-
-          {(usernameError || passwordError) && (
-            <div className="text-xs text-[#FF8484] mt-2 flex items-center">
-              <AiOutlineExclamationCircle size={16} className="mr-1" />
-              <p>{usernameError || passwordError}</p>
-            </div>
-          )}
-
-          <button
-            onClick={handlelogin}
-            type="button"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white mt-4 ${loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#5572FA] hover:bg-indigo-700"
-              }`}
-            disabled={loading}
-          >
-            {loading ? "กำลังเข้าสู่ระบบ" : "เข้าสู่ระบบ"}
-          </button>
-        </form>
-
-        <div className="relative flex py-6 items-center">
-          <div className="flex-grow border-t border-gray-300"></div>
-          <div className="flex-grow border-t border-gray-300"></div>
-        </div>
-
-        <button
-          onClick={handlegooglelogin} // ตรวจสอบว่าฟังก์ชันนี้ผูกกับปุ่มแล้ว
-          className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium border-white bg-[#FAFAFA]"
-        >
-          <Image
-            src={"https://logopng.com.br/logos/google-37.svg"}
-            alt="Google Icon"
-            width={24}
-            height={24}
-          />
-          <span className="ml-2 text-gray-800">เข้าสู่ระบบด้วย Google</span>
-        </button>
+      <div className="flex flex-col items-start w-full gap-y-3">
+        <Label text="บัญชีผู้ใช้" isRequired={true} />
+        <TextField name="username" onChange={handleInputChange} onKeyDown={handleLogin} />
       </div>
+
+      <div className="flex flex-col items-start w-full gap-y-3">
+        <Label text="รหัสผ่าน" isRequired={true} />
+        <TextFieldPassword name="password" onChange={handleInputChange} onKeyDown={handleLogin}/>
+      </div>
+
+      <div onClick={() => router.push('/login/forgot-password')} className="text-xs self-end hover:text-primary cursor-pointer">ลืมรหัสผ่าน ?</div>
+
+      {
+        textError && <div className="flex flex-row items-center text-red-l gap-x-2">
+          <ErrorOutlineIcon />
+          <p>{textError}</p>
+        </div>
+      }
+
+      <ConfirmButton className="w-full" onClick={handleLogin} disabled={isLoading}>
+        {
+          isLoading ? <div className="flex flex-row items-center justify-center gap-x-4">
+            <Loading />
+            <p>กำลังเข้าสู่ระบบ</p>
+          </div> : 'เข้าสู่ระบบ'
+        }
+      </ConfirmButton>
+
+      <div className="h-[1px] w-full bg-[#CED4DA] opacity-35"></div>
+      <GoogleButton className="w-full" onClick={handleGooleLogin} />
     </div>
-  );
+  </div>;
 }

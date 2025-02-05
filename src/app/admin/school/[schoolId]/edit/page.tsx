@@ -9,7 +9,7 @@ import { ISchool, IUpdateSchool } from "@/app/interfaces/school.interface";
 import { IProvince } from "@/app/interfaces/province.interface"
 import { Label } from "@/app/components/Input/Label";
 import { Dropdown } from "@/app/components/Input/Dropdown";
-import { TextField } from "@/app/components/Input/TextField";
+import { TextField } from "@/app/components/Input/TextField/TextField";
 import { CheckBox } from "@/app/components/Input/CheckBox";
 import { TextArea } from "@/app/components/Input/TextArea";
 import { ZipCode } from "@/app/components/Input/ZipCode";
@@ -279,7 +279,7 @@ export default function SchoolEdit() {
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="จำกัดจำนวนคอร์ส" isRequired={true} />
-                      <TextField name="maxCreateCoursePerTeacher" value={updateForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={3} validateText="จำนวนคอร์สต้องมากกว่า 0" isSubmited={isSubmited}/>
+                      <TextField name="maxCreateCoursePerTeacher" value={updateForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={3} validateText="จำนวนคอร์สต้องมากกว่า 0" isSubmited={isSubmited}/>
                     </div>
                   </div>
 
@@ -288,13 +288,13 @@ export default function SchoolEdit() {
                     {/* จำกัดจำนวนผู้สอน*/}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="จำกัดจำนวนผู้สอน" isRequired={true} />
-                      <TextField name="maxCreateTeacher" value={updateForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} validateText="จำนวนผู้สอนต้องมากกว่า 0" isSubmited={isSubmited}/>
+                      <TextField name="maxCreateTeacher" value={updateForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={4} validateText="จำนวนผู้สอนต้องมากกว่า 0" isSubmited={isSubmited}/>
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="จำกัดจำนวนผู้เรียน" isRequired={true} />
-                      <TextField name="maxCreateStudent" value={updateForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} numberDigit={4} validateText="จำนวนผู้เรียนต้องมากกว่า 0" isSubmited={isSubmited}/>
+                      <TextField name="maxCreateStudent" value={updateForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={4} validateText="จำนวนผู้เรียนต้องมากกว่า 0" isSubmited={isSubmited}/>
                     </div>
                   </div>
 

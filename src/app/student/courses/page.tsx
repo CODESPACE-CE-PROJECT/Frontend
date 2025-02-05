@@ -35,8 +35,7 @@ export default function Courses() {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-col text-[#FAFAFA] w-full">
-      <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
+    <div className="flex flex-col text-[#FAFAFA] w-full"> 
       <CoursesMap />
     </div>
   );

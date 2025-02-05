@@ -1,23 +1,35 @@
 import type { Config } from "tailwindcss";
+import flowbite from 'flowbite-react/tailwind'
 
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    flowbite.content()
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        mulish: ["Mulish", "sans-serif"],
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+    fontFamily: {
+      sans: ['Noto Sans Thai'],
     },
+    colors: {
+      'primary': '#5572FA',
+      'white': '#FAFAFA',
+      'pure-white': '#FFFFFF',
+      'border-text-light': '#CED4DA',
+      'gray': '#808080',
+      'black': '#0F1119',
+      'table-header': '#3049724D',
+      'border-page': '#D7D7D71A',
+      'page': '#0B111B',
+      'blackground-text': '#2A3A50',
+      'hover-navbar': '#0E2244',
+      'red-l': '#FB7474',
+      'green': '#00DACC'
+    }
   },
-  plugins: [],
+  plugins: [
+    flowbite.plugin()
+  ],
 };
 export default config;

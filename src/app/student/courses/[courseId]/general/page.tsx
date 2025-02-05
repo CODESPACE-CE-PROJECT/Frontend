@@ -60,9 +60,6 @@ export default function Announcement() {
   return (
     <>
       <div className="relative w-full">
-        <div className="flex pl-10">
-          <h1 className="z-10 py-4 text-4xl">{courseDetails?.title}</h1>
-        </div>
         <h1 className="flex pl-10 text-1xl">{courseDetails?.description}</h1>
       </div>
 

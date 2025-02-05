@@ -5,15 +5,16 @@ interface Props {
     placeholder?: string;
     value?: string;
     isNumberic?: boolean;
-    numberDigit?: number;
+    maxLength?: number;
     onChange: (value: string | number, name: string) => void;
     validateText?: string;
     isSubmited?:boolean,
     textColor?: string,
     bgColor?: string
+    onKeyDown?: () => void
 }
 
-export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, numberDigit, validateText, isSubmited, textColor, bgColor}) => {
+export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, maxLength, validateText, isSubmited, textColor, bgColor, onKeyDown}) => {
      const [displayText, setDisplayText] = useState<string>("")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,13 +37,18 @@ export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value,
             type="text"
             name={name}
             value={displayText}
-            maxLength={numberDigit}
+            maxLength={maxLength}
             placeholder={placeholder}
-            className={`h-10 py-2 px-4 gap-2.5 self-stretch rounded-[6px] ${bgColor ? bgColor : 'bg-[#2A3A50]'} focus:outline-[#5572FA] ${textColor ? textColor:'text-zinc-50'}`}
+            className={`h-10 py-2 px-4 gap-2.5 w-full rounded-[6px] ${bgColor ? bgColor : 'bg-[#2A3A50]'} focus:outline-[#5572FA] ${textColor ? textColor:'text-zinc-50'}`}
             onChange={handleChange}
             inputMode={isNumberic ? "numeric" : "text"}
             pattern={isNumberic ? "\\d*" : undefined}
+            onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                    onKeyDown && onKeyDown()
+                }
+            }}
         />
-        {validateText && !displayText && isSubmited && <p className="mt-2 text-sm text-[#EF4343]">{validateText}</p>}
+        {validateText && !displayText && isSubmited && <p className="mt-2 text-sm text-red-l">{validateText}</p>}
     </>
 };
