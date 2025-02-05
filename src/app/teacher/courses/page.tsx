@@ -13,6 +13,7 @@ import Profiler from "../../../../src/app/assets/setting/profileuser.svg";
 import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
 import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
 import CoursesMap from "@/app/components/CoursesItems/CoursesMap";
+import { ConfirmButton } from "@/app/components/Input/Button/ConfirmButton";
 
 export default function CoursesPage() {
   const [showCreateClass, setShowCreateClass] = useState<boolean>(false);
@@ -99,17 +100,15 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="flex flex-col text-[#FAFAFA] m-14 min-w-screen">
-      <div className="flex flex-row justify-between items-center">
-        <h1 className="text-3xl font-medium mb-6">คอร์สเรียน</h1>
+    <div className="flex flex-col text-[#FAFAFA] min-w-screen">
+      <div className="flex flex-row justify-end items-center">
         {!showCreateClass && (
-          <button
-            onClick={toggleCreateClass}
-            className="bg-[#30363D80] hover:bg-blue-700 text-white py-2 px-4 rounded-lg border-solid border-[1px] border-[#7A7A7A] flex items-center space-x-3 transition duration-300 ease-in-out"
-          >
-            <PersonAddIcon />
-            <div className="">สร้างชั้นเรียน</div>
-          </button>
+          <ConfirmButton className="px-3">
+            <div className="flex flex-row items-center gap-x-4">
+              <PersonAddIcon />
+              <p>สร้างชั้นเรียน</p>
+            </div>
+          </ConfirmButton>
         )}
       </div>
 

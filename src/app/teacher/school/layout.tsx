@@ -1,5 +1,14 @@
-import UserLayout from "@/app/layout/UserLayout";
+import { ReactNode } from "react";
+import { TeacherLayout } from "@/app/layout/TeacherLayout";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return <UserLayout>{children}</UserLayout>;
+interface Props {
+     children: ReactNode
+}
+
+export default function Layout({ children }: Props) {
+     return <>
+          <TeacherLayout>
+               {children}
+          </TeacherLayout>
+     </>
 }

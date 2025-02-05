@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IAuth, IResponseAuth } from '../interfaces/auth.interface';
+import { IAuth, IResponseAuth } from '@/app/interfaces/auth.interface';
 import Cookies from 'js-cookie';
 
 export const login = async (formData: IAuth) => {

@@ -1,27 +1,21 @@
-"use client";
-import UserLayout from "@/app/layout/UserLayout";
-import ClassLayout from "@/app/layout/ClassLayout";
-import { useParams } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  courseNavSelector,
-  setIsCloseCourseNav,
-} from "@/app/store/slices/courseNavSlice";
-import { useEffect } from "react";
+import { ReactNode } from "react";
+import { TeacherLayout } from "@/app/layout/TeacherLayout";
+import { Metadata } from "next/types";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const param = useParams<{ courseId: string }>();
 
-  const isCloseCourseNav = useSelector(courseNavSelector).isCloseCourseNav;
+interface Props {
+     children: ReactNode
+}
 
-  return (
-    <UserLayout>
-     
-      {isCloseCourseNav ? (
-        <>{children}</>
-      ) : (
-        <ClassLayout id={param.courseId}>{children}</ClassLayout> // false (ON)
-      )}
-    </UserLayout>
-  );
+export const metadata: Metadata = {
+  title: "คอร์สเรียน",
+  description: 'คอร์สเรียน'
+}
+
+export default function Layout({ children }: Props) {
+     return <>
+          <TeacherLayout>
+               {children}
+          </TeacherLayout>
+     </>
 }

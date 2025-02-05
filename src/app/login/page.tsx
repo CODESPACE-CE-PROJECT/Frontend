@@ -16,6 +16,8 @@ import { IAuth } from "@/app/interfaces/auth.interface";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { AxiosError } from "axios";
 import { Loading } from "@/app/components/Loading/Loading";
+import { notify } from "../utils/toast.util";
+import { NotifyType } from "../enum/enum";
 
 export default function Login() {
   const router = useRouter();
@@ -47,15 +49,8 @@ export default function Login() {
       if (formData) {
         await login(formData);
         setIsLoading(false)
-        Swal.fire({
-          title: "เข้าสู่ระบบเสร็จสิ้น",
-          text: "",
-          showConfirmButton: false,
-          icon: "success",
-          timer: 2000,
-        }).then(() => {
-          router.push('/')
-        })
+        notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
+        router.push('/')
       }
     } catch (error: any) {
       setIsLoading(false)
@@ -78,27 +73,14 @@ export default function Login() {
     const error = urlParams.get('error') || ""
 
     if (error !== "") {
-      Swal.fire({
-        title: "เข้าสู่ระบบไม่สมบูรณ์",
-        text: "ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง",
-        showConfirmButton: false,
-        icon: "error",
-        timer: 3000,
-      })
+      notify(NotifyType.ERROR, 'เข้าสู่ระบบไมาสมบูรณ์') 
     }
 
     if (accessToken && refreshToken && error === "") {
       Cookies.set("accessToken", accessToken);
       Cookies.set("refreshToken", refreshToken);
-      Swal.fire({
-        title: "เข้าสู่ระบบเสร็จสิ้น",
-        text: "",
-        showConfirmButton: false,
-        icon: "success",
-        timer: 2000,
-      }).then(() => {
-        router.push('/')
-      })
+      notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
+      router.push('/')
     }
   }, [router]);
 

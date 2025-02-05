@@ -23,10 +23,10 @@ const config: Config = {
       'border-page': '#D7D7D71A',
       'page': '#0B111B',
       'blackground-text': '#2A3A50',
-      'hover-navbar': '#0E2244',
+      'hover-navbar': '#16233A',
       'red-l': '#FB7474',
       'green': '#00DACC'
-    }
+    },
   },
   plugins: [
     flowbite.plugin()
