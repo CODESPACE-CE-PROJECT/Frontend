@@ -9,7 +9,7 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { useParams } from "next/navigation";
 import { getSchoolById } from "@/app/services/school.service";
-import { ISchool } from "@/app/interfaces/school.interface";
+import { ISchool } from "@/app/types/school";
 import { textPackage } from "@/app/utils/text.util";
 import SchoolIcon from '@mui/icons-material/School';
 import {
@@ -17,7 +17,7 @@ import {
   textStatusActiveColor,
 } from "@/app/utils/color.util";
 import { textActivedUser } from "@/app/utils/text.util";
-import { IProfile } from "@/app/interfaces/user.interface";
+import { IProfile } from "@/app/types/user";
 import { Role } from "@/app/enum/enum";
 import Profiler from "@/app/assets/setting/Profileuser.svg";
 import Image from "next/image";

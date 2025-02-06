@@ -1,6 +1,6 @@
 import axios from "axios"
 import Cookies from "js-cookie"
-import { ICreateSchool, IUpdateSchool } from "../interfaces/school.interface"
+import { ICreateSchool, IUpdateSchool } from "../types/school"
 import { PackageType } from "../enum/enum"
 
 export const getAllSchool = async () => {

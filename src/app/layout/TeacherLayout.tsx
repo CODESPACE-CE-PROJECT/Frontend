@@ -10,9 +10,9 @@ import CodeIcon from '@mui/icons-material/Code';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import SchoolIcon from '@mui/icons-material/School';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { logout } from "@/app/services/auth.service";
+import { logout } from "@/app/actions/auth";
 import { toast } from 'react-toastify'
-import {useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { TopNav } from "../components/Navbar/TopNav";
 
 interface Props {
@@ -27,7 +27,7 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
       pending: 'กำลังออกจากระบบ',
       success: 'ออกจากระบบเสร็จสมบูรณ์',
       error: 'เกิดข้อผิดผลาดในการออกจากระบบ'
-    },{
+    }, {
       position: 'top-center'
     }).then(() => router.push('/'))
   }
@@ -44,28 +44,28 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
       </Link>
 
       <div className="flex flex-col flex-grow justify-between w-full">
-          <div className="flex flex-col gap-y-4">
-            <NavItem text="คอร์สเรียน" href="/teacher/courses">
-              <LibraryBooksIcon fontSize="large" />
-            </NavItem>
+        <div className="flex flex-col gap-y-4">
+          <NavItem text="คอร์สเรียน" href="/teacher/courses">
+            <LibraryBooksIcon fontSize="large" />
+          </NavItem>
 
-            <NavItem text="เขียนโปรแกรม" href="/teacher/editor">
-              <CodeIcon fontSize="large" />
-            </NavItem>
+          <NavItem text="เขียนโปรแกรม" href="/teacher/editor">
+            <CodeIcon fontSize="large" />
+          </NavItem>
 
-            <NavItem text="ปฏิทิน" href="/teacher/calendar">
-              <DateRangeIcon fontSize="large" />
-            </NavItem>
+          <NavItem text="ปฏิทิน" href="/teacher/calendar">
+            <DateRangeIcon fontSize="large" />
+          </NavItem>
 
-            <NavItem text="โรงเรียน" href="/teacher/school">
-              <SchoolIcon fontSize="large" />
-            </NavItem>
-          </div>
-
-          <div className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rounded-lg" onClick={handleLogout}>
-              <LogoutIcon fontSize="large" />
-          </div>
+          <NavItem text="โรงเรียน" href="/teacher/school">
+            <SchoolIcon fontSize="large" />
+          </NavItem>
         </div>
+
+        <div className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rounded-lg" onClick={handleLogout}>
+          <LogoutIcon fontSize="large" />
+        </div>
+      </div>
 
     </nav>
 

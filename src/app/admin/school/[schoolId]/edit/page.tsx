@@ -5,8 +5,8 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import { useRouter } from "next/navigation";
 import { getProvinceData } from "@/app/services/province.service";
 import { getSchoolById } from "@/app/services/school.service";
-import { ISchool, IUpdateSchool } from "@/app/interfaces/school.interface";
-import { IProvince } from "@/app/interfaces/province.interface"
+import { ISchool, IUpdateSchool } from "@/app/types/school";
+import { IProvince } from "@/app/types/province"
 import { Label } from "@/app/components/Input/Label";
 import { Dropdown } from "@/app/components/Input/Dropdown";
 import { TextField } from "@/app/components/Input/TextField/TextField";

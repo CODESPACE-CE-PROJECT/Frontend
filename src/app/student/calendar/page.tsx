@@ -7,7 +7,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { GetAllAssignmentForCalendar } from "@/app/services/calendar.service";
-import { ICalendar } from "@/app/interfaces/calendar.interface";
+import { ICalendar } from "@/app/types/calendar";
 import { EventInput } from "@fullcalendar/core/index.js";
 
 export default function Calendar() {

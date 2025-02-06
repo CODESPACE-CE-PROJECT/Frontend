@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Label } from "@/app/components/Input/Label";
 import { TextField } from "@/app/components/Input/TextField/TextField";
 import { ConfirmButton } from "@/app/components/Input/Button/ConfirmButton";
@@ -30,7 +30,7 @@ export default function ResetPassword() {
         await forgotPassword(email)
         setIsLoading(false)
         notify(NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
-        router.push('/login')
+        redirect('/login')
 
     } catch (error: any) {
       const err: AxiosError = error

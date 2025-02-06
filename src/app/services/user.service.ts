@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import { IProfile } from "../interfaces/user.interface";
+import { IProfile } from "../types/user";
 
 export const getProfile = async () => {
   const token = Cookies.get('accessToken')

@@ -6,7 +6,7 @@ import UserProfileIcon from "../../app/assets/CoursesAssets/UserProfileIcon.svg"
 import Link from "next/link";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { getProfile } from "@/app/services/user.service";
-import { IProfile } from "@/app/interfaces/user.interface";
+import { IProfile } from "@/app/types/user";
 import { Role } from "@/app/enum/enum";
 import { useParams, usePathname } from "next/navigation";
 import { getProblemById } from "@/app/services/problem.service";

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Profiler from "../../../../src/app/assets/setting/profileuser.svg";
 import { getProfile } from "../../services/user.service";
-import { IProfile } from "../../interfaces/user.interface";
+import { IProfile } from "../../types/user";
 import { Role, Gender } from "../../enum/enum";
 import { editProfile, uploadProfilePicture } from "../../services/user.service";
 

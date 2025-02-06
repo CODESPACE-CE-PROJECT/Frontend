@@ -16,7 +16,7 @@ import { getCoursesById } from "../../../../services/announcement.service";
 import Image from "next/image";
 import TeacherProfile from "@/app/assets/CoursesAssets/TeacherIcon.svg";
 import { getProfile } from "@/app/services/user.service";
-import { IProfile } from "@/app/interfaces/user.interface";
+import { IProfile } from "@/app/types/user";
 
 export default function Announcement() {
   const router = useRouter();

@@ -9,7 +9,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { logout } from "@/app/services/auth.service";
+import { logout } from "@/app/actions/auth";
 import { toast } from 'react-toastify'
 import {useRouter} from 'next/navigation'
 import SchoolIcon from '@mui/icons-material/School';

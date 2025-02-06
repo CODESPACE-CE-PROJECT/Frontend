@@ -11,10 +11,11 @@ interface Props {
     isSubmited?:boolean,
     textColor?: string,
     bgColor?: string
-    onKeyDown?: () => void
+    onKeyDown?: () => void,
+    require?: boolean
 }
 
-export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, maxLength, validateText, isSubmited, textColor, bgColor, onKeyDown}) => {
+export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, maxLength, validateText, isSubmited, textColor, bgColor, onKeyDown, require}) => {
      const [displayText, setDisplayText] = useState<string>("")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +49,7 @@ export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value,
                     onKeyDown && onKeyDown()
                 }
             }}
+            required={require}
         />
         {validateText && !displayText && isSubmited && <p className="mt-2 text-sm text-red-l">{validateText}</p>}
     </>

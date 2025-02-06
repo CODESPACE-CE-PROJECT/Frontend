@@ -5,7 +5,7 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import { getDashboardInfo } from "@/app/services/dashboard.service";
-import { IDashboardInfo } from "@/app/interfaces/dashboard.interface";
+import { IDashboardInfo } from "@/app/types/dashboard";
 import { CountInfoCard } from "@/app/components/Dashboard/CountInfoCard";
 import { ColumnChart } from "@/app/components/Dashboard/ColumnChart";
 import { DonutPie } from "@/app/components/Dashboard/DonutPie";

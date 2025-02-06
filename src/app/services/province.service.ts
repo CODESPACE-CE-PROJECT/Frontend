@@ -1,4 +1,4 @@
-import { IProvinceResponse, IProvince } from "../interfaces/province.interface"
+import { IProvinceResponse, IProvince } from "../types/province"
 import axios from "axios"
 
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { IAuth, IResponseAuth } from '@/app/interfaces/auth.interface';
+import { IAuth, IResponseAuth } from '@/app/types/auth';
 import Cookies from 'js-cookie';
+
 
 export const login = async (formData: IAuth) => {
      return await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, formData).then(

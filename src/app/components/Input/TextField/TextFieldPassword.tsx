@@ -6,10 +6,11 @@ interface Props {
     name?: string;
     placeholder?: string;
     onChange: (value: string | number, name: string) => void;
-    onKeyDown?: () => void
+    onKeyDown?: () => void,
+    require?: boolean
 }
 
-export const TextFieldPassword: React.FC<Props> = ({ placeholder, name, onChange, onKeyDown }) => {
+export const TextFieldPassword: React.FC<Props> = ({ placeholder, name, onChange, onKeyDown, require }) => {
     const [type, setType] = useState<boolean>(false)
 
     return <div className="relative w-full">
@@ -24,6 +25,7 @@ export const TextFieldPassword: React.FC<Props> = ({ placeholder, name, onChange
                     onKeyDown && onKeyDown()
                 }
             }}
+            required={require}
         />
         <span
             className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"

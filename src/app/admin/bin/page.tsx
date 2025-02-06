@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 import { getSchoolBinInfo } from "@/app/services/school.service";
-import { ISchools, ISchoolBin } from "@/app/interfaces/school.interface";
+import { ISchools, ISchoolBin } from "@/app/types/school";
 import Image from "next/image";
 import { Role } from "@/app/enum/enum";
 import Profiler from "@/app/assets/setting/Profileuser.svg";
-import { IProfile } from "@/app/interfaces/user.interface";
+import { IProfile } from "@/app/types/user";
 import { Option } from "@/app/components/Options/Option";
 import { Dropdown } from "@/app/components/Input/Dropdown";
 

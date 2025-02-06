@@ -1,23 +1,22 @@
 'use client'
-
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Logo from "@/app/assets/Login/logo.svg";
 import { useRouter } from "next/navigation";
 import { login } from "@/app/services/auth.service";
-import Swal from "sweetalert2";
 import { TextField } from "@/app/components/Input/TextField/TextField";
 import { Label } from "@/app/components/Input/Label";
 import { TextFieldPassword } from "../components/Input/TextField/TextFieldPassword";
 import { ConfirmButton } from "@/app/components/Input/Button/ConfirmButton";
 import { GoogleButton } from "@/app/components/Input/Button/GoogleButton";
 import Cookies from "js-cookie";
-import { IAuth } from "@/app/interfaces/auth.interface";
+import { IAuth } from "@/app/types/auth";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { AxiosError } from "axios";
 import { Loading } from "@/app/components/Loading/Loading";
 import { notify } from "../utils/toast.util";
 import { NotifyType } from "../enum/enum";
+import { redirect } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();
@@ -35,7 +34,6 @@ export default function Login() {
   }
 
   const handleLogin = async () => {
-
     setIsLoading(true)
     if (!formData?.username && !formData?.password) {
       setTextError("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง")
@@ -50,7 +48,7 @@ export default function Login() {
         await login(formData);
         setIsLoading(false)
         notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
-        router.push('/')
+        redirect('/')
       }
     } catch (error: any) {
       setIsLoading(false)
@@ -80,7 +78,7 @@ export default function Login() {
       Cookies.set("accessToken", accessToken);
       Cookies.set("refreshToken", refreshToken);
       notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
-      router.push('/')
+      redirect('/')
     }
   }, [router]);
 

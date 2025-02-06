@@ -9,7 +9,7 @@ import { getCoursesById } from "../../../../services/announcement.service";
 import Link from "next/link";
 import TeacherProfile from "@/app/assets/CoursesAssets/TeacherIcon.svg";
 import Image from "next/image";
-import { IProfile } from "@/app/interfaces/user.interface";
+import { IProfile } from "@/app/types/user";
 import { getProfile } from "@/app/services/user.service";
 
 const AssignBox = ({

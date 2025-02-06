@@ -1,5 +1,5 @@
 import { PackageType } from "../enum/enum"
-import { IProfile } from "./user.interface"
+import { IProfile } from "./user"
 
 export interface ISchools {
      schoolId: string,

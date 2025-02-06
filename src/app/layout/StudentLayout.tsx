@@ -9,7 +9,7 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import CodeIcon from '@mui/icons-material/Code';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { logout } from "@/app/services/auth.service";
+import { logout } from "@/app/actions/auth";
 import { toast } from 'react-toastify'
 import {useRouter} from 'next/navigation'
 import { TopNav } from "../components/Navbar/TopNav";

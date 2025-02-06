@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { ISchool } from "@/app/interfaces/school.interface";
+import { ISchool } from "@/app/types/school";
 import { getAllSchool } from "@/app/services/school.service";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
