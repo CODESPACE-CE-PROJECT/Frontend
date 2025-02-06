@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import UploadIcon from "@mui/icons-material/Upload";
-import { LanguageType } from "../enum/enum";
+import { LanguageType } from "@/enum/enum";
 import { 
   CplusplusOriginal, 
   PythonOriginal, 
