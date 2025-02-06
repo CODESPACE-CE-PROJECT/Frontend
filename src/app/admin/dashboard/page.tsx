@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
-import { getDashboardInfo } from "@/app/services/dashboard.service";
-import { IDashboardInfo } from "@/app/types/dashboard";
-import { CountInfoCard } from "@/app/components/Dashboard/CountInfoCard";
-import { ColumnChart } from "@/app/components/Dashboard/ColumnChart";
-import { DonutPie } from "@/app/components/Dashboard/DonutPie";
+import { getDashboardInfo } from "@/actions/dashboard";
+import { IDashboardInfo } from "@/types/dashboard";
+import { CountInfoCard } from "@/components/Dashboard/CountInfoCard";
+import { ColumnChart } from "@/components/Dashboard/ColumnChart";
+import { DonutPie } from "@/components/Dashboard/DonutPie";
 
 export default function Dashboard() {
   const [dashboardInfo, setDashboardInfo] = useState<IDashboardInfo>()
