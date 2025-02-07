@@ -9,9 +9,12 @@ import { IDashboardInfo } from "@/types/dashboard";
 import { CountInfoCard } from "@/components/Dashboard/CountInfoCard";
 import { ColumnChart } from "@/components/Dashboard/ColumnChart";
 import { DonutPie } from "@/components/Dashboard/DonutPie";
+import { Loading } from "@/components/Loading/Loading";
+import { ProvinceTable } from "@/components/Table/ProvinceTable";
 
 export default function Dashboard() {
   const [dashboardInfo, setDashboardInfo] = useState<IDashboardInfo>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [dataSet, setDataSet] = useState<{
     student: number[],
     teacher: number[],
@@ -26,48 +29,43 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response: IDashboardInfo = await getDashboardInfo()
-      setDashboardInfo(response)
-      setDataSet({
-        student: response.months.flatMap((item) => item.student),
-        teacher: response.months.flatMap((item) => item.teacher),
-        school: response.months.flatMap((item) => item.school),
-        month: response.months.flatMap((item) => item.month)
-      })
-    }
+      setIsLoading(true)
+      try {
+        const response: IDashboardInfo = await getDashboardInfo()
+        setDashboardInfo(response)
+        setDataSet({
+          student: response.months.flatMap((item) => item.student),
+          teacher: response.months.flatMap((item) => item.teacher),
+          school: response.months.flatMap((item) => item.school),
+          month: response.months.flatMap((item) => item.month)
+        })
+      } catch (error) {
 
+      } finally {
+        setIsLoading(false)
+      }
+    }
     fetchData()
   }, [])
 
-  return <div className="flex flex-col h-full p-[60px] pt-[40px] text-neutral-50">
-    <p className="text-3xl font-semibold mb-[80px]">ภาพรวม</p>
-    <div className="flex flex-col gap-y-4 lg:flex-row items-center lg:gap-x-4 w-full ">
-      <CountInfoCard title="โรงเรียน" count={`${dashboardInfo?.count.school.toString()} แห่ง`}><LocationCityIcon fontSize="large" /></CountInfoCard>
-      <CountInfoCard title="ผู้สอน" count={`${dashboardInfo?.count.teacher.toString()} คน`}><SchoolOutlinedIcon fontSize="large" /> </CountInfoCard>
-      <CountInfoCard title="ผู้เรียน" count={`${dashboardInfo?.count.student.toString()} คน`}><PersonOutlineIcon fontSize="large" /></CountInfoCard>
-    </div>
-    <p className="mt-[80px] text-center text-2xl font-bold">ผู้ใช้งานทั้งหมด {dashboardInfo?.count.totalUser} คน</p>
-    <ColumnChart school={dataSet.school} student={dataSet.student} teacher={dataSet.teacher} month={dataSet.month} />
-    <div className="flex flex-col gap-y-4 lg:flex-row w-full h-full mt-[80px]">
-      <DonutPie  className="self-center"/>
-      <table className="w-full">
-        <thead className="bg-[#3049724D] h-[61px]">
-          <tr className="text-xl">
-            <th className="pl-6 rounded-l-xl text-left">จังหวัด</th>
-            <th className="rounded-r-xl">โรงเรียน</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="text-lg h-10">
-            <td className="pl-6">กรุงเทพมหานคร</td>
-            <td className="text-center">2</td>
-          </tr>
-           <tr className="text-lg h-10">
-            <td className="pl-6">กาญจนบุรี</td>
-            <td className="text-center">1</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>;
+  return (
+    isLoading ? (
+      <div className="flex flex-col items-center justify-center h-[70vh]">
+        <Loading className="size-20" />
+      </div>
+    ) : (
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col gap-y-4 lg:flex-row items-center lg:gap-x-4 w-full ">
+          <CountInfoCard title="โรงเรียน" count={`${dashboardInfo?.count.school.toString()} แห่ง`}><LocationCityIcon fontSize="large" /></CountInfoCard>
+          <CountInfoCard title="ผู้สอน" count={`${dashboardInfo?.count.teacher.toString()} คน`}><SchoolOutlinedIcon fontSize="large" /> </CountInfoCard>
+          <CountInfoCard title="ผู้เรียน" count={`${dashboardInfo?.count.student.toString()} คน`}><PersonOutlineIcon fontSize="large" /></CountInfoCard>
+        </div>
+        <p className="mt-[80px] text-center text-2xl font-bold">ผู้ใช้งานทั้งหมด {dashboardInfo?.count.totalUser} คน</p>
+        <ColumnChart school={dataSet.school} student={dataSet.student} teacher={dataSet.teacher} month={dataSet.month} />
+        <div className="flex flex-col gap-y-4 lg:flex-row w-full h-full mt-[80px]">
+          <DonutPie className="self-center" province={dashboardInfo?.province}/>
+          <ProvinceTable provinces={dashboardInfo?.province}/>
+        </div>
+      </div>
+    ));
 }

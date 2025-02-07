@@ -16,10 +16,12 @@ export default async function middleware(req: NextRequest) {
   const payload = await decrypt(refreshToken)
 
   if (isProtectedRoute && !payload?.username) {
+    deleteSession()
     return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
 
   await getAccessToken(refreshToken)
+
 
   if (!refreshToken) {
     if (isPublicRoute) {

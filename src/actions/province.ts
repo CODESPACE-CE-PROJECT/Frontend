@@ -1,6 +1,7 @@
+"use server"
+
 import { IProvinceResponse, IProvince } from "../types/province"
 import axios from "axios"
-
 
 export const getProvinceData = async () => {
      try {

@@ -26,7 +26,7 @@ const config: Config = {
       'blackground-text': '#2A3A50',
       'hover-navbar': '#16233A',
       'red-l': '#FB7474',
-      'green': '#00DACC'
+      'green-l': '#00DACC'
     },
   },
   plugins: [

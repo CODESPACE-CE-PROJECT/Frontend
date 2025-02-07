@@ -1,3 +1,5 @@
+"use server"
+
 import axios, { AxiosResponse } from "axios";
 import { IProfile } from "../types/user";
 import { getToken } from "@/lib/session";
@@ -9,7 +11,7 @@ export const getProfile = async () => {
     headers: {
       Authorization: `Bearer ${token}`
     }
-  }).then((res) => res.data);
+  }).then((res) => res.data.data);
 };
 
 export const editProfile = async (profileData: IProfile) => {

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import XtermTerminal from "@/components/terminal";
+import XtermTerminal from "@/components/WorkingSpaceItems/Terminal";
 import TerminalIcon from "@mui/icons-material/Terminal";
 
 export default function WorkSpaceEditor() {

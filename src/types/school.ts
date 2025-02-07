@@ -1,7 +1,7 @@
 import { PackageType } from "../enum/enum"
 import { IProfile } from "./user"
 
-export interface ISchools {
+export type ISchools = {
      schoolId: string,
      schoolName: string,
      pictureUrl: string,
@@ -34,12 +34,12 @@ export interface ISchool extends ISchools {
      users: IProfile[]
 }
 
-export interface ISchoolBin {
+export type ISchoolBin = {
      school: ISchools[],
      user: IProfile[]
 }
 
-export interface ICreateSchool {
+export type ICreateSchool = {
      schoolName?: string,
      picture?: File | null,
      package?: string,
@@ -56,7 +56,7 @@ export interface ICreateSchool {
      canDeleteUser: boolean
 }
 
-export interface IUpdateSchool {
+export type IUpdateSchool = {
      schoolName?: string,
      picture?: File | null,
      package?: string,

@@ -21,7 +21,7 @@ export const Option: React.FC<Props> = ({ children }) => {
      }, [isOpen])
 
      return <div className='relative' ref={optionRef}>
-          <div onClick={() => setIsOpen(prev => !prev)} className="z-0 flex text-center size-10 items-center justify-center border-[1px] rounded-md border-[#2A3A50] cursor-pointer">
+          <div onClick={() => setIsOpen(prev => !prev)} className="z-0 flex hover:bg-primary text-center size-10 items-center justify-center border-[1px] rounded-md border-[#2A3A50] cursor-pointer">
                <MoreHorizOutlinedIcon className=" text-neutral-50" />
           </div>
 

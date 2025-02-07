@@ -1,13 +1,16 @@
 import dynamic from 'next/dynamic'
 import { ApexOptions } from 'apexcharts'
+import { IDashboardProvince } from '@/types/dashboard'
 
 interface Props {
-     className?: string
+     className?: string,
+     province: IDashboardProvince[] | undefined
 }
 
-export const DonutPie:React.FC<Props> = ({className}) => {
+export const DonutPie:React.FC<Props> = ({className, province}) => {
      const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
      const options: ApexOptions = {
+          series: province?.flatMap((item) => item.school),
           chart: {
                type: 'donut',
                foreColor: '#fafafa',
@@ -19,6 +22,7 @@ export const DonutPie:React.FC<Props> = ({className}) => {
                width: 2,
                colors: ['transparent']
           },
+          labels: province?.flatMap((item) => item.provinceName),
           plotOptions: {
                bar: {
                     horizontal: false,
@@ -58,7 +62,7 @@ export const DonutPie:React.FC<Props> = ({className}) => {
 
      return <div className={className}>
           <Chart
-               series={[10,20]}
+               series={options.series}
                options={options}
                type='donut'
           />

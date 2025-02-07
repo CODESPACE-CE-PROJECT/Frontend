@@ -1,19 +1,19 @@
-export const statusActiveColor = (isActived: boolean, allowLogin: boolean) => {
+export const borderStatusActiveColor = (isActived: boolean, allowLogin: boolean) => {
      if(!allowLogin){
-          return "#EF4343"
+          return "border-red-l"
      }else if(isActived){
-          return "#00DACC"
+          return "border-green-l"
      }else {
-          return "#fafafa"
+          return "border-white"
      }
 }
 
 export const textStatusActiveColor = (isActived: boolean, allowLogin: boolean) => {
      if(!allowLogin){
-          return "text-[#EF4343]"
+          return "text-red-l"
      }else if(isActived){
-          return "text-[#00DACC]"
+          return "text-green-l"
      }else {
-          return "text-[#fafafa]"
+          return "text-white"
      }
 }

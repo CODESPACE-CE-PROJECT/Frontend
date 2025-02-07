@@ -1,5 +1,5 @@
 import { Noto_Sans_Thai} from "next/font/google";
-import ReduxProvider from '@/components/ReduxProvider'
+import ReduxProvider from '@/components/Redux/ReduxProvider'
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
 

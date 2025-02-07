@@ -49,7 +49,7 @@ export const AdminLayout: React.FC<Props> = ({ children }) => {
               <SchoolIcon fontSize="large" />
             </NavItem>
 
-            <NavItem text="ถังขยะ" href="/admin/bin">
+            <NavItem text="ถังขยะ" href="/admin/trash">
               <DeleteIcon fontSize="large" />
             </NavItem>
 
