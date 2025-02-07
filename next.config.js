@@ -8,7 +8,7 @@ const nextConfig = {
         hostname: "s3.minio.srv-demo-2.home.unixvextor.com",
       },
       {
-        protocol: "https",
+        protocol: "http",
         hostname: "localhost",
       },
     ],

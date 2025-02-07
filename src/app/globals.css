@@ -4,9 +4,12 @@
 @tailwind utilities;
 
 body {
+  overscroll-behavior: none;
+  overflow-x: hidden;
   background-color: #0B111B;
-  /* overflow-y: hidden; */
-  /* overscroll-behavior: none; */
+  color: #fafafa;
+  margin: 0px;
+  padding: 0px; 
 }
 
 xterm-viewport {
@@ -20,11 +23,6 @@ xterm-viewport {
 .fc .fc-daygrid-day.fc-day-today {
   background-color: #2A3A50;
 }
-
-/* .fc-day:hover {
-  background: #ff0000;
-  color: #fff000;
-} */
 
 .fc-daygrid-event{
   padding: 1rem;
@@ -103,4 +101,9 @@ xterm-viewport {
     border-radius: 10px; /* Rounded corners for the track */
     margin-top: 2px;
     margin-bottom: 2px;
+}
+
+.apexcharts-tooltip {
+    background: #000;
+    color: #fafafa;
 }

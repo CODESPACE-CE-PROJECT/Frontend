@@ -1,106 +1,50 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { jwtDecode } from "jwt-decode"; // Corrected import
 import { cookies } from 'next/headers'
-import axios, { AxiosResponse } from "axios";
-import { fetchEventSource } from '@microsoft/fetch-event-source';
-import { Role } from "./app/enum/enum";
+import { decrypt, deleteSession, getAccessToken } from "@/lib/session";
+import { Role } from "@/enum/enum";
 
-interface IJwt {
-  username: string;
-  role: Role;
-  schoolId: string;
-  iat: number;
-  exp: number;
-}
+const protectedRoute = ['/teacher', '/student', '/admin']
+const publicRoute = ['/login', '/forgot-password', '/']
 
-const getAccessToken = async (refreshToken: string) => {
-  try {
-    if (refreshToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${refreshToken}`;
-      const response: AxiosResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`)
-      if (response.status === 201) {
-        const accessToken: string | null = response.data.accessToken;
-        const refreshToken: string | null = response.data.refreshToken;
+export default async function middleware(req: NextRequest) {
+  const path = req.nextUrl.pathname
+  const isProtectedRoute = protectedRoute.includes(path)
+  const isPublicRoute = publicRoute.includes(path)
 
-        if (accessToken && refreshToken) {
-          const accessTokenExpiration = 60 * 60;
-          const refreshTokenExpiration = 7 * 24 * 60 * 60;
+  const refreshToken = (await cookies()).get('refreshToken')?.value
+  const payload = await decrypt(refreshToken)
 
-          (await cookies()).set('accessToken', accessToken, { maxAge: accessTokenExpiration });
-          (await cookies()).set('refreshToken', refreshToken, { maxAge: refreshTokenExpiration });
-        }
-      }
-    }
-  } catch (error) {
-    throw new Error('Error Fetch Refresh Token')
-  }
-};
-
-
-export default async function middleware(request: NextRequest) {
-  const accessToken = (await cookies()).get('accessToken')?.value || null
-  const refreshToken = (await cookies()).get('refreshToken')?.value || null
-
-  if (!accessToken && refreshToken) {
-    await getAccessToken(refreshToken)
+  if (isProtectedRoute && !payload?.username) {
+    deleteSession()
+    return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
 
-  const newAccessToken = (await cookies()).get('accessToken')?.value || null;
+  await getAccessToken(refreshToken)
 
-  if (!newAccessToken || !refreshToken) {
-    if (request.nextUrl.pathname === "/login") {
+
+  if (!refreshToken) {
+    if (isPublicRoute) {
       return NextResponse.next()
     }
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  try {
-    const decodedToken = jwtDecode<IJwt>(newAccessToken);
-    const decodedRefreshToken = jwtDecode<IJwt>(refreshToken)
-    const currentTime = Math.floor(Date.now() / 1000);
-
-    if (currentTime >= decodedRefreshToken.exp) {
-      (await cookies()).delete('refreshToken')
+  if (isPublicRoute && payload?.username) {
+    if (payload.role === Role.ADMIN && !path.startsWith('/admin')) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.nextUrl))
+    } else if (payload.role === Role.TEACHER && !path.startsWith('/teacher')) {
+      return NextResponse.redirect(new URL("/teacher/course", req.nextUrl))
+    } else if (payload.role === Role.STUDENT && !path.startsWith('/student')) {
+      return NextResponse.redirect(new URL("/student/course", req.nextUrl))
+    } else {
+      return NextResponse.redirect(new URL("/login", req.nextUrl))
     }
-
-    if (currentTime >= decodedToken.exp) {
-      (await cookies()).delete('accessToken')
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    const currentPath = request.nextUrl.pathname;
-
-    switch (decodedToken.role) {
-      case "ADMIN":
-        if (!currentPath.startsWith("/admin") || currentPath.includes('/login')) {
-          return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-        }
-        break;
-      case "TEACHER":
-        if (!currentPath.startsWith("/teacher") || currentPath.includes('/login')) {
-          return NextResponse.redirect(
-            new URL("/teacher/courses", request.url)
-          );
-        }
-        break;
-      case "STUDENT":
-        if (!currentPath.startsWith("/student") || currentPath.includes('/login')) {
-          return NextResponse.redirect(
-            new URL("/student/courses", request.url)
-          );
-        }
-        break;
-      default:
-        return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    return NextResponse.next();
-  } catch (error) {
-    return NextResponse.redirect(new URL("/login", request.url));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/login", "/student/:path*", "/teacher/:path*", "/admin/:path*"],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 };

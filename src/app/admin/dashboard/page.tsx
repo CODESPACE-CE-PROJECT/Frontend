@@ -4,68 +4,68 @@ import React, { useEffect, useState } from "react";
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
-import { getDashboardInfo } from "@/app/services/dashboard.service";
-import { IDashboardInfo } from "@/app/interfaces/dashboard.interface";
+import { getDashboardInfo } from "@/actions/dashboard";
+import { IDashboardInfo } from "@/types/dashboard";
+import { CountInfoCard } from "@/components/Dashboard/CountInfoCard";
+import { ColumnChart } from "@/components/Dashboard/ColumnChart";
+import { DonutPie } from "@/components/Dashboard/DonutPie";
+import { Loading } from "@/components/Loading/Loading";
+import { ProvinceTable } from "@/components/Table/ProvinceTable";
 
 export default function Dashboard() {
   const [dashboardInfo, setDashboardInfo] = useState<IDashboardInfo>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [dataSet, setDataSet] = useState<{
+    student: number[],
+    teacher: number[],
+    school: number[],
+    month: string[]
+  }>({
+    student: [],
+    teacher: [],
+    school: [],
+    month: []
+  })
 
   useEffect(() => {
-
     const fetchData = async () => {
-      const response: IDashboardInfo = await getDashboardInfo()
-      console.log(response)
-      setDashboardInfo(response) 
-    }
+      setIsLoading(true)
+      try {
+        const response: IDashboardInfo = await getDashboardInfo()
+        setDashboardInfo(response)
+        setDataSet({
+          student: response.months.flatMap((item) => item.student),
+          teacher: response.months.flatMap((item) => item.teacher),
+          school: response.months.flatMap((item) => item.school),
+          month: response.months.flatMap((item) => item.month)
+        })
+      } catch (error) {
 
+      } finally {
+        setIsLoading(false)
+      }
+    }
     fetchData()
   }, [])
-  
+
   return (
-    <>
-      <div className="flex flex-col items-center gap-[80px] self-stretch pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen bg-[#0B111B]">
-        <span className="flex w-full p-[10px] text-3xl  text-neutral-50">ภาพรวม</span>
-        {/* container card */}
-        <div className="flex flex-col items-center justify-center gap-4 self-stretch lg:flex-row">
-          <div className="flex items-center justify-center gap-[16px] relative w-full h-32 ">
-            {/* School Card */}
-            <div className="flex items-center gap-9 p-6 rounded-xl bg-[#304972] bg-opacity-30  w-[550px] h-[128px]">
-              <div className="flex items-center justify-center w-20 h-20 px-1 rounded-full bg-[#0B111B]">
-                <LocationCityIcon className="text-neutral-50" fontSize="large"/>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className=" text-sm text-neutral-50">โรงเรียน</span>
-                <span className=" text-sm text-neutral-50">{dashboardInfo?.count.school}</span>
-              </div>
-            </div>
-          </div>
-          {/* Teacher card */}
-          <div className="flex items-center justify-center gap-[16px] relative w-full h-32 ">
-            <div className="flex items-center gap-9 p-6 rounded-xl bg-[#304972] bg-opacity-30  w-[550px] h-[128px]">
-              <div className="flex items-center justify-center w-20 h-20 px-1 rounded-full bg-[#0B111B]">
-                <SchoolOutlinedIcon className=" text-neutral-50" fontSize="large" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className=" text-sm text-neutral-50">ผู้สอน</span>
-                <span className=" text-sm text-neutral-50">{dashboardInfo?.count.teacher}</span>
-              </div>
-            </div>
-          </div>
-          {/* Student Card */}
-          <div className="flex items-center justify-center gap-[16px] relative w-full h-32 ">
-            <div className="flex items-center gap-9 p-6 rounded-xl bg-[#304972] bg-opacity-30  w-[550px] h-[128px]">
-              <div className="flex items-center justify-center w-20 h-20 px-1 rounded-full bg-[#0B111B]">
-                <PersonOutlineIcon className="text-neutral-50" fontSize="large"/>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className=" text-sm text-neutral-50">ผู้เรียน</span>
-                <span className=" text-sm text-neutral-50">{dashboardInfo?.count.student}</span>
-              </div>
-            </div>
-          </div>
+    isLoading ? (
+      <div className="flex flex-col items-center justify-center h-[70vh]">
+        <Loading className="size-20" />
+      </div>
+    ) : (
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col gap-y-4 lg:flex-row items-center lg:gap-x-4 w-full ">
+          <CountInfoCard title="โรงเรียน" count={`${dashboardInfo?.count.school.toString()} แห่ง`}><LocationCityIcon fontSize="large" /></CountInfoCard>
+          <CountInfoCard title="ผู้สอน" count={`${dashboardInfo?.count.teacher.toString()} คน`}><SchoolOutlinedIcon fontSize="large" /> </CountInfoCard>
+          <CountInfoCard title="ผู้เรียน" count={`${dashboardInfo?.count.student.toString()} คน`}><PersonOutlineIcon fontSize="large" /></CountInfoCard>
+        </div>
+        <p className="mt-[80px] text-center text-2xl font-bold">ผู้ใช้งานทั้งหมด {dashboardInfo?.count.totalUser} คน</p>
+        <ColumnChart school={dataSet.school} student={dataSet.student} teacher={dataSet.teacher} month={dataSet.month} />
+        <div className="flex flex-col gap-y-4 lg:flex-row w-full h-full mt-[80px]">
+          <DonutPie className="self-center" province={dashboardInfo?.province}/>
+          <ProvinceTable provinces={dashboardInfo?.province}/>
         </div>
       </div>
-
-    </>
-  );
+    ));
 }

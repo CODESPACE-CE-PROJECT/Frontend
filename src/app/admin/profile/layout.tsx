@@ -1,6 +1,20 @@
-// src/app/student/courses/layout.tsx
-import UserLayout from "@/app/layout/UserLayout";
+import { Metadata } from "next";
+import { TopNav } from "@/components/Navbar/TopNav";
+import { getProfile } from "@/actions/user";
+import { IProfile } from "@/types/user";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return <UserLayout>{children}</UserLayout>;
+export const metadata: Metadata = {
+     title: "หน้าโปรไฟล์",
+     description: 'หน้าโปรไฟล์'
+}
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
+     const { pictureUrl, role }: IProfile = await getProfile()
+
+     return <div className="flex flex-col px-14 py-10 gap-y-12">
+          <TopNav disableNotification={true} imageUrl={pictureUrl} role={role}>
+               <p>โปรไฟล์</p>
+          </TopNav>
+          {children}
+     </div>;
 }
