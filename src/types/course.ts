@@ -8,8 +8,8 @@ interface ICourseAnnounce {
   courseAnnounceId: string;
   username: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   courseId: string;
   replyAnnounce: any[];
   user: IUser;
@@ -25,8 +25,8 @@ interface IAssignment {
   expireAt: string;
   announceType: "ANNOUNCED";
   announceDate: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   courseId: string;
   user: IUser;
 }
@@ -37,8 +37,8 @@ export type ICourse = {
   description: string;
   backgroundUrl: string;
   username: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   schoolId: string;
   courseAnnounce: ICourseAnnounce[];
   assignment: IAssignment[];

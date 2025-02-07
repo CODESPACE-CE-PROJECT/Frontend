@@ -1,19 +1,22 @@
+"use server";
+
 import axios, { AxiosResponse } from "axios";
 import { IProfile } from "../types/user";
 import { getToken } from "@/lib/session";
 
 export const getProfile = async () => {
-  const token = await getToken()
-  return await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  }).then((res) => res.data);
+  const token = await getToken();
+  return await axios
+    .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data.data);
 };
 
 export const editProfile = async (profileData: IProfile) => {
-  const token = await getToken()
+  const token = await getToken();
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -25,12 +28,12 @@ export const editProfile = async (profileData: IProfile) => {
           firstName: profileData.firstName,
           lastName: profileData.lastName,
           studentNo: profileData.studentNo,
-          gender: profileData.gender
+          gender: profileData.gender,
         },
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
       return response.data.data;
@@ -43,27 +46,25 @@ export const editProfile = async (profileData: IProfile) => {
   }
 };
 
-
 export const uploadProfilePicture = async (picture: File) => {
-  const token = await getToken()
+  const token = await getToken();
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
       const response: AxiosResponse = await axios.patch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
         {
-          picture: picture
+          picture: picture,
         },
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       return response.data.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
-}
-
+};
