@@ -1,8 +1,8 @@
 "use client";
 
 import React, { ReactNode } from "react";
-import ClassRoomNav from "@/components/ClassRoomNav";
-import UserNav from "@/components/UserNav";
+import ClassRoomNav from "@/components/Navbar/ClassRoomNav";
+import {TopNav} from "@/components/Navbar/TopNav";
 import { Role } from "@/enum/enum";
 import { usePathname } from "next/navigation";
 
@@ -26,7 +26,6 @@ const ClassLayout: React.FC<LayoutProps> = ({ children, id }) => {
     <div className="flex flex-row overflow-y-hidden overscroll-none">
       <ClassRoomNav id={id} role={role} />
       <div className="text-[#FAFAFA] my-10 mx-[3.75rem] h-full w-full">
-        <UserNav role={role} />
         {children}
       </div>
     </div>
