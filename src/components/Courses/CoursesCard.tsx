@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { getAllCourse } from "../../actions/course";
+import { getAllCourse } from "@/actions/course";
 import CourseBg from "@/assets/CoursesAssets/CourseBg.png";
 import Profiler from "@/assets/setting/profileuser.svg";
 

@@ -3,18 +3,22 @@
 import React from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { Role } from "@/enum/enum";
 
-interface ClassRoomNavProps {
-  id: string;
-  role: Role;
-}
-
-export default function ClassRoomNav({ id, role }: ClassRoomNavProps) {
+export default function ClassRoomNav() {
   const pathname = usePathname();
+  const param = useParams<{ courseId: string }>();
+  const id = param.courseId;
+
+  const role: Role = /^\/student(\/|$)/.test(pathname)
+    ? Role.STUDENT
+    : /^\/teacher(\/|$)/.test(pathname)
+    ? Role.TEACHER
+    : Role.ADMIN;
+
   return (
-    <div className="sticky top-0 border-r-[1px] border-[#D7D7D71A] w-1/4">
+    <div className="h-screen sticky top-0 border-r-[1px] border-[#D7D7D71A] w-1/4">
       <ul className="flex flex-col text-lg text-[#FAFAFA] mt-10 mx-8 h-[calc(100vh-2.5rem)]">
         <li className="flex flex-row mb-6">
           <Link
