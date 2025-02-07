@@ -1,5 +1,4 @@
 import { Noto_Sans_Thai} from "next/font/google";
-import ReduxProvider from '@/components/ReduxProvider'
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
 
@@ -14,9 +13,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={noto.className}>
         <ToastContainer />
-        <ReduxProvider>
           {children}
-        </ReduxProvider>
       </body>
     </html>
   );
