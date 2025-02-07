@@ -1,7 +1,7 @@
 "use client"
 
 import React, { ReactNode } from "react";
-import Logo from '@/app/assets/Login/logo.svg'
+import Logo from "@/assets/Login/logo.svg"
 import Image from "next/image";
 import Link from 'next/link'
 import { NavItem } from "../components/Navbar/NavItem";
@@ -66,7 +66,6 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
     </nav>
 
     <div className="flex flex-col m-10 w-screen overflow-x-hidden overscroll-none">
-      <TopNav />
       {children}
     </div>
   </div>;

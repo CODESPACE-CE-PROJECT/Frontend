@@ -5,7 +5,7 @@ import { getAllCourse } from "../../actions/course";
 import CourseBg from "@/assets/CoursesAssets/CourseBg.png";
 import Profiler from "@/assets/setting/profileuser.svg";
 
-export default function CoursesMap() {
+export default function CoursesCard() {
   const router = useRouter();
   const pathname = usePathname();
   
@@ -34,7 +34,7 @@ export default function CoursesMap() {
     const currentPath = pathname;
     const role = currentPath.startsWith("/teacher") ? "teacher" : "student";
   
-    router.push(`/${role}/courses/${courseId}/general`);
+    router.push(`/${role}/course/${courseId}/general`);
   };
   
 
