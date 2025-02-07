@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { cookies } from 'next/headers'
 import { decrypt, deleteSession, getAccessToken } from "@/lib/session";
-import { Role } from "./enum/enum";
+import { Role } from "@/enum/enum";
 
 const protectedRoute = ['/teacher', '/student', '/admin']
 const publicRoute = ['/login', '/forgot-password', '/']

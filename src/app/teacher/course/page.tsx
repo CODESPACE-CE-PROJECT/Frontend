@@ -9,7 +9,7 @@ import { createCourse } from "@/actions/course";
 import { getAllCourse } from "@/actions/course";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/store/slices/courseNavSlice";
-import CoursesMap from "@/components/Courses/CoursesMap";
+import CoursesMap from "@/components/Courses/CoursesCard";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CreatCourseModal } from "@/components/Modals/CreateCourseModal";
 import {Loading} from "@/components/Loading/Loading"

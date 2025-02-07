@@ -4,6 +4,8 @@
 @tailwind utilities;
 
 body {
+  overscroll-behavior: none;
+  overflow-x: hidden;
   background-color: #0B111B;
   color: #fafafa;
   margin: 0px;
