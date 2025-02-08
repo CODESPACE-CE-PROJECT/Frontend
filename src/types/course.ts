@@ -1,3 +1,5 @@
+import { IProfile } from "@/types/user";
+
 interface IUser {
   firstName: string;
   lastName: string;
@@ -42,4 +44,16 @@ export type ICourse = {
   schoolId: string;
   courseAnnounce: ICourseAnnounce[];
   assignment: IAssignment[];
+}
+
+export type IPeople ={
+  courseStudent: {
+    courseStudentId: string,
+    user: IProfile,
+  
+  }[],
+  courseTeacher:{
+    courseTeacherId: string,
+    user: IProfile,
+  }[],
 }
