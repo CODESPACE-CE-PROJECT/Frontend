@@ -60,13 +60,7 @@ export default function ClassRoomNav() {
             } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
-              href={
-                role === "STUDENT"
-                  ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
-                  : role === "TEACHER"
-                  ? `/${role.toLowerCase()}/courses/${id}/assignment/homeworkassignment`
-                  : `/${role.toLowerCase()}/courses/${id}/assignment`
-              }
+              href={`/${role.toLowerCase()}/courses/${id}/assignment`}
               className="flex items-center"
             >
               แบบฝึกหัด

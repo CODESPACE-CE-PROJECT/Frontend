@@ -22,7 +22,7 @@ export const getpeople = async (courseId: string) => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}/people`
     );
-    return response.data;
+    return response.data.data;
   }
   throw new Error("No token available");
 };
