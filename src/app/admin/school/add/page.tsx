@@ -15,13 +15,18 @@ import { TextArea } from "@/components/Input/TextArea";
 import { ZipCode } from "@/components/Input/ZipCode";
 import { UploadFile } from "@/components/Input/UploadFile";
 import { createSchool } from "@/actions/school";
-import Swal from 'sweetalert2'
+import { TopNav } from "@/components/Navbar/TopNav";
+import { IProfile } from "@/types/user";
+import { getProfile } from "@/actions/user";
+import { notify, updateNotify } from "@/utils/toast.util";
+import { NotifyType } from "@/enum/enum";
 
 export default function Schooladd() {
   const router = useRouter()
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [provinceData, setProvinceData] = useState<IProvince[] | undefined>([])
   const [isSubmited, setIsSubmited] = useState<boolean>(false)
+  const [profile, setProfile] = useState<IProfile>()
   const [provinceFilterData, setProvinceFilterData] = useState<{
     provinces: string[],
     districts: string[]
@@ -46,13 +51,13 @@ export default function Schooladd() {
   const [isDropdownSelect, setIsDropdownSelect] = useState(false)
 
   const handleFileInput = (file: File) => {
-      setCreateForm((prev) => {
-        if(!prev) return prev
-        return{
-          ...prev,
-          picture: file
-        }
-      })
+    setCreateForm((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        picture: file
+      }
+    })
   };
 
   const handleDropDownChange = (value: string, name: string) => {
@@ -177,30 +182,41 @@ export default function Schooladd() {
 
   const handleSubmit = async () => {
     setIsSubmited(true)
-    if(!createForm.schoolName || 
-      !createForm.province || 
-      !createForm.district || 
-      !createForm.subDistrict || 
-      !createForm.postCode || 
+    if (!createForm.schoolName ||
+      !createForm.province ||
+      !createForm.district ||
+      !createForm.subDistrict ||
+      !createForm.postCode ||
       !createForm.address ||
       !createForm.package ||
       createForm.maxCreateCoursePerTeacher && createForm.maxCreateCoursePerTeacher < 1 ||
-      createForm.maxCreateTeacher && createForm.maxCreateTeacher < 1 || 
+      createForm.maxCreateTeacher && createForm.maxCreateTeacher < 1 ||
       createForm.maxCreateStudent && createForm.maxCreateStudent < 1
-    ){
+    ) {
       return
     }
-    Swal.isLoading()
-    await createSchool(createForm)
-    Swal.hideLoading()
-    router.push('/admin/school')
+    const id = notify(NotifyType.LOADING, "กำลังสร้างโรงเรียน")
+    const {status, data} = await createSchool(createForm)
+    const err:IErrorResponse = data
+    console.log(err)
+    if(id !== undefined){
+      if(status === 406 && err.message === "Already Have School Name"){
+        updateNotify(id, NotifyType.ERROR,"มีชื่อโรงเรียนนี้แล้วในระบบ")
+      }else if (status === 201){
+        updateNotify(id, NotifyType.SUCCESS, "สร้างโรงเรียนสำเร็จ")
+        router.push('/admin/school')
+      }else{
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการสร้างโรงเรียน")
+      }
+    }
   }
 
   useEffect(() => {
     const fetchProvinceData = async () => {
       const response = await getProvinceData()
+      const profile = await getProfile()
+      setProfile(profile)
       setProvinceData(response)
-
       setProvinceFilterData((prev) => {
         if (!prev) return prev
         return {
@@ -214,13 +230,13 @@ export default function Schooladd() {
 
   return (
     <>
-      <div className="flex flex-col items-center self-stretch gap-[80px] pt-[60px] pr-[60px] pb-[60px] pl-[60px] w-full h-screen">
-        <div className="flex justify-between items-center self-stretch">
-          <div className="cursor-pointer" onClick={() => router.back()}>
-            <ArrowBackIosNewRoundedIcon className="text-[#FAFAFA]" />
+      <div className="flex flex-col items-center self-stretch gap-[80px] w-full h-screen">
+        <TopNav imageUrl={profile?.pictureUrl} disableNotification={true} role={profile?.role} >
+          <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
+            <ArrowBackIosNewRoundedIcon />
           </div>
           <span className="flex w-full p-[10px] text-3xl text-zinc-50">เพิ่มโรงเรียน</span>
-        </div>
+        </TopNav>
 
         {/* container Search and Button */}
         <div className="flex w- py-[32px] flex-col items-center gap-[149px]">
@@ -228,20 +244,20 @@ export default function Schooladd() {
             <div className="flex flex-col items-start gap-[10px] self-stretch">
               <div className="flex flex-col justify-end items-end gap-[51px] self-stretch">
                 <div className="flex flex-col items-start gap-[32px] self-stretch">
-                  <UploadFile onInput={handleFileInput} className="w-full py-4 border-blackground-text"/>
+                  <UploadFile onInput={handleFileInput} className="w-full py-4 border-blackground-text" />
 
                   {/* รวม */}
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     {/* แพ็กเกจการใช้งาน */}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="แพ็กเกจการใช้งาน" isRequired={true} />
-                      <Dropdown value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited} className="w-full"/>
+                      <Dropdown value={createForm?.package} name="package" options={['Standard', 'Premium']} onChange={handleDropDownChange} validateText="กรุณาเลือกแพ็กเกจ" isSubmited={isSubmited} className="w-full" />
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="จำกัดจำนวนคอร์ส" isRequired={true} />
-                      <TextField name="maxCreateCoursePerTeacher" value={createForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={3} validateText="จำนวนคอร์สต้องมากกว่า 0" isSubmited={isSubmited}/>
+                      <TextField name="maxCreateCoursePerTeacher" value={createForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={3} validateText="จำนวนคอร์สต้องมากกว่า 0" isSubmited={isSubmited} />
                     </div>
                   </div>
 
@@ -250,23 +266,20 @@ export default function Schooladd() {
                     {/* จำกัดจำนวนผู้สอน*/}
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
                       <Label text="จำกัดจำนวนผู้สอน" isRequired={true} />
-                      <TextField name="maxCreateTeacher" value={createForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={4} validateText="จำนวนผู้สอนต้องมากกว่า 0" isSubmited={isSubmited}/>
+                      <TextField name="maxCreateTeacher" value={createForm.maxCreateTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={4} validateText="จำนวนผู้สอนต้องมากกว่า 0" isSubmited={isSubmited} />
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="จำกัดจำนวนผู้เรียน" isRequired={true} />
-                      <TextField name="maxCreateStudent" value={createForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={4} validateText="จำนวนผู้เรียนต้องมากกว่า 0" isSubmited={isSubmited}/>
+                      <TextField name="maxCreateStudent" value={createForm.maxCreateStudent?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={4} validateText="จำนวนผู้เรียนต้องมากกว่า 0" isSubmited={isSubmited} />
                     </div>
                   </div>
 
                   {/* รวมกำหนดสิทธิ์ */}
                   <div className="flex items-start gap-[35px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full justify-between">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="text-zinc-50">กำหนดสิทธิ์</span>
-                        <span className="text-[#EF4343]">*</span>
-                      </div>
+                      <Label text="กำหนดสิทธิ์" isRequired={false}/>
 
                       <div className="flex gap-5">
                         <CheckBox isChecked={createForm.canCreateUser} onChange={(value) => setCreateForm((prev) => !prev ? prev : { ...prev, canCreateUser: value })} label="สร้างผู้ใช้งาน" />
@@ -280,7 +293,7 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="ชื่อโรงเรียน / สถาบัน" isRequired={true} />
-                      <TextField name="schoolName" value={createForm.schoolName} onChange={handleTextFieldChange} isNumberic={false} validateText="กรุณากรอกชื่อโรงเรียน" isSubmited={isSubmited}/>
+                      <TextField name="schoolName" value={createForm.schoolName} onChange={handleTextFieldChange} isNumberic={false} validateText="กรุณากรอกชื่อโรงเรียน" isSubmited={isSubmited} />
                     </div>
                   </div>
 
@@ -288,7 +301,7 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="ที่อยู่" isRequired={true} />
-                      <TextArea name="address" value={createForm.address} onChange={handleTextFieldChange} validateText="กรุณากรอกที่อยู่" isSubmited={isSubmited}/>
+                      <TextArea name="address" value={createForm.address} onChange={handleTextFieldChange} validateText="กรุณากรอกที่อยู่" isSubmited={isSubmited} />
                     </div>
                   </div>
 
@@ -296,12 +309,12 @@ export default function Schooladd() {
                   <div className="flex items-start gap-[32px] self-stretch w-full">
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="แขวง / ตำบล" isRequired={true} />
-                      <Dropdown name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10 w-full" onChange={handleDropDownChange}  validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited}/>
+                      <Dropdown name="subDistrict" value={createForm?.subDistrict} options={provinceFilterData.subDistricts} className="z-10 w-full" onChange={handleDropDownChange} validateText="กรุณาเลือกแขวง/ตำบล" isSubmited={isSubmited} />
                     </div>
 
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="เขต / อำเภอ" isRequired={true} />
-                      <Dropdown name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0 w-full" onChange={handleDropDownChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited}/>
+                      <Dropdown name="district" value={createForm?.district} options={provinceFilterData.districts} className="z-0 w-full" onChange={handleDropDownChange} validateText="กรุณาเลือกเขต/อำเภอ" isSubmited={isSubmited} />
                     </div>
                   </div>
 
@@ -309,7 +322,7 @@ export default function Schooladd() {
                     {/* จังหวัด / รหัสไปรษณีย์ */}
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="จังหวัด" isRequired={true} />
-                      <Dropdown className="w-full" name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited}/>
+                      <Dropdown className="w-full" name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited} />
                     </div>
 
                     {/* จำกัดจำนวนคอร์ส */}

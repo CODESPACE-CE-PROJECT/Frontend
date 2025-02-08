@@ -9,23 +9,30 @@ import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from "@/actions/auth";
-import { toast } from 'react-toastify'
 import SchoolIcon from '@mui/icons-material/School';
+import { notify, updateNotify } from "@/utils/toast.util";
+import { NotifyType } from "@/enum/enum";
+import { useRouter } from "next/navigation";
 
 interface Props {
   children: ReactNode
 }
 
 export const AdminLayout: React.FC<Props> = ({ children }) => {
+  const router = useRouter()
 
   const handleLogout = async () => {
-    toast.promise(logout(), {
-      pending: 'กำลังออกจากระบบ',
-      success: 'ออกจากระบบเสร็จสมบูรณ์',
-      error: 'เกิดข้อผิดผลาดในการออกจากระบบ'
-    },{
-      position: 'top-center'
-    })
+    const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ")
+    const {status} = await logout()
+  
+    if(id !== undefined){
+      if(status === 200){
+        updateNotify(id, NotifyType.SUCCESS, "ออกจากระบบเสร็จสมบูรณ์")
+      }else{
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการออกจากระบบ")
+      }
+    }
+    router.push("/login")
   }
 
   return <div className="flex flex-col md:flex-row h-screen md:w-full overflow-x-hidden overscroll-none">

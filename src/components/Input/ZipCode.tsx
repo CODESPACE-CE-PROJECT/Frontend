@@ -60,7 +60,7 @@ export const ZipCode:React.FC<Props> = ({onChange, value}) => {
                     ref={(el) => {
                         inputsRef.current[index] = el;
                     }}
-                    className="w-8 h-10 text-zinc-50 text-center bg-[#2A3A50] rounded-[6px] focus:outline-[#5572FA]"
+                    className="w-10  h-10 text-zinc-50 text-center bg-[#2A3A50] rounded-[6px] focus:outline-[#5572FA]"
                 />
             ))}
         </div>

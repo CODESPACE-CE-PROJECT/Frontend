@@ -7,20 +7,21 @@ import { login } from "@/actions/auth";
 import { TextField } from "@/components/Input/TextField/TextField";
 import { Label } from "@/components/Input/Label";
 import { TextFieldPassword } from "@/components/Input/TextField/TextFieldPassword";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { GoogleButton } from "@/components/Button/GoogleButton";
-import Cookies from "js-cookie";
 import { IAuth } from "@/types/auth";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { AxiosError } from "axios";
 import { Loading } from "@/components/Loading/Loading";
 import { notify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
-import { redirect } from "next/navigation";
 import PlatfromLogo from '@/assets/Login/logo.svg'
+import { useSearchParams } from "next/navigation";
+import { useSetCookie } from 'cookies-next/client'
 
 export default function Page() {
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const setCookie = useSetCookie()
   const [textError, setTextError] = useState<string>()
   const [formData, setFormData] = useState<IAuth>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -44,20 +45,17 @@ export default function Page() {
       setTextError('')
     }
 
-    try {
-      if (formData) {
-        await login(formData);
-        setIsLoading(false)
-        notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
-        router.push('/')
-      }
-    } catch (error: any) {
-      setIsLoading(false)
-      const err: AxiosError = error
-      if (err.response?.status === 401) {
-        setTextError("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง")
-      }
+    const { status, data } = await login(formData)
+    const err: IErrorResponse = data
+
+    if (status === 401 && err.message === "Unauthorized") {
+      setTextError("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้ง")
+    } else if (status === 201) {
+      notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
+      router.push("/")
     }
+    setIsLoading(false)
+
   };
 
   const handleGooleLogin = () => {
@@ -66,22 +64,19 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("accessToken") || null;
-    const refreshToken = urlParams.get("refreshToken") || null;
-    const error = urlParams.get('error') || ""
+    const accessToken = searchParams.get("accessToken") || null;
+    const refreshToken = searchParams.get("refreshToken") || null;
+    const error = searchParams.get('error') || null
 
-    if (error !== "") {
-      notify(NotifyType.ERROR, 'เข้าสู่ระบบไม่สมบูรณ์') 
-    }
-
-    if (accessToken && refreshToken && error === "") {
-      Cookies.set("accessToken", accessToken);
-      Cookies.set("refreshToken", refreshToken);
+    if (error) {
+      notify(NotifyType.ERROR, 'เข้าสู่ระบบไม่สมบูรณ์')
+    } else if (accessToken && refreshToken) {
+      setCookie("accessToken", accessToken)
+      setCookie("refreshToken", refreshToken);
       notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
-      redirect('/')
+      router.refresh()
     }
-  }, [router]);
+  }, [router, searchParams, setCookie]);
 
   return <div className="flex flex-col items-center justify-center w-[100vw] h-[100vh] p-10">
     <Image
@@ -100,7 +95,7 @@ export default function Page() {
 
       <div className="flex flex-col items-start w-full gap-y-3">
         <Label text="รหัสผ่าน" isRequired={true} />
-        <TextFieldPassword name="password" onChange={handleInputChange} onKeyDown={handleLogin}/>
+        <TextFieldPassword name="password" onChange={handleInputChange} onKeyDown={handleLogin} />
       </div>
 
       <div onClick={() => router.push('/forgot-password')} className="text-xs self-end hover:text-primary cursor-pointer">ลืมรหัสผ่าน ?</div>
