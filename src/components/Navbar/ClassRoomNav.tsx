@@ -22,7 +22,7 @@ export default function ClassRoomNav() {
       <ul className="flex flex-col text-lg text-[#FAFAFA] mt-10 mx-8 h-[calc(100vh-2.5rem)]">
         <li className="flex flex-row mb-6">
           <Link
-            href={`/${role.toLowerCase()}/courses`}
+            href={`/${role.toLowerCase()}/course`}
             className="flex items-center"
           >
             <ArrowBackIosIcon className="text-3xl" />
@@ -36,7 +36,7 @@ export default function ClassRoomNav() {
             } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
-              href={`/${role.toLowerCase()}/courses/${id}/general`}
+              href={`/${role.toLowerCase()}/course/${id}/general`}
               className="flex items-center"
             >
               ประกาศ
@@ -48,7 +48,7 @@ export default function ClassRoomNav() {
             } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
-              href={`/${role.toLowerCase()}/courses/${id}/announcement`}
+              href={`/${role.toLowerCase()}/course/${id}/announcement`}
               className="flex items-center"
             >
               การแจ้งเตือน
@@ -60,7 +60,13 @@ export default function ClassRoomNav() {
             } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
-              href={`/${role.toLowerCase()}/courses/${id}/assignment`}
+              href={
+                role === "STUDENT"
+                  ? `/${role.toLowerCase()}/course/${id}/assignment/homework`
+                  : role === "TEACHER"
+                  ? `/${role.toLowerCase()}/course/${id}/assignment/homework`
+                  : `/${role.toLowerCase()}/course/${id}/assignment`
+              }
               className="flex items-center"
             >
               แบบฝึกหัด
@@ -74,10 +80,10 @@ export default function ClassRoomNav() {
             <Link
               href={
                 role === "STUDENT"
-                  ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
+                  ? `/${role.toLowerCase()}/course/${id}/score/homework`
                   : role === "TEACHER"
-                  ? `/${role.toLowerCase()}/courses/${id}/score/homeworkscore`
-                  : `/${role.toLowerCase()}/courses/${id}/score`
+                  ? `/${role.toLowerCase()}/course/${id}/score/homework`
+                  : `/${role.toLowerCase()}/course/${id}/score`
               }
               className="flex items-center"
             >
@@ -91,7 +97,7 @@ export default function ClassRoomNav() {
             } hover:bg-[#3049724D] cursor-pointer`}
           >
             <Link
-              href={`/${role.toLowerCase()}/courses/${id}/people`}
+              href={`/${role.toLowerCase()}/course/${id}/people`}
               className="flex items-center"
             >
               สมาชิก
@@ -104,7 +110,7 @@ export default function ClassRoomNav() {
               } hover:bg-[#3049724D] cursor-pointer`}
             >
               <Link
-                href={`/${role.toLowerCase()}/courses/${id}/setting`}
+                href={`/${role.toLowerCase()}/course/${id}/setting`}
                 className="flex items-center"
               >
                 ตั้งค่า
