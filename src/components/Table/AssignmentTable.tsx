@@ -1,6 +1,6 @@
 import { IAssignment } from "@/types/assignment";
 import AssignmentBox from "@/components/Assignment/AssignmentBox";
-import AssignmentBoxExam from "@/components/Assignment/AssignmentBoxExam";
+import AssignmentBoxExam from "@/components/Assignment/AssignmentBoxexam";
 
 interface Props {
   assignments: IAssignment;
@@ -33,11 +33,9 @@ const AssignmentList: React.FC<Props> = ({ assignments, courseId, isStudentOnSit
           </div>
 
           {/* Conditional Rendering: Show AssignmentBox or AssignmentBoxExam */}
-          {(assignment.type === "EXAMONLINE" || assignment.type === "EXAMONSITE") && !isStudentOnSite ? (
-            <AssignmentBoxExam assignment={assignment}  isStudentOnSite={isStudentOnSite} />
-          ) : (
+         
             <AssignmentBox assignment={assignment} courseId={courseId} />
-          )}
+         
 
           {/* Total Score */}
           <div className="text-white text-lg pl-9 rounded-md text-center w-1/6">
