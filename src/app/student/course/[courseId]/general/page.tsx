@@ -11,6 +11,7 @@ import { getProfile } from "@/actions/user";
 import { IProfile } from "@/types/user";
 import { ICourse } from "@/types/course";
 import { ICourseAnnounce } from "@/types/courseAnnounce";
+import ReplyEditor from "@/components/Courses/ReplyEditor";
 
 export default function Announcement() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function Announcement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isProfile, setProfile] = useState<IProfile | null>(null);
+  const [showReplyBox, setShowReplyBox] = useState(false);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -89,7 +91,7 @@ export default function Announcement() {
                       <div
                         key={index}
                         className={
-                          index === 0 ? "font-bold pb-3" : "font-normal"
+                          index === 0 ? "font-bold pb-3" : "font-normal pb-3"
                         }
                       >
                         {line}
@@ -98,15 +100,28 @@ export default function Announcement() {
                   </div>
                 </div>
               </div>
-
-              <div className="flex flex-row items-center border-blackground-text border-t-2 space-x-5 pt-4 mx-8 my-4">
+              {/* divider */}
+              <div className="h-px border-blackground-text border-t-2 mx-8" />
+              <div className="flex flex-row items-start mx-8 my-4">ReplyBox</div>
+              {/* divider */}
+              <div className="h-px border-blackground-text border-t-2 mx-8" />
+              <div className="flex flex-row items-start mx-8 my-4">
                 <Image
                   src={isProfile?.pictureUrl || UserProfileIcon}
                   width={40}
                   height={40}
                   alt="User Profile"
                 />
-                <h1 className="text-sm ">Reply</h1>
+                {!showReplyBox ? (
+                  <button
+                    className="text-sm px-2 py-1 hover:bg-blackground-text rounded"
+                    onClick={() => setShowReplyBox(true)}
+                  >
+                    Reply
+                  </button>
+                ) : (
+                  <ReplyEditor onSend={() => setShowReplyBox(false)} />
+                )}
               </div>
             </div>
           ))
