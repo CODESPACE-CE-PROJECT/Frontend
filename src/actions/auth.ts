@@ -1,9 +1,8 @@
 'use server'
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { IAuth, IResponseAuth } from '@/types/auth';
 import {createSession, deleteSession, getToken} from '@/lib/session'
-import { redirect } from 'next/navigation';
 
 export const login = async (formData: IAuth) => {
      return await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, formData).then(
@@ -14,8 +13,17 @@ export const login = async (formData: IAuth) => {
                          await createSession(token.accessToken, token.refreshToken)
                     }
                }
+               return {
+                    status: res.status,
+                    data: res.data.data,
+               }
           }
-     );
+     ).catch((e:AxiosError) => {
+          return {
+               status: e.status,
+               data: e.response?.data
+          }
+     });
 };
 
 export const logout = async () => {
@@ -27,9 +35,18 @@ export const logout = async () => {
                     Authorization: `Bearer ${token}`
                }
           }
-     ).then(() => {
+     ).then((res) => {
           deleteSession()
-          redirect('/login')
+          return {
+               status: res.status,
+               data: res.data.data
+          }
+     }).catch((e:AxiosError) => {
+          const err = e.response?.data as IErrorResponse
+          return {
+               status: e.status,   
+               data: err
+          }
      });
 };
 
@@ -39,5 +56,15 @@ export const forgotPassword = async (email: string) => {
           {
               email: email 
           }
-     )
+     ).then((res) => {
+          return {
+               status: res.status, 
+               data: res.data.data
+          }      
+     }).catch((e:AxiosError) => {
+          return {
+               status: e.status,
+               data: e.response?.data
+          }
+     })
 }

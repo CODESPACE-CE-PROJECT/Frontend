@@ -4,12 +4,15 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 import CircleIcon from "@mui/icons-material/Circle";
 import { ISchool } from "@/types/school";
 import { textPackage } from "@/utils/text.util";
+import {useRouter} from "next/navigation"
 
 interface Prop {
      data?: ISchool
 }
 
 export const SchoolCard: React.FC<Prop> = ({ data }) => {
+     const router = useRouter()
+
      return <div className="bg-table-header rounded-xl py-5 px-9">
           <div className="flex flex-row items-center justify-between">
                <div className="flex flex-row items-center gap-x-12">
@@ -36,7 +39,7 @@ export const SchoolCard: React.FC<Prop> = ({ data }) => {
                          </div>
                     </div>
                </div>
-               <div className="self-start hover:text-primary cursor-pointer">
+               <div className="self-start hover:text-primary cursor-pointer" onClick={() => router.push(`/admin/school/${data?.schoolId}/edit`)}>
                     <ModeEditOutlineOutlinedIcon />
                </div>
           </div>

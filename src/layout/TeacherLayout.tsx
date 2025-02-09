@@ -11,8 +11,9 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import SchoolIcon from '@mui/icons-material/School';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from "@/actions/auth";
-import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import { NotifyType } from "@/enum/enum";
+import { notify, updateNotify } from "@/utils/toast.util";
 
 interface Props {
   children: ReactNode
@@ -22,14 +23,19 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
   const router = useRouter()
 
   const handleLogout = async () => {
-    toast.promise(logout(), {
-      pending: 'กำลังออกจากระบบ',
-      success: 'ออกจากระบบเสร็จสมบูรณ์',
-      error: 'เกิดข้อผิดผลาดในการออกจากระบบ'
-    }, {
-      position: 'top-center'
-    }).then(() => router.push('/'))
+    const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ")
+    const { status } = await logout()
+
+    if (id !== undefined) {
+      if (status === 200) {
+        updateNotify(id, NotifyType.SUCCESS, "ออกจากระบบเสร็จสมบูรณ์")
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการออกจากระบบ")
+      }
+    }
+    router.push("/login")
   }
+
 
   return <div className="flex flex-col md:flex-row md:w-full overflow-x-hidden overscroll-none">
     <nav className="flex flex-col gap-y-10 xl:gap-y-20 p-3 px-3 pt-8 items-center justify-start md:w-[9vw] md:h-[100vh] border-transparent md:border-r-border-page border-[1px]">

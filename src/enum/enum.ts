@@ -55,5 +55,6 @@ export enum ConstraintType {
 export enum NotifyType {
     SUCCESS,
     ERROR,
-    WARNING
+    WARNING,
+    LOADING,
 }
