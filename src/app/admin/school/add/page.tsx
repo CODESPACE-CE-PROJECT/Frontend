@@ -198,7 +198,6 @@ export default function Schooladd() {
     const id = notify(NotifyType.LOADING, "กำลังสร้างโรงเรียน")
     const {status, data} = await createSchool(createForm)
     const err:IErrorResponse = data
-    console.log(err)
     if(id !== undefined){
       if(status === 406 && err.message === "Already Have School Name"){
         updateNotify(id, NotifyType.ERROR,"มีชื่อโรงเรียนนี้แล้วในระบบ")

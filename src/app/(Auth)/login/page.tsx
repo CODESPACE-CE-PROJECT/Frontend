@@ -55,7 +55,6 @@ export default function Page() {
       router.push("/")
     }
     setIsLoading(false)
-
   };
 
   const handleGooleLogin = () => {

@@ -21,6 +21,8 @@ import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
+import { notify, updateNotify } from "@/utils/toast.util";
+import { NotifyType } from "@/enum/enum";
 
 export default function SchoolEdit() {
      const router = useRouter()
@@ -199,9 +201,22 @@ export default function SchoolEdit() {
           ) {
                return
           }
-          const {status, data} = await updateSchoolById(updateForm, param.schoolId)
-          // console.log(status)
-          // router.push(`/admin/school/${param.schoolId}`)
+
+          const id = notify(NotifyType.LOADING, 'กำลังแก้ไขข้อมูลโรงเรียน')
+          
+          const {status} = await updateSchoolById(updateForm, param.schoolId)
+          
+          if(id){
+               if (status === 200){
+                    updateNotify(id, NotifyType.SUCCESS, 'แก้ไขโรงเรียนเสร็จสิ้น')
+                    router.push(`/admin/school/${param.schoolId}`)
+               } else if(status === 406){
+                    updateNotify(id, NotifyType.ERROR, 'มีชื่อโรงเรียนนี้แล้วอยู่ในระบบ')
+               } else {
+                    updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการแก้ไขโรงเรียน')
+               }
+          }
+
      }
 
      useEffect(() => {
@@ -239,9 +254,7 @@ export default function SchoolEdit() {
                setIsLoading(false)
           }
           fetchProvinceData()
-     }, [])
-
-
+     }, [param.schoolId])
 
      return isLoading ? (
           <div className="flex flex-col items-center justify-center h-[70vh]">

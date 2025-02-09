@@ -26,18 +26,10 @@ export default function Page() {
 
     setIsLoading(true)
     
-    try {
-        await forgotPassword(email)
-        setIsLoading(false)
-        notify(NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
-        redirect('/login')
-    } catch (error: any) {
-      const err: AxiosError = error
-      if (err.response?.status === 404) {
-        setIsLoading(false)
-        notify(NotifyType.ERROR, 'ไม่เจออีเมลล์ในระบบ')
-      }
-    }
+    await forgotPassword(email)
+    notify(NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
+    notify(NotifyType.ERROR, 'ไม่เจออีเมลล์ในระบบ')
+    redirect('/login')
   }
 
   return <div className="flex flex-col justify-center items-center h-[100vh] w-[100vw] gap-y-6 p-10">
