@@ -26,19 +26,10 @@ export default function Page() {
 
     setIsLoading(true)
     
-    try {
-        await forgotPassword(email)
-        setIsLoading(false)
-        notify(NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
-        redirect('/login')
-
-    } catch (error: any) {
-      const err: AxiosError = error
-      if (err.response?.status === 404) {
-        setIsLoading(false)
-        notify(NotifyType.ERROR, 'ไม่เจออีเมลล์ในระบบ')
-      }
-    }
+    await forgotPassword(email)
+    notify(NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
+    notify(NotifyType.ERROR, 'ไม่เจออีเมลล์ในระบบ')
+    redirect('/login')
   }
 
   return <div className="flex flex-col justify-center items-center h-[100vh] w-[100vw] gap-y-6 p-10">
@@ -46,14 +37,14 @@ export default function Page() {
     <div className="flex flex-col items-center w-full max-w-[540px] gap-y-10">
       <div className="flex flex-col items-start w-full gap-y-2">
         <Label text="อีเมล" isRequired={true} />
-        <TextField onChange={(value) => setEmail(value as string)} validateText="กรุณาใส่อีเมลล์" isSubmited={isSubmit} onKeyDown={handleForgotPassword}/>
+        <TextField onChange={(value) => setEmail(value as string)} validateText="กรุณาใส่อีเมลล์" onKeyDown={handleForgotPassword}/>
       </div>
       <div className="flex flex-col w-full gap-y-3">
-        <ConfirmButton className="w-full" onClick={handleForgotPassword}>
+        <ConfirmButton className="w-full" onClick={handleForgotPassword} disabled={isSubmit}>
             {
               isLoading ? <div className="flex flex-row items-center justify-center gap-x-4">
                 <Loading />
-                <p>กำลังเข้าส่งข้อมูลไปทางอีเมลล์</p>
+                <p>กำลังส่งข้อมูลไปทางอีเมลล์</p>
               </div> : 'ยืนยัน'
             }
         </ConfirmButton>

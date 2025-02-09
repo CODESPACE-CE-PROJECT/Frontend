@@ -11,8 +11,10 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { SchoolTable } from "@/components/Table/SchoolTable"
 import { TopNav } from "@/components/Navbar/TopNav"
 import { IProfile } from "@/types/user"
+import {useRouter} from "next/navigation"
 
 export default function Page() {
+     const router = useRouter()
      const [isLoading, setIsLoading] = useState<boolean>(true)
      const [schools, setSchools] = useState<ISchools[]>()
      const [schoolsData, setSchoolsDate] = useState<ISchools[]>()
@@ -52,7 +54,10 @@ export default function Page() {
                <div className="flex flex-row items-center w-full gap-x-5">
                     <SearchBar onChange={(value) => setSearch(value)} />
                     <div >
-                         <ConfirmButton className="flex flex-row md:w-40 text-center justify-center items-center px-4 gap-x-2">
+                         <ConfirmButton 
+                              onClick={() => router.push('/admin/school/add')}
+                              className="flex flex-row md:w-40 text-center justify-center items-center px-4 gap-x-2"
+                         >
                               <AddRoundedIcon className="text-neutral-50 w-6 h-6 " />
                               <p className="hidden md:block">เพิ่มโรงเรียน</p>
                          </ConfirmButton>

@@ -9,9 +9,10 @@ export const metadata: Metadata = {
 }
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-     const {pictureUrl}:IProfile = await getProfile()
+     const {pictureUrl, role}:IProfile = await getProfile()
+
      return <>
-          <TopNav imageUrl={pictureUrl}><p>คอร์สเรียน</p></TopNav>
+          <TopNav imageUrl={pictureUrl} role={role}><p>คอร์สเรียน</p></TopNav>
           {children}
      </>;
 }

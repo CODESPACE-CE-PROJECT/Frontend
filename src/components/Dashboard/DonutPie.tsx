@@ -10,7 +10,7 @@ interface Props {
 export const DonutPie:React.FC<Props> = ({className, province}) => {
      const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
      const options: ApexOptions = {
-          series: province?.flatMap((item) => item.school),
+          series: province?.flatMap((item) => item.school) || [],
           chart: {
                type: 'donut',
                foreColor: '#fafafa',
@@ -22,7 +22,7 @@ export const DonutPie:React.FC<Props> = ({className, province}) => {
                width: 2,
                colors: ['transparent']
           },
-          labels: province?.flatMap((item) => item.provinceName),
+          labels: province?.flatMap((item) => item.provinceName) || [],
           plotOptions: {
                bar: {
                     horizontal: false,

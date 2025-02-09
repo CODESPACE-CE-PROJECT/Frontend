@@ -10,7 +10,6 @@ interface Props {
 }
 
 export const CheckBox: React.FC<Props> = ({ onChange, isChecked, label, className, textColor }) => {
-
      return <div className={`flex flex-row gap-x-2 ${className} ${textColor ? textColor: 'text-zinc-50'}`}>
           <CheckBoxMUI 
                     checked={isChecked}
