@@ -21,3 +21,13 @@ export type IProfile = {
     package: PackageType
   }
 }
+
+export type ICreateUser = {
+  role?: Role,
+  studentNo?: string,
+  firstName: string,
+  lastName: string,
+  username: string,
+  email: string,
+  gender?: Gender
+}

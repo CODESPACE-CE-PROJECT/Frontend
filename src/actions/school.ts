@@ -20,7 +20,17 @@ export const getSchoolById = async (id: string) => {
           headers: {
                Authorization: `Bearer ${token}`
           }
-     }).then((res) => res.data.data)
+     }).then((res) => {
+          return {
+               status: res.status,
+               data: res.data.data
+          }
+     }).catch((e:AxiosError) => {
+          return {
+               status: e.status,
+               data: e.response?.data
+          }
+     })
 }
 
 export const getSchoolBinInfo = async () => {
@@ -35,17 +45,20 @@ export const getSchoolBinInfo = async () => {
 export const createSchool = async (createForm: ICreateSchool) => {
      const token = await getToken()
 
-     const formData = new FormData();
-     Object.entries(createForm).forEach(([key, value]) => {
-          if (key === "package") formData.append(key, value?.toString() === "Premium" ? PackageType.PREMIUM : PackageType.STANDARD)
-          else if (value !== undefined && value !== null && key !== "picture") formData.append(key, value.toString());
-     });
-
      if (createForm.picture) {
-          formData.append("picture", createForm.picture as File);
+          const formData = new FormData()
+          formData.append('picture', createForm.picture as File)
+          await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school`, formData, {
+               headers: {
+                    Authorization: `Bearer ${token}`,
+               },
+          })
      }
 
-     return await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school`, formData, {
+     return await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school`, {
+          ...createForm,
+          package: createForm.package === "Premium" ? PackageType.PREMIUM : PackageType.STANDARD,
+     }, {
           headers: {
                Authorization: `Bearer ${token}`,
           },
@@ -88,7 +101,47 @@ export const updateSchoolById = async (updateForm: IUpdateSchool, schoolId: stri
                data: res.data.data
           }
      }).catch((e: AxiosError) => {
-          console.log(e)
+          return {
+               status: e.status,
+               data: e.response?.data
+          }
+     })
+}
+
+export const setEnableSchoolById = async (schoolId: string, isEnable: boolean) => {
+     const token = await getToken()
+     return axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}`, {
+          isEnable: isEnable
+     }, {
+          headers: {
+               Authorization: `Bearer ${token}`,
+          }
+     }).then((res) => {
+          return {
+               status: res.status,
+               data: res.data.data
+          }
+     }).catch((e: AxiosError) => {
+          return {
+               status: e.status,
+               data: e.response?.data
+          }
+     })
+}
+
+export const deleteSchoolById = async (schoolId:string) => {
+     const token = await getToken()
+     return axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}`, {
+          headers: {
+               Authorization: `Bearer ${token}`,
+          }
+     }).then((res) => {
+          return {
+               status: res.status,
+               data: res.data.data
+          }
+     }).catch((e: AxiosError) => {
+          console.log(e.response?.data)
           return {
                status: e.status,
                data: e.response?.data

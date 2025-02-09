@@ -10,7 +10,8 @@ export async function generateMetadata(
      { params }: Props,
 ): Promise<Metadata> {
      const schoolId = (await params).schoolId
-     const school:ISchool = await getSchoolById(schoolId)
+     const {data} = await getSchoolById(schoolId)
+     const school: ISchool = data
      return {
           title: school.schoolName,
           description: school.schoolName
