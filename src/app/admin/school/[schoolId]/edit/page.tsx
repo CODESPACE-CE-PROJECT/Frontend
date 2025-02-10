@@ -283,7 +283,7 @@ export default function SchoolEdit() {
                          <div className="flex flex-col items-start gap-[10px] self-stretch">
                               <div className="flex flex-col justify-end items-end gap-[51px] self-stretch">
                                    <div className="flex flex-col items-start gap-[32px] self-stretch">
-                                        <UploadFile onInput={handleFileInput} imageUrl={imageUrl} className="w-full py-4 border-blackground-text" />
+                                        <UploadFile onInput={handleFileInput} imageUrl={imageUrl} className="w-full py-4 border-blackground-text" text="เลือกรูปภาพโปรไฟล์ของโรงเรียน"/>
 
                                         {/* รวม */}
                                         <div className="flex items-start gap-[32px] self-stretch w-full">

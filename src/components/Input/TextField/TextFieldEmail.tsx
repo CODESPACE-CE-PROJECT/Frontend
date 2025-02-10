@@ -41,6 +41,9 @@ export const TextFieldEmail: React.FC<Props> = ({
           if(value === ""){
                setIsValid(false)
           }
+          else if(value && emailRegex.test(value) && value?.trim() !== ""){
+               setIsValid(true)
+          }
      }, [value]);
 
      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

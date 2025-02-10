@@ -21,7 +21,7 @@ export const CreatCourseModal = () => {
                          สร้างคอร์สในโรงเรียน
                     </p>
 
-                    <UploadFile className="w-[35vw] py-6 border-border-text-light" onInput={() => { }} />
+                    <UploadFile text="เลือกรูปภาพคอร์สเรียน" className="w-[35vw] py-6 border-border-text-light" onInput={() => { }} />
 
                     <div className="flex flex-col items-start w-full gap-y-2">
                          <Label text="ชื่อวิชา" isRequired={true} />

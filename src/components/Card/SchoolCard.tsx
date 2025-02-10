@@ -33,9 +33,9 @@ export const SchoolCard: React.FC<Prop> = ({ data }) => {
                          <p className="text-2xl font-semibold">{data?.schoolName}</p>
                          <p className="text-xl">{data?.address} {data?.subDistrict} {data?.district} {data?.province} {data?.postCode}</p>
                          <div className="flex flex-row gap-x-4 items-center text-lg">
-                              <p>ผู้สอน 2 คน</p>
+                              <p>ผู้สอน {data?.count.teacher} คน</p>
                               <CircleIcon fontSize="small" />
-                              <p>ผู้เรียน 1 คน</p>
+                              <p>ผู้เรียน {data?.count.student} คน</p>
                          </div>
                     </div>
                </div>

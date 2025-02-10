@@ -1,7 +1,7 @@
 "use server"
 
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { IProfile } from "../types/user";
+import { ICreateUser, IProfile, IUpdateUser } from "../types/user";
 import { getToken } from "@/lib/session";
 
 export const getProfile = async () => {
@@ -116,6 +116,86 @@ export const setAllowLoginByUsername = async (username: string, allowLogin: bool
   const token = await getToken()
   return axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/username/${username}`, {
     allowLogin: allowLogin
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  }).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data
+    }
+  }).catch((e: AxiosError) => {
+    console.log(e.response?.data)
+    return {
+      status: e.status,
+      data: e.response?.data
+    }
+  })
+}
+
+export const createUserBySchoolId = async (schoolId: string, createForm: ICreateUser) => {
+  const token = await getToken()
+  return axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user`, {
+    schoolId: schoolId,
+    users: [
+      {
+        ...createForm
+      }
+    ]
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  }).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data
+    }
+  }).catch((e: AxiosError) => {
+    console.log(e.response?.data)
+    return {
+      status: e.status,
+      data: e.response?.data
+    }
+  })
+}
+
+export const getUserByUsername = async (username: string) => {
+  const token = await getToken()
+  return axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/username/${username}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  }).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data
+    }
+  }).catch((e: AxiosError) => {
+    console.log(e.response?.data)
+    return {
+      status: e.status,
+      data: e.response?.data
+    }
+  })
+}
+
+export const updateUserByUsername = async (updateForm: IUpdateUser) => {
+  const token = await getToken()
+  
+  if (updateForm.picture) {
+    const formData = new FormData()
+    formData.append('picture', updateForm.picture as File)
+    await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/username/${updateForm.username}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+  }
+
+  return axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/username/${updateForm.username}`, {
+    ...updateForm
   }, {
     headers: {
       Authorization: `Bearer ${token}`,

@@ -9,6 +9,7 @@ export default function NotFoundPage() {
                width={200}
                height={200}
           />
-          <p>ไม่เจอหน้านี้ 404 NOT FOUND</p>
+          <p>ไม่เจอหน้านี้</p>
+          <p className="text-4xl font-bold">404 NOT FOUND</p>
      </div>
 }

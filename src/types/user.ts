@@ -1,4 +1,4 @@
-import { Role, Gender, PackageType } from '@/enum/enum'
+import { Role, Gender, PackageType, ValidateType } from '@/enum/enum'
 
 export type IProfile = {
   username: string,
@@ -23,11 +23,34 @@ export type IProfile = {
 }
 
 export type ICreateUser = {
-  role?: Role,
-  studentNo?: string,
-  firstName: string,
-  lastName: string,
+  email: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  gender: Gender;
+  role: Role;
+  studentNo?: string;
+}
+
+export type IUpdateUser = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  gender: Gender;
+  role: Role;
+  studentNo?: string;
+  picture?: File | null;
+  pictureUrl?: string
+}
+
+export type IFileFormat = {
+  studentId: string,
+  firstname: string,
+  lastname: string,
+  gender: Gender,
   username: string,
   email: string,
-  gender?: Gender
+  role: Role,
+  validateType: ValidateType
 }

@@ -13,10 +13,11 @@ interface Props {
     bgColor?: string
     onKeyDown?: () => void,
     require?: boolean,
-    className?: string
+    className?: string,
+    disable?: boolean
 }
 
-export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, maxLength, validateText, isSubmited, textColor, bgColor, onKeyDown, require, className}) => {
+export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value, isNumberic, maxLength, validateText, isSubmited, textColor, bgColor, onKeyDown, require, className, disable}) => {
      const [displayText, setDisplayText] = useState<string>("")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +42,8 @@ export const TextField: React.FC<Props> = ({ placeholder, name, onChange, value,
             value={displayText}
             maxLength={maxLength}
             placeholder={placeholder}
-            className={`h-10 py-2 px-4 gap-2.5 w-full rounded-[6px] outline-0 ${className} ${bgColor ? bgColor : 'bg-[#2A3A50]'} focus:outline-[#5572FA] ${textColor ? textColor:'text-zinc-50'}`}
+            disabled={disable}
+            className={`h-10 py-2 px-4 gap-2.5 w-full rounded-[6px] outline-0 disabled:text-gray-500 ${className} ${bgColor ? bgColor : 'bg-[#2A3A50]'} focus:outline-[#5572FA] ${textColor ? textColor:'text-zinc-50'}`}
             onChange={handleChange}
             inputMode={isNumberic ? "numeric" : "text"}
             pattern={isNumberic ? "\\d*" : undefined}

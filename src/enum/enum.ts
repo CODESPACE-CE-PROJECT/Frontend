@@ -58,3 +58,9 @@ export enum NotifyType {
     WARNING,
     LOADING,
 }
+
+export enum ValidateType {
+    NOTEXIST = 'NOTEXIST',
+    EXIST = 'EXIST',
+    DUPLICATE = 'DUPLICATE',
+}
