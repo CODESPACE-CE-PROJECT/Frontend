@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import Divider from "./Divider";
+import Divider from "@/components/Courses/Divider";
 import TeacherProfile from "@/assets/CoursesAssets/TeacherIcon.svg";
 import ReplyBox from "@/components/Courses/ReplyBox";
 import ReplyEditorBox from "@/components/Courses/ReplyEditorBox";
 import { ICourseAnnounce } from "@/types/courseAnnounce";
 
-interface AnnouncementProps {
+interface AnnounceProps {
   announce: ICourseAnnounce;
   profilePicture: string;
   handleReply: (message: string, courseAnnounceId: string) => void;
 }
 
-const AnnounceCard: React.FC<AnnouncementProps> = ({ announce, profilePicture, handleReply }) => {
+const AnnounceCard: React.FC<AnnounceProps> = ({ announce, profilePicture, handleReply }) => {
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
 
   return (

@@ -16,7 +16,7 @@ import AnnounceCard from "@/components/Courses/AnnounceCard";
 export default function Page() {
   const param = useParams<{ courseId: string }>();
   const courseId = param.courseId;
-  const [announcement, setAnnouncement] = useState<ICourseAnnounce[]>([]);
+  const [announce, setAnnounce] = useState<ICourseAnnounce[]>([]);
   const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
 
@@ -25,7 +25,7 @@ export default function Page() {
       const response: ICourse = await getCoursesById(courseId);
       const profile: IProfile = await getProfile();
       setCourseDetails(response);
-      setAnnouncement(response.courseAnnounce || []);
+      setAnnounce(response.courseAnnounce || []);
       setProfile(profile);
     };
 
@@ -43,7 +43,7 @@ export default function Page() {
     if (id !== undefined) {
       if (status === 201) {
         updateNotify(id, NotifyType.SUCCESS, "ตอบกลับสำเร็จ");
-        setAnnouncement((prevAnnouncements) =>
+        setAnnounce((prevAnnouncements) =>
           prevAnnouncements.map((announce) =>
             announce.courseAnnounceId === courseAnnounceId
               ? { ...announce, replyAnnounce: [...announce.replyAnnounce] }
@@ -71,8 +71,8 @@ export default function Page() {
       </p>
 
       <div className="flex flex-col items-center space-y-5 px-40">
-        {announcement.length > 0 ? (
-          announcement.map((announce) => (
+        {announce.length > 0 ? (
+          announce.map((announce) => (
             <AnnounceCard
               key={announce.courseAnnounceId}
               announce={announce}

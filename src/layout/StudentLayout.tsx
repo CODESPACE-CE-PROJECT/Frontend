@@ -21,22 +21,21 @@ interface Props {
 }
 
 export const StudentLayout: React.FC<Props> = ({ children }) => {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = async () => {
-    const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ")
-    const { status } = await logout()
+    const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ");
+    const { status } = await logout();
 
     if (id !== undefined) {
       if (status === 200) {
-        updateNotify(id, NotifyType.SUCCESS, "ออกจากระบบเสร็จสมบูรณ์")
+        updateNotify(id, NotifyType.SUCCESS, "ออกจากระบบเสร็จสมบูรณ์");
       } else {
-        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการออกจากระบบ")
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการออกจากระบบ");
       }
     }
-    router.push("/login")
-  }
-
+    router.push("/login");
+  };
 
   return (
     <div className="flex flex-col md:flex-row md:w-screen overflow-x-hidden overscroll-none">
@@ -47,7 +46,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
 
         <div className="flex flex-col flex-grow justify-between w-full">
           <div className="flex flex-col gap-y-4">
-            <NavItem text="คอร์สเรียน" href="/student/courses">
+            <NavItem text="คอร์สเรียน" href="/student/course">
               <LibraryBooksIcon fontSize="large" />
             </NavItem>
 
@@ -70,9 +69,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
       </nav>
 
       <div className="flex flex-row w-screen overflow-x-hidden overscroll-none">
-        <ClassRoomNav />
-        {/* ClassRoomNav ยังเปิด/ปิดไม่ได้ เดี๋ยวมาแก้ให้ */}
-        <div className="flex flex-col p-10 w-screen h-screen">{children}</div>
+        {children}
       </div>
     </div>
   );
