@@ -29,8 +29,7 @@ export const notify = (type: NotifyType, text: string) => {
      } else if (type === NotifyType.WARNING) {
           toast.warn(text, {
                position: "top-center",
-               autoClose: 3000,
-               hideProgressBar: false,
+               hideProgressBar: true,
                closeOnClick: false,
                pauseOnHover: true,
                draggable: false,

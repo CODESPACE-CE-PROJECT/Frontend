@@ -59,7 +59,7 @@ export enum NotifyType {
     LOADING,
 }
 
-export enum ValidateType {
+export enum ValidType {
     NOTEXIST = 'NOTEXIST',
     EXIST = 'EXIST',
     DUPLICATE = 'DUPLICATE',

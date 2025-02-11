@@ -9,7 +9,7 @@ import { ICreateUser, IProfile, IUpdateUser } from "@/types/user";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SchoolCard } from "@/components/Card/SchoolCard";
-import { getProfile, getUserByUsername, setAllowLoginByUsername, setEnableUserByUsername, updateUserByUsername } from "@/actions/user";
+import { getProfile, getUserByUsername, importFileExel, setAllowLoginByUsername, setEnableUserByUsername, updateUserByUsername } from "@/actions/user";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { SearchBar } from "@/components/Input/SerachBar";
@@ -34,6 +34,7 @@ export default function Page() {
      const [isOpenCreateUserForm, setIsOpenCreateUserForm] = useState<boolean>(false)
      const [isOpenUpdateUserForm, setIsOpenUpdateUserForm] = useState<boolean>(false)
      const [isOpenImportFileModal, setIsOpenImportFileModal] = useState<boolean>(false)
+     const [file, setFile] = useState<File>()
      const [createForm, setCreateForm] = useState<ICreateUser>({
           email: "",
           firstName: "",
@@ -184,9 +185,7 @@ export default function Page() {
      const handleSubmitUpdateUser = async (updateForm: IUpdateUser) => {
           const id = notify(NotifyType.LOADING, "กำลังแก้ไขข้อมูลบัญชีผู้ใช้งาน")
           if (school?.schoolId && id) {
-               const { status, data } = await updateUserByUsername(updateForm)
-               console.log(status)
-               console.log(data)
+               const { status } = await updateUserByUsername(updateForm)
                if (status === 200) {
                     updateNotify(id, NotifyType.SUCCESS, "แก้ไขข้อมูลบัญชีผู้ใช้เสร็จสิ้น")
                     const { data } = await getSchoolById(param.schoolId);
@@ -204,13 +203,35 @@ export default function Page() {
           }
      }
 
+     const handleFileImport = async () => {
+          if(file){
+               const id = notify(NotifyType.LOADING, 'กำลังประมวลผลไฟล์')
+               const {status, data} = await importFileExel(file)
+               if(id){
+                    if(status === 201){
+                         updateNotify(id, NotifyType.SUCCESS, 'ประมวลผลไฟล์เสร็จสิ้น')
+                         sessionStorage.setItem(`dataFile-${param.schoolId}`, JSON.stringify(data))
+                         setIsOpenImportFileModal(false)
+                         router.push(`/admin/school/${param.schoolId}/file`)
+                    } else if (status === 400){
+                         updateNotify(id, NotifyType.ERROR, 'รูปแบบไฟล์ไม่ถูกต้อง')
+                         data.errors.map((item:string) => {
+                              notify(NotifyType.WARNING, item)
+                         })
+                    } else {
+                         updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการประมวลผลไฟล์')
+                    }
+               }
+          }
+     }
+
      useEffect(() => {
           const fetchSchool = async () => {
+               const profile: IProfile = await getProfile()
+               setProfile(profile)
                const { status, data } = await getSchoolById(param.schoolId);
                if (status === 200) {
                     const response: ISchool = data
-                    const profile: IProfile = await getProfile()
-                    setProfile(profile)
                     setSchool(response);
                     setTeachers(response.users.filter((user) => user.role === Role.TEACHER));
                     setStudents(response.users.filter((user) => user.role === Role.STUDENT));
@@ -271,6 +292,6 @@ export default function Page() {
           </div>
           <CreateUserModal onSubmit={(createForm) => handleSubmitCreateUser(createForm)} handleInputChange={handleInputChangeCreateForm} createForm={createForm} isOpen={isOpenCreateUserForm} onClose={() => {setIsOpenCreateUserForm(false); clearDataCreateForm()}} />
           <UpdateUserModal onSubmit={(updateForm) => handleSubmitUpdateUser(updateForm)} isOpen={isOpenUpdateUserForm} handleFileInputChange={handleFileInputChangeUpdateForm} onClose={(username) => {setIsOpenUpdateUserForm(false); clearDataUpdateForm(username)}} updateForm={updateForm} handleInputChange={handleInputChangeUpdateForm}/>
-          <ImportFileModal isOpen={isOpenImportFileModal} onClose={() => setIsOpenImportFileModal(false)}/>
+          <ImportFileModal isOpen={isOpenImportFileModal} onInput={(file) => setFile(file)} onClose={() => setIsOpenImportFileModal(false)} onClick={handleFileImport}/>
      </div>)
 }

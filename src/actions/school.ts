@@ -110,7 +110,7 @@ export const updateSchoolById = async (updateForm: IUpdateSchool, schoolId: stri
 
 export const setEnableSchoolById = async (schoolId: string, isEnable: boolean) => {
      const token = await getToken()
-     return axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}`, {
+     return await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}`, {
           isEnable: isEnable
      }, {
           headers: {
@@ -131,7 +131,7 @@ export const setEnableSchoolById = async (schoolId: string, isEnable: boolean) =
 
 export const deleteSchoolById = async (schoolId:string) => {
      const token = await getToken()
-     return axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}`, {
+     return await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}`, {
           headers: {
                Authorization: `Bearer ${token}`,
           }

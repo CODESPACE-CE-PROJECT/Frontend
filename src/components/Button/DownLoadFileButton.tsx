@@ -1,4 +1,5 @@
 import TaskIcon from '@mui/icons-material/Task';
+import Link from 'next/link';
 
 interface Props {
      className?: string
@@ -7,13 +8,15 @@ interface Props {
 }
 
 export const DownLoadFileButton: React.FC<Props> = ({ className, onClick, disabled }) => {
-     return <button
-               type="button"
-               className={`${className} bg-white text-primary px-4 hover:bg-gray-100 py-3 rounded-md disabled:bg-blue-400`}
-               onClick={onClick}
-               disabled={disabled}
-          >
+     return <Link
+          href="/FileFormat/example-import-file.xlsx"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${className} inline-flex items-center bg-white text-primary px-4 py-3 rounded-md hover:bg-gray-100 
+     ${disabled ? "pointer-events-none opacity-50" : ""}`}
+          onClick={disabled ? undefined : onClick}
+     >
           <TaskIcon fontSize="medium" />
-          <p className="hidden lg:block">ดาวน์โหลด</p>
-     </button>
+          <p className="hidden lg:block ml-2">ดาวน์โหลด</p>
+     </Link>
 }

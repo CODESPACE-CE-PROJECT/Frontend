@@ -12,7 +12,6 @@ interface Props {
 export const UploadFileExel: React.FC<Props> = ({ onInput, texColor, className}) => {
      const [exelFile, setExelFile] = useState<File>()
      const onDrop = useCallback((acceptedFiles: File[]) => {
-          console.log(acceptedFiles)
           if (onInput) {
                setExelFile(acceptedFiles[0])
                onInput(acceptedFiles[0]);

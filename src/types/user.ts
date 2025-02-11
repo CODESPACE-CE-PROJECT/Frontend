@@ -1,4 +1,4 @@
-import { Role, Gender, PackageType, ValidateType } from '@/enum/enum'
+import { Role, Gender, PackageType, ValidType } from '@/enum/enum'
 
 export type IProfile = {
   username: string,
@@ -52,5 +52,5 @@ export type IFileFormat = {
   username: string,
   email: string,
   role: Role,
-  validateType: ValidateType
+  validType: ValidType
 }

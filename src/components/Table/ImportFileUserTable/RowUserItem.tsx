@@ -1,4 +1,4 @@
-import { Gender, ValidateType } from "@/enum/enum"
+import { Gender, ValidType } from "@/enum/enum"
 import { IFileFormat } from "@/types/user"
 import { getRoleInThai } from "@/utils/text.util"
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -11,17 +11,17 @@ interface Props {
 }
 
 export const RowUserItem: React.FC<Props> = ({ data, onClick, index }) => {
-     const backgroundColor = (validateType: ValidateType) => {
-          if (validateType === ValidateType.EXIST) {
-               return 'bg-[#FF9000]'
-          } else if (validateType === ValidateType.DUPLICATE) {
+     const backgroundColor = (validType: ValidType) => {
+          if (validType === ValidType.EXIST) {
                return 'bg-[#EF4343]'
+          } else if (validType === ValidType.DUPLICATE) {
+               return 'bg-[#FF9000]'
           } else {
                return ''
           }
      }
      return <>
-          <div className={`table-row w-full text-center ${backgroundColor(data.validateType)} bg-opacity-10 gap-y-4 text-xl`}>
+          <div className={`table-row w-full text-center ${backgroundColor(data.validType)} bg-opacity-10 gap-y-4 text-xl`}>
                <div className="table-cell align-middle px-8 py-4 rounded-l-xl">{data.studentId}</div>
                <div className="table-cell align-middle px-8 p-4">{data.firstname}</div>
                <div className="table-cell align-middle px-8 p-4">{data.lastname}</div>
@@ -31,25 +31,25 @@ export const RowUserItem: React.FC<Props> = ({ data, onClick, index }) => {
                <div className="table-cell align-middle px-8 p-4">{getRoleInThai(data.role)}</div>
                <div className="table-cell align-middle px-8 p-4 rounded-r-xl">
                     {
-                         data.validateType === ValidateType.NOTEXIST ? (
-                              <div className="flex flex-row items-center gap-x-2 justify-center text-green-l">
+                         data.validType === ValidType.NOTEXIST ? (
+                              <div className="flex flex-row items-center  gap-x-2 justify-start text-green-l">
                                    <CheckCircleOutlineIcon />
                                    <p>สามารถเพิ่มได้</p>
                               </div>
-                         ) : data.validateType === ValidateType.EXIST ? (
-                              <div className="flex flex-row items-center gap-x-7 justify-center text-[#FF9000]">
+                         ) : data.validType === ValidType.DUPLICATE ? (
+                              <div className="flex flex-row items-center gap-x-7 justify-start text-[#FF9000]">
                                    <div className="flex flex-row items-center gap-x-2">
                                         <CancelOutlinedIcon />
                                         <p>รายชื่อซ้ำจากไฟล์</p>
                                    </div>
-                                   <div className="underline cursor-pointer" onClick={() => onClick && onClick(index)}>ลบ</div>
+                                   <div className="hover:underline cursor-pointer" onClick={() => onClick && onClick(index)}>ลบ</div>
                               </div>
-                         ) : <div className="flex flex-row items-center gap-x-7 justify-center text-[#EF4343]">
+                         ) : <div className="flex flex-row items-center gap-x-7 justify-start text-[#EF4343]">
                               <div className="flex flex-row items-center gap-x-2">
                                    <CancelOutlinedIcon />
                                    <p>รายชื่อซ้ำในระบบ</p>
                               </div>
-                              <div className="underline cursor-pointer" onClick={() => onClick && onClick(index)}>ลบ</div>
+                              <div className="hover:underline cursor-pointer" onClick={() => onClick && onClick(index)}>ลบ</div>
                          </div>
                     }
                </div>
