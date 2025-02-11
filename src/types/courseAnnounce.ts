@@ -11,6 +11,21 @@ export type ICourseAnnounce = {
   createdAt: Date;
   updatedAt: Date;
   courseId: string;
-  replyAnnounce: any[];
+  replyAnnounce: IReplyAnnounce[];
   user: IUser;
+};
+
+export type IReplyAnnounce = {
+  replyAnnounceId: string;
+  message: string;
+  username: string;
+  createAt: Date;
+  updateAt: Date;
+  courseAnnounceId: string;
+  user: IUser;
+};
+
+export type ICreateReply = {
+  courseAnnounceId: string;
+  message: string;
 };

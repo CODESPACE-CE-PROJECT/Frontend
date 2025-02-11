@@ -3,6 +3,8 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { $getRoot } from "lexical";
+import { useState } from "react";
 import ReplyToolbar from "@/components/Lexical/ReplyToolbar";
 import SendIcon from "@mui/icons-material/Send";
 
@@ -15,7 +17,14 @@ const editorConfig = {
   nodes: [],
 };
 
-export default function ReplyEditor({ onSend }: { onSend: () => void }) {
+export default function ReplyEditor({ onSend }: { onSend: (message: string) => void }) {
+  const [editorState, setEditorState] = useState<string>("");
+
+  const handleSend = () => {
+    if (!editorState.trim()) return;
+    onSend(editorState);
+  };
+
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative w-full">
@@ -31,14 +40,21 @@ export default function ReplyEditor({ onSend }: { onSend: () => void }) {
         <div className="flex flex-row w-full items-center">
           <ReplyToolbar />
           <button
-            onClick={onSend}
+            onClick={handleSend}
             className="px-3 py-1 hover:bg-blackground-text rounded-xl"
           >
             <SendIcon fontSize="medium" />
           </button>
         </div>
         <HistoryPlugin />
-        <OnChangePlugin onChange={(editorState) => console.log(editorState)} />
+        <OnChangePlugin
+          onChange={(editorState) => {
+            editorState.read(() => {
+              const text = $getRoot().getTextContent();
+              setEditorState(text);
+            });
+          }}
+        />
       </div>
     </LexicalComposer>
   );
