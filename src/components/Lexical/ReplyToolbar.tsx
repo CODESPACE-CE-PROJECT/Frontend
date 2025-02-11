@@ -39,7 +39,7 @@ export default function ReplyToolbar() {
   }, [editor, $updateToolbar]);
 
   return (
-    <div ref={toolbarRef} className="flex bg-white p-2 rounded-lg mb-px">
+    <div ref={toolbarRef} className="flex bg-white p-2 rounded-lg mb-px w-full">
       <button
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
         className={`flex items-center justify-center p-2 rounded-lg mr-1 ${
@@ -67,7 +67,7 @@ export default function ReplyToolbar() {
       >
         <FormatUnderlinedIcon className="text-gray-600" />
       </button>
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 }
