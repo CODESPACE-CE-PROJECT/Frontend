@@ -1,14 +1,14 @@
 import { IAssignment } from "@/types/assignment";
 import AssignmentBox from "@/components/Assignment/AssignmentBox";
-import AssignmentBoxExam from "@/components/Assignment/AssignmentBoxexam";
+
 
 interface Props {
   assignments: IAssignment;
   courseId: string;
-  isStudentOnSite: boolean; // รับค่าตัวแปรนี้เข้ามาจาก Props
+   // รับค่าตัวแปรนี้เข้ามาจาก Props
 }
 
-const AssignmentList: React.FC<Props> = ({ assignments, courseId, isStudentOnSite }) => {
+const AssignmentList: React.FC<Props> = ({ assignments, courseId }) => {
   return (
     <div>
       {/* Table Header */}

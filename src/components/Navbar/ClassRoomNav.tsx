@@ -62,9 +62,9 @@ export default function ClassRoomNav() {
             <Link
               href={
                 role === "STUDENT"
-                  ? `/${role.toLowerCase()}/course/${id}/assignment/homework`
+                  ? `/${role.toLowerCase()}/course/${id}/assignment/exercise`
                   : role === "TEACHER"
-                  ? `/${role.toLowerCase()}/course/${id}/assignment/homework`
+                  ? `/${role.toLowerCase()}/course/${id}/assignment/exercise`
                   : `/${role.toLowerCase()}/course/${id}/assignment`
               }
               className="flex items-center"
@@ -80,9 +80,9 @@ export default function ClassRoomNav() {
             <Link
               href={
                 role === "STUDENT"
-                  ? `/${role.toLowerCase()}/course/${id}/score/homework`
+                  ? `/${role.toLowerCase()}/course/${id}/score/exercise `
                   : role === "TEACHER"
-                  ? `/${role.toLowerCase()}/course/${id}/score/homework`
+                  ? `/${role.toLowerCase()}/course/${id}/score/exercise `
                   : `/${role.toLowerCase()}/course/${id}/score`
               }
               className="flex items-center"

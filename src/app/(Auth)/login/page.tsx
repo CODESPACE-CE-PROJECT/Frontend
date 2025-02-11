@@ -16,7 +16,7 @@ import { notify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
 import PlatfromLogo from '@/assets/Login/logo.svg'
 import { useSearchParams } from "next/navigation";
-import { useSetCookie } from 'cookies-next/client'
+import { useSetCookie } from 'cookies-next/client';
 
 export default function Page() {
   const router = useRouter();
