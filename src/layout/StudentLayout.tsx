@@ -47,7 +47,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
 
         <div className="flex flex-col flex-grow justify-between w-full">
           <div className="flex flex-col gap-y-4">
-            <NavItem text="คอร์สเรียน" href="/student/courses">
+            <NavItem text="คอร์สเรียน" href="/student/course">
               <LibraryBooksIcon fontSize="large" />
             </NavItem>
 
