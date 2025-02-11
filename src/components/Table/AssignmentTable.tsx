@@ -1,14 +1,14 @@
 import { IAssignment } from "@/types/assignment";
 import AssignmentBox from "@/components/Assignment/AssignmentBox";
-import AssignmentBoxExam from "@/components/Assignment/AssignmentBoxexam";
+
 
 interface Props {
   assignments: IAssignment;
   courseId: string;
-  isStudentOnSite: boolean; // รับค่าตัวแปรนี้เข้ามาจาก Props
+   // รับค่าตัวแปรนี้เข้ามาจาก Props
 }
 
-const AssignmentList: React.FC<Props> = ({ assignments, courseId, isStudentOnSite }) => {
+const AssignmentList: React.FC<Props> = ({ assignments, courseId }) => {
   return (
     <div>
       {/* Table Header */}
@@ -25,7 +25,7 @@ const AssignmentList: React.FC<Props> = ({ assignments, courseId, isStudentOnSit
       </div>
 
       {/* Assignment List */}
-      {assignments.assignment.map((assignment) => (
+      {assignments.assignment?.map((assignment) => (
         <div key={assignment.assignmentId} className="flex justify-center items-center px-8 py-3 rounded-lg gap-x-4">
           {/* Assignment Title */}
           <div className="text-white text-lg px-3 rounded-md flex text-start flex-1 w-1/2 ml-3">

@@ -7,7 +7,7 @@ import { getCoursesById } from "@/actions/announcement";
 import Link from "next/link";
 import { IAssignment } from "@/types/assignment"
 import AssignmentTable from "@/components/Table/AssignmentTable";
-
+import  NavigationButton from "@/components/Tab/์NavigationTab";
 
 export default function Assignment() {
   const router = useRouter();
@@ -53,33 +53,8 @@ export default function Assignment() {
   return (
     <>
       
-
-      <div className="relative w-full">
-        <div className="flex gap-12 pl-5 mt-5 ">
-          <Link href={`/student/course/${courseId}/assignment/homework`}>
-            <h1
-              className={`text-lg font-semibold cursor-pointer px-4 py-2 pb-2 hover:bg-[#3049724D] rounded-md ${
-                window.location.pathname.includes("homework")
-                  ? "text-white border-b-4 border-[#5572FA]"
-                  : "text-white"
-              }`}
-            >
-              แบบฝึกหัด
-            </h1>
-          </Link>
-          <Link href={`/student/course/${courseId}/assignment/exam`}>
-            <h1
-              className={`text-lg font-semibold cursor-pointer px-4 py-2 pb-2 hover:bg-[#3049724D] rounded-md ${
-                window.location.pathname.includes("exam")
-                  ? "text-white border-b-4 border-[#5572FA]"
-                  : "text-white"
-              }`}
-            >
-              การทดสอบ
-            </h1>
-          </Link>
-        </div>
-      </div>
+      <NavigationButton courseId={courseId} basePath={`/student/course/${courseId}/assignment`} />
+    
       <div className="mt-4">
       {assignments && <AssignmentTable assignments={assignments} courseId={courseId} />}
       </div>

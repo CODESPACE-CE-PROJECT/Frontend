@@ -3,12 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
-import { getCoursesById } from "@/actions/announcement";
-import Link from "next/link";
 import { IAssignment } from "@/types/assignment"
 import AssignmentTable from "@/components/Table/AssignmentTable";
 import  NavigationButton from "@/components/Tab/์NavigationTab";
-
 
 export default function Assignment() {
   const router = useRouter();
@@ -29,8 +26,8 @@ export default function Assignment() {
       try {
         const data = await getAssignment(courseId);
         if (data) {
-          const filteredAssignments = data.data.assignment.filter(
-             (assignment: IAssignment["assignment"][number]) => assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
+          const filteredAssignments = data.data.assignment?.filter(
+             (assignment: IAssignment["assignment"][number]) => assignment.type === "EXERCISE"
           );
     
           setAssignments({ assignment: filteredAssignments }); 
@@ -55,6 +52,7 @@ export default function Assignment() {
     <>
       
       <NavigationButton courseId={courseId} basePath={`/student/course/${courseId}/assignment`} />
+    
       <div className="mt-4">
       {assignments && <AssignmentTable assignments={assignments} courseId={courseId} />}
       </div>

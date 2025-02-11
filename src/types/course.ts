@@ -1,4 +1,5 @@
 import { IProfile } from "@/types/user";
+import { IReplyAnnounce } from "./courseAnnounce";
 
 interface IUser {
   firstName: string;
@@ -13,7 +14,7 @@ interface ICourseAnnounce {
   createdAt: Date;
   updatedAt: Date;
   courseId: string;
-  replyAnnounce: any[];
+  replyAnnounce: IReplyAnnounce[];
   user: IUser;
 }
 

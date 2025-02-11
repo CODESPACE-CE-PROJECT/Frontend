@@ -251,3 +251,29 @@ export const importFileExel = async (file: File) => {
     }
   })
 }
+
+export const updatePassword = async (formData: { password: string, confirmPassword: string }) => {
+  const token = await getToken();
+  
+  return await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/update-password`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    }
+  
+  ).then((res) => {
+       return {
+        status: res.status,
+        data: res.data,
+       }
+  }).catch((e:AxiosError) => {
+       const err = e.response?.data as IErrorResponse
+       return {
+            status: e.status,   
+            data: err
+       }
+  });
+};
