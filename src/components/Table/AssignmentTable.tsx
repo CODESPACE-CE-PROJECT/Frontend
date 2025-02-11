@@ -25,7 +25,7 @@ const AssignmentList: React.FC<Props> = ({ assignments, courseId }) => {
       </div>
 
       {/* Assignment List */}
-      {assignments.assignment.map((assignment) => (
+      {assignments.assignment?.map((assignment) => (
         <div key={assignment.assignmentId} className="flex justify-center items-center px-8 py-3 rounded-lg gap-x-4">
           {/* Assignment Title */}
           <div className="text-white text-lg px-3 rounded-md flex text-start flex-1 w-1/2 ml-3">

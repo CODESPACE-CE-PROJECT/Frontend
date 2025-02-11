@@ -14,6 +14,8 @@ import { logout } from "@/actions/auth";
 import { useRouter } from 'next/navigation'
 import { NotifyType } from "@/enum/enum";
 import { notify, updateNotify } from "@/utils/toast.util";
+import ClassRoomNav from "@/components/Navbar/ClassRoomNav";
+
 
 interface Props {
   children: ReactNode
@@ -74,8 +76,12 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
 
     </nav>
 
-    <div className="flex flex-col m-10 gap-y-6 w-full overflow-x-hidden overscroll-none">
-      {children}
-    </div>
+    <div className="flex flex-row w-screen overflow-x-hidden overscroll-none">
+        <ClassRoomNav />
+        {/* ClassRoomNav ยังเปิด/ปิดไม่ได้ เดี๋ยวมาแก้ให้ */}
+        <div className="flex flex-col p-10 w-screen h-screen">{children}</div>
+      </div>
+
+    
   </div>;
 };

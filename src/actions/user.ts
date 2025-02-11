@@ -1,6 +1,9 @@
 "use server"
 
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
+import  {  AxiosResponse } from "axios";
+import Cookies from 'js-cookie';
+
 import { IProfile } from "../types/user";
 import { getToken } from "@/lib/session";
 
@@ -67,4 +70,39 @@ export const uploadProfilePicture = async (picture: File) => {
       console.log(error);
     }
   }
+};
+
+
+
+
+
+export const updatePassword = async (formData: { password: string, confirmPassword: string }) => {
+  const token = await getToken();
+  
+  return await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/update-password`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    }
+  
+  ).then((res) => {
+       
+       return {
+        status: res.status,
+        data: res.data,
+       }
+  }).catch((e:AxiosError) => {
+       const err = e.response?.data as IErrorResponse
+       return {
+            status: e.status,   
+            data: err
+       }
+  });
+
+   
+   
+  
 };
