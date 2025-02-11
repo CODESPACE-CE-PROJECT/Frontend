@@ -22,7 +22,7 @@ const AssignmentBox: React.FC<Props> = ({ assignment, courseId }) => {
           onClick={
             !assignment.isLock
               ? undefined
-              : () => router.push(`/student/course/${courseId}/assignment/homeworkassignment/${problem.problemId}`)
+              : () => router.push(`/student/problem/${problem.problemId}`)
           }
         >
           <p className="space-x-1">
