@@ -19,7 +19,7 @@ const TextProfileField: React.FC<Props> = ({ label, name, value, isEditing, onCh
           name={name}
           value={value}
           onChange={onChange}
-          disabled={name === 'username' || name === 'ip'}
+          disabled={ name === 'ip'}
           className="pl-5 py-3 w-full text-white bg-[#2A3A50] rounded-md border border-gray-300 shadow-inner disabled:border-[#2A3A50] disabled:bg-transparent"
         />
       ) : (
