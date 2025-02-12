@@ -52,7 +52,7 @@ export default function Assignment() {
     <>
       
       <NavigationButton courseId={courseId} basePath={`/student/course/${courseId}/assignment`} />
-    
+        {/* test */}
       <div className="mt-4">
       {assignments && <AssignmentTable assignments={assignments} courseId={courseId} />}
       </div>
