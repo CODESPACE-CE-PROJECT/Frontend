@@ -7,10 +7,11 @@ interface Props {
      onInput?: (file: File) => void,
      imageUrl?: string,
      texColor?: string,
-     className?: string
+     className?: string,
+     text: string,
 }
 
-export const UploadFile: React.FC<Props> = ({ onInput, imageUrl, texColor, className }) => {
+export const UploadFile: React.FC<Props> = ({ onInput, imageUrl, texColor, className, text }) => {
      const [urlImage, setUrlImage] = useState<string>("")
      const onDrop = useCallback((acceptedFiles: File[]) => {
           if (onInput) {
@@ -33,7 +34,7 @@ export const UploadFile: React.FC<Props> = ({ onInput, imageUrl, texColor, class
 
      return <div {...getRootProps()} className={`flex ${className} flex-col items-center gap-[16px] rounded-[12px] border-2 border-dashed ${isDragActive ? 'bg-zinc-400' : ''}`}>
           {
-               urlImage ?
+               urlImage && urlImage !== "none" ?
                     <Image
                          src={urlImage}
                          alt="preview"
@@ -44,7 +45,7 @@ export const UploadFile: React.FC<Props> = ({ onInput, imageUrl, texColor, class
                     /> :
                     <div className="flex h-48 flex-col items-center justify-center gap-[20px]">
                          <CloudUploadOutlinedIcon className="w-8 h-8 text-zinc-50" />
-                         <span className={`${texColor ? texColor: 'text-zinc-50'}`}>เลือกรูปภาพโปรไฟล์ของโรงเรียน</span>
+                         <span className={`${texColor ? texColor: 'text-zinc-50'}`}>{text}</span>
                          <span className=" text-[#CED4DA]">JPEG, PNG ขนาดไม่เกิน 50MB</span>
                     </div>
           }

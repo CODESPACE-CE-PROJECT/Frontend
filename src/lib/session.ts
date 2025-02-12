@@ -32,6 +32,9 @@ export const getAccessToken = async (refreshToken: string | undefined) => {
                          cookieStore.set('accessToken', accessToken, { maxAge: accessTokenExpiration });
                          cookieStore.set('refreshToken', refreshToken, { maxAge: refreshTokenExpiration });
                     }
+               } else if (response.status === 401){
+                    cookieStore.delete('accessToken')
+                    cookieStore.delete('refreshToken')
                }
           }
      } catch (error) {

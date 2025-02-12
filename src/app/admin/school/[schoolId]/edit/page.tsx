@@ -23,6 +23,8 @@ import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
+import { CancelButton } from "@/components/Button/CancelButton";
+import { ConfirmButton } from "@/components/Button/ConfirmButton";
 
 export default function SchoolEdit() {
      const router = useRouter()
@@ -74,7 +76,7 @@ export default function SchoolEdit() {
                          [name]: value
                     };
                })
-               
+
                if (name === "package") {
                     if (value === "Standard") {
                          setUpdateForm((prev) => {
@@ -96,7 +98,7 @@ export default function SchoolEdit() {
                          })
                     }
                }
-               
+
                if (name === "province") {
                     setProvinceFilterData((prev) => {
                          if (!prev) return prev
@@ -146,7 +148,7 @@ export default function SchoolEdit() {
                }
           }
      }
-     
+
      const handleZipCodeChange = (value: string) => {
           if (value.length === 5 && !isDropdownSelect) {
                const data = provinceData?.filter((item) => item.zipCode === value)
@@ -203,14 +205,14 @@ export default function SchoolEdit() {
           }
 
           const id = notify(NotifyType.LOADING, 'กำลังแก้ไขข้อมูลโรงเรียน')
-          
-          const {status} = await updateSchoolById(updateForm, param.schoolId)
-          
-          if(id){
-               if (status === 200){
+
+          const { status } = await updateSchoolById(updateForm, param.schoolId)
+
+          if (id) {
+               if (status === 200) {
                     updateNotify(id, NotifyType.SUCCESS, 'แก้ไขโรงเรียนเสร็จสิ้น')
                     router.push(`/admin/school/${param.schoolId}`)
-               } else if(status === 406){
+               } else if (status === 406) {
                     updateNotify(id, NotifyType.ERROR, 'มีชื่อโรงเรียนนี้แล้วอยู่ในระบบ')
                } else {
                     updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการแก้ไขโรงเรียน')
@@ -233,24 +235,30 @@ export default function SchoolEdit() {
                          provinces: [...new Set(response?.map(item => item.province))]
                     }
                })
+               const { status, data } = await getSchoolById(param.schoolId)
 
-               const school: ISchool = await getSchoolById(param.schoolId)
-               setUpdateForm({
-                    schoolName: school.schoolName,
-                    address: school.address,
-                    district: school.subDistrict,
-                    postCode: school.postCode,
-                    province: school.province,
-                    subDistrict: school.subDistrict,
-                    package: textPackage(school.package),
-                    maxCreateCoursePerTeacher: school.permission.maxCreateCoursePerTeacher,
-                    maxCreateStudent: school.permission.maxCreateStudent,
-                    maxCreateTeacher: school.permission.maxCreateTeacher,
-                    canCreateUser: school.permission.canCreateUser,
-                    canUpdateUser: school.permission.canUpdateUser,
-                    canDeleteUser: school.permission.canDeleteUser,
-               })
-               setImageUrl(school.pictureUrl)
+               if (status === 200) {
+                    const school: ISchool = data
+                    setUpdateForm({
+                         schoolName: school.schoolName,
+                         address: school.address,
+                         district: school.subDistrict,
+                         postCode: school.postCode,
+                         province: school.province,
+                         subDistrict: school.subDistrict,
+                         package: textPackage(school.package),
+                         maxCreateCoursePerTeacher: school.permission.maxCreateCoursePerTeacher,
+                         maxCreateStudent: school.permission.maxCreateStudent,
+                         maxCreateTeacher: school.permission.maxCreateTeacher,
+                         canCreateUser: school.permission.canCreateUser,
+                         canUpdateUser: school.permission.canUpdateUser,
+                         canDeleteUser: school.permission.canDeleteUser,
+                    })
+                    setImageUrl(school.pictureUrl)
+               } else {
+
+               }
+
                setIsLoading(false)
           }
           fetchProvinceData()
@@ -275,7 +283,7 @@ export default function SchoolEdit() {
                          <div className="flex flex-col items-start gap-[10px] self-stretch">
                               <div className="flex flex-col justify-end items-end gap-[51px] self-stretch">
                                    <div className="flex flex-col items-start gap-[32px] self-stretch">
-                                        <UploadFile onInput={handleFileInput} imageUrl={imageUrl} className="w-full py-4 border-blackground-text" />
+                                        <UploadFile onInput={handleFileInput} imageUrl={imageUrl} className="w-full py-4 border-blackground-text" text="เลือกรูปภาพโปรไฟล์ของโรงเรียน"/>
 
                                         {/* รวม */}
                                         <div className="flex items-start gap-[32px] self-stretch w-full">
@@ -367,8 +375,12 @@ export default function SchoolEdit() {
                                         </div>
                                    </div>
                                    <div className="flex align-center gap-4">
-                                        <button onClick={() => router.back()} className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border border-[#2A3A50] text-zinc-50" >ยกเลิก</button>
-                                        <button onClick={() => handleSubmit()} className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border bg-[#5572FA] border-[#5572FA] text-zinc-50 hover:bg-blue-300" >แก้ไข</button>
+                                        <CancelButton className="w-40" onClick={() => router.back()}>
+                                             <p>ยกเลิก</p>
+                                        </CancelButton>
+                                        <ConfirmButton className="w-40" onClick={() => handleSubmit()}>
+                                             <p>ตกลง</p>
+                                        </ConfirmButton>
                                    </div>
                               </div>
                          </div>

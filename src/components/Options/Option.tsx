@@ -26,7 +26,7 @@ export const Option: React.FC<Props> = ({ children }) => {
           </div>
 
           {
-               isOpen && <div className='z-10 absolute -left-24 top-12 rounded-xl bg-[#2A3A50]'>
+               isOpen && <div className='text-left z-10 absolute right-0 top-12 rounded-xl bg-[#2A3A50]' onClick={() => setIsOpen(prev => !prev)}>
                     {children}
                </div>
           }

@@ -1,9 +1,14 @@
-import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
-import { ICreateAssignment } from "@/types/assignment";
+"use server"
 
+import { getToken } from "@/lib/session";
+import axios, { AxiosResponse } from "axios";
 export const getAssignment = async (courseId: string) => {
-  const token = Cookies.get('accessToken');
+  const token = await getToken();
+  
+  if (!courseId) {
+    //  console.error("No courseId provided.");
+     return null;
+   }
 
   if (token) {
     try {
@@ -28,7 +33,7 @@ export const getAssignment = async (courseId: string) => {
 
 
 export const getAssignmentscore = async (courseId: string) => {
-  const token = Cookies.get('accessToken');
+  const token = await getToken();
 
   if (token) {
     try {
@@ -53,7 +58,7 @@ export const getAssignmentscore = async (courseId: string) => {
 
 export const createAssignment = async (formData: ICreateAssignment) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = await getToken();
     console.log(formData)
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");

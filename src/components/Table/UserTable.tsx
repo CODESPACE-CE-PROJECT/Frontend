@@ -8,10 +8,11 @@ import { IProfile } from "@/types/user";
 
 interface Props {
      title: string
-     data?: IProfile[]
+     data?: IProfile[],
+     onClickOption: (name: string, username:string, allowLogin: boolean | null) => void
 }
 
-export const UserTable:React.FC<Props> = ({title, data}) => {
+export const UserTable:React.FC<Props> = ({title, data, onClickOption}) => {
      return (
           <div className="w-full">
                <div className="table w-full rounded-xl">
@@ -48,7 +49,7 @@ export const UserTable:React.FC<Props> = ({title, data}) => {
                                              <p className={`py-2 font-normal px-3 text-center flex items-center ${textStatusActiveColor(item.isActived, item.allowLogin)} justify-center gap-2 border-2 ${borderStatusActiveColor(item.isActived, item.allowLogin)} rounded-md`}>
                                                   <CircleIcon /> {textActivedUser(item.isActived, item.allowLogin)}
                                              </p>
-                                             <OptionUser />
+                                             <OptionUser allowLogin={item.allowLogin} onClick={(name, allowLogin) => onClickOption(name,item.username, allowLogin)}/>
                                         </div>
                                    </div>
                               </div>
