@@ -3,7 +3,7 @@
 import { Loading } from "@/components/Loading/Loading"
 import { TopNav } from "@/components/Navbar/TopNav"
 import { ICreateUser, IFileFormat, IProfile } from "@/types/user"
-import { notFound, useParams, useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { createMultipleUserBySchoolId, getProfile } from "@/actions/user"
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
@@ -36,12 +36,11 @@ export default function Page() {
                     setUser(JSON.parse(fileData))
                }else if(fileData === null){
                     setIsLoading(false)
-                    notFound();
                }
                setIsLoading(false)
           }
           fetchData()
-     }, [param.schoolId, notFound])
+     }, [param.schoolId])
 
      const onClickOption = (index: number | undefined) => {
           setFileData(prev => prev?.filter((_, i) => i !== index))

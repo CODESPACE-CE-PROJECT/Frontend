@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import { getSchoolById } from "@/actions/school";
 import { ISchool } from "@/types/school";
+
 type Props = {
      params: Promise<{ schoolId: string }>
-     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateMetadata(

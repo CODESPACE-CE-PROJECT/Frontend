@@ -61,7 +61,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
           </div>
 
           <div
-            className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rounded-lg"
+            className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rotate-180 rounded-lg"
             onClick={handleLogout}
           >
             <LogoutIcon fontSize="large" />

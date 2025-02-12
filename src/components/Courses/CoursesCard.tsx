@@ -3,7 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { getAllCourse } from "@/actions/course";
 import CourseBg from "@/assets/CoursesAssets/CourseBg.png";
-import Profiler from "@/assets/setting/profileuser.svg";
+import Profiler from "@/assets/setting/Profileuser.svg";
 
 export default function CoursesCard() {
   const router = useRouter();

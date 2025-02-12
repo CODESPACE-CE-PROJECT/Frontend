@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 interface Props {
      name?: string;
@@ -32,7 +32,7 @@ export const TextFieldEmail: React.FC<Props> = ({
      const [displayText, setDisplayText] = useState<string>("");
      const [isValid, setIsValid] = useState<boolean>(true);
 
-     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+     const emailRegex = useMemo(() => (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/), []);
 
      useEffect(() => {
           if (value !== undefined) {
@@ -44,7 +44,7 @@ export const TextFieldEmail: React.FC<Props> = ({
           else if(value && emailRegex.test(value) && value?.trim() !== ""){
                setIsValid(true)
           }
-     }, [value]);
+     }, [value, emailRegex]);
 
      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const newValue = e.target.value;

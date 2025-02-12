@@ -20,7 +20,7 @@ export const LexicalEditor = () => {
           theme,
           onError,
      };
-
+     
      const placeholder = 'พิมพ์ที่นี่ .....';
 
      return <LexicalComposer initialConfig={initialConfig}>

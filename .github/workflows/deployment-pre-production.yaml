@@ -1,0 +1,41 @@
+name: Deployment Pre Production
+
+on: 
+    push: 
+        branches: ['dev']
+
+jobs:
+    build:
+        runs-on: self-hosted
+        steps:     
+          - name: Clone Repo 🤖
+            uses: actions/checkout@v3
+          
+          - name: Set Environment Variables 🔠
+            env:
+               NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+               NEXT_PUBLIC_COMPILER_URL: ${{ secrets.NEXT_PUBLIC_COMPILER_URL }}
+               NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL }}
+            run: |
+               echo "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" >> .env
+               echo "NEXT_PUBLIC_COMPILER_URL=$NEXT_PUBLIC_COMPILER_URL" >> .env
+               echo "NEXT_PUBLIC_REAL_TIME_URL=$NEXT_PUBLIC_REAL_TIME_URL" >> .env
+
+          - name: Clear Cache 🫧
+            run: |
+               docker stop frontend || true
+               docker rm frontend || true
+               docker rmi frontend-frontend:latest || true
+            
+          - name: Run Image ✅
+            run: |
+               docker compose up -d
+            
+          - name: Message ✉️
+            uses: fjogeleit/http-request-action@v1
+            with:
+               timeout: 60000
+               url: ${{ secrets.DISCORD_WEBHOOK }}
+               method: 'POST'
+               customHeaders: '{"Content-Type": "application/json"}'
+               data: '{"content": "Frontend Build ✅","embeds": [{"title": "Preview[Frontend]","url": "https://codespace.srv-demo-2.home.unixvextor.com","color": "655172"}]}'

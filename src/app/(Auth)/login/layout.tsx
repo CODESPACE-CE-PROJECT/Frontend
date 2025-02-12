@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "หน้าเข้าสู่ระบบ",
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <>
+    <Suspense>
+      {children}
+    </Suspense>
+  </>;
 }

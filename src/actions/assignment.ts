@@ -1,8 +1,10 @@
+"use server"
+
+import { getToken } from "@/lib/session";
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 
 export const getAssignment = async (courseId: string) => {
-  const token = Cookies.get('accessToken'); // Retrieve the token from cookies
+  const token = await getToken();
   
   if (!courseId) {
     //  console.error("No courseId provided.");
@@ -33,7 +35,7 @@ export const getAssignment = async (courseId: string) => {
 
 
 export const getAssignmentscore = async (courseId: string) => {
-  const token = Cookies.get('accessToken');
+  const token = await getToken();
 
   if (token) {
     try {
@@ -65,7 +67,7 @@ export const createAssignment = async (formData: {
   expireAt: string;
 }) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = await getToken();
     console.log(formData)
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
