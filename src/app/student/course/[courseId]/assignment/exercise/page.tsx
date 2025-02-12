@@ -7,10 +7,11 @@ import { getCoursesById } from "@/actions/announcement";
 import Link from "next/link";
 import { IAssignment } from "@/types/assignment";
 import AssignmentTable from "@/components/Table/AssignmentTable";
-import NavigationButton from "@/components/Tab/NavigationTab";
+import NavigationTab from "@/components/Tab/NavigationTab";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
+import { Loading } from "@/components/Loading/Loading";
 
 export default function Assignment() {
   const router = useRouter();
@@ -49,28 +50,36 @@ export default function Assignment() {
     fetchAssignments();
   }, [courseId, param.courseId]);
 
-  if (loading) return <div>Loading...</div>;
+
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      <TopNav
-        disableNotification={false}
-        imageUrl={profile?.pictureUrl}
-        role={profile?.role}
-      >
-        <p>แบบฝึกหัด</p>
-      </TopNav>
-      <NavigationButton
-        courseId={courseId}
-        basePath={`/student/course/${courseId}/assignment`}
-      />
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+          <Loading className="size-20" />
+        </div>
+      ) : (
+        <>
+          <TopNav
+            disableNotification={false}
+            imageUrl={profile?.pictureUrl}
+            role={profile?.role}
+          >
+            <p>แบบฝึกหัด</p>
+          </TopNav>
+          <NavigationTab
+            courseId={courseId}
+            basePath={`/student/course/${courseId}/assignment`}
+          />
 
-      <div className="mt-4">
-        {assignments && (
-          <AssignmentTable assignments={assignments} courseId={courseId} />
-        )}
-      </div>
+          <div className="mt-4">
+            {assignments && (
+              <AssignmentTable assignments={assignments} courseId={courseId} />
+            )}
+          </div>
+        </>)}
     </>
+
   );
 }

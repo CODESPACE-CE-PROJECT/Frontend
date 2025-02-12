@@ -128,7 +128,7 @@ export default function Setting() {
                   <p className="text-lg text-gray-400">{profileData?.email}</p>
                   <div className="flex flex-row items-center gap-x-4">
                     <p className="text-lg pb-5">
-                      {profileData?.role === Role.STUDENT ? "ผู้เรียน" : ""}
+                      {profileData?.role === Role.ADMIN? "admin" : ""}
                     </p>
                     <div className="bg-[#FAFAFA] size-2 rounded-full mb-5" />
                     <p className="text-lg pb-5">{profileData?.school.schoolName}</p>
