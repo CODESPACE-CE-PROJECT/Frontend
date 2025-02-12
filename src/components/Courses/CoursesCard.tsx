@@ -85,7 +85,7 @@ export default function CoursesCard() {
           </div>
         ))
       ) : (
-        <p>No courses available at the moment.</p>
+        <p>ไม่มีคอร์สเปิดให้บริการ ณ เวลานี้</p>
       )}
     </div>
   );

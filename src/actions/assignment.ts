@@ -2,7 +2,6 @@
 
 import { getToken } from "@/lib/session";
 import axios, { AxiosResponse } from "axios";
-
 export const getAssignment = async (courseId: string) => {
   const token = await getToken();
   
@@ -12,24 +11,23 @@ export const getAssignment = async (courseId: string) => {
    }
 
   if (token) {
-    
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
     try {
-    
       const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      return response.data;  
+      return response.data;
     } catch (error) {
-   
       console.error("Error fetching assignment:", error);
       return null;
     }
   } else {
- 
     console.error("No access token found.");
-    return null; 
+    return null;
   }
 };
 
@@ -58,14 +56,7 @@ export const getAssignmentscore = async (courseId: string) => {
   }
 };
 
-export const createAssignment = async (formData: {
-  courseId: string;
-  title: string;
-  type: "EXERCISE" | "EXAMONSITE" | "EXAMONLINE";
-  announceDate: string; 
-  startAt: string;
-  expireAt: string;
-}) => {
+export const createAssignment = async (formData: ICreateAssignment) => {
   try {
     const token = await getToken();
     console.log(formData)

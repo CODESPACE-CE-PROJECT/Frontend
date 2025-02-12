@@ -28,13 +28,13 @@ export const TopNav: FC<Props> = ({ children, imageUrl,role,disableNotification}
                                    src={imageUrl}
                                    alt='avatart'
                                    priority={true}
-                                   width={45}
-                                   height={45}
-                                   className='object-cover w-auto h-auto'
+                                   width={100}
+                                   height={100}
+                                   className='w-12 h-12 object-cover border border-blackground-text rounded-full'
                               />
                          </Link> :
                          <Link href={`/${getRole(role)}/profile`}>
-                              <AccountCircleIcon className='text-[45px]' />
+                              <AccountCircleIcon fontSize='inherit' className='text-[48px]' />
                          </Link>
                }
           </div>
