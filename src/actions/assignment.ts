@@ -1,7 +1,9 @@
 "use server"
 
 import { getToken } from "@/lib/session";
+import { ICreateAssignment } from "@/types/assignment";
 import axios, { AxiosResponse } from "axios";
+
 export const getAssignment = async (courseId: string) => {
   const token = await getToken();
   

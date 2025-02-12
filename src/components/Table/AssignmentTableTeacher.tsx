@@ -54,7 +54,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, courseId }) => {
                     </div>
 
                     <div className="text-white text-lg px-4 py-3 rounded-md text-center w-[10px]">
-                         <OptionUser />
+                         <OptionUser onClick={() => {}}  allowLogin={true}/>
                     </div>
                     
                 </div>
