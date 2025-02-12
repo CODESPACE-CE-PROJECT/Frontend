@@ -10,7 +10,6 @@ import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
 
 export default function Page() {
-   
     const [formData, setFormData] = useState({
         password: "",
         confirmPassword: "",
@@ -18,27 +17,26 @@ export default function Page() {
 
     const handleInputChange = (value: string | number, name: string) => {
         setFormData((prev) => {
-            return {
+              return {
                 ...prev,
                 [name]: value as string
-            } as { password: string, confirmPassword: string }
-        })
+              } as {password: string , confirmPassword: string}
+            })
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-
         e.preventDefault();
         const id = notify(NotifyType.LOADING, "กำลังเปลี่ยนรหัสผ่าน");
         const result = await updatePassword(formData);
         if (id !== undefined) {
-            if (result.status === 201) {
+              if (result.status === 201) {
                 updateNotify(id, NotifyType.SUCCESS, "ตอบกลับสำเร็จ");
-
-            } else {
+                
+              } else {
                 updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการตอบกลับ");
+              }
             }
-        }
-
+        
     };
 
     const handleCancel = () => {
@@ -53,7 +51,7 @@ export default function Page() {
 
     return (
         <div>
-
+         
             <div className="min-h-screen  flex items-start justify-center">
                 <div className="p-8 rounded-lg shadow-lg w-full max-w-[540px]">
                     <p className="text-4xl mt-6 font-semibold text-center">เปลี่ยนรหัสผ่าน</p>
@@ -69,7 +67,7 @@ export default function Page() {
                             <Label text="ยืนยันรหัสผ่าน" isRequired={true} />
                             <TextFieldPassword name="confirmPassword" onChange={handleInputChange} />
                         </div>
-                        
+
 
                         <div className="mt-6 w-full">
                             <ConfirmButton className="w-full" disabled={isDisabled}>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
 import { IAssignment } from "@/types/assignment";
-import NavigationButton from "@/components/Tab/์NavigationTab";
+import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreTable from "@/components/Table/ScoreTable";
 
 export default function Score() {
@@ -64,7 +64,7 @@ export default function Score() {
 
   return (
     <>
-      <NavigationButton courseId={courseId} basePath={`/student/course/${courseId}/score`} />
+      <NavigationTab courseId={courseId} basePath={`/student/course/${courseId}/score`} />
       <ScoreTable assignments={assignments} isLoading={isLoading} error={error} />
 
       <div className="flex justify-end px-8 py-4">
