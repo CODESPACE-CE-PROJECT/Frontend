@@ -1,5 +1,7 @@
 import { IProfile } from "@/types/user";
 import { IReplyAnnounce } from "./courseAnnounce";
+import { AssignmentType } from "@/enum/enum";
+import { AnnounceAssignmentType } from "@/enum/enum";
 
 interface IUser {
   firstName: string;
@@ -18,21 +20,21 @@ interface ICourseAnnounce {
   user: IUser;
 }
 
-interface IAssignment {
+export type IAssignment = {
   assignmentId: string;
   username: string;
   title: string;
-  type: "EXERCISE" | "EXAMONSITE";
+  type: AssignmentType;
   isLock: boolean;
   startAt: string;
   expireAt: string;
-  announceType: "ANNOUNCED";
+  announceType: AnnounceAssignmentType;
   announceDate: string;
   createdAt: Date;
   updatedAt: Date;
   courseId: string;
   user: IUser;
-}
+};
 
 export type ICourse = {
   courseId: string;
@@ -45,16 +47,15 @@ export type ICourse = {
   schoolId: string;
   courseAnnounce: ICourseAnnounce[];
   assignment: IAssignment[];
-}
+};
 
-export type IPeople ={
+export type IPeople = {
   courseStudent: {
-    courseStudentId: string,
-    user: IProfile,
-  
-  }[],
-  courseTeacher:{
-    courseTeacherId: string,
-    user: IProfile,
-  }[],
-}
+    courseStudentId: string;
+    user: IProfile;
+  }[];
+  courseTeacher: {
+    courseTeacherId: string;
+    user: IProfile;
+  }[];
+};

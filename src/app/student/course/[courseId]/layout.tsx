@@ -1,3 +1,4 @@
+import ClassRoomNav from "@/components/Navbar/ClassRoomNav";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,5 +11,10 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <ClassRoomNav />
+      <div className="flex flex-col p-10 w-screen h-screen">{children}</div>
+    </>
+  );
 }
