@@ -4,8 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
 import { IAssignment } from "@/types/assignment";
-import NavigationButton from "@/components/Tab/์NavigationTab";
+import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreTable from "@/components/Table/ScoreTable";
+import { TopNav } from "@/components/Navbar/TopNav";
+import { IProfile } from "@/types/user";
+import { getProfile } from "@/actions/user";
 
 export default function Score() {
   const params = useParams<{ courseId: string }>();
@@ -16,6 +19,7 @@ export default function Score() {
   const [assignments, setAssignments] = useState<IAssignment["assignment"]>([]);
   const [totalScore, setTotalScore] = useState<number>(0);
   const [maxTotalScore, setMaxTotalScore] = useState<number>(0);
+  const [profile, setProfile] = useState<IProfile>();
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -23,33 +27,40 @@ export default function Score() {
       if (courseId) {
         try {
           const data = await getAssignment(courseId);
-          console.log(data);
-
+          const profile: IProfile = await getProfile();
+          setProfile(profile);
           if (data?.data?.assignment && Array.isArray(data.data.assignment)) {
             const exerciseAssignments = data.data.assignment.filter(
-              (assignment: IAssignment["assignment"][number]) => assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
+              (assignment: IAssignment["assignment"][number]) =>
+                assignment.type === "EXAMONSITE" ||
+                assignment.type === "EXAMONLINE"
             );
-
 
             setAssignments(exerciseAssignments ?? []);
 
             const overallTotalScore = exerciseAssignments.reduce(
-              (acc: number, assignment: IAssignment["assignment"][number]) => acc + (assignment.totalScore ?? 0),
+              (acc: number, assignment: IAssignment["assignment"][number]) =>
+                acc + (assignment.totalScore ?? 0),
               0
             );
-
 
             setTotalScore(overallTotalScore);
 
             const overallMaxTotalScore = exerciseAssignments.reduce(
               (acc: number, assignment: IAssignment["assignment"][number]) =>
-                acc + (assignment.problem?.reduce((sum: number, problem) => sum + problem.score, 0) ?? 0),
+                acc +
+                (assignment.problem?.reduce(
+                  (sum: number, problem) => sum + problem.score,
+                  0
+                ) ?? 0),
               0
             );
 
             setMaxTotalScore(overallMaxTotalScore);
           } else {
-            setError("Failed to fetch assignments or data is not in expected format.");
+            setError(
+              "Failed to fetch assignments or data is not in expected format."
+            );
           }
         } catch (err) {
           setError("An error occurred while fetching assignments.");
@@ -64,13 +75,30 @@ export default function Score() {
 
   return (
     <>
-      <NavigationButton courseId={courseId} basePath={`/student/course/${courseId}/score`} />
-      <ScoreTable assignments={assignments} isLoading={isLoading} error={error} />
+      <TopNav
+        disableNotification={false}
+        imageUrl={profile?.pictureUrl}
+        role={profile?.role}
+      >
+        คะแนน
+      </TopNav>
+      <NavigationTab
+        courseId={courseId}
+        basePath={`/student/course/${courseId}/score`}
+      />
+      <ScoreTable
+        assignments={assignments}
+        isLoading={isLoading}
+        error={error}
+      />
 
-      <div className="flex justify-end px-8 py-4">
-        <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-8">
-          คะแนนรวม {totalScore} / {maxTotalScore}
-        </div>
+      <div className="flex justify-between items-center rounded-lg mt-6">
+        <p className="flex-1 text-white text-lg rounded-md text-end mr-4">
+          คะแนนรวม
+        </p>
+        <p className="flex w-36 text-white text-lg px-4 py-3 rounded-md text-center items-center justify-center">
+          {totalScore} / {maxTotalScore}
+        </p>
       </div>
     </>
   );

@@ -1,38 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getCoursesById } from "@/actions/announcement";
 import { getProfile } from "@/actions/user";
-import { ICourse } from "@/types/course";
 import { IProfile } from "@/types/user";
+import { ICourse } from "@/types/course";
 import { TopNav } from "@/components/Navbar/TopNav";
-import { ICourseAnnounce } from "@/types/courseAnnounce";
+import AnnouncementCard from "@/components/Courses/AnnouncementCard";
+import { IAssignment } from "@/types/course";
 
 export default function Page() {
   const param = useParams<{ courseId: string }>();
   const courseId = param.courseId;
-  const [announcement, setAnnouncement] = useState<ICourseAnnounce[]>([]);
-  const [courseDetails, setCourseDetails] = useState<ICourse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [announcement, setAnnouncement] = useState<IAssignment[]>([]);
+  const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
+
   useEffect(() => {
     const fetchCourseData = async () => {
-      try {
-        const response: ICourse = await getCoursesById(courseId);
-        const profile: IProfile = await getProfile();
-        setCourseDetails(response);
-        setAnnouncement(response.courseAnnounce || []);
-        setProfile(profile);
-        setLoading(false);
-      } catch {
-        setLoading(false);
-      }
+      const response: ICourse = await getCoursesById(courseId);
+      const profile: IProfile = await getProfile();
+      setCourseDetails(response);
+      setAnnouncement(response.assignment || []);
+      setProfile(profile);
     };
 
     fetchCourseData();
   }, [courseId]);
+
   return (
     <>
       <TopNav
@@ -42,6 +38,24 @@ export default function Page() {
       >
         <p>{courseDetails?.title}</p>
       </TopNav>
+
+      <p className="flex px-4 py-3 my-6 text-lg text-wrap">
+        {courseDetails?.description}
+      </p>
+
+      <div className="flex flex-col items-center space-y-5 px-40">
+        {announcement.length > 0 ? (
+          announcement.map((announce) => (
+            <AnnouncementCard
+              key={announce.assignmentId}
+              courseId={courseId}
+              announcement={announce}
+            />
+          ))
+        ) : (
+          <p className="text-center">ยังไม่มีการประกาศ</p>
+        )}
+      </div>
     </>
   );
 }

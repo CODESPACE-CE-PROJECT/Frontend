@@ -3,23 +3,21 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAllCourse } from "@/actions/course";
-import CourseBg from "@/app/assets/CoursesAssets/CourseBg.png";
-import UserProfile from "@/app/assets/CoursesAssets/UserProfile.svg";
-import { useDispatch } from "react-redux";
-import Image from "next/image";
-import Profiler from "@/app/assets/setting/profileuser.svg";
 import CoursesCard from "@/components/Courses/CoursesCard";
+import { TopNav } from "@/components/Navbar/TopNav";
+import { IProfile } from "@/types/user";
+import { getProfile } from "@/actions/user";
 
 export default function Courses() {
-  const router = useRouter();
-  
   const [courses, setCourses] = useState([]);
+  const [profile, setProfile] = useState<IProfile>();
 
   useEffect(() => {
-
     const fetchCourses = async () => {
       try {
         const response = await getAllCourse();
+        const profile: IProfile = await getProfile();
+        setProfile(profile);
         if (response && response.data) {
           setCourses(response.data || []);
         }
@@ -32,8 +30,19 @@ export default function Courses() {
   }, []);
 
   return (
-    <div className="flex flex-col text-[#FAFAFA] w-full">
-      <CoursesCard />
-    </div>
+    <>
+      <div className="flex flex-col p-10 w-screen h-screen">
+        <TopNav
+          disableNotification={false}
+          imageUrl={profile?.pictureUrl}
+          role={profile?.role}
+        >
+          <p className="p-[10px]">คอร์สเรียน</p>
+        </TopNav>
+        <div className="flex flex-col mt-6 text-[#FAFAFA] w-full">
+          <CoursesCard />
+        </div>
+      </div>
+    </>
   );
 }
