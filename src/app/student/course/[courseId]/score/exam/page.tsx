@@ -79,6 +79,7 @@ export default function Score() {
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
         role={profile?.role}
+        gender={profile?.gender}
       >
         คะแนน
       </TopNav>

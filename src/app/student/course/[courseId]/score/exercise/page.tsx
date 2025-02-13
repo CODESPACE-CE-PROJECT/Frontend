@@ -78,6 +78,7 @@ export default function Score() {
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
         role={profile?.role}
+        gender={profile?.gender}
       >
         คะแนน
       </TopNav>
@@ -98,6 +99,11 @@ export default function Score() {
         <p className="flex w-36 text-white text-lg px-4 py-3 rounded-md text-center items-center justify-center">
           {totalScore} / {maxTotalScore}
         </p>
+      </div>
+
+      <div className="flex flex-row justify-evenly w-full">
+        <div>graph</div>
+        <div>dashboard</div>
       </div>
     </>
   );

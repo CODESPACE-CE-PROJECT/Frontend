@@ -35,7 +35,7 @@ export const getAccessToken = async (refreshToken: string | undefined) => {
                }
           }
      } catch (error) {
-          console.log(error)
+          console.log('error')
      }
 };
 

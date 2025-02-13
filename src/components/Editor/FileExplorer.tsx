@@ -64,7 +64,7 @@ export default function FileExplorer() {
   };
 
   return (
-    <div className="bg-[#0B111B] text-white w-1/6 h-screen px-5 py-4 space-y-4 border-r-[0.5px] border-[#D7D7D71A]">
+    <div className="bg-[#0B111B] text-white w-2/12 h-screen px-5 py-4 space-y-4 border-r-[0.5px] border-[#D7D7D71A]">
       {/* Title */}
       <div className="flex items-center justify-between pb-2 border-b-[0.5px] border-[#2A3A50]">
         <div className="flex flex-row items-center space-x-2">

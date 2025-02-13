@@ -230,7 +230,7 @@ export default function Schooladd() {
   return (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] w-full h-screen">
-        <TopNav imageUrl={profile?.pictureUrl} disableNotification={true} role={profile?.role} >
+        <TopNav imageUrl={profile?.pictureUrl} disableNotification={true} role={profile?.role} gender={profile?.gender}>
           <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
             <ArrowBackIosNewRoundedIcon />
           </div>

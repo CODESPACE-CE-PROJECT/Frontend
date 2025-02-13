@@ -30,7 +30,7 @@ const AnnounceCard: React.FC<AnnounceProps> = ({ announce, profilePicture, handl
             <p className="text-xl">{announce?.user?.firstName}</p>
             <p className="text-xl">{announce?.user?.lastName}</p>
           </div>
-          <h2 className="text-sm">{new Date(announce.createdAt).toLocaleString()}</h2>
+          <h2 className="text-sm">{new Date(announce.createdAt).toLocaleString("th")}</h2>
         </div>
 
         {announce.description.split("\r\n").map((line, index) => (

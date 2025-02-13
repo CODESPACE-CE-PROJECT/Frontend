@@ -58,6 +58,7 @@ export default function Assignment() {
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
         role={profile?.role}
+        gender={profile?.gender}
       >
         <p>แบบฝึกหัด</p>
       </TopNav>

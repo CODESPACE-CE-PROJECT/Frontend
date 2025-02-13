@@ -29,7 +29,7 @@ const AnnouncementCard: React.FC<AnnouncementProps> = ({
             <p className="text-xl">{announcement?.user?.lastName}</p>
           </div>
           <h2 className="text-sm">
-            {new Date(announcement.createdAt).toLocaleString()}
+            {new Date(announcement.createdAt).toLocaleString("th")}
           </h2>
         </div>
 

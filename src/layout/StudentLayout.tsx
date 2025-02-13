@@ -50,7 +50,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
               <LibraryBooksIcon fontSize="large" />
             </NavItem>
 
-            <NavItem text="เขียนโปรแกรม" href="/student/workingspace">
+            <NavItem text="เขียนโปรแกรม" href="/student/editor">
               <CodeIcon fontSize="large" />
             </NavItem>
 

@@ -48,7 +48,7 @@ export default function Page() {
           </div>
      ) : (
           <div className="flex flex-col w-full h-full gap-y-12">
-               <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role}>
+               <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role} gender={profile?.gender}>
                     <p>โรงเรียน</p>
                </TopNav>
                <div className="flex flex-row items-center w-full gap-x-5">
