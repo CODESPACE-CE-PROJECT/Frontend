@@ -1,6 +1,6 @@
 "use client"
 
-import { getAllSchool } from "@/actions/school"
+import { getAllSchool, setEnableSchoolById } from "@/actions/school"
 import { getProfile } from "@/actions/user"
 import { Loading } from "@/components/Loading/Loading"
 import { ISchools } from "@/types/school"
@@ -11,15 +11,36 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { SchoolTable } from "@/components/Table/SchoolTable"
 import { TopNav } from "@/components/Navbar/TopNav"
 import { IProfile } from "@/types/user"
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation"
+import { NotifyType } from "@/enum/enum"
+import { notify, updateNotify } from "@/utils/toast.util"
 
 export default function Page() {
      const router = useRouter()
      const [isLoading, setIsLoading] = useState<boolean>(true)
      const [schools, setSchools] = useState<ISchools[]>()
-     const [schoolsData, setSchoolsDate] = useState<ISchools[]>()
+     const [schoolsData, setSchoolsData] = useState<ISchools[]>()
      const [search, setSearch] = useState<string>("")
      const [profile, setProfile] = useState<IProfile>()
+
+     const handleOnClickOption = async (name: string, schoolId: string) => {
+          if (name === "edit") {
+               router.push(`/admin/school/${schoolId}/edit`)
+          } else if (name === "delete") {
+               const id = notify(NotifyType.LOADING, "กำลังแก้ไข")
+               const { status } = await setEnableSchoolById(schoolId, false)
+               if (id) {
+                    if (status === 200) {
+                         updateNotify(id, NotifyType.SUCCESS, 'แก้ไขเสร็จสิ้น');
+                         const response = await getAllSchool()
+                         setSchoolsData(response)
+                         setSchools(response)
+                    } else {
+                         updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการแก้ไขข้อมูล')
+                    }
+               }
+          }
+     }
 
      useEffect(() => {
           const fetchSchools = async (): Promise<void> => {
@@ -27,10 +48,10 @@ export default function Page() {
                     const response: ISchools[] = await getAllSchool()
                     const profile: IProfile = await getProfile()
                     setProfile(profile)
-                    setSchoolsDate(response)
+                    setSchoolsData(response)
                     setSchools(response)
                } catch (error) {
-                    
+
                } finally {
                     setIsLoading(false)
                }
@@ -54,7 +75,7 @@ export default function Page() {
                <div className="flex flex-row items-center w-full gap-x-5">
                     <SearchBar onChange={(value) => setSearch(value)} />
                     <div >
-                         <ConfirmButton 
+                         <ConfirmButton
                               onClick={() => router.push('/admin/school/add')}
                               className="flex flex-row md:w-40 text-center justify-center items-center px-4 gap-x-2"
                          >
@@ -63,7 +84,7 @@ export default function Page() {
                          </ConfirmButton>
                     </div>
                </div>
-               <SchoolTable schools={schools} />
+               <SchoolTable schools={schools} onClickOption={handleOnClickOption} />
           </div>
      )
 }

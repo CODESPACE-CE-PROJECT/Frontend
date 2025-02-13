@@ -20,6 +20,8 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
+import { ConfirmButton } from "@/components/Button/ConfirmButton";
+import { CancelButton } from "@/components/Button/CancelButton";
 
 export default function Schooladd() {
   const router = useRouter()
@@ -230,8 +232,8 @@ export default function Schooladd() {
   return (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] w-full h-screen">
-        <TopNav imageUrl={profile?.pictureUrl} disableNotification={true} role={profile?.role} gender={profile?.gender}>
-          <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
+        <TopNav imageUrl={profile?.pictureUrl} disableNotification={true} role={profile?.role} >
+          <div className="cursor-pointer hover:text-primary" onClick={() => router.push('/admin/school')}>
             <ArrowBackIosNewRoundedIcon />
           </div>
           <span className="flex w-full p-[10px] text-3xl text-zinc-50">เพิ่มโรงเรียน</span>
@@ -243,7 +245,7 @@ export default function Schooladd() {
             <div className="flex flex-col items-start gap-[10px] self-stretch">
               <div className="flex flex-col justify-end items-end gap-[51px] self-stretch">
                 <div className="flex flex-col items-start gap-[32px] self-stretch">
-                  <UploadFile onInput={handleFileInput} className="w-full py-4 border-blackground-text" />
+                  <UploadFile onInput={handleFileInput} className="w-full py-4 border-blackground-text" text="เลือกรูปภาพโปรไฟล์ของโรงเรียน"/>
 
                   {/* รวม */}
                   <div className="flex items-start gap-[32px] self-stretch w-full">
@@ -332,8 +334,12 @@ export default function Schooladd() {
                   </div>
                 </div>
                 <div className="flex align-center gap-4">
-                  <button onClick={() => router.back()} className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border border-[#2A3A50] text-zinc-50" >ยกเลิก</button>
-                  <button onClick={() => handleSubmit()} className="flex w-[160px] h-[54px] justify-center items-center py-3 px-4 rounded-[6px] border bg-[#5572FA] border-[#5572FA] text-zinc-50 hover:bg-blue-300" >เพิ่ม</button>
+                  <CancelButton className="w-40" onClick={() => router.back()}>
+                    <p>ยกเลิก</p>
+                  </CancelButton>
+                  <ConfirmButton className="w-40" onClick={() => handleSubmit()}>
+                    <p>ตกลง</p>
+                  </ConfirmButton>
                 </div>
               </div>
             </div>

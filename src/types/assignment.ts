@@ -29,3 +29,15 @@ export type IAssignment = {
   }[]
 
 }
+
+export type ICreateAssignment = 
+  {
+    courseId: string,
+    title: string,
+    type: AssignmentType,
+    announceDate:string,
+    startAt: string,
+    expireAt: string
+  }
+
+

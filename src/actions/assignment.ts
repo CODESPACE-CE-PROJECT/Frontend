@@ -1,8 +1,11 @@
+"use server"
+
+import { getToken } from "@/lib/session";
+import { ICreateAssignment } from "@/types/assignment";
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 
 export const getAssignment = async (courseId: string) => {
-  const token = Cookies.get('accessToken'); // Retrieve the token from cookies
+  const token = await getToken();
   
   if (!courseId) {
     //  console.error("No courseId provided.");
@@ -10,30 +13,29 @@ export const getAssignment = async (courseId: string) => {
    }
 
   if (token) {
-    
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
     try {
-    
       const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      return response.data;  
+      return response.data;
     } catch (error) {
-   
       console.error("Error fetching assignment:", error);
       return null;
     }
   } else {
- 
     console.error("No access token found.");
-    return null; 
+    return null;
   }
 };
 
 
 export const getAssignmentscore = async (courseId: string) => {
-  const token = Cookies.get('accessToken');
+  const token = await getToken();
 
   if (token) {
     try {
@@ -56,16 +58,9 @@ export const getAssignmentscore = async (courseId: string) => {
   }
 };
 
-export const createAssignment = async (formData: {
-  courseId: string;
-  title: string;
-  type: "EXERCISE" | "EXAMONSITE" | "EXAMONLINE";
-  announceDate: string; 
-  startAt: string;
-  expireAt: string;
-}) => {
+export const createAssignment = async (formData: ICreateAssignment) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = await getToken();
     console.log(formData)
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");

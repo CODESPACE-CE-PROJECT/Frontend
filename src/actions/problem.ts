@@ -1,8 +1,8 @@
+import { getToken } from "@/lib/session";
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 
 export const getProblemById = async (problemId: string) => {
-     const token = Cookies.get('accessToken')
+     const token = await getToken()
    
      if (!problemId) {
       //  console.error("No courseId provided.");

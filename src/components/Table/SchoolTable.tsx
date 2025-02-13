@@ -3,13 +3,14 @@ import SchoolPlaceholder from "@/assets/placeholder/school-placeholder.svg"
 import Image from "next/image";
 import { ISchools } from "@/types/school";
 import { useRouter } from "next/navigation"
-
 interface Props {
      schools: ISchools[] | undefined
+     onClickOption: (name: string, schoolId: string) => void
 }
 
-export const SchoolTable: React.FC<Props> = ({ schools }) => {
+export const SchoolTable: React.FC<Props> = ({ schools,  onClickOption}) => {
      const router = useRouter()
+
      return (
           <div className="w-full">
                <div className="table w-full rounded-xl">
@@ -48,7 +49,7 @@ export const SchoolTable: React.FC<Props> = ({ schools }) => {
                                    <div className="table-cell align-middle p-4">{item.count.student}</div>
                                    <div className="table-cell align-middle p-4">
                                         <div className="flex justify-center items-center">
-                                             <OptionSchool />
+                                             <OptionSchool onClick={(name) => onClickOption(name, item.schoolId)} />
                                         </div>
                                    </div>
                               </div>

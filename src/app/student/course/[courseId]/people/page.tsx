@@ -3,16 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getpeople } from "@/actions/course";
-import Image from "next/image";
-
-import { Role } from "@/enum/enum";
 import { SearchBar } from "@/components/Input/SerachBar";
 import { IPeople } from "@/types/course";
 import { IProfile } from "@/types/user";
-import { getAvatar } from "@/utils/gender.util";
 import { PeopleTable } from "@/components/Table/PeopleTable";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { getProfile } from "@/actions/user";
+import { Loading } from "@/components/Loading/Loading";
 
 export default function People() {
   const params = useParams<{ courseId: string }>();
@@ -67,11 +64,17 @@ export default function People() {
     );
   }, [search, alluser]);
 
-  if (loading) return <div>Loading...</div>;
+  
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
+    {loading ? (
+            <div className="flex flex-col items-center justify-center h-[70vh]">
+              <Loading className="size-20" />
+            </div>
+          ) : (
+            <>
       <TopNav
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
@@ -84,6 +87,7 @@ export default function People() {
         <SearchBar onChange={(value) => setSearch(value)} />
       </div>
       <PeopleTable teachers={teachers} students={students} />
+      </>)}
     </>
   );
 }

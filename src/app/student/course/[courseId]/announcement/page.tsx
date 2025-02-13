@@ -9,6 +9,7 @@ import { ICourse } from "@/types/course";
 import { TopNav } from "@/components/Navbar/TopNav";
 import AnnouncementCard from "@/components/Courses/AnnouncementCard";
 import { IAssignment } from "@/types/course";
+import { Loading } from "@/components/Loading/Loading";
 
 export default function Page() {
   const param = useParams<{ courseId: string }>();
@@ -16,6 +17,7 @@ export default function Page() {
   const [announcement, setAnnouncement] = useState<IAssignment[]>([]);
   const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -24,6 +26,7 @@ export default function Page() {
       setCourseDetails(response);
       setAnnouncement(response.assignment || []);
       setProfile(profile);
+      setLoading(false);
     };
 
     fetchCourseData();
@@ -31,6 +34,12 @@ export default function Page() {
 
   return (
     <>
+    {loading ? (
+            <div className="flex flex-col items-center justify-center h-[70vh]">
+              <Loading className="size-20" />
+            </div>
+          ) : (
+            <>
       <TopNav
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
@@ -57,6 +66,7 @@ export default function Page() {
           <p className="text-center">ยังไม่มีการประกาศ</p>
         )}
       </div>
+      </>)}
     </>
   );
 }

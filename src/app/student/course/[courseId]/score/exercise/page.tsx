@@ -9,12 +9,12 @@ import ScoreTable from "@/components/Table/ScoreTable";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
+import { Loading } from "@/components/Loading/Loading";
 
 export default function Score() {
   const params = useParams<{ courseId: string }>();
   const { courseId } = params;
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [assignments, setAssignments] = useState<IAssignment["assignment"]>([]);
   const [totalScore, setTotalScore] = useState<number>(0);
@@ -74,6 +74,12 @@ export default function Score() {
 
   return (
     <>
+    {loading ? (
+                <div className="flex flex-col items-center justify-center h-[70vh]">
+                  <Loading className="size-20" />
+                </div>
+              ) : (
+                <>
       <TopNav
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
@@ -88,7 +94,7 @@ export default function Score() {
       />
       <ScoreTable
         assignments={assignments}
-        isLoading={isLoading}
+        isLoading={loading}
         error={error}
       />
 
@@ -105,6 +111,7 @@ export default function Score() {
         <div>graph</div>
         <div>dashboard</div>
       </div>
+      </>)}
     </>
   );
 }

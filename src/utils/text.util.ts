@@ -29,3 +29,13 @@ export const getRole = (role: Role|undefined) => {
           return null
      }
 }
+
+export const getRoleInThai = (role: Role | undefined) => {
+     if(role === Role.ADMIN){
+          return "ผู้ดูแลระบบ"
+     }else if(role === Role.TEACHER){
+          return "ผู้สอน"
+     }else if(role === Role.STUDENT){
+          return "ผู้เรียน"
+     }
+}
