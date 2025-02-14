@@ -1,9 +1,7 @@
-name: Deployment
+name: Deployment Production
 
 on: 
     push: 
-        branches: ['main']
-    pull_request:
         branches: ['main']
 
 jobs:
@@ -13,9 +11,15 @@ jobs:
             - name: Clone Repo 🤖
               uses: actions/checkout@v3
             
-            - name: show disk space
+            - name: Set Environment Variables 🔠
+              env:
+                 NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+                 NEXT_PUBLIC_COMPILER_URL: ${{ secrets.NEXT_PUBLIC_COMPILER_URL }}
+                 NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL }}
               run: |
-                df -h
+                 echo "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" >> .env
+                 echo "NEXT_PUBLIC_COMPILER_URL=$NEXT_PUBLIC_COMPILER_URL" >> .env
+                 echo "NEXT_PUBLIC_REAL_TIME_URL=$NEXT_PUBLIC_REAL_TIME_URL" >> .env
             
             - name: Clear Cache 🫧
               run: |

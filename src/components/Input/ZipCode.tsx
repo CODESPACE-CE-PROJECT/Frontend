@@ -13,7 +13,7 @@ export const ZipCode:React.FC<Props> = ({onChange, value}) => {
         if (onChange) {
             onChange(zipcode);
         }
-    }, [zipcode]);
+    }, [zipcode, onChange]);
 
     useEffect(() => {
             if(value){

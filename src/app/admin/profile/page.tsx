@@ -61,7 +61,7 @@ export default function Setting() {
     const file: File = e.target.files[0];
     if (file) {
       await uploadProfilePicture(file);
-      window.location.reload();
+      router.refresh()
     }
   };
 
@@ -69,7 +69,7 @@ export default function Setting() {
     if (isEditing) {
       setIsEditing(false);
     } else {
-      router.push("/student/profile/update-password");
+      router.push("/admin/profile/update-password");
     }
   };
 
@@ -128,10 +128,8 @@ export default function Setting() {
                   <p className="text-lg text-gray-400">{profileData?.email}</p>
                   <div className="flex flex-row items-center gap-x-4">
                     <p className="text-lg pb-5">
-                      {profileData?.role === Role.ADMIN? "admin" : ""}
+                      ผู้ดูแลระบบ
                     </p>
-                    <div className="bg-[#FAFAFA] size-2 rounded-full mb-5" />
-                    <p className="text-lg pb-5">{profileData?.school.schoolName}</p>
                   </div>
 
                   <TextProfileField label="IP" name="IpAddress" value={editData?.IpAddress || ""} isEditing={false} onChange={handleChange}
@@ -156,9 +154,9 @@ export default function Setting() {
                   <div className="flex items-center space-x-6 mt-7 w-full">
                     <label className="text-lg font-medium text-gray-300">เพศ:</label>
                     <div className="flex items-center space-x-6">
-                      <GenderRadio value={Gender.MALE} checked={editData?.gender === Gender.MALE} onChange={handleChange} disable={!isEditing} />
-                      <GenderRadio value={Gender.FEMALE} checked={editData?.gender === Gender.FEMALE} onChange={handleChange} disable={!isEditing} />
-                      <GenderRadio value={Gender.OTHER} checked={editData?.gender === Gender.OTHER} onChange={handleChange} disable={!isEditing} />
+                      <GenderRadio value={Gender.MALE} checked={editData?.gender === Gender.MALE} onChange={handleChange} disable={isEditing} />
+                      <GenderRadio value={Gender.FEMALE} checked={editData?.gender === Gender.FEMALE} onChange={handleChange} disable={isEditing} />
+                      <GenderRadio value={Gender.OTHER} checked={editData?.gender === Gender.OTHER} onChange={handleChange} disable={isEditing} />
                     </div>
                   </div>
                 </div>

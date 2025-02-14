@@ -12,6 +12,7 @@ interface Props {
   topClass?: string;
   bgColor?: string;
   textColor?: string;
+  border?: string;
 }
 
 export const Dropdown: React.FC<Props> = ({
@@ -24,7 +25,8 @@ export const Dropdown: React.FC<Props> = ({
   isSubmited,
   topClass,
   bgColor,
-  textColor
+  textColor,
+  border,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -43,7 +45,7 @@ export const Dropdown: React.FC<Props> = ({
   return (
     <div className={`relative ${className}`} ref={dropDownRef}>
       <div
-        className={`flex flex-row h-full ${textColor || 'text-zinc-50'} items-center py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] ${bgColor || 'bg-[#2A3A50]'} cursor-pointer`}
+        className={`flex flex-row h-full ${textColor || 'text-zinc-50'} ${border || ''} items-center py-2 px-4 justify-between gap-2.5 self-stretch rounded-[6px] ${bgColor || 'bg-[#2A3A50]'} cursor-pointer`}
         onClick={() => setIsOpen(prev => !prev)}
       >
         <span className={value ? '' : 'text-zinc-200'}>{value}</span>
@@ -56,12 +58,12 @@ export const Dropdown: React.FC<Props> = ({
 
       {isOpen && (
         <div
-          className={`absolute w-full max-h-[200px] ${textColor || 'text-zinc-50'} overflow-y-auto dropdown ${topClass || 'top-12'} ${bgColor || 'bg-[#2A3A50]'} border-[1px] border-[#5572FA] rounded-[6px]`}
+          className={`absolute w-full max-h-[200px] ${textColor || 'text-zinc-50'} overflow-y-auto dropdown ${topClass || 'top-12'} ${bgColor || 'bg-[#2A3A50]'} border-[1px] ${bgColor ? "": 'border-primary'} rounded-[6px]`}
         >
           {options.map((option, index) => (
             <div
               key={index}
-              className="py-2 px-4 hover:bg-[#5572FA] cursor-pointer"
+              className={`py-2 px-4 hover:${bgColor ? 'bg-gray-200': 'bg-primary'} cursor-pointer`}
               onClick={() => {
                 onChange && onChange(option, name);
                 setIsOpen(false);

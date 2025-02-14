@@ -20,15 +20,14 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
 
-  await getAccessToken(refreshToken)
-
-
   if (!refreshToken) {
     if (isPublicRoute) {
       return NextResponse.next()
     }
     return NextResponse.redirect(new URL("/login", req.url));
   }
+
+  await getAccessToken(refreshToken)
 
   if (isPublicRoute && payload?.username) {
     if (payload.role === Role.ADMIN && !path.startsWith('/admin')) {

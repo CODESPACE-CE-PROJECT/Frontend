@@ -57,7 +57,7 @@ export const getAssignmentscore = async (courseId: string) => {
 
 export const createAssignment = async (formData: ICreateAssignment) => {
   try {
-    const token = Cookies.get("accessToken");
+    const token = await getToken();
     console.log(formData)
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");

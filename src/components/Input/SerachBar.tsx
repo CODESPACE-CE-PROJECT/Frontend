@@ -7,7 +7,7 @@ interface Props {
 
 export const SearchBar: React.FC<Props> = ({ onChange, className }) => {
      return (
-          <div className="relative w-full    ">
+          <div className="relative w-full h-full">
                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <SearchTwoToneIcon className="text-neutral-50" fontSize="medium" />    
                </div>

@@ -1,8 +1,8 @@
+import { getToken } from "@/lib/session";
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 
 export const GetAllAssignmentForCalendar = async () => {
-  const token = Cookies.get("accessToken");
+  const token = await getToken()
   if (token) {
     try {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

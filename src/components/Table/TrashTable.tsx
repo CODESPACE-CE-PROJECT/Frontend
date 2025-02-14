@@ -1,8 +1,19 @@
 import Image from "next/image";
 import SchoolPlaceholder from "@/assets/placeholder/school-placeholder.svg"
 import { OptionTrash } from "../Options/OptionTrash";
+import { ISchools } from "@/types/school";
+import { Role } from "@/enum/enum";
+import { IProfile } from "@/types/user";
+import { getAvatar } from "@/utils/gender.util";
 
-export const TrashTable = () => {
+interface Props {
+     school: ISchools[] | undefined,
+     user: IProfile[] | undefined,
+     onClickOption: (name: string, type: string, id: string) => void
+}
+
+
+export const TrashTable: React.FC<Props> = ({ school, user, onClickOption }) => {
      return (
           <div className="w-full">
                <div className="table w-full rounded-xl">
@@ -19,31 +30,61 @@ export const TrashTable = () => {
                          <div className="table-row w-full">
                               <div className="table-cell align-middle py-2" />
                          </div>
-                         {Array.from({length: 10}).map((item, index) => (
-                              <div className="table-row w-full hover:bg-gray-600 hover:bg-opacity-15 text-center" key={index}>
-                                   <div className="table-cell align-middle px-8 py-4">
-                                        <div className="flex flex-col lg:flex-row items-center gap-x-4" onClick={() => {}}>
-                                             <Image
-                                                  src={SchoolPlaceholder}
-                                                  alt="school logo"
-                                                  width={60}
-                                                  height={60}
-                                                  className="object-cover"
-                                             />
-                                             <p className="text-center">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
+
+                         {
+                              school?.map((item) => (
+                                   <div className="table-row w-full hover:bg-gray-600 hover:bg-opacity-15 text-center" key={item.schoolId}>
+                                        <div className="table-cell align-middle px-8 py-4">
+                                             <div className="flex flex-col lg:flex-row items-center gap-x-4">
+                                                  <Image
+                                                       src={item.pictureUrl || SchoolPlaceholder}
+                                                       alt="school logo"
+                                                       width={60}
+                                                       height={60}
+                                                       className="object-cover"
+                                                  />
+                                                  <p className="text-center">{item.schoolName}</p>
+                                             </div>
+                                        </div>
+                                        <div className="table-cell align-middle py-4 text-left">
+                                             {item.address} {item.subDistrict} {item.district} {item.province} {item.postCode}
+                                        </div>
+                                        <div className="table-cell align-middle p-4">โรงเรียน</div>
+                                        <div className="table-cell align-middle p-4">
+                                             <div className="flex justify-center items-center">
+                                                  <OptionTrash onClick={(name) => onClickOption(name, "school", item.schoolId)}/>
+                                             </div>
                                         </div>
                                    </div>
-                                   <div className="table-cell align-middle py-4 text-left">
-                                   1 ซอยฉลองกรุง 1 เขตลาดกระบัง อำเภอลาดกระบัง จังหวัดกรุงเทพมหานคร 10520
-                                   </div>
-                                   <div className="table-cell align-middle p-4">โรงเรียน</div>
-                                   <div className="table-cell align-middle p-4">
-                                        <div className="flex justify-center items-center">
-                                            <OptionTrash />
+                              ))
+                         }
+                         {
+                              user?.map((item) => (
+                                   <div className="table-row w-full hover:bg-gray-600 hover:bg-opacity-15 text-center" key={item.username}>
+                                        <div className="table-cell align-middle px-8 py-4">
+                                             <div className="flex flex-col lg:flex-row items-center gap-x-4">
+                                                  <Image
+                                                       src={getAvatar(item.gender)}
+                                                       alt="school logo"
+                                                       width={60}
+                                                       height={60}
+                                                       className="object-cover"
+                                                  />
+                                                  <p className="text-center">{item.firstName} {item.lastName}</p>
+                                             </div>
+                                        </div>
+                                        <div className="table-cell align-middle py-4 text-left">
+                                             -
+                                        </div>
+                                        <div className="table-cell align-middle text-center p-4">{item.role === Role.TEACHER ? 'ผู้สอน' : 'ผู้เรียน'}</div>
+                                        <div className="table-cell align-middle p-4">
+                                             <div className="flex justify-center items-center">
+                                                  <OptionTrash onClick={(name) => onClickOption(name, "user", item.username)} />
+                                             </div>
                                         </div>
                                    </div>
-                              </div>
-                         ))}
+                              ))
+                         }
                     </div>
                </div>
           </div>

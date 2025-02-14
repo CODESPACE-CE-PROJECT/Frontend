@@ -62,7 +62,7 @@ export const AdminLayout: React.FC<Props> = ({ children }) => {
 
           </div>
 
-          <div className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rounded-lg" onClick={handleLogout}>
+          <div className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rounded-lg rotate-180" onClick={handleLogout}>
               <LogoutIcon fontSize="large" />
           </div>
       </div>
