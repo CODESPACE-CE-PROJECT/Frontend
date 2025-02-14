@@ -142,8 +142,8 @@ export default function Page() {
                     <SearchBar onChange={(value) => setSearch(value)} />
                     <Dropdown name="type" value={valueDropDown} onChange={(value) => setValueDropdown(value)} options={['ทั้งหมด', 'โรงเรียน', 'ผู้สอน', 'ผู้เรียน']} className="w-36 h-full z-20" topClass="top-16" />
                </div>
-               <TrashTable school={schools} user={users} onClickOption={handleOnClickOption} />
-               {/* <LexicalEditor /> */}
+               {/* <TrashTable school={schools} user={users} onClickOption={handleOnClickOption} /> */}
+               <LexicalEditor />
           </div>
      )
 }

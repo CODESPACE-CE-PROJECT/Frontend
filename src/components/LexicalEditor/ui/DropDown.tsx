@@ -42,7 +42,7 @@ export const DropDown: React.FC<Props> = ({
 
                {isOpen && (
                     <div
-                         className={`absolute z-40 top-10 px-2 min-w-48 bg-hover-navbar bg-opacity-75 rounded-[6px] shadow-sm`}
+                         className={`absolute z-40 top-10 px-2 min-w-48 bg-hover-navbar rounded-[6px] shadow-sm`}
                     >
                          {children}
                     </div>

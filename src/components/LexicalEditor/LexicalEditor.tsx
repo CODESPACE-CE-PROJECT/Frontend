@@ -1,4 +1,4 @@
-import { $getRoot, $getSelection } from "lexical"
+import { $getRoot, $getSelection, ParagraphNode } from "lexical"
 import { useEffect } from "react"
 
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
@@ -7,8 +7,14 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import {HeadingNode, QuoteNode } from '@lexical/rich-text';
+import {CheckListPlugin} from '@lexical/react/LexicalCheckListPlugin';
+import {ListPlugin} from '@lexical/react/LexicalListPlugin';
 import { theme } from "@/components/LexicalEditor/config"
 import { ToolbarPlugin } from "@/components/LexicalEditor/Plugins/ToolbarPlugin";
+import { TreeViewPlugin } from "@/components/LexicalEditor/Plugins/TreeViewPlugin";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
 
 export const LexicalEditor = () => {
      function onError(error: any) {
@@ -17,6 +23,14 @@ export const LexicalEditor = () => {
 
      const initialConfig = {
           namespace: 'Lexical Editor',
+          nodes: [ HeadingNode, 
+               ParagraphNode, 
+               QuoteNode, 
+               ListNode,
+               ListItemNode,
+               CodeNode,
+               CodeHighlightNode,
+          ],
           theme,
           onError,
      };
@@ -30,7 +44,7 @@ export const LexicalEditor = () => {
                     <RichTextPlugin
                          contentEditable={
                               <ContentEditable
-                                   className="relative h-64 overflow-y-auto bg-blackground-text outline-0"
+                                   className="relative h-96 overflow-y-auto bg-blackground-text outline-0"
                                    aria-placeholder={placeholder}
                                    placeholder={
                                         <div className="absolute top-[16px] left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">{placeholder}</div>
@@ -42,6 +56,9 @@ export const LexicalEditor = () => {
                </div>
           </div>
           <HistoryPlugin />
+          <ListPlugin />
+          <CheckListPlugin />
+          <TreeViewPlugin />
           <AutoFocusPlugin />
      </LexicalComposer>
 }
