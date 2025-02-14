@@ -50,9 +50,9 @@ export default function Page() {
     const isDisabled = formData.password !== formData.confirmPassword || !formData.password || !formData.confirmPassword;
 
     return (
-        <div>
-         
-            <div className="min-h-screen  flex items-start justify-center">
+        <div className="justify-center h-full w-full">
+         <div>
+            <div className="min-h-screen  flex items-center justify-center">
                 <div className="p-8 rounded-lg shadow-lg w-full max-w-[540px]">
                     <p className="text-4xl mt-6 font-semibold text-center">เปลี่ยนรหัสผ่าน</p>
                     <form onSubmit={handleSubmit} className="flex flex-col items-center mt-8">
@@ -82,6 +82,7 @@ export default function Page() {
                     </form>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

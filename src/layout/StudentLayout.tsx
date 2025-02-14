@@ -38,7 +38,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:w-screen overflow-x-hidden overscroll-none">
+    <div className="flex flex-col md:flex-row md:w-screen  ">
       <nav className="flex flex-col gap-y-10 xl:gap-y-20 p-3 px-3 pt-8 items-center justify-start md:w-[8vw] md:h-[100vh] border-transparent  md:border-r-border-page border-[1px]">
         <Link href={"/"}>
           <Image src={Logo} alt="logo" width={60} height={60} />

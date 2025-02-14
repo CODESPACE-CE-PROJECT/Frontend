@@ -1,6 +1,7 @@
 import { Option } from "@/components/Options/Option"
 import ModeOutlinedIcon from '@mui/icons-material/ModeOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
 export const OptionUser = () => {
      return <Option>
           <div className='flex flex-col w-36'>

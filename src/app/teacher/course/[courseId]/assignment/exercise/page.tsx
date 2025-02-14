@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
-import { IAssignment, ICreateAssignment } from "@/types/assignment";
+import { IAssignment, ICreateAssignment, IUpdateLock } from "@/types/assignment";
 import AssignmentTableTeacher from "@/components/Table/AssignmentTableTeacher";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import { TopNav } from "@/components/Navbar/TopNav";
@@ -11,7 +11,10 @@ import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
 import { createAssignment } from "@/actions/assignment";
-import {AssignmentType} from "@/enum/enum"
+import { AssignmentType } from "@/enum/enum"
+
+import { UpdatedLockAssignment } from "@/actions/assignment";
+
 export default function Assignment() {
   const router = useRouter();
   const param = useParams<{ courseId: string }>();
@@ -22,7 +25,7 @@ export default function Assignment() {
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
 
 
   const [title, setTitle] = useState("");
@@ -38,8 +41,8 @@ export default function Assignment() {
     expireAt: "",
     courseId: courseId,
   });
-  
-  
+
+
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -77,20 +80,20 @@ export default function Assignment() {
 
   const handleInputChange = (value: string | number, name: string) => {
     setFormData((prev) => {
-          return {
-            ...prev,
-            [name]: value 
-          } as ICreateAssignment
-        })
-};
+      return {
+        ...prev,
+        [name]: value
+      } as ICreateAssignment
+    })
+  };
 
 
   const handleSubmit = async () => {
     const assignmentData = {
       ...formData,
-      courseId, 
+      courseId,
     };
-  
+
     try {
       const result = await createAssignment(assignmentData);
       setIsModalOpen(false);
@@ -98,7 +101,21 @@ export default function Assignment() {
       console.error("Error creating assignment:", error);
     }
   };
-  
+
+  const handleToggle = async (assignmentData: IUpdateLock) => {
+    await UpdatedLockAssignment(assignmentData);
+    setAssignments((prevAssignments) => {
+      if (!prevAssignments) return prevAssignments;
+      const updatedAssignments = prevAssignments.assignment.map((assignment) =>
+        assignment.assignmentId === assignmentData.assignmentId
+          ? { ...assignment, isLock: assignmentData.isLock }
+          : assignment
+      );
+      return { assignment: updatedAssignments };
+    });
+
+  };
+
 
   if (error) return <div>Error: {error}</div>;
 
@@ -121,10 +138,10 @@ export default function Assignment() {
           <div className="flex justify-between items-center pt-2 ">
             <NavigationTab
               courseId={courseId}
-              basePath={`/student/course/${courseId}/assignment`}
+              basePath={`/teacher/course/${courseId}/assignment`}
             />
             <button
-              onClick={() => setIsModalOpen(true)} // Open modal on button click
+              onClick={() => setIsModalOpen(true)}
               className="bg-[#5572FA] text-white px-4 py-3 rounded-[6px] text-center h-14 text-nowrap"
             >
               สร้างแบบฝึกหัด/การทดสอบ
@@ -133,7 +150,11 @@ export default function Assignment() {
 
           <div className="mt-4">
             {assignments && (
-              <AssignmentTableTeacher assignments={assignments} courseId={courseId} />
+              <AssignmentTableTeacher
+                assignments={assignments}
+                courseId={courseId}
+                onToggle={handleToggle}
+              />
             )}
           </div>
 
