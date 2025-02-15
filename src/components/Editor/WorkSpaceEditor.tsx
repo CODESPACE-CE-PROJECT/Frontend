@@ -16,7 +16,7 @@ export default function WorkSpaceEditor() {
       enabled: false,
     },
     scrollbar: {
-      horizontalSliderSize: 4,
+      horizontalSliderSize: 18,
       verticalSliderSize: 18,
     },
     selectOnLineNumbers: true,
@@ -26,8 +26,9 @@ export default function WorkSpaceEditor() {
     automaticLayout: true,
 
     LineNumber: "on",
+    lineNumbersMinChars:3,
     padding: {
-      top: 5,
+      top: 16,
     },
   };
 
@@ -42,7 +43,7 @@ export default function WorkSpaceEditor() {
     });
   };
 
-  const handleEditorDidMount = (editor: any, monaco: Monaco) => {
+  const handleEditorDidMount = (_editor: any, monaco: Monaco) => {
     monaco.editor.setTheme("custom-vs-dark");
   };
 

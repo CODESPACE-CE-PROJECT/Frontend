@@ -12,6 +12,7 @@ const config: Config = {
   theme: {
     fontFamily: {
       sans: ['Noto Sans Thai'],
+      jetbrains: ["JetBrains Mono", "monospace"],
     },
     colors: {
       'primary': '#5572FA',

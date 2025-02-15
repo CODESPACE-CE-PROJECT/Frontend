@@ -12,9 +12,8 @@ export default function WorkSpaceTerminal() {
           <p className="text-[#C2C8CC] min-w-32">Terminal</p>
         </div>
       </div>
-      <div className="h-24">
-        <XtermTerminal />
-      </div>
+
+      <XtermTerminal />
     </div>
   );
 }
