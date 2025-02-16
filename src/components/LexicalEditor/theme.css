@@ -1,3 +1,11 @@
+.ltr {
+  text-align: left;
+}
+
+.rtl {
+  text-align: right;
+}
+
 .editor-text-bold {
   font-weight: bold;
 }
@@ -71,23 +79,15 @@
   margin: 0;
   margin-left: 16px;
   list-style-position: outside;
-  list-style-type: circle;
+  list-style-type: disc;
 }
 
 .editor-listitem {
-  margin: 8px 32px 8px 32px;
+  margin: 8px 20px 8px 20px;
 }
 
 .editor-nested-listitem {
   list-style-type: none;
-}
-
-.ltr {
-  text-align: left;
-}
-
-.rtl {
-  text-align: right;
 }
 
 .editor-quote {
@@ -101,4 +101,75 @@
      border-left-style: solid;
      border-radius: 3px;
      padding-left: 16px;
+}
+
+.editor-code {
+  background-color: #363636;
+  font-family: JetBrains Mono;
+  display: block;
+  padding: 8px 8px 8px 52px;
+  line-height: 1.53;
+  font-size: 16px;
+  margin: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  tab-size: 2;
+  overflow-x: auto;
+  position: relative;
+}
+
+.editor-code:before {
+  content: attr(data-gutter);
+  position: absolute;
+  background-color: #eee;
+  left: 0;
+  top: 0;
+  border-right: 1px solid #ccc;
+  padding: 8px;
+  color: #777;
+  white-space: pre-wrap;
+  text-align: right;
+  min-width: 25px;
+}
+.editor-code:after {
+  content: attr(data-highlight-language);
+  position: absolute;
+  top: 0;
+  right: 3px;
+  padding: 3px;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: rgba(207, 207, 207, 0.7);
+}
+
+.editorTokenComment {
+  color: slategray;
+}
+
+.editor-tokenPunctuation {
+  color: #999;
+}
+
+.editorTokenProperty {
+  color: #905;
+}
+
+.editorTokenSelector {
+  color: #690;
+}
+
+.editorTokenOperator {
+  color: #9a6e3a;
+}
+
+.editorTokenAttr {
+  color: #07a;
+}
+
+.editorTokenVariable {
+  color: #e90;
+}
+
+.editorTokenFunction {
+  color: #dd4a68;
 }
