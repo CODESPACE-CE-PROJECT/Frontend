@@ -4,13 +4,13 @@ import {
      $insertNodes,
 } from 'lexical';
 
-import KatexRenderer from '../../ui/KatexRenderer';
+import KatexRenderer from '@/components/LexicalEditor/ui/KatexRenderer';
 import { useState } from 'react';
 import { PiPlusMinusFill } from "react-icons/pi";
 import { Modal } from '@/components/Modals/Modal';
-import { Button } from '../../ui/Button';
+import { Button } from '@/components/LexicalEditor/ui/Button';
 import { TextField } from '@/components/Input/TextField/TextField';
-import { $createEquationNode } from '../../node/EquationNode';
+import { $createEquationNode } from '@/components/LexicalEditor/node/EquationNode';
 
 export const EquationPlugin = () => {
      const [editor] = useLexicalComposerContext()

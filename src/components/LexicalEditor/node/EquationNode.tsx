@@ -13,7 +13,7 @@ import type { JSX } from 'react'
 import katex from 'katex'
 import { $applyNodeReplacement, DecoratorNode } from 'lexical'
 import { Suspense } from 'react'
-import KatexRenderer from '../ui/KatexRenderer'
+import KatexRenderer from '@/components/LexicalEditor/ui/KatexRenderer'
 
 export type SerializedEquationNode = Spread<
      {

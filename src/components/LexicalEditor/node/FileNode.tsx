@@ -11,7 +11,7 @@ import {
   SerializedLexicalNode,
   Spread
 } from "lexical";
-import { FileEmbed } from "../ui/FileEmbed";
+import { FileEmbed } from "@/components/LexicalEditor/ui/FileEmbed";
 
 export const $createFileNode = ({
   file,

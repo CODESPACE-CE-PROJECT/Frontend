@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
-import { Button } from "../../ui/Button";
+import { Button } from "@/components/LexicalEditor/ui/Button";
 import { Modal } from "@/components/Modals/Modal";
 import { MdAttachFile } from "react-icons/md";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $createFileNode } from "../../node/FileNode";
+import { $createFileNode } from "@/components/LexicalEditor/node/FileNode";
 import { $insertNodes } from "lexical";
 import { uploadDocumentFile } from "@/actions/file";
 import { IFile } from "@/types/file";

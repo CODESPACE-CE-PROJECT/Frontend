@@ -21,9 +21,7 @@ import {
      CiTextAlignCenter,
      CiTextAlignRight,
      CiTextAlignJustify,
-     CiImageOn
 } from "react-icons/ci";
-import { MdAttachFile } from "react-icons/md";
 import { useCallback, useEffect, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
@@ -51,13 +49,13 @@ import { $isHeadingNode } from '@lexical/rich-text';
 import { $getSelectionStyleValueForProperty } from '@lexical/selection';
 import { blockTypeToBlockName, rootTypeToRootName } from '../type';
 import { FontSizePlugin } from '@/components/LexicalEditor/Plugins/FontSizePlugin/FontSizePlugin';
-import { Button } from '../../ui/Button';
-import { BlockFormatDropDown } from './BlockFormatDropDown';
-import CodeBlockPlugin from '../CodeBlockPlugin/CodeBlockPlugin';
-import { ImagePlugin } from "../ImagePlugin/ImagePlugin";
-import { YoututbePlugin } from "../YoutubePlugin/YoutubePlugin";
-import { EquationPlugin } from "../EquationPlugin/EquationPlugin";
-import { FilePlugin } from "../FilePlugin/FilePlugin";
+import { Button } from '@/components/LexicalEditor/ui/Button';
+import { BlockFormatDropDown } from '@/components/LexicalEditor/Plugins/ToolbarPlugin/BlockFormatDropDown';
+import CodeBlockPlugin from '@/components/LexicalEditor/Plugins/CodeBlockPlugin/CodeBlockPlugin';
+import { ImagePlugin } from "@/components/LexicalEditor/Plugins/ImagePlugin/ImagePlugin";
+import { YoututbePlugin } from "@/components/LexicalEditor/Plugins/YoutubePlugin/YoutubePlugin";
+import { EquationPlugin } from "@/components/LexicalEditor/Plugins/EquationPlugin/EquationPlugin";
+import { FilePlugin } from "@/components/LexicalEditor/Plugins/FilePlugin/FilePlugin";
 
 export const getIcon = ({
      blockType
@@ -88,7 +86,6 @@ export const getIcon = ({
      }
 }
 
-
 export const ToolbarPlugin = () => {
      const [editor] = useLexicalComposerContext();
      const [activeEditor, setActiveEditor] = useState(editor)
@@ -98,7 +95,6 @@ export const ToolbarPlugin = () => {
 
      const [fontSize, setFontSize] = useState<string>("15px")
      const [elementFormat, setElementFormat] = useState<ElementFormatType>("left")
-     const [isLink, setIsLink] = useState(false)
      const [isBold, setIsBold] = useState(false)
      const [isItalic, setIsItalic] = useState(false)
      const [isUnderline, setIsUnderline] = useState(false)
@@ -136,11 +132,6 @@ export const ToolbarPlugin = () => {
                // Update Links
                const node = getSelectedNode(selection)
                const parent = node.getParent()
-               if ($isListNode(parent) || $isListNode(node)) {
-                    setIsLink(true);
-               } else {
-                    setIsLink(false);
-               }
 
                if (elementDOM !== null) {
                     setSelectElementKey(elementKey)
