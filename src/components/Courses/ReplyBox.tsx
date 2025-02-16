@@ -43,7 +43,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ replies, courseAnnounceId }) => {
             <div className="flex flex-row items-center space-x-5">
               <p className="font-semibold">{reply.user.firstName} {reply.user.lastName}</p>
               <p className="text-sm font-light text-gray-400">
-                {new Date(reply.createAt).toLocaleString()}
+                {new Date(reply.createAt).toLocaleString("th")}
               </p>
             </div>
             <p className="text-sm text-wrap">{reply.message}</p>

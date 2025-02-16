@@ -7,9 +7,12 @@ import { COriginal } from "devicons-react";
 import { JavascriptOriginal } from "devicons-react";
 import DescriptionIcon from "@mui/icons-material/Description";
 import ClearIcon from "@mui/icons-material/Clear";
-import WindowIcon from "@mui/icons-material/Window";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+
+interface FileExplorerProps {
+  isPremium: boolean;
+}
 
 // Mapping type
 const fileIcons: Record<string, JSX.Element> = {
@@ -20,12 +23,12 @@ const fileIcons: Record<string, JSX.Element> = {
   ".txt": <DescriptionIcon fontSize="medium" />,
 };
 
-export default function FileExplorer() {
+export default function FileExplorer({ isPremium }: FileExplorerProps) {
   const [files, setFiles] = useState<string[]>([]);
   const [editingFile, setEditingFile] = useState<string | null>(null);
   const [focusedFile, setFocusedFile] = useState<string | null>(null);
 
-  const createNewFile = () => { 
+  const createNewFile = () => {
     let baseName = "untitled";
     let newFileName = baseName;
     let counter = 1;
@@ -64,17 +67,22 @@ export default function FileExplorer() {
   };
 
   return (
-    <div className="bg-[#0B111B] text-white w-1/6 h-screen px-5 py-4 space-y-4 border-r-[0.5px] border-[#D7D7D71A]">
+    <div className="overflow-y-auto bg-[#0B111B] text-white w-2/12 h-screen px-5 py-4 space-y-4 border-r-[0.5px] border-[#D7D7D71A]">
       {/* Title */}
       <div className="flex items-center justify-between pb-2 border-b-[0.5px] border-[#2A3A50]">
-        <div className="flex flex-row items-center space-x-2">
-          {/* <WindowIcon className="text-[#2A3A50]" /> */}
-          <h1 className="text-sm font-semibold border-2 border-[#2A3A50] rounded-lg py-2 px-3">Premium</h1>
+        <div className="hidden xl:flex sm:text-sm flex-row items-center space-x-2 ">
+          <h1 className="text-sm font-semibold border-2 border-[#2A3A50] rounded-lg py-2 px-3">
+            {isPremium ? "Premium" : "Standard"}
+          </h1>
         </div>
         <div className="flex flex-row items-center space-x-4">
-          <PlayArrowIcon/>
+          <PlayArrowIcon
+            fontSize="inherit"
+            className="text-3xl hover:text-primary cursor-pointer"
+          />
           <NoteAddIcon
-            className="cursor-pointer"
+            fontSize="inherit"
+            className="text-3xl hover:text-primary cursor-pointer"
             onClick={createNewFile}
           />
         </div>
@@ -83,7 +91,7 @@ export default function FileExplorer() {
       {/* File List */}
       <ul className="space-y-2">
         {files.length === 0 && (
-          <p className="text-gray-400 text-sm">No files available</p>
+          <p className="text-gray-400 text-sm">ไม่พบไฟล์</p>
         )}
         {files.map((file) => (
           <li
@@ -102,7 +110,8 @@ export default function FileExplorer() {
                   defaultValue={file}
                   onBlur={(e) => renameFile(file, e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") renameFile(file, e.currentTarget.value);
+                    if (e.key === "Enter")
+                      renameFile(file, e.currentTarget.value);
                     if (e.key === "Escape") setEditingFile(null);
                   }}
                   className="p-0.5 bg-gray-600 text-white rounded focus:outline-none w-full"

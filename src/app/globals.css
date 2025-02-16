@@ -75,6 +75,10 @@ xterm-viewport {
   cursor: pointer;
 }
 
+.scrollbar-x-custom::-webkit-scrollbar {
+  height: 8px; /* Adjust horizontal scrollbar height */
+}
+
 /* Scrollbar width */
 ::-webkit-scrollbar {
   width: 8px;

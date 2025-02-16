@@ -1,5 +1,7 @@
+import { StateSubmission } from "@/enum/enum";
+
 export interface IProblems {
-problemId: string;
+  problemId: string;
   score: number;
-  stateSubmission: string;
+  stateSubmission: StateSubmission;
 }
