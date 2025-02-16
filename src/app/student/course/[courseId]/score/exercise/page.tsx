@@ -36,7 +36,6 @@ export default function Score() {
             );
 
             setAssignments(exerciseAssignments ?? []);
-
             const overallTotalScore = exerciseAssignments.reduce(
               (acc: number, assignment: IAssignment["assignment"][number]) =>
                 acc + (assignment.totalScore ?? 0),
@@ -74,44 +73,40 @@ export default function Score() {
 
   return (
     <>
-    {loading ? (
-                <div className="flex flex-col items-center justify-center h-[70vh]">
-                  <Loading className="size-20" />
-                </div>
-              ) : (
-                <>
-      <TopNav
-        disableNotification={false}
-        imageUrl={profile?.pictureUrl}
-        role={profile?.role}
-        gender={profile?.gender}
-      >
-        คะแนน
-      </TopNav>
-      <NavigationTab
-        courseId={courseId}
-        basePath={`/student/course/${courseId}/score`}
-      />
-      <ScoreTable
-        assignments={assignments}
-        isLoading={loading}
-        error={error}
-      />
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+          <Loading className="size-20" />
+        </div>
+      ) : (
+        <>
+          <TopNav
+            disableNotification={false}
+            imageUrl={profile?.pictureUrl}
+            role={profile?.role}
+            gender={profile?.gender}
+          >
+            คะแนน
+          </TopNav>
+          <NavigationTab
+            courseId={courseId}
+            basePath={`/student/course/${courseId}/score`}
+          />
+          <ScoreTable
+            assignments={assignments}
+            isLoading={loading}
+            error={error}
+          />
 
-      <div className="flex justify-between items-center rounded-lg mt-6">
-        <p className="flex-1 text-white text-lg rounded-md text-end mr-4">
-          คะแนนรวม
-        </p>
-        <p className="flex w-36 text-white text-lg px-4 py-3 rounded-md text-center items-center justify-center">
-          {totalScore} / {maxTotalScore}
-        </p>
-      </div>
-
-      <div className="flex flex-row justify-evenly w-full">
-        <div>graph</div>
-        <div>dashboard</div>
-      </div>
-      </>)}
+          <div className="flex justify-between items-center rounded-lg mt-6">
+            <p className="flex-1 text-white text-lg rounded-md text-end mr-4">
+              คะแนนรวม
+            </p>
+            <p className="flex w-36 text-white text-lg px-4 py-3 rounded-md text-center items-center justify-center">
+              {totalScore} / {maxTotalScore}
+            </p>
+          </div>
+        </>
+      )}
     </>
   );
 }
