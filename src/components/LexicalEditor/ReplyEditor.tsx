@@ -8,15 +8,12 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { theme } from "@/components/LexicalEditor/theme"
-import { ToolbarPlugin } from "@/components/LexicalEditor/Plugins/ToolbarPlugin/ToolbarPlugin";
 import { TreeViewPlugin } from "@/components/LexicalEditor/Plugins/TreeViewPlugin";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
-import { ImageNode } from "@/components/LexicalEditor/node/ImageNode";
-import { YoutubeNode } from "@/components/LexicalEditor/node/YoutubeNode";
-import { EquationNode } from "@/components/LexicalEditor/node/EquationNode";
-import { FileNode } from "@/components/LexicalEditor/node/FileNode";
 import { CustomOnChangePlugin } from '@/components/LexicalEditor/Plugins/CustomOnChangePlugin/CustomOnChangePlugin';
+import { ReplyToolbarPlugin } from '@/components/LexicalEditor/Plugins/ReplyToolbarPlugin/ReplyToolbarPlugin';
+import { useState } from 'react';
 
 interface Props {
      value: string,
@@ -30,16 +27,14 @@ const PlaygroundNodes = [
      ListItemNode,
      CodeNode,
      CodeHighlightNode,
-     ImageNode,
-     YoutubeNode,
-     EquationNode,
-     FileNode
 ]
 
-export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
+export const ReplyEditor:React.FC<Props> = ({onChange, value}) => {
+     const [isActive, setIsActive] = useState(false);
+     const [valueChange, setValueChange] = useState<string>()
 
      const initialConfig = {
-          namespace: 'Lexical Editor',
+          namespace: 'Lexical Reply Editor',
           nodes: [...PlaygroundNodes],
           editable: true,
           theme: theme,
@@ -47,32 +42,45 @@ export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
                throw error;
           },
      };
+
+     const onFocus = () => setIsActive(true);
+     const onBlur = () => setIsActive(false);
+     const onValueChange = (value: string) => {
+          if(value !== `<p class="editor-paragraph"><br></p>`){
+               setValueChange(value)
+               onChange(value)
+          }else {
+               setValueChange(undefined)
+          }
+     }
      
      const placeholder = 'พิมพ์ที่นี่ .....';
 
      return <LexicalComposer initialConfig={initialConfig}>
-          <div className="relative rounded-md bg-blackground-text">
-               <ToolbarPlugin />
+          <div className="relative rounded-md bg-blackground-text focus-within:border-[1px] focus-within:border-primary"
+               onFocus={onFocus} 
+               onBlur={onBlur}
+          >
                <div className="relative p-4">
                     <RichTextPlugin
                          contentEditable={
                               <ContentEditable
-                                   className="relative h-96 overflow-y-auto bg-blackground-text outline-0"
-                                   aria-placeholder={placeholder}
-                                   placeholder={
-                                        <div className="absolute top-[16px] left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">{placeholder}</div>
-                                   }
+                              className={`relative ${isActive || valueChange !== undefined ? 'h-24': 'h-8'} overflow-y-auto bg-blackground-text outline-0`}
+                              aria-placeholder={placeholder}
+                              placeholder={
+                                   <div className="absolute top-[16px] left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">{placeholder}</div>
+                              }
                               />
                          }
                          ErrorBoundary={LexicalErrorBoundary}
                     />
                </div>
+               <ReplyToolbarPlugin isActive={isActive || valueChange !== undefined}/>
           </div>
           <HistoryPlugin />
           <ListPlugin />
           <CheckListPlugin />
-          {/* <TreeViewPlugin /> */}
           <AutoFocusPlugin />
-          <CustomOnChangePlugin value={value} onChange={onChange}/>
+          <CustomOnChangePlugin value={value} onChange={onValueChange}/>
      </LexicalComposer>
 }

@@ -1,3 +1,5 @@
+import { StateSubmission } from "@/enum/enum"
+
 export const borderStatusActiveColor = (isActived: boolean, allowLogin: boolean) => {
      if(!allowLogin){
           return "border-red-l"

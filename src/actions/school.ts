@@ -1,7 +1,7 @@
 "use server"
 
 import axios, { AxiosError } from "axios"
-import { ICreateSchool, IUpdateSchool } from "../types/school"
+import { ICreateSchool, IUpdateSchool } from "@/types/school"
 import { PackageType } from "@/enum/enum"
 import { getToken } from "@/lib/session"
 
