@@ -1,44 +1,45 @@
 import { IAssignment } from "@/types/assignment";
 import AssignmentBox from "@/components/Assignment/AssignmentBox";
 
-
 interface Props {
   assignments: IAssignment;
   courseId: string;
-   // รับค่าตัวแปรนี้เข้ามาจาก Props
+  // รับค่าตัวแปรนี้เข้ามาจาก Props
 }
 
 const AssignmentList: React.FC<Props> = ({ assignments, courseId }) => {
   return (
     <div>
       {/* Table Header */}
-      <div className="flex justify-center items-center px-2 rounded-lg pt-3 gap-x-4">
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center w-1/2">
+      <div className="flex justify-center items-center px-2 rounded-lg pt-3 space-x-4">
+        <div className="flex-1 text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] text-center w-6/12">
           แบบฝึกหัด
         </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center w-4/12">
+        <p className="flex text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] justify-center items-center w-4/12">
           ข้อย่อย
-        </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] text-center w-1/6">
+        </p>
+        <div className="flex text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] justify-center items-center w-2/12">
           คะแนน
         </div>
       </div>
 
       {/* Assignment List */}
       {assignments.assignment?.map((assignment) => (
-        <div key={assignment.assignmentId} className="flex justify-center items-center px-8 py-3 rounded-lg gap-x-4">
+        <div
+          key={assignment.assignmentId}
+          className="flex justify-between items-center rounded-lg space-x-4"
+        >
           {/* Assignment Title */}
-          <div className="text-white text-lg px-3 rounded-md flex text-start flex-1 w-1/2 ml-3">
+          <div className="flex-1 text-white text-lg px-4 py-3 rounded-md text-start w-6/12 my-5">
             {assignment.title}
           </div>
 
           {/* Conditional Rendering: Show AssignmentBox or AssignmentBoxExam */}
-         
-            <AssignmentBox assignment={assignment} courseId={courseId} />
-         
+
+          <AssignmentBox assignment={assignment} courseId={courseId} />
 
           {/* Total Score */}
-          <div className="text-white text-lg pl-9 rounded-md text-center w-1/6">
+          <div className="flex text-white text-lg px-4 py-3 justify-center text-center w-2/12">
             {assignment.totalScore}
           </div>
         </div>

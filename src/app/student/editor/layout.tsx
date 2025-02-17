@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "หน้าโปรไฟล์",
-  description: "หน้าโปรไฟล์",
+  title: "WokingSpace",
+  description: "WokingSpace",
 };
 
 export default async function Layout({
@@ -10,6 +10,5 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-
   return <>{children}</>;
 }

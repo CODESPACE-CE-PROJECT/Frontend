@@ -1,16 +1,13 @@
 "use server"
 
-import { getToken } from "@/lib/session";
-import { ICreateAssignment } from "@/types/assignment";
 import axios, { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
+import { IAssignment, ICreateAssignment, IUpdateLock } from "@/types/assignment";
+import { getToken } from "@/lib/session";
+
 
 export const getAssignment = async (courseId: string) => {
   const token = await getToken();
-  
-  if (!courseId) {
-    //  console.error("No courseId provided.");
-     return null;
-   }
 
   if (token) {
     try {
@@ -67,7 +64,7 @@ export const createAssignment = async (formData: ICreateAssignment) => {
       return;
     }
 
-  
+
     if (new Date(formData.expireAt) <= new Date(formData.startAt)) {
       alert("Expire date must be later than start date.");
       return;
@@ -78,10 +75,10 @@ export const createAssignment = async (formData: ICreateAssignment) => {
       {
         courseId: formData.courseId,
         title: formData.title,
-        type: formData.type, 
-        announceDate: new Date(new Date(formData.announceDate).toUTCString()), 
-        startAt: new Date(new Date(formData.startAt).toUTCString()), 
-        expireAt: new Date(new Date(formData.expireAt).toUTCString()), 
+        type: formData.type,
+        announceDate: new Date(new Date(formData.announceDate).toUTCString()),
+        startAt: new Date(new Date(formData.startAt).toUTCString()),
+        expireAt: new Date(new Date(formData.expireAt).toUTCString()),
       },
       {
         headers: {
@@ -106,3 +103,27 @@ export const createAssignment = async (formData: ICreateAssignment) => {
     throw error;
   }
 };
+
+
+export const UpdatedLockAssignment = async (assignmentData: IUpdateLock) => {
+  const token = await getToken();
+  if (token) {
+
+    const response = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${assignmentData.assignmentId}/${assignmentData.isLock}`,
+      {
+        isLock: assignmentData.isLock,
+
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+    );
+    return response.data;
+
+  }
+};
+
