@@ -11,7 +11,6 @@ import { Dropdown } from "@/components/Input/Dropdown";
 import { NotifyType, Role } from "@/enum/enum";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { deleteUserByUsername, setEnableUserByUsername } from "@/actions/user";
-import { LexicalEditor } from "@/components/LexicalEditor/LexicalEditor";
 
 export default function Page() {
      const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -142,8 +141,7 @@ export default function Page() {
                     <SearchBar onChange={(value) => setSearch(value)} />
                     <Dropdown name="type" value={valueDropDown} onChange={(value) => setValueDropdown(value)} options={['ทั้งหมด', 'โรงเรียน', 'ผู้สอน', 'ผู้เรียน']} className="w-36 h-full z-20" topClass="top-16" />
                </div>
-               {/* <TrashTable school={schools} user={users} onClickOption={handleOnClickOption} /> */}
-               <LexicalEditor />
+               <TrashTable school={schools} user={users} onClickOption={handleOnClickOption} />
           </div>
      )
 }

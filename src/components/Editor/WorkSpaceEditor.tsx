@@ -1,9 +1,29 @@
 "use client";
 
-import { CplusplusOriginal } from "devicons-react";
 import { Editor, Monaco } from "@monaco-editor/react";
+import {
+  CplusplusOriginal,
+  PythonOriginal,
+  COriginal,
+  JavaOriginal,
+} from "devicons-react";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { Loading } from "@/components/Loading/Loading";
+import { ICodeSpace } from "@/types/codeSpace";
 
-export default function WorkSpaceEditor() {
+interface WorkSpaceEditorProps {
+  codeFile?: ICodeSpace;
+}
+
+const fileIcons: Record<string, JSX.Element> = {
+  ".cpp": <CplusplusOriginal size="24" />,
+  ".py": <PythonOriginal size="24" />,
+  ".c": <COriginal size="24" />,
+  ".java": <JavaOriginal size="24" />,
+  "": <DescriptionIcon fontSize="medium" />,
+};
+
+export default function WorkSpaceEditor({ codeFile }: WorkSpaceEditorProps) {
   const options = {
     autoIndent: "full",
     contextmenu: true,
@@ -12,9 +32,6 @@ export default function WorkSpaceEditor() {
     lineHeight: 24,
     hideCursorInOverviewRuler: true,
     matchBrackets: "always",
-    minimap: {
-      enabled: false,
-    },
     scrollbar: {
       horizontalSliderSize: 18,
       verticalSliderSize: 18,
@@ -24,27 +41,42 @@ export default function WorkSpaceEditor() {
     readOnly: false,
     cursorStyle: "line",
     automaticLayout: true,
-
-    LineNumber: "on",
-    lineNumbersMinChars:3,
+    lineNumbers: "on",
+    lineNumbersMinChars: 3,
     padding: {
       top: 16,
     },
   };
 
   const handleEditorWillMount = (monaco: Monaco) => {
-    monaco.editor.defineTheme("custom-vs-dark", {
+    monaco.editor.defineTheme("custom", {
       base: "vs-dark",
       inherit: true,
-      rules: [],
+      rules: [
+        {
+          background: "#0B111B",
+          token: "",
+        },
+      ],
       colors: {
-        "editor.background": "#0B111B",
+        "editor.forefround": "#16233A",
+        "editor.background": "#16233A",
+        "editor.selectionBackground": "#2A3A50",
+        "editor.lineHighlightBackground": "#2A3A50",
+        "editorCursor.foreground": "#F8F8F0",
+        "editorWhitespace.foreground": "#3B3A32",
+        "editorIndentGuide.activeBackground": "#9D550FB0",
       },
     });
   };
 
-  const handleEditorDidMount = (_editor: any, monaco: Monaco) => {
-    monaco.editor.setTheme("custom-vs-dark");
+  const handleEditorOnMount = (_editor: any, monaco: Monaco) => {
+    monaco.editor.setTheme("custom");
+  };
+
+  const getFileIcon = (file: string) => {
+    const extension = file?.slice(file.lastIndexOf("."));
+    return fileIcons[extension] || <DescriptionIcon />;
   };
 
   return (
@@ -52,36 +84,23 @@ export default function WorkSpaceEditor() {
       {/* Text Editor Header */}
       <div className="flex h-auto border-b-[0.5px] border-b-[#2A3A50]">
         <div className="flex flex-row bg-[#0B111B] rounded-t-lg border-t-[#5572FA] border-t-2 border-r-[#2A3A50] border-r-[0.5px] space-x-3 px-4 pt-3 pb-4">
-          <CplusplusOriginal size="24" />
-          <p className="text-[#C2C8CC] min-w-32">main.cpp</p>
+          {/* change to fileIcons with  */}
+          {codeFile?.fileName && getFileIcon(codeFile?.fileName)}
+          <p className="text-[#C2C8CC] truncate min-w-32 max-w-96 ">{codeFile?.fileName}</p>
         </div>
       </div>
 
       {/* Editor */}
-      <div className="flex-1">
+      <div className="w-full h-full">
         <Editor
-          className="w-full h-full"
-          defaultLanguage="cpp"
-          defaultValue={`#include <iostream>
-  using namespace std;
-  
-  int main() {
-      int first_number, second_number, sum;
-      
-      cout << "Enter two integers: ";
-      cin >> first_number >> second_number;
-      
-      sum = first_number + second_number;
-      
-      cout << first_number << " + " <<  second_number << " = " << sum;     
-      
-      return 0;
-  }`}
           options={{
             ...options,
           }}
+          loading={<Loading />}
+          language={codeFile?.language?.toLowerCase()}
+          value={codeFile?.sourceCode}
           beforeMount={handleEditorWillMount}
-          onMount={handleEditorDidMount}
+          onMount={handleEditorOnMount}
         />
       </div>
     </div>

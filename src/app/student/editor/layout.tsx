@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "WokingSpace",
-  description: "WokingSpace",
+  title: "พื้นที่เขียนโค้ด",
+  description: "พื้นที่เขียนโค้ด",
 };
 
 export default async function Layout({
