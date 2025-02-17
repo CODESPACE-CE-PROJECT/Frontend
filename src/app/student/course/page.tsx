@@ -1,29 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { getAllCourse } from "@/actions/course";
-import CoursesCard from "@/components/Courses/CoursesCard";
+import { CoursesCard } from "@/components/Courses/CoursesCard";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
+import { ICourse } from "@/types/course";
 
 export default function Courses() {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<ICourse[]>();
   const [profile, setProfile] = useState<IProfile>();
 
   useEffect(() => {
     const fetchCourses = async () => {
-      try {
-        const response = await getAllCourse();
+        const {status, data} = await getAllCourse();
+        if(status === 200){
+          setCourses(data)
+        }
         const profile: IProfile = await getProfile();
         setProfile(profile);
-        if (response && response.data) {
-          setCourses(response.data || []);
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
     };
 
     fetchCourses();
@@ -39,8 +35,11 @@ export default function Courses() {
         >
           <p className="p-[10px]">คอร์สเรียน</p>
         </TopNav>
-        <div className="flex flex-col mt-6 text-[#FAFAFA] w-full">
-          <CoursesCard />
+
+        <div className="flex flex-col mt-6 text-[#FAFAFA]">
+          {
+            courses?.map((item) => <CoursesCard data={item} key={item.courseId} />)
+          }
         </div>
       </div>
     </>

@@ -47,6 +47,7 @@ export type ICourse = {
   schoolId: string;
   courseAnnounce: ICourseAnnounce[];
   assignment: IAssignment[];
+  user: IProfile,
 };
 
 export type IPeople = {
