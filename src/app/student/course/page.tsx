@@ -29,8 +29,7 @@ export default function Courses() {
   }, []);
 
   return <>
-    {
-      loading ? (
+      {loading ? (
         <div className="flex flex-col items-center justify-center h-[70vh] w-full">
           <Loading className="size-20" />
         </div>
@@ -50,7 +49,6 @@ export default function Courses() {
             }
           </div>
         </div>
-      )
-    }
-  </>
+      )}
+    </>
 }

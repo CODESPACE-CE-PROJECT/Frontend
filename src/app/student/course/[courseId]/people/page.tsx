@@ -64,30 +64,30 @@ export default function People() {
     );
   }, [search, alluser]);
 
-  
+
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-    {loading ? (
-            <div className="flex flex-col items-center justify-center h-[70vh]">
-              <Loading className="size-20" />
-            </div>
-          ) : (
-            <>
-      <TopNav
-        disableNotification={false}
-        imageUrl={profile?.pictureUrl}
-        role={profile?.role}
-        gender={profile?.gender}
-      >
-        <p>สมาชิก</p>
-      </TopNav>
-      <div className="flex items-center my-3 py-3 rounded-md focus:border-[#1E90FF] duration-200  ">
-        <SearchBar onChange={(value) => setSearch(value)} />
-      </div>
-      <PeopleTable teachers={teachers} students={students} />
-      </>)}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+          <Loading className="size-20" />
+        </div>
+      ) : (
+        <>
+          <TopNav
+            disableNotification={false}
+            imageUrl={profile?.pictureUrl}
+            role={profile?.role}
+            gender={profile?.gender}
+          >
+            <p>สมาชิก</p>
+          </TopNav>
+          <div className="flex items-center my-3 py-3 rounded-md focus:border-[#1E90FF] duration-200  ">
+            <SearchBar onChange={(value) => setSearch(value)} />
+          </div>
+          <PeopleTable teachers={teachers} students={students} />
+        </>)}
     </>
   );
 }

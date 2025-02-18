@@ -72,7 +72,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
         </div>
       </nav>
 
-      <div className="flex flex-row w-screen overflow-x-hidden overscroll-none">
+      <div className="flex flex-row w-full overflow-x-hidden overscroll-none">
         {children}
       </div>
     </div>

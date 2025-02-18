@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "พื้นที่เขียนโค้ด",
-  description: "พื้นที่เขียนโค้ด",
+  title: "หน้าเปลี่ยนรหัสผ่าน",
+  description: "หน้าเปลี่่ยนรหัสผ่าน",
 };
 
 export default async function Layout({
@@ -10,5 +10,6 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
+
   return <>{children}</>;
 }

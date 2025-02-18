@@ -54,3 +54,8 @@ export type IFileFormat = {
   role: Role,
   validType: ValidType
 }
+
+export type IUpdatePassword = {
+  password: string,
+  confirmPassword: string
+}

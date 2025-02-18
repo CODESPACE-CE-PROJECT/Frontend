@@ -1,10 +1,23 @@
+import { getCoursesById } from "@/actions/course";
 import ClassRoomNav from "@/components/Navbar/ClassRoomNav";
+import { ICourse } from "@/types/course";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "คอร์สเรียน",
-  description: "คอร์สเรียน",
-};
+type Props = {
+  params: Promise<{ courseId: string }>
+}
+
+export async function generateMetadata(
+     { params }: Props,
+): Promise<Metadata> {
+     const courseId = (await params).courseId
+     const data = await getCoursesById(courseId)
+     const course: ICourse = data
+     return {
+          title: course?.title,
+          description: course?.description
+     }
+}
 
 export default async function Layout({
   children,

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import TeacherProfile from "@/assets/CoursesAssets/TeacherIcon.svg";
 import { IAssignment } from "@/types/course";
 import Link from "next/link";
+import { getAvatar } from "@/utils/gender.util";
 
 interface AnnouncementProps {
   courseId: string;
@@ -18,7 +19,7 @@ const AnnouncementCard: React.FC<AnnouncementProps> = ({
       <div className="mx-8">
         <div className="flex flex-row items-center space-x-5 font-light text-lg my-4">
           <Image
-            src={announcement.user.pictureUrl || TeacherProfile}
+            src={announcement.user.pictureUrl || getAvatar(announcement.user.gender)}
             width={100}
             height={100}
             alt="Teacher Profile"

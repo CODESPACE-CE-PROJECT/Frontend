@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "พื้นที่เขียนโค้ด",
-  description: "พื้นที่เขียนโค้ด",
+  title: "หน้าปฏิทิน",
+  description: "หน้าปฏิทิน",
 };
 
 export default async function Layout({

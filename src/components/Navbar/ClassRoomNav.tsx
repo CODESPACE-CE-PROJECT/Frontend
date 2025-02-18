@@ -22,9 +22,9 @@ export default function ClassRoomNav() {
       <div className="flex flex-col text-lg text-[#FAFAFA] mt-10 mx-8 h-[calc(100vh-2.5rem)]">
         <Link
           href={`/${role.toLowerCase()}/course`}
-          className="flex items-center mb-6 cursor-pointer hover:text-primary"
+          className="flex items-center mb-6 cursor-pointer"
         >
-          <ArrowBackIosNewRoundedIcon />
+          <ArrowBackIosNewRoundedIcon className="hover:text-primary"/>
           <p className="font-semibold text-3xl">คอร์สเรียน</p>
         </Link>
         <div className="flex flex-col gap-3">

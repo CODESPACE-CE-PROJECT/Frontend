@@ -10,15 +10,15 @@ type GenderRadioProps = {
 
 const GenderRadio: React.FC<GenderRadioProps> = ({ value, checked, onChange, disable }) => {
   return (
-    <label className="flex items-center space-x-2 cursor-pointer">
+    <label className={`flex items-center space-x-2 ${!disable ? 'cursor-pointer': ''}`}>
       <input
         type="radio"
-        name="gender"
+        name={value}
         value={value}
         checked={checked}
         onChange={onChange}
         className="hidden peer"
-        disabled={!disable}
+        disabled={disable}
       />
       <div
         className={`w-6 h-6 flex items-center justify-center border-2 rounded-full ${

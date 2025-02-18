@@ -12,12 +12,16 @@ interface AnnounceProps {
   handleReply: (message: string, courseAnnounceId: string) => void;
 }
 
-const AnnounceCard: React.FC<AnnounceProps> = ({ announce, profilePicture, handleReply }) => {
+const AnnounceCard: React.FC<AnnounceProps> = ({
+  announce,
+  profilePicture,
+  handleReply,
+}) => {
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
 
   return (
     <div className="bg-[#16233A] rounded-md w-full">
-      <div className="mx-8">        
+      <div className="mx-8">
         <div className="flex flex-row items-center space-x-5 font-light text-lg my-4">
           <Image
             src={announce.user.pictureUrl || TeacherProfile}
@@ -30,21 +34,22 @@ const AnnounceCard: React.FC<AnnounceProps> = ({ announce, profilePicture, handl
             <p className="text-xl">{announce?.user?.firstName}</p>
             <p className="text-xl">{announce?.user?.lastName}</p>
           </div>
-          <h2 className="text-sm">{new Date(announce.createdAt).toLocaleString("th")}</h2>
+          <h2 className="text-sm">
+            {new Date(announce.createdAt).toLocaleString("th")}
+          </h2>
         </div>
 
-        {announce.description.split("\r\n").map((line, index) => (
-          <div key={index} className={index === 0 ? "font-bold pb-3" : "font-normal pb-3"}>
-            {line}
-          </div>
-        ))}
+        <div className="pb-3">{announce.description}</div>
       </div>
-      
+
       <Divider />
-      
+
       {/* Reply Box */}
-      <ReplyBox replies={announce.replyAnnounce} courseAnnounceId={announce.courseAnnounceId} />
-      
+      <ReplyBox
+        replies={announce.replyAnnounce}
+        courseAnnounceId={announce.courseAnnounceId}
+      />
+
       {announce.replyAnnounce.length > 0 && <Divider />}
 
       {/* Reply Editor Box */}

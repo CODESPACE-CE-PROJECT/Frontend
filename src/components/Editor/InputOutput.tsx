@@ -4,11 +4,12 @@ import React from "react";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import { TextArea } from "@/components/Input/TextArea";
 
-const handleInputChange = () => {
-  // setCreateForm((prev) => !prev ? prev : { ...prev, [name]: value })
-};
+interface Props {
+  output?: string,
+  onInputChage: (value: string, name: string) => void
+}
 
-export default function InputOutput() {
+export const InputOutput:React.FC<Props> = ({output, onInputChage}) => {
   return (
     <>
       <div className="flex flex-col w-5/12">
@@ -22,7 +23,7 @@ export default function InputOutput() {
             name="input"
             placeholder="Input for the program (Optional)"
             className="w-[100%] h-5/6 p-4 scrollbar-x-custom bg-transparent font-jetbrains text-nowrap rounded-none shadow-none border-none resize-none focus:!outline-none"
-            onChange={handleInputChange}
+            onChange={onInputChage}
           />
         </div>
 
@@ -33,7 +34,7 @@ export default function InputOutput() {
           </div>
           <div className=" border-blackground-text border-t-[0.5px]"></div>
           <div className="w-full h-full p-4 overflow-auto font-jetbrains text-nowrap">
-            output
+            {output}
           </div>
         </div>
       </div>
