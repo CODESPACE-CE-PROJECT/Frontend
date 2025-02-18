@@ -3,13 +3,13 @@ import { Editor, Monaco } from "@monaco-editor/react"
 import { Loading } from "@/components/Loading/Loading";
 
 interface Props {
-     language: LanguageType,
-     sourceCode: string,
-     onChange: (value: string) => void
+     language?: LanguageType,
+     sourceCode?: string,
+     onChange?: (value: string|undefined) => void
 }
 
 
-export const MonacoTextEditor = () => {
+export const MonacoTextEditor:React.FC<Props> = ({language, sourceCode, onChange}) => {
      const handleEditorWillMount = (monaco: Monaco) => {
           monaco.editor.defineTheme("custom", {
                base: "vs-dark",
@@ -38,11 +38,11 @@ export const MonacoTextEditor = () => {
 
      return <Editor
           options={{ fontSize: 16, fontFamily: "JetBrains Mono" }}
-          language="cpp"
-          value=""
+          language={language === LanguageType.C || language === LanguageType.CPP ? 'cpp': language?.toLowerCase()}
+          value={sourceCode}
           loading={<Loading />}
           className="rounded-md h-screen md:h-full  bg-[#16233A] border border-transparent p-1 py-3"
-          onChange={(value) => console.log(value)}
+          onChange={onChange}
           beforeMount={handleEditorWillMount}
           onMount={handleEditorOnMount}
      />

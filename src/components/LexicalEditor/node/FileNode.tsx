@@ -9,61 +9,70 @@ import {
   NodeKey,
   SerializedEditor,
   SerializedLexicalNode,
-  Spread
+  Spread,
 } from "lexical";
 import { FileEmbed } from "@/components/LexicalEditor/ui/FileEmbed";
 
 export const $createFileNode = ({
-  file,
+  fileName,
+  size,
   src,
-  editor
+  editor,
 }: {
-  file?: File,
-  src: string
-  editor?: LexicalEditor
+  fileName: string,
+  size: number,
+  src: string;
+  editor?: LexicalEditor;
 }) => {
-  return new FileNode({ file, src, editor});
+  return new FileNode({ fileName, size,src, editor });
 };
-
 
 export type SerializedFileNode = Spread<
   {
-    file: File,
-    src: string,
-    editor: SerializedEditor
+    fileName: string,
+    size: number,
+    src: string;
+    editor: SerializedEditor;
   },
   SerializedLexicalNode
 >;
 
 const $convertFileElement = (domNode: HTMLElement): DOMConversionOutput | null => {
-    const src = domNode.getAttribute("data-lexical-src-file")
-    if(!src) return null
-    const node = $createFileNode({src});
-    return { node };
+  const src = domNode.getAttribute("data-lexical-src-file");
+  const fileName = domNode.getAttribute("data-lexical-fileName")
+  const size = domNode.getAttribute("data-lexical-file-size")
+  if (!src || !fileName || !size) return null;
+  return { node: $createFileNode({ src, fileName, size: parseInt(size, 10) }) };
 };
 
 export class FileNode extends DecoratorNode<JSX.Element> {
-  __file: File | undefined
-  __src: string
-  __editor: LexicalEditor
+  __fileName: string;
+  __size: number;
+  __src: string;
+  __editor: LexicalEditor;
 
   constructor({
-    file,
+    fileName,
+    size,
     src,
     editor,
     key,
   }: {
-    file?: File,
+    fileName: string,
+    size: number,
     src: string;
-    editor?: LexicalEditor
+    editor?: LexicalEditor;
     key?: NodeKey;
   }) {
-    super(key);
+    super(key)
     this.__src = src;
-    this.__file = file;
-    this.__editor = editor || createEditor({
-      nodes: [],
-    });
+    this.__fileName = fileName;
+    this.__size = size;
+    this.__editor =
+      editor ||
+      createEditor({
+        nodes: [],
+      });
   }
 
   static getType(): string {
@@ -72,35 +81,41 @@ export class FileNode extends DecoratorNode<JSX.Element> {
 
   static clone(node: FileNode): FileNode {
     return new FileNode({
-      file: node.__file,
+      fileName: node.__fileName,
+      size: node.__size,
       src: node.__src,
       key: node.__key,
-      editor: node.__editor
+      editor: node.__editor,
     });
   }
 
   static importJSON(serializedNode: SerializedFileNode): FileNode {
-    const {file,src, editor} =
-      serializedNode;
-    const node = $createFileNode({
-      file,
-      src,
-    });
-    const nestedEditor = node.__editor;
-    const editorState = nestedEditor.parseEditorState(editor.editorState);
-    if (!editorState.isEmpty()) {
-      nestedEditor.setEditorState(editorState);
+    const { src, editor, fileName, size } = serializedNode;
+    const node = $createFileNode({ src, fileName, size });
+
+    if (editor) {
+      const nestedEditor = node.__editor;
+      const editorState = nestedEditor.parseEditorState(editor.editorState);
+      if (!editorState.isEmpty()) {
+        nestedEditor.setEditorState(editorState);
+      }
     }
     return node;
   }
 
+  exportJSON(): SerializedFileNode {
+    return {
+      fileName: this.__fileName,
+      size: this.__size,
+      src: this.__src,
+      editor: this.__editor.toJSON(),
+      type: this.getType(),
+      version: 1,
+    };
+  }
+
   decorate(): JSX.Element {
-    return (
-     <FileEmbed
-        src={this.__src}
-        file={this.__file}
-     />
-    );
+    return <FileEmbed src={this.__src} fileName={this.__fileName} size={this.__size} />;
   }
 
   createDOM(): HTMLElement {
@@ -110,26 +125,26 @@ export class FileNode extends DecoratorNode<JSX.Element> {
 
   exportDOM(): DOMExportOutput {
     const element = document.createElement("div");
-    element.setAttribute('data-lexical-src-file', this.__src)
-
+    element.setAttribute("data-lexical-src-file", this.__src);
+    element.setAttribute("data-lexical-fileName", this.__fileName)
+    element.setAttribute("data-lexical-file-size", this.__size.toString())
     return { element };
   }
 
-  updateDOM(_prevNode: this): boolean {
-    return this.__src !== _prevNode.__src  
+  updateDOM(): false {
+    return false;
   }
 
   static importDOM(): DOMConversionMap | null {
     return {
-      img: (_node: Node) => {
-        return { conversion: $convertFileElement, priority: 0 };
-      },
+      "div[data-lexical-src-file]":(node: Node) => ({
+        conversion: $convertFileElement,
+        priority: 0,
+      }),
     };
   }
 }
 
-export function $isFileNode(
-  node: LexicalNode | null | undefined
-): node is FileNode {
-  return node instanceof FileNode
+export function $isFileNode(node: LexicalNode | null | undefined): node is FileNode {
+  return node instanceof FileNode;
 }

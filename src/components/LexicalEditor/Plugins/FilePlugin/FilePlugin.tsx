@@ -12,7 +12,7 @@ export const FilePlugin = () => {
      const [editor] = useLexicalComposerContext()
      const [isOpen, setIsOpen] = useState<boolean>(false)
      const inputFileRef = useRef<HTMLInputElement>(null)
-     const [file, setFile] = useState<File>()
+     const [file, setFile] = useState<File | undefined>()
 
      const onAttachFile = async () => {
           if (file) {
@@ -21,7 +21,7 @@ export const FilePlugin = () => {
                     const srcFile:IFile = data
                     editor.update(() => {
                          editor.update(() => {
-                              const node = $createFileNode({file, src:srcFile.fileUrl, editor});
+                              const node = $createFileNode({fileName: file.name, size:file.size,src:srcFile.fileUrl});
                               $insertNodes([node])
                          })
                     })

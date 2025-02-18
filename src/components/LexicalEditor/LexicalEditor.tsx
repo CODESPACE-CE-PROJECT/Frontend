@@ -1,3 +1,5 @@
+"use client"
+
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -16,11 +18,11 @@ import { ImageNode } from "@/components/LexicalEditor/node/ImageNode";
 import { YoutubeNode } from "@/components/LexicalEditor/node/YoutubeNode";
 import { EquationNode } from "@/components/LexicalEditor/node/EquationNode";
 import { FileNode } from "@/components/LexicalEditor/node/FileNode";
-import { CustomOnChangePlugin } from '@/components/LexicalEditor/Plugins/CustomOnChangePlugin/CustomOnChangePlugin';
+import { MyOnChangePlugin } from '@/components/LexicalEditor/Plugins/MyOnChangePlugin/MyOnChangePlugin';
 
 interface Props {
-     value: string,
-     onChange: (value: string) => void
+     value?: string,
+     onChange: (editorState: string) => void
 }
 
 const PlaygroundNodes = [
@@ -42,6 +44,7 @@ export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
           namespace: 'Lexical Editor',
           nodes: [...PlaygroundNodes],
           editable: true,
+          editorState: value,
           theme: theme,
           onError: (error: Error) => {
                throw error;
@@ -71,8 +74,8 @@ export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
           <HistoryPlugin />
           <ListPlugin />
           <CheckListPlugin />
-          {/* <TreeViewPlugin /> */}
+          <TreeViewPlugin />
           <AutoFocusPlugin />
-          <CustomOnChangePlugin value={value} onChange={onChange}/>
+          <MyOnChangePlugin onChange={(editorState) => onChange(JSON.stringify(editorState))}/>
      </LexicalComposer>
 }

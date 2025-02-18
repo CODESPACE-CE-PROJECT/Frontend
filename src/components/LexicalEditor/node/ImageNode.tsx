@@ -1,15 +1,18 @@
 import {
+  $applyNodeReplacement,
   createEditor,
   DecoratorNode,
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
   LexicalEditor,
+  LexicalNode,
   NodeKey,
   SerializedEditor,
   SerializedLexicalNode,
   Spread
 } from "lexical";
+import { Suspense } from "react";
 
 export const $createImageNode = ({
   altText,
@@ -17,16 +20,18 @@ export const $createImageNode = ({
   maxWidth = 400,
   src,
   width,
-  editor
+  editor,
+  key
 }: {
   altText: string;
   height?: number;
   maxWidth?: number;
   src: string;
   width?: number;
-  editor?: LexicalEditor
+  editor?: LexicalEditor,
+  key?: NodeKey
 }) => {
-  return new ImageNode({ altText, height, maxWidth, src, width, editor});
+  return $applyNodeReplacement(new ImageNode({ altText, height, maxWidth, src, width, editor, key }));
 };
 
 
@@ -54,8 +59,8 @@ const $convertImageElement = (domNode: Node): DOMConversionOutput | null => {
 export class ImageNode extends DecoratorNode<JSX.Element> {
   __src: string;
   __altText: string;
-  __height: "inherit" | number;
   __width: "inherit" | number;
+  __height: "inherit" | number;
   __maxWidth: number;
   __editor: LexicalEditor
 
@@ -76,7 +81,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     editor?: LexicalEditor
     key?: NodeKey;
   }) {
-    super(key);
+    super(key)
     this.__altText = altText;
     this.__width = width || "inherit";
     this.__height = height || "inherit";
@@ -104,7 +109,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const {altText, height, width, maxWidth, src, editor} =
+    const { altText, height, width, maxWidth, src, editor } =
       serializedNode;
     const node = $createImageNode({
       altText,
@@ -114,26 +119,55 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       width,
     });
     const nestedEditor = node.__editor;
-    const editorState = nestedEditor.parseEditorState(editor.editorState);
+    const editorState = nestedEditor.parseEditorState(editor?.editorState);
     if (!editorState.isEmpty()) {
       nestedEditor.setEditorState(editorState);
     }
     return node;
   }
 
+  exportJSON(): SerializedImageNode {
+    return {
+      altText: this.getAltText(),
+      height: this.__height === 'inherit' ? 0 : this.__height,
+      width: this.__width === 'inherit' ? 0 : this.__width,
+      maxWidth: this.__maxWidth,
+      src: this.getSrc(),
+      type: 'image',
+      version: 1,
+      editor: this.__editor.toJSON(),
+    };
+  }
+
   decorate(): JSX.Element {
     return (
-      <img
-        className="mt-2"
-        src={this.__src}
-        alt={this.__altText}
-        style={{
-          width: this.__width,
-          height: this.__height,
-          maxWidth: this.__maxWidth,
-        }}
-      />
+      <Suspense fallback={null}>
+        <img
+          className="mt-1"
+          src={this.__src}
+          alt={this.__altText}
+          width={100}
+          height={100}
+          style={{
+            width: this.__width,
+            height: this.__height,
+            maxWidth: this.__maxWidth,
+          }}
+        />
+      </Suspense>
     );
+  }
+
+  updateDOM(): false {
+    return false
+  }
+
+  getSrc(): string {
+    return this.__src;
+  }
+
+  getAltText(): string {
+    return this.__altText;
   }
 
   createDOM(): HTMLElement {
@@ -145,21 +179,24 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     const image = document.createElement("img");
     image.setAttribute("src", this.__src);
     image.setAttribute("alt", this.__altText);
-    image.setAttribute("width", this.__width.toString());
-    image.setAttribute("height", this.__height.toString());
+    image.setAttribute('width', this.__width.toString());
+    image.setAttribute('height', this.__height.toString());
 
     return { element: image };
   }
 
-  updateDOM(_prevNode: this): boolean {
-    return this.__src !== _prevNode.__src  
-  }
-
   static importDOM(): DOMConversionMap | null {
     return {
-      img: (_node: Node) => {
-        return { conversion: $convertImageElement, priority: 0 };
-      },
+      img: (node: Node) => ({
+        conversion: $convertImageElement,
+        priority: 0
+      }),
     };
   }
+}
+
+export function $isImageNode(
+  node: LexicalNode | null | undefined,
+): node is ImageNode {
+  return node instanceof ImageNode;
 }

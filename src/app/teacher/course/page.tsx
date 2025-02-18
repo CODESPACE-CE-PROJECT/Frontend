@@ -9,10 +9,11 @@ import { createCourse } from "@/actions/course";
 import { getAllCourse } from "@/actions/course";
 import { useDispatch } from "react-redux";
 import { setIsCloseCourseNav } from "@/store/slices/courseNavSlice";
-import CoursesMap from "@/components/Courses/CoursesCard";
+import { } from "@/components/Courses/CoursesCard";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CreatCourseModal } from "@/components/Modals/CreateCourseModal";
-import {Loading} from "@/components/Loading/Loading"
+import { Loading } from "@/components/Loading/Loading"
+import { CoursesCard } from "@/components/Courses/CoursesCard";
 
 export default function Page() {
   const [showCreateClass, setShowCreateClass] = useState<boolean>(false);
@@ -100,7 +101,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col text-[#FAFAFA] min-w-screen gap-y-6">
-      
+
       <ConfirmButton className="self-end px-3">
         <div className="flex flex-row items-center gap-x-4">
           <PersonAddIcon />
@@ -223,7 +224,11 @@ export default function Page() {
         </div>
       )}
 
-      <CoursesMap />
+      <div className="flex flex-col mt-6 text-[#FAFAFA]">
+        {
+          courses?.map((item) => <CoursesCard data={item} key={item.courseId} />)
+        }
+      </div>
     </div>
   );
 }

@@ -1,21 +1,18 @@
-import { getToken } from "@/lib/session";
-import axios, { AxiosResponse } from "axios";
+"use server";
 
-export const GetAllAssignmentForCalendar = async () => {
-  const token = await getToken()
+import { getToken } from "@/lib/session";
+import axios from "axios";
+
+export const GetAllAssignmentFromCalendar = async () => {
+  const token = await getToken();
   if (token) {
-    try {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/calendar/info`
-      );
-      return response.data.data;
-    } catch (error) {
-      console.error("Error fetching assignment calendar:", error);
-      return null;
-    }
-  } else {
-    console.error("No access token found.");
-    return null;
+    return await axios
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/calendar/info`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data.data)
+      .catch((err) => err);
   }
 };

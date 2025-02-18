@@ -39,6 +39,7 @@ export default function Page() {
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
         role={profile?.role}
+        gender={profile?.gender}
       >
         <p>{courseDetails?.title}</p>
       </TopNav>

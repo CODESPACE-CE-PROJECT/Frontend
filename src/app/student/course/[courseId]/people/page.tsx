@@ -79,6 +79,7 @@ export default function People() {
         disableNotification={false}
         imageUrl={profile?.pictureUrl}
         role={profile?.role}
+        gender={profile?.gender}
       >
         <p>สมาชิก</p>
       </TopNav>

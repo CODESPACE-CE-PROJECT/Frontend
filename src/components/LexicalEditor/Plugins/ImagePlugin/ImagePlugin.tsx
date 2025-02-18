@@ -28,7 +28,7 @@ export const ImagePlugin = () => {
           }
 
           editor.update(() => {
-               const node = $createImageNode({ src, altText: file?.name || "Dummy Text", editor});
+               const node = $createImageNode({ src, altText: file?.name || "Dummy Text"});
                $insertNodes([node]);
           });
           setFile(undefined);
