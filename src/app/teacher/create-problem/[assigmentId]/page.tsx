@@ -2,21 +2,25 @@
 import { useState } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CodeIcon from '@mui/icons-material/Code';
+import { MonacoTextEditor } from '@/components/Monaco/MonacoTextEditor';
+import ToggleButton from '@/components/Button/ToggleButton';
 const Home = () => {
   const [value, setValue] = useState('');
   const [value2, setValue2] = useState('');
   const [value3, setValue3] = useState('');
 
-  // สถานะการเตือน
   const [showWarning1, setShowWarning1] = useState(true);
   const [showWarning2, setShowWarning2] = useState(true);
   const [showWarning3, setShowWarning3] = useState(true);
 
-  // เก็บข้อย่อย
+
   const [subItems, setSubItems] = useState<string[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // สถานะที่เก็บ index ของข้อย่อยที่เปิดแสดงฟอร์ม
+  const [toggleState, setToggleState] = useState(false);
+  const [examples, setExamples] = useState<any[]>([]); // New state to toggle the example section
+  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
 
-  // ฟังก์ชันเพิ่มข้อย่อย
+
   const addSubItem = () => {
     if (subItems.length < 6) {
       setSubItems((prevSubItems) => [...prevSubItems, `ข้อย่อยข้อที่${prevSubItems.length + 1}`]);
@@ -25,12 +29,12 @@ const Home = () => {
     }
   };
 
-  // ฟังก์ชันลบข้อย่อย
+
   const deleteSubItem = (index: number) => {
     setSubItems((prevSubItems) => prevSubItems.filter((_, i) => i !== index));
   };
 
-  // ฟังก์ชันตรวจสอบเมื่อออกจาก input
+
   const handleBlur = (setter: string, warningSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!setter) {
       warningSetter(true);
@@ -41,6 +45,23 @@ const Home = () => {
 
   const toggleForm = (index: number) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index)); // สลับการแสดงผล
+  };
+
+  const addExample = () => {
+    setExamples((prevExamples) => [
+      ...prevExamples,
+      {
+        id: prevExamples.length + 1,
+        title: `ตัวอย่าง ${prevExamples.length + 1}`,
+      },
+    ]);
+  };
+
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
   return (
@@ -183,13 +204,87 @@ const Home = () => {
                   วิเคราะห์ Code
                 </button>
               </div>
-              <div className="bg-[#16233A]  w-full h-[368px]">text</div>
+              <div className="bg-[#16233A]  w-full h-[368px]"><MonacoTextEditor /></div>
+
+              <div className="flex w-full py-9 gap-8">
+                <div className="w-1/2  p-6 rounded-lg shadow-lg">
+                  <h3 className="text-white font-medium text-lg  pb-2 mb-4">
+                    ข้อจำกัดของคีย์เวิร์ดวิเคราะห์ได้จากโค้ดเฉลย
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
+                      Function (3)
+                      <KeyboardArrowDownIcon
+                        className={`cursor-pointer transform transition-transform ${expandedSections["function"] ? "rotate-180" : ""
+                          }`}
+                        onClick={() => toggleSection("function")}
+                      />
+                    </div>
+                    {expandedSections["function"] && (
+                      <div className="flex flex-col space-y-2 mt-2">
+                        <div className="flex">
+                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 w-[240px] rounded-md">
+                            cout
+                          </div>
+                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 py-2 w-[80px] ml-3 rounded-md justify-center">
+                            3
+                          </div>
+                        </div>
+                        <div className="flex">
+                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 w-[240px] rounded-md">
+                            cin
+                          </div>
+                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 py-2 w-[80px] ml-3 rounded-md justify-center">
+                            1
+                          </div>
+                        </div>
+                        <div className="flex">
+                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 w-[240px] rounded-md">
+                            if
+                          </div>
+                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 py-2 w-[80px] ml-3 rounded-md justify-center">
+                            1
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow  px-4 justify-between">
+                      Methods (0)
+                      <KeyboardArrowDownIcon />
+                    </div>
+                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow  px-4 justify-between">
+                      Classes (0)
+                      <KeyboardArrowDownIcon />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-1/2  p-6 rounded-lg shadow-lg">
+                  <h3 className="text-white font-medium text-lg pb-2 mb-4">
+                    ข้อจำกัดของคีย์เวิร์ดที่กำหนด
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
+                      Function (3)
+                      <KeyboardArrowDownIcon />
+                    </div>
+                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
+                      Methods (0)
+                      <KeyboardArrowDownIcon />
+                    </div>
+                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
+                      Classes (0)
+                      <KeyboardArrowDownIcon />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
-              <div className="my-3 flex items-center rounded-lg justify-between p-4">
+              <div className="my-9 flex items-center rounded-lg justify-between ">
                 <span className="text-white font-medium text-lg">ตัวอย่าง</span>
                 <div className="space-x-3 flex">
-                  <button className="border border-[#2A3A50] text-white py-2 px-4 rounded-md min-w-[105px] h-[39px] hover:bg-[#424951]">
+                  <button className="border border-[#2A3A50] text-white py-2 px-4 rounded-md min-w-[105px] h-[39px] hover:bg-[#424951]" onClick={addExample}>
                     เพิ่มตัวอย่าง
                   </button>
                   <button className="bg-[#00DACC] text-black py-2 px-4 rounded-md hover:bg-[#a7f8f3] min-w-[105px] h-[39px]">
@@ -201,7 +296,42 @@ const Home = () => {
                 </div>
               </div>
 
+              {examples.map((example) => (
+                <div key={example.id}>
+                  <div className="flex items-center justify-between bg-[#2A3A50] p-4 shadow-md h-[39px] ">
+                    <span className="text-white text-lg font-medium">{example.title}:</span>
 
+                    <div className="flex space-x-6">
+                      <div className="flex items-center space-x-3">
+                        <ToggleButton
+                          initialState={true}
+                          onToggle={(newState) => console.log("Toggled:", newState)}
+                        />
+                        <span className="text-white text-sm">วิเคราะห์ช่องว่าง</span>
+                      </div>
+
+                      <div className="flex items-center space-x-3">
+                        <ToggleButton
+                          initialState={true}
+                          onToggle={(newState) => console.log("Toggled:", newState)}
+                        />
+                        <span className="text-white text-sm">แสดงตัวอย่างให้นักเรียน</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex w-full pb-5">
+                    <input
+                      className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
+                      placeholder="กรุณาใส่ข้อความ ..."
+                    />
+                    <div className="w-[1px] bg-gray-600"></div>
+                    <input
+                      className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
+                      placeholder="กรุณาใส่ข้อความ ..."
+                    />
+                  </div>
+                </div>
+              ))}
 
             </>
 
