@@ -16,9 +16,9 @@ export default function RootLayout({
       <body className={noto.className}>
         <ToastContainer />
         <ReduxProvider> 
-          <SSEContext>
+          {/* <SSEContext> */}
             {children}
-          </SSEContext>
+          {/* </SSEContext> */}
         </ReduxProvider>
       </body>
     </html>

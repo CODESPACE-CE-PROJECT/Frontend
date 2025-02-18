@@ -75,6 +75,10 @@ xterm-viewport {
   cursor: pointer;
 }
 
+.scrollbar-x-custom::-webkit-scrollbar {
+  height: 8px; /* Adjust horizontal scrollbar height */
+}
+
 /* Scrollbar width */
 ::-webkit-scrollbar {
   width: 8px;
@@ -97,7 +101,7 @@ xterm-viewport {
 }
 
 .dropdown::-webkit-scrollbar-track {
-    background: #2A3A50; /* Color of the scrollbar track */
+    background: #302f2f; /* Color of the scrollbar track */
     border-radius: 10px; /* Rounded corners for the track */
     margin-top: 2px;
     margin-bottom: 2px;

@@ -1,96 +1,108 @@
 "use client";
 
-import { CplusplusOriginal } from "devicons-react";
-import ClearIcon from "@mui/icons-material/Clear";
-
 import { Editor, Monaco } from "@monaco-editor/react";
+import {
+  CplusplusOriginal,
+  PythonOriginal,
+  COriginal,
+  JavaOriginal,
+} from "devicons-react";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { Loading } from "@/components/Loading/Loading";
+import { ICodeSpace } from "@/types/codeSpace";
 
-export default function WorkSpaceEditor() {
-  // const options = {
-  //   autoIndent: "full",
-  //   contextmenu: true,
-  //   fontFamily: "JetBrains Mono",
-  //   fontSize: 16,
-  //   lineHeight: 24,
-  //   hideCursorInOverviewRuler: true,
-  //   matchBrackets: "always",
-  //   minimap: {
-  //     enabled: false,
-  //   },
-  //   scrollbar: {
-  //     horizontalSliderSize: 4,
-  //     verticalSliderSize: 18,
-  //   },
-  //   selectOnLineNumbers: true,
-  //   roundedSelection: false,
-  //   readOnly: false,
-  //   cursorStyle: "line",
-  //   automaticLayout: true,
+interface WorkSpaceEditorProps {
+  codeFile?: ICodeSpace;
+}
 
-  //   LineNumber: "on",
-  //   padding: {
-  //     top: 5,
-  //   },
-  // };
+const fileIcons: Record<string, JSX.Element> = {
+  ".cpp": <CplusplusOriginal size="24" />,
+  ".py": <PythonOriginal size="24" />,
+  ".c": <COriginal size="24" />,
+  ".java": <JavaOriginal size="24" />,
+  "": <DescriptionIcon fontSize="medium" />,
+};
 
-  // Handle defining the custom theme before the editor mounts
+export default function WorkSpaceEditor({ codeFile }: WorkSpaceEditorProps) {
+  const options = {
+    autoIndent: "full",
+    contextmenu: true,
+    fontFamily: "JetBrains Mono",
+    fontSize: 16,
+    lineHeight: 24,
+    hideCursorInOverviewRuler: true,
+    matchBrackets: "always",
+    scrollbar: {
+      horizontalSliderSize: 18,
+      verticalSliderSize: 18,
+    },
+    selectOnLineNumbers: true,
+    roundedSelection: false,
+    readOnly: false,
+    cursorStyle: "line",
+    automaticLayout: true,
+    lineNumbers: "on",
+    lineNumbersMinChars: 3,
+    padding: {
+      top: 16,
+    },
+  };
+
   const handleEditorWillMount = (monaco: Monaco) => {
-    monaco.editor.defineTheme("custom-vs-dark", {
-      base: "vs-dark", // Base theme
-      inherit: true, // Inherit the base theme's rules
-      rules: [],
+    monaco.editor.defineTheme("custom", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [
+        {
+          background: "#0B111B",
+          token: "",
+        },
+      ],
       colors: {
-        "editor.background": "#0B111B",
+        "editor.forefround": "#16233A",
+        "editor.background": "#16233A",
+        "editor.selectionBackground": "#2A3A50",
+        "editor.lineHighlightBackground": "#2A3A50",
+        "editorCursor.foreground": "#F8F8F0",
+        "editorWhitespace.foreground": "#3B3A32",
+        "editorIndentGuide.activeBackground": "#9D550FB0",
       },
     });
   };
 
-  // Apply the theme after the editor mounts
-  const handleEditorDidMount = (editor: any, monaco: Monaco) => {
-    monaco.editor.setTheme("custom-vs-dark");
+  const handleEditorOnMount = (_editor: any, monaco: Monaco) => {
+    monaco.editor.setTheme("custom");
+  };
+
+  const getFileIcon = (file: string) => {
+    const extension = file?.slice(file.lastIndexOf("."));
+    return fileIcons[extension] || <DescriptionIcon />;
   };
 
   return (
-    <>
-      <div className="pt-2 w-[45vw] h-screen">
-        {/* Text Editor */}
-        <div className="flex h-auto border-b-[0.5px] border-b-[#2A3A50]">
-          <div className="flex flex-row bg-[#0B111B] rounded-t-lg border-t-[#5572FA] border-t-2 border-r-[#2A3A50] border-r-[0.5px] space-x-3 px-4 pt-3 pb-4">
-            <CplusplusOriginal size="24" />
-            <p className="text-[#C2C8CC] min-w-32">main.cpp</p>
-          </div>
-        </div>
-        <div className="max-h-fit">
-          <Editor
-            className="h-[90vh] resize-x overflow-auto"
-            height="auto"
-            width="auto"
-            defaultLanguage="cpp"
-            defaultValue={`#include <iostream>
-            using namespace std;
-            
-            int main() {
-              
-            int first_number, second_number, sum;
-            
-            cout << "Enter two integers: ";
-            cin >> first_number >> second_number;
-            
-            // sum of two numbers in stored in variable sumOfTwoNumbers
-            sum = first_number + second_number;
-            
-            // prints sum 
-            cout << first_number << " + " <<  second_number << " = " << sum;     
-            
-            return 0;
-            }`}
-            theme="vs-dark"
-            options={{ fontSize: 16, fontFamily: "JetBrains Mono" }}
-            beforeMount={handleEditorWillMount}
-            onMount={handleEditorDidMount}
-          />
+    <div className="pt-2 w-5/12 h-screen flex flex-col">
+      {/* Text Editor Header */}
+      <div className="flex h-auto border-b-[0.5px] border-b-[#2A3A50]">
+        <div className="flex flex-row bg-[#0B111B] rounded-t-lg border-t-[#5572FA] border-t-2 border-r-[#2A3A50] border-r-[0.5px] space-x-3 px-4 pt-3 pb-4">
+          {/* change to fileIcons with  */}
+          {codeFile?.fileName && getFileIcon(codeFile?.fileName)}
+          <p className="text-[#C2C8CC] truncate min-w-32 max-w-96 ">{codeFile?.fileName}</p>
         </div>
       </div>
-    </>
+
+      {/* Editor */}
+      <div className="w-full h-full">
+        <Editor
+          options={{
+            ...options,
+          }}
+          loading={<Loading />}
+          language={codeFile?.language?.toLowerCase()}
+          value={codeFile?.sourceCode}
+          beforeMount={handleEditorWillMount}
+          onMount={handleEditorOnMount}
+        />
+      </div>
+    </div>
   );
 }
