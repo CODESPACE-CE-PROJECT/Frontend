@@ -1,4 +1,13 @@
-export const SubmissionTable = () => {
+import { StateSubmission } from "@/enum/enum"
+import { ISubmission } from "@/types/submission"
+
+interface Props {
+     selectedSubmission?: ISubmission
+     submissions?:ISubmission[]
+     onClick?: (submission: ISubmission) => void
+}
+
+export const SubmissionTable:React.FC<Props> = ({selectedSubmission,submissions, onClick}) => {
      return <div className="w-full">
      <div className="table w-full rounded-xl">
           <div className="table-header-group bg-[#3049724D] w-full">
@@ -13,11 +22,14 @@ export const SubmissionTable = () => {
                <div className="table-row w-full">
                     <div className="table-cell align-middle py-2" />
                </div>
-               {Array.from({length: 20}).map((item, index) => (
-                    <div className="table-row w-full hover:bg-gray-600 hover:bg-opacity-15 text-center cursor-pointer text-lg" key={index}>
-                         <div className="table-cell align-middle p-4">{index + 1}</div>
-                         <div className="table-cell align-middle p-4">20/10/2024 14.00</div>
-                         <div className="table-cell align-middle p-4 text-green-l font-medium">ผ่าน</div>
+               {submissions?.map((item) => (
+                    <div className={`table-row w-full ${selectedSubmission?.submissionId === item.submissionId ? 'bg-gray-700': 'hover:bg-gray-600 hover:bg-opacity-15'}  text-center cursor-pointer text-lg`}
+                         key={item.submissionId}
+                         onClick={() => onClick && onClick(item)}
+                    >
+                         <div className="table-cell rounded-l-md align-middle p-4">{item.no}</div>
+                         <div className="table-cell align-middle p-4">{new Date(item.createdAt).toLocaleString('th')}</div>
+                         <div className={`table-cell rounded-r-md align-middle p-4 ${item.stateSubmission === StateSubmission.PASS ? 'text-green-l': 'text-red-l'} font-medium`}>{item.stateSubmission === StateSubmission.PASS ? 'ผ่าน': 'ไม่ผ่าน'}</div>
                     </div>
                ))}
           </div>

@@ -13,6 +13,7 @@ import { ICodeSpace } from "@/types/codeSpace";
 
 interface WorkSpaceEditorProps {
   codeFile?: ICodeSpace;
+  onChange: (value:string) => void
 }
 
 const fileIcons: Record<string, JSX.Element> = {
@@ -23,7 +24,7 @@ const fileIcons: Record<string, JSX.Element> = {
   "": <DescriptionIcon fontSize="medium" />,
 };
 
-export default function WorkSpaceEditor({ codeFile }: WorkSpaceEditorProps) {
+export default function WorkSpaceEditor({ codeFile, onChange }: WorkSpaceEditorProps) {
   const options = {
     autoIndent: "full",
     contextmenu: true,
@@ -81,10 +82,9 @@ export default function WorkSpaceEditor({ codeFile }: WorkSpaceEditorProps) {
 
   return (
     <div className="pt-2 w-5/12 h-screen flex flex-col">
-      {/* Text Editor Header */}
       <div className="flex h-auto border-b-[0.5px] border-b-[#2A3A50]">
         <div className="flex flex-row bg-[#0B111B] rounded-t-lg border-t-[#5572FA] border-t-2 border-r-[#2A3A50] border-r-[0.5px] space-x-3 px-4 pt-3 pb-4">
-          {/* change to fileIcons with  */}
+        
           {codeFile?.fileName && getFileIcon(codeFile?.fileName)}
           <p className="text-[#C2C8CC] truncate min-w-32 max-w-96 ">{codeFile?.fileName}</p>
         </div>
@@ -99,6 +99,7 @@ export default function WorkSpaceEditor({ codeFile }: WorkSpaceEditorProps) {
           loading={<Loading />}
           language={codeFile?.language?.toLowerCase()}
           value={codeFile?.sourceCode}
+          onChange={(value) => value && onChange(value)}
           beforeMount={handleEditorWillMount}
           onMount={handleEditorOnMount}
         />

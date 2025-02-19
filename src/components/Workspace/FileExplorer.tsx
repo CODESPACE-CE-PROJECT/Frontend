@@ -24,6 +24,7 @@ interface FileExplorerProps {
   editState: { isLoading: boolean; codeSpaceId?: string };
   onSelect: (file: ICodeSpace) => void;
   selectedFile?: ICodeSpace;
+  onExecute: () => void
 }
 
 // Mapping file extensions to icons
@@ -51,6 +52,7 @@ export default function FileExplorer({
   editState,
   onSelect,
   selectedFile,
+  onExecute
 }: FileExplorerProps) {
   const [focusedFile, setFocusedFile] = useState<string | null>(null);
   const [isEditingFile, setIsEditingFile] = useState<string | null>(null);
@@ -75,15 +77,22 @@ export default function FileExplorer({
           </h1>
         </div>
         <div className="flex flex-row items-center space-x-4">
-          <PlayArrowIcon
-            fontSize="inherit"
-            className="text-3xl hover:text-primary cursor-pointer"
-          />
-          <NoteAddIcon
-            fontSize="inherit"
-            className="text-3xl hover:text-primary cursor-pointer"
-            onClick={onCreateFile}
-          />
+          <button 
+            disabled={codeFile?.length === 0}
+            onClick={() => onExecute()}
+          >
+            <PlayArrowIcon
+              fontSize="inherit"
+              className={`text-3xl ${codeFile && codeFile?.length > 0 ? 'hover:text-primary': 'text-gray-500'}`}
+            />
+          </button>
+
+          <button onClick={onCreateFile}>
+            <NoteAddIcon
+              fontSize="inherit"
+              className="text-3xl hover:text-primary cursor-pointer"
+            />
+          </button>
         </div>
       </div>
 
@@ -95,11 +104,10 @@ export default function FileExplorer({
         {codeFile?.map((file) => (
           <li
             key={file.codeSpaceId}
-            className={`flex justify-between items-center cursor-pointer text-sm ${
-              selectedFile && selectedFile.codeSpaceId === file.codeSpaceId
-                ? "bg-[#2A3A50]"
-                : "hover:bg-[#3C5271]"
-            } p-2 rounded`}
+            className={`flex justify-between items-center cursor-pointer text-sm ${selectedFile && selectedFile.codeSpaceId === file.codeSpaceId
+              ? "bg-[#2A3A50]"
+              : "hover:bg-[#3C5271]"
+              } p-2 rounded`}
             onMouseEnter={() => setFocusedFile(file.codeSpaceId)}
             onMouseLeave={() => setFocusedFile(null)}
             onClick={() => onSelect(file)}
@@ -143,7 +151,7 @@ export default function FileExplorer({
             </div>
 
             {editState.isLoading &&
-            editState.codeSpaceId === file.codeSpaceId ? (
+              editState.codeSpaceId === file.codeSpaceId ? (
               <div className="flex flex-col items-center justify-center">
                 <Loading className="size-4" />
               </div>

@@ -4,7 +4,7 @@ import React from 'react';
 interface Props {
   label: string;
   name: string;
-  value: string;
+  value?: string;
   isEditing: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -12,14 +12,14 @@ interface Props {
 const TextProfileField: React.FC<Props> = ({ label, name, value, isEditing, onChange }) => {
   return (
     <div className="flex flex-col items-start space-y-1 w-full">
-      <span className="font-medium text-gray-300">{label}</span>
+      <span className="font-medium text-lg text-gray-300">{label}</span>
       {isEditing ? (
         <input
           type="text"
           name={name}
           value={value}
           onChange={onChange}
-          disabled={ name === 'ip'}
+          disabled={ name === 'ip' || name === 'username'}
           className="pl-5 py-3 w-full text-white bg-[#2A3A50] rounded-md border border-gray-300 shadow-inner disabled:border-[#2A3A50] disabled:bg-transparent"
         />
       ) : (

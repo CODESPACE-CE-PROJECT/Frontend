@@ -20,7 +20,7 @@ export const YoututbePlugin = () => {
           const id = match && match?.[2]?.length === 11 ? match?.[2] : null;
           if (!id) return;
           editor.update(() => {
-               const node = $createYoutubeNode({id, editor})
+               const node = $createYoutubeNode({id})
                $insertNodes([node])
           });
           setURL("")

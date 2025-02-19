@@ -1,7 +1,7 @@
 "use server"
 
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { ICreateUser, IProfile, IUpdateUser } from "@/types/user";
+import { ICreateUser, IProfile, IUpdatePassword, IUpdateUser } from "@/types/user";
 import { getToken } from "@/lib/session";
 
 export const getProfile = async () => {
@@ -17,56 +17,46 @@ export const getProfile = async () => {
 
 export const editProfile = async (profileData: IProfile) => {
   const token = await getToken();
-
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    try {
-      const response: AxiosResponse = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
-        {
-          email: profileData.email,
-          firstName: profileData.firstName,
-          lastName: profileData.lastName,
-          studentNo: profileData.studentNo,
-          gender: profileData.gender,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      throw error;
-    }
-  } else {
-    throw new Error("No access token found");
-  }
+  return await axios
+    .patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
+      {
+        email: profileData.email,
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        studentNo: profileData.studentNo,
+        gender: profileData.gender,
+      }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }).then((res) => ({
+      status: res.status,
+      data: res.data
+    })).catch((err: AxiosError) => ({
+      status: err.status,
+      data: err.response?.data
+    }));
 };
 
 export const uploadProfilePicture = async (picture: File) => {
   const token = await getToken();
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    try {
-      const response: AxiosResponse = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`,
-        {
-          picture: picture,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const formData = new FormData()
+  formData.append('picture', picture)
+  return await axios.patch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile`, 
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    },
+  ).then((res) => ({
+    status: res.status,
+    data: res.data
+  })).catch((err: AxiosError) => ({
+    status: err.status,
+    data: err.response?.data
+  }));
 };
 
 export const setEnableUserByUsername = async (username: string, isEnable: boolean) => {
@@ -252,28 +242,27 @@ export const importFileExel = async (file: File) => {
   })
 }
 
-export const updatePassword = async (formData: { password: string, confirmPassword: string }) => {
+export const updatePassword = async (updateForm: IUpdatePassword) => {
   const token = await getToken();
-  
+
   return await axios.post(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/update-password`,
-    formData,
+    updateForm,
     {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     }
-  
+
   ).then((res) => {
-       return {
-        status: res.status,
-        data: res.data,
-       }
-  }).catch((e:AxiosError) => {
-       const err = e.response?.data as IErrorResponse
-       return {
-            status: e.status,   
-            data: err
-       }
+    return {
+      status: res.status,
+      data: res.data,
+    }
+  }).catch((err: AxiosError) => {
+    return {
+      status: err.status,
+      data: err.response?.data
+    }
   });
 };

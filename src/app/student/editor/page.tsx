@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import FileExplorer from "@/components/Editor/FileExplorer";
-import WorkSpaceEditor from "@/components/Editor/WorkSpaceEditor";
-import WorkSpaceTerminal from "@/components/Editor/WorkSpaceTerminal";
-import InputOutput from "@/components/Editor/InputOutput";
+import FileExplorer from "@/components/Workspace/FileExplorer";
+import WorkSpaceEditor from "@/components/Workspace/WorkSpaceEditor";
+import WorkSpaceTerminal from "@/components/Workspace/WorkSpaceTerminal";
+import { InputOutput } from "@/components/Workspace/InputOutput";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { LanguageType, PackageType } from "@/enum/enum";
@@ -22,18 +22,26 @@ import {
 } from "@/actions/codeSpace";
 import { NotifyType } from "@/enum/enum";
 import { notify, updateNotify } from "@/utils/toast.util";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { getCookie } from "cookies-next/client";
+import { compileCode } from "@/actions/compiler";
+import { ICompileCode } from "@/types/compile";
 
 export default function Page() {
   const [profile, setProfile] = useState<IProfile>();
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [codeFile, setCodeFile] = useState<ICodeSpace[]>();
+  const [selectedFile, setSelectedFile] = useState<ICodeSpace>();
+  const [output, setOutput] = useState<string>()
+  const [input, setInput] = useState<string>()
+  const accessToken = getCookie('accessToken')
+
   const [editState, setEditState] = useState<{
     isLoading: boolean;
     codeSpaceId?: string;
   }>({
     isLoading: false,
   });
-  const [selectedFile, setSelectedFile] = useState<ICodeSpace>();
 
   const createNewFile = async () => {
     const newFile: ICreateCodeSpace = {
@@ -114,17 +122,69 @@ export default function Page() {
       setProfile(profile);
       setCodeFile(codeFile);
       setSelectedFile(codeFile[0])
-      setLoading(false);
+
+      await fetchEventSource(`${process.env.NEXT_PUBLIC_REAL_TIME_URL}/compiler`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        async onopen(response) {
+          if (response.ok) {
+            setIsLoading(false)
+          }
+        },
+        async onmessage(ev) {
+          if (ev.data === "ok") {
+            console.log("compiler connected")
+          } else {
+            console.log(JSON.parse(ev.data))
+            setOutput(JSON.parse(ev.data).result)
+          }
+        },
+      });
     };
     fetchData();
-  }, []);
+  }, [accessToken]);
 
-  const isPremium = profile?.school?.package === PackageType.PREMIUM; // check is PREMIUM package
+  const isPremium = profile?.school?.package === PackageType.PREMIUM;
+
+  const handleExecuteStandardPackage = async () => {
+    const id = notify(NotifyType.LOADING, "กำลังประมวลผล")
+    if (id && selectedFile) {
+      const updateForm: IUpdateCodeSpace = {
+        filename: selectedFile.fileName,
+        language: selectedFile.language,
+        sourceCode: selectedFile.sourceCode
+      }
+      const { status } = await updateFileCodeSpace(selectedFile?.codeSpaceId, updateForm);
+      if (status === 200 && profile) {
+        const submitCode: ICompileCode = {
+          fileName: "",
+          input: input || "",
+          language: selectedFile.language,
+          sourceCode: selectedFile.sourceCode,
+          username: profile?.username
+        }
+        const { status } = await compileCode(submitCode)
+        if (status === 200) {
+          updateNotify(id, NotifyType.SUCCESS, "ประมวลผลเสร็จสิ้น")
+        } else {
+          updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการประมวลผล')
+        }
+        const codeFile: ICodeSpace[] = await getCodeSpace();
+        setCodeFile(codeFile);
+      } else {
+        updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการประมวลผล')
+        return;
+      }
+
+    }
+  }
 
   return (
     <>
-      {loading ? (
-        <div className="flex flex-col items-center justify-center h-[70vh] w-full ">
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center h-full w-full ">
           <Loading className="size-20" />
         </div>
       ) : (
@@ -138,11 +198,26 @@ export default function Page() {
             }
             onDeleteFile={(codespaceId) => deleteFile(codespaceId)}
             editState={editState}
-            onSelect={(file) => setSelectedFile(file) }
+            onSelect={(file) => setSelectedFile(file)}
             selectedFile={selectedFile}
+            onExecute={handleExecuteStandardPackage}
           />
-          <WorkSpaceEditor codeFile={selectedFile} />
-          {isPremium ? <WorkSpaceTerminal /> : <InputOutput />}
+          <WorkSpaceEditor
+            codeFile={selectedFile}
+            onChange={(value) =>
+              setSelectedFile((prev) => {
+                if (!prev) return undefined;
+                return {
+                  ...prev,
+                  sourceCode: value || ""
+                };
+              })}
+          />
+          {
+            isPremium ?
+              <WorkSpaceTerminal /> :
+              <InputOutput onInputChange={(value) => setInput(value)} output={output} />
+          }
         </>
       )}
     </>

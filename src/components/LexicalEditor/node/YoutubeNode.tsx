@@ -114,6 +114,15 @@ export class YoutubeNode extends DecoratorNode<JSX.Element> {
           return { element: iframe };
      }
 
+     exportJSON(): SerializedImageNode {
+         return {
+           id: this.__id,
+           type: 'youtube',
+           version: 1,
+           editor: this.__editor.toJSON(),
+         };
+     }
+
 
      updateDOM(_prevNode: this): boolean {
           return this.__id !== _prevNode.__id

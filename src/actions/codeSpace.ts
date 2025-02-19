@@ -39,13 +39,13 @@ export const createFileCodeSpace = async (createForm: ICreateCodeSpace) => {
 
 export const updateFileCodeSpace = async (
   codeSpaceId: string,
-  createForm: IUpdateCodeSpace
+  updateForm: IUpdateCodeSpace
 ) => {
   const token = await getToken();
   return await axios
     .patch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/code-space/${codeSpaceId}`,
-      createForm,
+      updateForm,
       {
         headers: {
           Authorization: `Bearer ${token}`,

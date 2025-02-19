@@ -6,7 +6,11 @@ import {
      PythonOriginal, 
 } from "devicons-react";
 
-export const ProblemLanguage = () => {
+interface Props {
+     language?: LanguageType
+}
+
+export const ProblemLanguage:React.FC<Props> = ({language}) => {
      const getLanguageIcon = (language: LanguageType | undefined) => {
           switch (language) {
                case LanguageType.C:
@@ -21,7 +25,7 @@ export const ProblemLanguage = () => {
      };
 
      return <div className="flex flex-row items-center justify-center max-w-28 gap-x-4 p-3 bg-table-header rounded-md">
-          <p>{getLanguageIcon(LanguageType.PYTHON)}</p>
+          <p>{getLanguageIcon(language)}</p>
           <p className="text-lg">Code</p>
      </div>
 }

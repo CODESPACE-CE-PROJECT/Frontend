@@ -1,9 +1,9 @@
 "use server";
 
 import { getToken } from "@/lib/session";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
-export const GetAllAssignmentForCalendar = async () => {
+export const GetAllAssignmentFromCalendar = async () => {
   const token = await getToken();
   if (token) {
     return await axios

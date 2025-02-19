@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { IAssignment, IUpdateLock } from "@/types/assignment";
-import AssignmentBox from "@/components/Assignment/AssignmentBox";
 import ToggleButton from "@/components/Button/ToggleButton";
 import { OptionAssignment } from "@/components/Options/OptionAssignment";
 import CampaignIcon from '@mui/icons-material/Campaign';
@@ -34,10 +32,8 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, courseId, onTogg
             </div>
 
             {assignments.assignment?.map((assignment) => {
-                const [isChecked, setIsChecked] = useState(assignment.isLock);
 
                 const handleToggle = (newState: boolean) => {
-                    setIsChecked(newState);
                     onToggle({ assignmentId: assignment.assignmentId, isLock: newState });
                 };
 
@@ -52,9 +48,9 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, courseId, onTogg
 
                         {/* ToggleButton */}
                         <div className="text-white text-lg px-4 py-3 rounded-md  w-[140px] flex items-center justify-center">
-                            <ToggleButton initialState={isChecked} onToggle={handleToggle} />
+                            <ToggleButton initialState={assignment.isLock} onToggle={handleToggle} />
                             <span className="ms-3 text-sm font-medium text-white">
-                                {isChecked ? "เปิด" : "ปิด"}
+                                {assignment.isLock ? "เปิด" : "ปิด"}
                             </span>
                         </div>
 

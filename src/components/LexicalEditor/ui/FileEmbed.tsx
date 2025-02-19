@@ -2,11 +2,12 @@ import { FcFile } from "react-icons/fc";
 import Link from "next/link";
 
 interface Props {
-     file?: File,
-     src: string
+     fileName: string,
+     src: string,
+     size?: number
 }
 
-export const FileEmbed: React.FC<Props> = ({ file, src }) => {
+export const FileEmbed: React.FC<Props> = ({ fileName, src, size }) => {
      function formatBytes(bytes:number | undefined, unit = "KB") {
           if (bytes && (isNaN(bytes) || bytes < 0)) return "Invalid input";
       
@@ -28,8 +29,8 @@ export const FileEmbed: React.FC<Props> = ({ file, src }) => {
      >
           <FcFile className="text-4xl" />
           <div className="flex flex-col">
-               <p className="truncate w-24">{file?.name}</p>
-               <p>{formatBytes(file?.size)}</p>
+               <p className="truncate w-24">{fileName}</p>
+               <p>{formatBytes(size)}</p>
           </div>
      </Link>
 }

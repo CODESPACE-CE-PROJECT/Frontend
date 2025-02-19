@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getCoursesById } from "@/actions/announcement";
+import { getCoursesById } from "@/actions/course";
 import { getProfile } from "@/actions/user";
 import { ICourse } from "@/types/course";
 import { IProfile } from "@/types/user";
