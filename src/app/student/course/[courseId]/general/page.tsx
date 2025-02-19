@@ -20,7 +20,7 @@ export default function Page() {
   const [announce, setAnnounce] = useState<ICourseAnnounce[]>([]);
   const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   
 
   useEffect(() => {
@@ -47,8 +47,8 @@ export default function Page() {
     if (id !== undefined) {
       if (status === 201) {
         updateNotify(id, NotifyType.SUCCESS, "ตอบกลับสำเร็จ");
-        setAnnounce((prevAnnouncements) =>
-          prevAnnouncements.map((announce) =>
+        setAnnounce((prevAnnounce) =>
+          prevAnnounce.map((announce) =>
             announce.courseAnnounceId === courseAnnounceId
               ? { ...announce, replyAnnounce: [...announce.replyAnnounce] }
               : announce

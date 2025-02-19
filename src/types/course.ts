@@ -3,12 +3,6 @@ import { IReplyAnnounce } from "./courseAnnounce";
 import { AssignmentType } from "@/enum/enum";
 import { AnnounceAssignmentType } from "@/enum/enum";
 
-interface IUser {
-  firstName: string;
-  lastName: string;
-  pictureUrl: string;
-}
-
 interface ICourseAnnounce {
   courseAnnounceId: string;
   username: string;
@@ -17,7 +11,7 @@ interface ICourseAnnounce {
   updatedAt: Date;
   courseId: string;
   replyAnnounce: IReplyAnnounce[];
-  user: IUser;
+  user: IProfile;
 }
 
 export type IAssignment = {
@@ -33,7 +27,7 @@ export type IAssignment = {
   createdAt: Date;
   updatedAt: Date;
   courseId: string;
-  user: IUser;
+  user: IProfile;
 };
 
 export type ICourse = {
@@ -47,6 +41,7 @@ export type ICourse = {
   schoolId: string;
   courseAnnounce: ICourseAnnounce[];
   assignment: IAssignment[];
+  user: IProfile;
 };
 
 export type IPeople = {

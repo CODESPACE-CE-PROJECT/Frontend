@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
-import { IAssignment, ICreateAssignment, IUpdateLock } from "@/types/assignment";
+import {
+  IAssignment,
+  ICreateAssignment,
+  IUpdateLock,
+} from "@/types/assignment";
 import AssignmentTableTeacher from "@/components/Table/AssignmentTableTeacher";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import { TopNav } from "@/components/Navbar/TopNav";
@@ -11,7 +15,7 @@ import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
 import { createAssignment } from "@/actions/assignment";
-import { AssignmentType } from "@/enum/enum"
+import { AssignmentType } from "@/enum/enum";
 
 import { UpdatedLockAssignment } from "@/actions/assignment";
 
@@ -26,23 +30,21 @@ export default function Assignment() {
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
   const [title, setTitle] = useState("");
-  const [type, setType] = useState<"EXERCISE" | "EXAMONSITE" | "EXAMONLINE">("EXERCISE");
+  const [type, setType] = useState<"EXERCISE" | "EXAMONSITE" | "EXAMONLINE">(
+    "EXERCISE"
+  );
   const [announceDate, setAnnounceDate] = useState("");
   const [startAt, setStartAt] = useState("");
   const [expireAt, setExpireAt] = useState("");
   const [formData, setFormData] = useState<ICreateAssignment>({
     title: "",
-    type: AssignmentType.EXERCISE,  // ใช้ค่าเริ่มต้นจาก enum
+    type: AssignmentType.EXERCISE, // ใช้ค่าเริ่มต้นจาก enum
     announceDate: "",
     startAt: "",
     expireAt: "",
     courseId: courseId,
   });
-
-
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -54,7 +56,8 @@ export default function Assignment() {
         const data = await getAssignment(courseId);
         if (Array.isArray(data.data)) {
           const filteredAssignments = data.data.filter(
-            (assignment: IAssignment["assignment"][number]) => assignment.type === "EXERCISE"
+            (assignment: IAssignment["assignment"][number]) =>
+              assignment.type === "EXERCISE"
           );
           if (filteredAssignments.length > 0) {
             setAssignments({ assignment: filteredAssignments });
@@ -74,7 +77,13 @@ export default function Assignment() {
   }, [courseId, param.courseId]);
 
   const handleCreateAssignment = () => {
-    console.log("Creating assignment", { title, type, announceDate, startAt, expireAt });
+    console.log("Creating assignment", {
+      title,
+      type,
+      announceDate,
+      startAt,
+      expireAt,
+    });
     setIsModalOpen(false);
   };
 
@@ -82,11 +91,10 @@ export default function Assignment() {
     setFormData((prev) => {
       return {
         ...prev,
-        [name]: value
-      } as ICreateAssignment
-    })
+        [name]: value,
+      } as ICreateAssignment;
+    });
   };
-
 
   const handleSubmit = async () => {
     const assignmentData = {
@@ -113,9 +121,7 @@ export default function Assignment() {
       );
       return { assignment: updatedAssignments };
     });
-
   };
-
 
   if (error) return <div>Error: {error}</div>;
 
