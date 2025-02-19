@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { JSX } from 'react';
 
 import katex from 'katex';

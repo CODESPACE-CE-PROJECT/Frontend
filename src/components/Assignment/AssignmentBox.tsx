@@ -9,6 +9,19 @@ interface Props {
 const AssignmentBox: React.FC<Props> = ({ assignment}) => {
   const router = useRouter();
 
+  
+  const getBackgroundColor = (state: string) => {
+    switch (state) {
+      case "PASS":
+        return "bg-[#00DACC]"; 
+      case "FAILED":
+        return "bg-[#EF4343]"; 
+      case "NOTSEND":
+      default:
+        return "bg-[#808080]"; 
+    }
+  };
+
   return (
     <div
       className={`flex w-4/12 text-center ${
@@ -22,15 +35,15 @@ const AssignmentBox: React.FC<Props> = ({ assignment}) => {
           key={problem.problemId}
           className={`flex flex-col items-center justify-center rounded-sm h-[3.75rem] w-[3.75rem] flex-grow-0 basis-[3.75rem]
             ${
-              !assignment.isLock
-                ? "bg-[#808080] text-white border-[#2A3A50] hover:bg-[#a0a0a0] cursor-pointer"
+              assignment.isLock
+                ? `${getBackgroundColor(problem.stateSubmission)}  hover:bg-[#bebebe] `
                 : "border-2 border-dotted border-[#2A3A50] hover:border-[#2A3A50] hover:border-dotted"
             }
             ${assignment.problem.length >= 6 ? "flex-grow" : ""}`}
           onClick={
             assignment.isLock
-              ? undefined
-              : () => router.push(`/student/problem/${problem.problemId}`)
+              ? () => router.push(`/student/problem/${problem.problemId}`)
+              : undefined
           }
         >
           <p className="space-x-1">

@@ -114,7 +114,7 @@ export default function Page() {
                setIsLoading(false)
           }
           fetchData()
-     }, [params])
+     }, [params, accessToken])
 
      return isLoading ? (
           <div className="flex flex-col items-center justify-center w-full h-full">

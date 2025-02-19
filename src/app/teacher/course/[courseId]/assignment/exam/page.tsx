@@ -35,7 +35,7 @@ export default function Assignment() {
   const [expireAt, setExpireAt] = useState("");
   const [formData, setFormData] = useState<ICreateAssignment>({
     title: "",
-    type: AssignmentType.EXERCISE,  // ใช้ค่าเริ่มต้นจาก enum
+    type: AssignmentType.EXAMONSITE,  // ใช้ค่าเริ่มต้นจาก enum
     announceDate: "",
     startAt: "",
     expireAt: "",

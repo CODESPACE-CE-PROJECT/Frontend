@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
-import { getCoursesById } from "@/actions/announcement";
-import Link from "next/link";
 import { IAssignment } from "@/types/assignment";
 import AssignmentTable from "@/components/Table/AssignmentTable";
 import NavigationTab from "@/components/Tab/NavigationTab";
@@ -14,7 +12,6 @@ import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 
 export default function Assignment() {
-  const router = useRouter();
   const param = useParams<{ courseId: string }>();
   const courseId = param.courseId;
 
@@ -27,7 +24,7 @@ export default function Assignment() {
     const fetchAssignments = async () => {
       const profile: IProfile = await getProfile();
       setProfile(profile);
-      
+
       if (!courseId) return;
       setLoading(true);
       try {
@@ -56,30 +53,30 @@ export default function Assignment() {
 
   return (
     <>
-     {loading ? (
-            <div className="flex flex-col items-center justify-center h-[70vh]">
-              <Loading className="size-20" />
-            </div>
-          ) : (
-            <>
-      <TopNav
-        disableNotification={false}
-        imageUrl={profile?.pictureUrl}
-        role={profile?.role}
-        gender={profile?.gender}
-      >
-        <p>การทดสอบ</p>
-      </TopNav>
-      <NavigationTab
-        courseId={courseId}
-        basePath={`/student/course/${courseId}/assignment`}
-      />
-      <div className="mt-4">
-        {assignments && (
-          <AssignmentTable assignments={assignments} courseId={courseId} />
-        )}
-      </div>
-      </>)}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+          <Loading className="size-20" />
+        </div>
+      ) : (
+        <>
+          <TopNav
+            disableNotification={false}
+            imageUrl={profile?.pictureUrl}
+            role={profile?.role}
+            gender={profile?.gender}
+          >
+            <p>การทดสอบ</p>
+          </TopNav>
+          <NavigationTab
+            courseId={courseId}
+            basePath={`/student/course/${courseId}/assignment`}
+          />
+          <div className="mt-4">
+            {assignments && (
+              <AssignmentTable assignments={assignments} courseId={courseId} />
+            )}
+          </div>
+        </>)}
     </>
   );
 }

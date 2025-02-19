@@ -81,6 +81,6 @@ export const ReplyEditor:React.FC<Props> = ({onChange, value}) => {
           <ListPlugin />
           <CheckListPlugin />
           <AutoFocusPlugin />
-          <MyOnChangePlugin value={value} onChange={onValueChange}/>
+          <MyOnChangePlugin onChange={(val) => {}}/>
      </LexicalComposer>
 }
