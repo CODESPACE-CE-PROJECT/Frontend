@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import FileExplorer from "@/components/Editor/FileExplorer";
-import WorkSpaceEditor from "@/components/Editor/WorkSpaceEditor";
-import WorkSpaceTerminal from "@/components/Editor/WorkSpaceTerminal";
-import { InputOutput } from "@/components/Editor/InputOutput";
+import FileExplorer from "@/components/Workspace/FileExplorer";
+import WorkSpaceEditor from "@/components/Workspace/WorkSpaceEditor";
+import WorkSpaceTerminal from "@/components/Workspace/WorkSpaceTerminal";
+import { InputOutput } from "@/components/Workspace/InputOutput";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { LanguageType, PackageType } from "@/enum/enum";
@@ -144,7 +144,7 @@ export default function Page() {
       });
     };
     fetchData();
-  }, []);
+  }, [accessToken]);
 
   const isPremium = profile?.school?.package === PackageType.PREMIUM;
 
@@ -216,7 +216,7 @@ export default function Page() {
           {
             isPremium ?
               <WorkSpaceTerminal /> :
-              <InputOutput onInputChage={(value, name) => setInput(value)} output={output} />
+              <InputOutput onInputChange={(value) => setInput(value)} output={output} />
           }
         </>
       )}

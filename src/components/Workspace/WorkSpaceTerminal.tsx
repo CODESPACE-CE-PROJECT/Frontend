@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import XtermTerminal from "@/components/Editor/Terminal";
+import XtermTerminal from "@/components/Workspace/Terminal";
 import TerminalIcon from "@mui/icons-material/Terminal";
 
 export default function WorkSpaceTerminal() {
