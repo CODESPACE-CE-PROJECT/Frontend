@@ -4,6 +4,7 @@ import AssignmentBox from "@/components/Assignment/AssignmentBox";
 import ToggleButton from "@/components/Button/ToggleButton";
 import { OptionAssignment } from "@/components/Options/OptionAssignment";
 import CampaignIcon from '@mui/icons-material/Campaign';
+import AssignmentBoxTeacher from "../Assignment/AssignmentBoxTeacher";
 
 interface Props {
     assignments: IAssignment;
@@ -58,7 +59,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, courseId, onTogg
                         </div>
 
                         <div className="text-white text-lg px-4 py-3 rounded-md  w-[500px]">
-                            <AssignmentBox assignment={assignment} courseId={courseId} />
+                            <AssignmentBoxTeacher assignment={assignment} courseId={courseId} />
                         </div>
 
                         <div className="text-white text-lg px-4 py-3 rounded-md  text-center w-[140px]">

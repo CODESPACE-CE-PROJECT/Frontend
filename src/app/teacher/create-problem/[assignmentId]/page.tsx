@@ -4,7 +4,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CodeIcon from '@mui/icons-material/Code';
 import { MonacoTextEditor } from '@/components/Monaco/MonacoTextEditor';
 import ToggleButton from '@/components/Button/ToggleButton';
-const Home = () => {
+import { useParams } from 'next/navigation';
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import DescriptionIcon from "@mui/icons-material/Description";
+const Page = () => {
   const [value, setValue] = useState('');
   const [value2, setValue2] = useState('');
   const [value3, setValue3] = useState('');
@@ -19,7 +22,8 @@ const Home = () => {
   const [toggleState, setToggleState] = useState(false);
   const [examples, setExamples] = useState<any[]>([]); // New state to toggle the example section
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
-
+  const { assignmentId } = useParams<{ assignmentId: string }>();
+  console.log(assignmentId)
 
   const addSubItem = () => {
     if (subItems.length < 6) {
@@ -208,9 +212,10 @@ const Home = () => {
 
               <div className="flex w-full py-9 gap-8">
                 <div className="w-1/2  p-6 rounded-lg shadow-lg">
-                  <h3 className="text-white font-medium text-lg  pb-2 mb-4">
+                <p className="text-white font-medium text-lg pb-2 mb-4 flex items-center gap-2">
+                    <LightbulbIcon className="w-6 h-6" />
                     ข้อจำกัดของคีย์เวิร์ดวิเคราะห์ได้จากโค้ดเฉลย
-                  </h3>
+                  </p>
                   <div className="space-y-3">
                     <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
                       Function (3)
@@ -260,9 +265,10 @@ const Home = () => {
                 </div>
 
                 <div className="w-1/2  p-6 rounded-lg shadow-lg">
-                  <h3 className="text-white font-medium text-lg pb-2 mb-4">
+                <p className="text-white font-medium text-lg pb-2 mb-4 flex items-center gap-2">
+                    <DescriptionIcon className="w-6 h-6" />
                     ข้อจำกัดของคีย์เวิร์ดที่กำหนด
-                  </h3>
+                  </p>
                   <div className="space-y-3">
                     <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
                       Function (3)
@@ -344,4 +350,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Page;
