@@ -14,7 +14,7 @@ import { IProfile } from "@/types/user";
 import { Loading } from "@/components/Loading/Loading";
 import { TopNav } from "@/components/Navbar/TopNav";
 
-export default function Calendar() {
+export default function Page() {
   const [events, setEvents] = useState<EventInput[]>([]);
   const [profile, setProfile] = useState<IProfile>();
   const [loading, setLoading] = useState(true);

@@ -22,11 +22,11 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
     <div
       key={data.courseId}
       onClick={() => handleCourseClick(data.courseId)}
-      className="relative flex w-72 flex-col text-[#0B111B] cursor-pointer h-[300px] border-border-page border-[1px] rounded-2xl"
+      className="relative flex w-72 h-[320px] flex-col text-[#0B111B] cursor-pointer border-border-page border-[1px] rounded-2xl"
     >
       {data.backgroundUrl ? (
         <Image
-          className="self-center rounded-t-2xl w-full h-full object-cover"
+          className="self-center rounded-t-2xl max-w-[286px] max-h-[169px] object-cover"
           src={data.backgroundUrl}
           alt={data.title}
           width={500}
@@ -56,7 +56,7 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
           {data.title}
         </p>
         <p className="text-sm text-pretty truncate">
-          {data.user.username} {data.user.lastName}
+          {data.user.firstName} {data.user.lastName}
         </p>
       </div>
     </div>

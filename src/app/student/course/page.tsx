@@ -43,7 +43,7 @@ export default function Courses() {
             <p className="p-[10px]">คอร์สเรียน</p>
           </TopNav>
 
-          <div className="flex flex-col mt-6 text-[#FAFAFA]">
+          <div className="flex flex-row flex-wrap mt-6 gap-10 text-[#FAFAFA]">
             {
               courses?.map((item) => <CoursesCard data={item} key={item.courseId} />)
             }
