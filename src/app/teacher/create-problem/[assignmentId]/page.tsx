@@ -1,71 +1,124 @@
 "use client";
-import { useState } from 'react';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import CodeIcon from '@mui/icons-material/Code';
-import { MonacoTextEditor } from '@/components/Monaco/MonacoTextEditor';
-import ToggleButton from '@/components/Button/ToggleButton';
-import { useParams } from 'next/navigation';
-import LightbulbIcon from "@mui/icons-material/Lightbulb";
-import DescriptionIcon from "@mui/icons-material/Description";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { ICreateProblems } from "@/types/problem";
+import { createProblem } from "@/actions/problem";
+import SubItem from "@/components/Problem/SubItem";
+import { LanguageType } from "@/enum/enum";
+import { ConstraintType } from "@/enum/enum";
+
 const Page = () => {
-  const [value, setValue] = useState('');
-  const [value2, setValue2] = useState('');
-  const [value3, setValue3] = useState('');
+  const [value, setValue] = useState("");
+  const [value2, setValue2] = useState("");
+  const [value3, setValue3] = useState("");
+  const { assignmentId } = useParams<{ assignmentId: string }>();
 
   const [showWarning1, setShowWarning1] = useState(true);
   const [showWarning2, setShowWarning2] = useState(true);
   const [showWarning3, setShowWarning3] = useState(true);
-
-
   const [subItems, setSubItems] = useState<string[]>([]);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // สถานะที่เก็บ index ของข้อย่อยที่เปิดแสดงฟอร์ม
-  const [toggleState, setToggleState] = useState(false);
-  const [examples, setExamples] = useState<any[]>([]); // New state to toggle the example section
-  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
-  const { assignmentId } = useParams<{ assignmentId: string }>();
-  console.log(assignmentId)
+  const [problems, setProblems] = useState<ICreateProblems[]>([]); 
 
-  const addSubItem = () => {
-    if (subItems.length < 6) {
-      setSubItems((prevSubItems) => [...prevSubItems, `ข้อย่อยข้อที่${prevSubItems.length + 1}`]);
-    } else {
-      alert("ไม่สามารถเพิ่มข้อย่อยได้มากกว่า 6 ข้อ");
-    }
-  };
+  
+  useEffect(() => {
+    console.log("Updated SubItems:", subItems);
+  }, [subItems]);
 
+
+  useEffect(() => {
+    console.log("Updated Problems:", problems);
+  }, [problems]);
 
   const deleteSubItem = (index: number) => {
-    setSubItems((prevSubItems) => prevSubItems.filter((_, i) => i !== index));
+    setSubItems((prevSubItems) => {
+      const newSubItems = prevSubItems.filter((_, i) => i !== index);
+
+      
+      setProblems((prevProblems) => {
+        return prevProblems.slice(0, newSubItems.length); 
+      });
+
+      return newSubItems;
+    });
   };
 
-
-  const handleBlur = (setter: string, warningSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
-    if (!setter) {
-      warningSetter(true);
+  const handleBlur = (
+    setter: string,
+    warningSetter: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    if (!setter.trim()) {
+      warningSetter(true); 
     } else {
       warningSetter(false);
     }
   };
 
-  const toggleForm = (index: number) => {
-    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index)); // สลับการแสดงผล
+  const addSubItem = () => {
+    if (subItems.length < 6) {
+      const newSubItems = [...subItems, `ข้อย่อยข้อที่${subItems.length + 1}`];
+
+      
+      const newProblem: ICreateProblems = {
+        assignmentId: assignmentId || "",
+        problem: [
+          {
+            title: "",
+            description: "",
+            hint: "",
+            language: LanguageType.C,
+            revaleCode: "",
+            isRegex: false,
+            score: 0,
+            testcase: [{ input: "", output: "", isHidden: false }],
+            constraint: [{ type: ConstraintType.FUNCTION, keyword: "", quantities: 0 }],
+          },
+        ],
+      };
+
+      // อัปเดตสถานะพร้อมกัน
+      setSubItems((prevSubItems) => {
+        const updatedSubItems = [...prevSubItems, `ข้อย่อยข้อที่${prevSubItems.length + 1}`];
+        return updatedSubItems;
+      });
+
+      setProblems((prevProblems) => {
+        const updatedProblems = [...prevProblems, newProblem];
+        return updatedProblems;
+      });
+
+     
+      console.log("Updated SubItems:", newSubItems);
+      console.log("Updated Problems:", newProblem);
+    } else {
+      if (subItems.length >= 6) {
+        alert("ไม่สามารถเพิ่มข้อย่อยได้มากกว่า 6 ข้อ");
+      }
+    }
   };
 
-  const addExample = () => {
-    setExamples((prevExamples) => [
-      ...prevExamples,
-      {
-        id: prevExamples.length + 1,
-        title: `ตัวอย่าง ${prevExamples.length + 1}`,
-      },
-    ]);
-  };
+  const handleSubmit = async () => {
+    try {
+      console.log("Current Problems State Before Submit:", JSON.stringify(problems, null, 2));
 
-  const toggleSection = (section: string) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+      const problemData: ICreateProblems = {
+        assignmentId: assignmentId || "",
+        problem: problems.map((problem) => ({
+          ...problem.problem[0],
+          title: value.trim() || problem.problem[0].title,
+          score: problem.problem[0].score ?? 0,
+          language: problem.problem[0].language ?? LanguageType.C,
+        })),
+      };
+
+      console.log("Problem data being submitted:", problemData);
+
+      const result = await createProblem(problemData);
+      console.log("Result from backend:", result);
+      alert("บันทึกข้อมูลสำเร็จ");
+    } catch (error) {
+      console.error("Error while creating problem:", error);
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+    }
   };
 
   return (
@@ -76,14 +129,22 @@ const Page = () => {
           <input
             type="datetime-local"
             className="bg-[#2A3A50] ml-4 py-2 px-3 text-white rounded-md cursor-pointer"
+            value={value2}
+            onChange={(e) => setValue2(e.target.value)} // Update state properly
           />
         </div>
 
         <div className="space-x-3">
-          <button className="border border-[#2A3A50] w-[120px] h-[43px] rounded-[6px] text-center hover:bg-[#424951]">
+          <button
+            className="border border-[#2A3A50] w-[120px] h-[43px] rounded-[6px] text-center hover:bg-[#424951]"
+            onClick={() => alert("ยกเลิก")}
+          >
             ยกเลิก
           </button>
-          <button className="bg-primary w-[120px] h-[43px] rounded-[6px] text-center hover:bg-[#7991f9]">
+          <button
+            className="bg-primary w-[120px] h-[43px] rounded-[6px] text-center hover:bg-[#7991f9]"
+            onClick={handleSubmit}
+          >
             บันทึก
           </button>
         </div>
@@ -96,9 +157,9 @@ const Page = () => {
             className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer"
             value={value}
             placeholder="ชื่อแบบฝึกหัด"
-            onChange={(e) => setValue(e.target.value)}
             required
-            onBlur={() => handleBlur(value, setShowWarning1)}
+            onChange={(e) => setValue(e.target.value)} 
+            onBlur={() => handleBlur(value, setShowWarning1)} 
           />
         </div>
 
@@ -111,7 +172,7 @@ const Page = () => {
               value={value2}
               onChange={(e) => setValue2(e.target.value)}
               required
-              onBlur={() => handleBlur(value2, setShowWarning2)}
+              onBlur={() => handleBlur(value2, setShowWarning2)} 
             />
           </div>
           <div className="flex flex-col">
@@ -120,9 +181,9 @@ const Page = () => {
               type="datetime-local"
               className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer outline-none"
               value={value3}
-              onChange={(e) => setValue3(e.target.value)}
+              onChange={(e) => setValue3(e.target.value)} 
               required
-              onBlur={() => handleBlur(value3, setShowWarning3)}
+              onBlur={() => handleBlur(value3, setShowWarning3)} 
             />
           </div>
         </div>
@@ -143,209 +204,13 @@ const Page = () => {
         </div>
       </div>
 
-
-      {subItems.map((subItem, index) => (
-        <div key={index} className="flex flex-col    ">
-          <div className="flex justify-between items-center  border-b border-[#2A3A50] px-5 py-5">
-            <div>{subItem}</div>
-            <div className="flex items-center">
-              <button
-                className="border border-[#EF4343] text-[#EF4343] py-3 w-[7.5rem] rounded-md mr-4 hover:bg-[#f15252] hover:text-white"
-                onClick={() => deleteSubItem(index)}
-              >
-                ลบ
-              </button>
-              <KeyboardArrowDownIcon
-                onClick={() => toggleForm(index)}
-                className={`cursor-pointer ${expandedIndex === index ? 'rotate-180' : ''}`} // เพิ่มคลาสสำหรับหมุนไอคอนเมื่อเปิดฟอร์ม
-              />
-            </div>
-          </div>
-
-
-          {expandedIndex === index && (
-            <>
-              <div className="text-white font-sans flex justify-between mt-5 space-x-6 ">
-                <div className="flex flex-col flex-1 ">
-                  <span>หัวข้อ {<span className="text-red-500">*</span>}</span>
-                  <input
-                    className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer"
-                    placeholder="หัวข้อ"
-
-                  />
-                </div>
-
-                <div className="flex flex-row gap-3">
-                  <div className="flex flex-col ">
-                    <span>ภาษาโปรแกรม {<span className="text-red-500">*</span>}</span>
-                    <select
-                      className="px-4 w-[160px] rounded-md bg-[#2A3A50] text-white my-2 border border-[#2A3A50]"
-
-                    >
-                      <option value="PYTHON">Python</option>
-                      <option value="JAVA">Java</option>
-                      <option value="C">C</option>
-                      <option value="CPP">C++</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col">
-                    <span>คะแนน {<span className="text-red-500">*</span>}</span>
-                    <input
-                      className="bg-[#2A3A50] mt-2 py-2 px-4 text-white rounded-md cursor-pointer  my-2 w-[160px]"
-                      required
-                    />
-                  </div>
-
-                </div>
-              </div>
-              <div className="bg-[#16233A] my-3 w-full h-[368px]">text</div>
-              <div className="my-3 flex items-center  rounded-lg justify-between">
-                <div className=" space-x-2">
-                  <CodeIcon className="" />
-                  <span className="text-white font-medium">Source Code:</span>
-                </div>
-                <button className="border border-[#2A3A50] text-white py-3 w-[131px] h-[54px] rounded-md hover:bg-[#424951]">
-                  วิเคราะห์ Code
-                </button>
-              </div>
-              <div className="bg-[#16233A]  w-full h-[368px]"><MonacoTextEditor /></div>
-
-              <div className="flex w-full py-9 gap-8">
-                <div className="w-1/2  p-6 rounded-lg shadow-lg">
-                <p className="text-white font-medium text-lg pb-2 mb-4 flex items-center gap-2">
-                    <LightbulbIcon className="w-6 h-6" />
-                    ข้อจำกัดของคีย์เวิร์ดวิเคราะห์ได้จากโค้ดเฉลย
-                  </p>
-                  <div className="space-y-3">
-                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
-                      Function (3)
-                      <KeyboardArrowDownIcon
-                        className={`cursor-pointer transform transition-transform ${expandedSections["function"] ? "rotate-180" : ""
-                          }`}
-                        onClick={() => toggleSection("function")}
-                      />
-                    </div>
-                    {expandedSections["function"] && (
-                      <div className="flex flex-col space-y-2 mt-2">
-                        <div className="flex">
-                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 w-[240px] rounded-md">
-                            cout
-                          </div>
-                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 py-2 w-[80px] ml-3 rounded-md justify-center">
-                            3
-                          </div>
-                        </div>
-                        <div className="flex">
-                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 w-[240px] rounded-md">
-                            cin
-                          </div>
-                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 py-2 w-[80px] ml-3 rounded-md justify-center">
-                            1
-                          </div>
-                        </div>
-                        <div className="flex">
-                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 w-[240px] rounded-md">
-                            if
-                          </div>
-                          <div className="bg-[#3049724D] h-[39px] flex items-center px-4 py-2 w-[80px] ml-3 rounded-md justify-center">
-                            1
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow  px-4 justify-between">
-                      Methods (0)
-                      <KeyboardArrowDownIcon />
-                    </div>
-                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow  px-4 justify-between">
-                      Classes (0)
-                      <KeyboardArrowDownIcon />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="w-1/2  p-6 rounded-lg shadow-lg">
-                <p className="text-white font-medium text-lg pb-2 mb-4 flex items-center gap-2">
-                    <DescriptionIcon className="w-6 h-6" />
-                    ข้อจำกัดของคีย์เวิร์ดที่กำหนด
-                  </p>
-                  <div className="space-y-3">
-                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
-                      Function (3)
-                      <KeyboardArrowDownIcon />
-                    </div>
-                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
-                      Methods (0)
-                      <KeyboardArrowDownIcon />
-                    </div>
-                    <div className="bg-[#3049724D] h-[54px] flex items-center  rounded-md text-white font-medium shadow px-4 justify-between">
-                      Classes (0)
-                      <KeyboardArrowDownIcon />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              <div className="my-9 flex items-center rounded-lg justify-between ">
-                <span className="text-white font-medium text-lg">ตัวอย่าง</span>
-                <div className="space-x-3 flex">
-                  <button className="border border-[#2A3A50] text-white py-2 px-4 rounded-md min-w-[105px] h-[39px] hover:bg-[#424951]" onClick={addExample}>
-                    เพิ่มตัวอย่าง
-                  </button>
-                  <button className="bg-[#00DACC] text-black py-2 px-4 rounded-md hover:bg-[#a7f8f3] min-w-[105px] h-[39px]">
-                    รันทุกตัวอย่าง
-                  </button>
-                  <button className="bg-[#5572FA] text-white py-2 px-4 rounded-md hover:bg-[#8a9ef7] min-w-[105px] h-[39px]">
-                    แก้ไข
-                  </button>
-                </div>
-              </div>
-
-              {examples.map((example) => (
-                <div key={example.id}>
-                  <div className="flex items-center justify-between bg-[#2A3A50] p-4 shadow-md h-[39px] ">
-                    <span className="text-white text-lg font-medium">{example.title}:</span>
-
-                    <div className="flex space-x-6">
-                      <div className="flex items-center space-x-3">
-                        <ToggleButton
-                          initialState={true}
-                          onToggle={(newState) => console.log("Toggled:", newState)}
-                        />
-                        <span className="text-white text-sm">วิเคราะห์ช่องว่าง</span>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <ToggleButton
-                          initialState={true}
-                          onToggle={(newState) => console.log("Toggled:", newState)}
-                        />
-                        <span className="text-white text-sm">แสดงตัวอย่างให้นักเรียน</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex w-full pb-5">
-                    <input
-                      className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
-                      placeholder="กรุณาใส่ข้อความ ..."
-                    />
-                    <div className="w-[1px] bg-gray-600"></div>
-                    <input
-                      className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
-                      placeholder="กรุณาใส่ข้อความ ..."
-                    />
-                  </div>
-                </div>
-              ))}
-
-            </>
-
-          )}
-        </div>
-      ))}
-
-
+      <SubItem
+        subItems={subItems}
+        assignmentId={assignmentId}
+        problems={problems}
+        setProblems={setProblems}
+        deleteSubItem={deleteSubItem}
+      />
     </>
   );
 };
