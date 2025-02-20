@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getAssignment } from "@/actions/assignment";
 import { IAssignment } from "@/types/assignment";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreTable from "@/components/Table/ScoreTable";
+import { getAssignmentscore } from "@/actions/assignment"
 
 export default function Score() {
   const params = useParams<{ courseId: string }>();
@@ -22,7 +22,7 @@ export default function Score() {
       setIsLoading(true);
       if (courseId) {
         try {
-          const data = await getAssignment(courseId);
+          const data = await getAssignmentscore(courseId);
           console.log(data);
 
           if (data?.data?.assignment && Array.isArray(data.data.assignment)) {
