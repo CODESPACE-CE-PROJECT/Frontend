@@ -1,7 +1,7 @@
 "use client";
 
-import React, { ReactNode } from "react";
-import Logo from "@/assets/Login/logo.svg";
+import React, { ReactNode, useState } from "react";
+import Logo from '@/assets/Login/logo.svg'
 import Image from "next/image";
 import Link from "next/link";
 import { NavItem } from "../components/Navbar/NavItem";
@@ -21,11 +21,13 @@ interface Props {
 }
 
 export const TeacherLayout: React.FC<Props> = ({ children }) => {
-  const router = useRouter();
+  const router = useRouter()
+  const [isLoadinLogout, setIsLoadingLogout] = useState<boolean>(false)
 
   const handleLogout = async () => {
-    const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ");
-    const { status } = await logout();
+    const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ")
+    setIsLoadingLogout(true)
+    const { status } = await logout()
 
     if (id !== undefined) {
       if (status === 200) {
@@ -34,8 +36,9 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการออกจากระบบ");
       }
     }
-    router.push("/login");
-  };
+    setIsLoadingLogout(false)
+    router.push("/login")
+  }
 
   return (
     <div className="flex flex-col md:flex-row md:w-screen overflow-x-hidden overscroll-none">
@@ -46,7 +49,7 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
 
         <div className="flex flex-col flex-grow justify-between w-full">
           <div className="flex flex-col gap-y-4">
-            <NavItem text="คอร์สเรียน" href="/teacher/course">
+            <NavItem text="คอร์สเรียน" href="/teacher/course" additionHref="/teacher/problem">
               <LibraryBooksIcon fontSize="large" />
             </NavItem>
 
@@ -63,12 +66,9 @@ export const TeacherLayout: React.FC<Props> = ({ children }) => {
             </NavItem>
           </div>
 
-          <div
-            className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rotate-180 rounded-lg"
-            onClick={handleLogout}
-          >
+          <button className="text-center mb-10 px-4 py-3 disabled:bg-transparent disabled:text-gray-400 hover:bg-hover-navbar rotate-180 rounded-lg" disabled={isLoadinLogout} onClick={handleLogout}>
             <LogoutIcon fontSize="large" />
-          </div>
+          </button>
         </div>
       </nav>
 

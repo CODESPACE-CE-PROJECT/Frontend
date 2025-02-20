@@ -8,7 +8,8 @@ interface Props {
 export const SubmissionNo: React.FC<Props> = ({ no, stateSubmission }) => {
      return <>
           {
-               no && <div className={`flex items-center text-black justify-center rounded-md ${stateSubmission === StateSubmission.PASS ? 'bg-green-l' : 'bg-red-l'}  h-full p-4`}>
+               no && stateSubmission && stateSubmission !== StateSubmission.NOTSEND && 
+               <div className={`flex items-center text-black justify-center rounded-md ${stateSubmission === StateSubmission.PASS ? 'bg-green-l' : 'bg-red-l'}  h-full p-4`}>
                     ส่งแล้ว {no} ครั้ง
                </div>
           }

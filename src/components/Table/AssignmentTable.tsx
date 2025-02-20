@@ -36,7 +36,7 @@ const AssignmentList: React.FC<Props> = ({ assignments, courseId }) => {
 
           {/* Conditional Rendering: Show AssignmentBox or AssignmentBoxExam */}
 
-          <AssignmentBox assignment={assignment} courseId={courseId} />
+          <AssignmentBox assignment={assignment} />
 
           {/* Total Score */}
           <div className="flex text-white text-lg px-4 py-3 justify-center text-center w-2/12">

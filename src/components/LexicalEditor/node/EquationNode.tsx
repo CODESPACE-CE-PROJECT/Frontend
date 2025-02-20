@@ -83,7 +83,7 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
           element.setAttribute('data-lexical-equation', equation);
           element.setAttribute('data-lexical-inline', `${this.__inline}`);
           katex.render(this.__equation, element, {
-               displayMode: !this.__inline, // true === block display //
+               displayMode: !this.__inline,
                errorColor: '#cc0000',
                output: 'html',
                strict: 'warn',
@@ -117,7 +117,6 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
      }
 
      updateDOM(prevNode: this): boolean {
-          // If the inline property changes, replace the element
           return this.__inline !== prevNode.__inline;
      }
 

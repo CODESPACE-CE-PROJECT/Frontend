@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getCoursesById } from "@/actions/announcement";
+import { getCoursesById } from "@/actions/course";
 import { getProfile } from "@/actions/user";
 import { IProfile } from "@/types/user";
 import { ICourse } from "@/types/course";
@@ -76,7 +76,7 @@ export default function Page() {
             <p>{courseDetails?.title}</p>
           </TopNav>
 
-          <p className="flex px-4 py-3 my-6 text-lg text-wrap">
+          <p className="flex py-3 my-6 text-lg text-wrap">
             {courseDetails?.description}
           </p>
 

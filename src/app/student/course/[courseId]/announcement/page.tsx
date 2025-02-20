@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getCoursesById } from "@/actions/announcement";
+import { getCoursesById } from "@/actions/course";
 import { getProfile } from "@/actions/user";
 import { IProfile } from "@/types/user";
 import { ICourse } from "@/types/course";
@@ -24,7 +24,7 @@ export default function Page() {
       const response: ICourse = await getCoursesById(courseId);
       const profile: IProfile = await getProfile();
       setCourseDetails(response);
-      setAnnouncement(response.assignment || []);
+      setAnnouncement(response.assignment);
       setProfile(profile);
       setLoading(false);
     };
@@ -49,11 +49,11 @@ export default function Page() {
         <p>{courseDetails?.title}</p>
       </TopNav>
 
-      <p className="flex px-4 py-3 my-6 text-lg text-wrap">
+      <p className="flex py-3 my-6 text-lg text-wrap">
         {courseDetails?.description}
       </p>
 
-      <div className="flex flex-col items-center space-y-5 px-40">
+      <div className="flex flex-col items-center space-y-5 px-20">
         {announcement.length > 0 ? (
           announcement.map((announce) => (
             <AnnouncementCard

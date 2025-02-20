@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import Logo from "@/assets/Login/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,9 +22,11 @@ interface Props {
 
 export const StudentLayout: React.FC<Props> = ({ children }) => {
   const router = useRouter();
+  const [isLoadinLogout, setIsLoadingLogout] = useState<boolean>(false)
 
   const handleLogout = async () => {
     const id = notify(NotifyType.LOADING, "กำลังออกจากระบบ");
+    setIsLoadingLogout(true)
     const { status } = await logout();
 
     if (id !== undefined) {
@@ -34,6 +36,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการออกจากระบบ");
       }
     }
+    setIsLoadingLogout(false)
     router.push("/login");
   };
 
@@ -46,7 +49,7 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
 
         <div className="flex flex-col flex-grow justify-between w-full">
           <div className="flex flex-col gap-y-4">
-            <NavItem text="คอร์สเรียน" href="/student/course">
+            <NavItem text="คอร์สเรียน" href="/student/course" additionHref="/student/problem">
               <LibraryBooksIcon fontSize="large" />
             </NavItem>
 
@@ -59,16 +62,17 @@ export const StudentLayout: React.FC<Props> = ({ children }) => {
             </NavItem>
           </div>
 
-          <div
-            className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar rotate-180 rounded-lg"
+          <button
+            className="text-center mb-10 px-4 py-3 hover:bg-hover-navbar disabled:bg-transparent disabled:text-gray-400 rotate-180 rounded-lg"
             onClick={handleLogout}
+            disabled={isLoadinLogout}
           >
             <LogoutIcon fontSize="large" />
-          </div>
+          </button>
         </div>
       </nav>
 
-      <div className="flex flex-row w-screen overflow-x-hidden overscroll-none">
+      <div className="flex flex-row w-full overflow-x-hidden overscroll-none">
         {children}
       </div>
     </div>

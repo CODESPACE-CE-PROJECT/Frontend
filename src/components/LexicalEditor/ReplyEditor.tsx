@@ -11,7 +11,7 @@ import { theme } from "@/components/LexicalEditor/theme"
 import { TreeViewPlugin } from "@/components/LexicalEditor/Plugins/TreeViewPlugin";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
-import { CustomOnChangePlugin } from '@/components/LexicalEditor/Plugins/CustomOnChangePlugin/CustomOnChangePlugin';
+import { MyOnChangePlugin } from '@/components/LexicalEditor/Plugins/MyOnChangePlugin/MyOnChangePlugin';
 import { ReplyToolbarPlugin } from '@/components/LexicalEditor/Plugins/ReplyToolbarPlugin/ReplyToolbarPlugin';
 import { useState } from 'react';
 
@@ -81,6 +81,6 @@ export const ReplyEditor:React.FC<Props> = ({onChange, value}) => {
           <ListPlugin />
           <CheckListPlugin />
           <AutoFocusPlugin />
-          <CustomOnChangePlugin value={value} onChange={onValueChange}/>
+          <MyOnChangePlugin onChange={(val) => {}}/>
      </LexicalComposer>
 }

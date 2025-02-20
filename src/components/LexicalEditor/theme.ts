@@ -1,5 +1,5 @@
 import type {EditorThemeClasses} from 'lexical';
-import "./theme.css"
+import "@/components/LexicalEditor/theme.css"
 
 export const theme:EditorThemeClasses = {
      heading: {

@@ -11,10 +11,9 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    environment:
-      NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
-      NEXT_PUBLIC_COMPILER_URL: ${NEXT_PUBLIC_COMPILER_URL}
-      NEXT_PUBLIC_REAL_TIME_URL: ${NEXT_PUBLIC_REAL_TIME_URL}
+    env_file:
+      - path: ./.env
+        required: true
     labels:
       traefik.enable: 'true'
       traefik.http.services.codespace.loadbalancer.server.port: '3000'

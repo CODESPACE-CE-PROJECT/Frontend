@@ -2,13 +2,14 @@
 
 import React from "react";
 import TerminalIcon from "@mui/icons-material/Terminal";
-import { TextArea } from "@/components/Input/TextArea";
+import { MonacoFieldBox } from "@/components/Monaco/MonacoFieldBox";
 
-const handleInputChange = () => {
-  // setCreateForm((prev) => !prev ? prev : { ...prev, [name]: value })
-};
+interface Props {
+  output?: string,
+  onInputChange: (value: string | undefined) => void
+}
 
-export default function InputOutput() {
+export const InputOutput: React.FC<Props> = ({ output, onInputChange }) => {
   return (
     <>
       <div className="flex flex-col w-5/12">
@@ -18,12 +19,7 @@ export default function InputOutput() {
             <p className="text-[#C2C8CC] min-w-32">INPUT</p>
           </div>
           <div className=" border-blackground-text border-t-[0.5px]"></div>
-          <TextArea
-            name="input"
-            placeholder="Input for the program (Optional)"
-            className="w-[100%] h-5/6 p-4 scrollbar-x-custom bg-transparent font-jetbrains text-nowrap rounded-none shadow-none border-none resize-none focus:!outline-none"
-            onChange={handleInputChange}
-          />
+          <MonacoFieldBox onChange={onInputChange} />
         </div>
 
         <div className="flex flex-col w-full h-[50vh] pt-2 bg-[#161D2D]">
@@ -32,9 +28,7 @@ export default function InputOutput() {
             <p className="text-[#C2C8CC] min-w-32">OUTPUT</p>
           </div>
           <div className=" border-blackground-text border-t-[0.5px]"></div>
-          <div className="w-full h-full p-4 overflow-auto font-jetbrains text-nowrap">
-            output
-          </div>
+          <MonacoFieldBox value={output} />
         </div>
       </div>
     </>

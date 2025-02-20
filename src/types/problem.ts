@@ -1,10 +1,46 @@
 import { StateSubmission } from "@/enum/enum";
 import { LanguageType } from "@/enum/enum";
 import { ConstraintType } from "@/enum/enum";
-export interface IProblems {
+import { ISubmission } from "@/types/submission";
+export interface IProblem {
   problemId: string;
-  title?: string,
-  score?: number;
+  title: string;
+  description: string;
+  hint: string;
+  language: LanguageType;
+  revaleCode: string;
+  score: number;
+  isRegex: boolean;
+  createdAt: string;
+  updatedAt: string;
+  assignmentTitle: string;
+  courseTitle: string;
+  assignmentId: string;
+  testCases: ITestCase[],
+  constraint: IConstraint[],
+  submission: ISubmission[],
+  other: IOtherProblem[]
+}
+
+export type ITestCase = {
+  testCaseId: string;
+  input: string;
+  output: string;
+  isHidden: boolean;
+  problemId: string;
+};
+
+export type IConstraint = {
+  constraintId: string;
+  type: string;
+  keyword: string;
+  quantities: number;
+  problemId: string;
+};
+
+export type IOtherProblem = {
+  problemId: string;
+  title: string;
   stateSubmission: StateSubmission;
 }
 
