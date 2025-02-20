@@ -20,7 +20,6 @@ import { AssignmentType } from "@/enum/enum";
 import { UpdatedLockAssignment } from "@/actions/assignment";
 
 export default function Assignment() {
-  const router = useRouter();
   const param = useParams<{ courseId: string }>();
   const courseId = param.courseId;
 
@@ -30,16 +29,9 @@ export default function Assignment() {
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState<"EXERCISE" | "EXAMONSITE" | "EXAMONLINE">(
-    "EXERCISE"
-  );
-  const [announceDate, setAnnounceDate] = useState("");
-  const [startAt, setStartAt] = useState("");
-  const [expireAt, setExpireAt] = useState("");
   const [formData, setFormData] = useState<ICreateAssignment>({
     title: "",
-    type: AssignmentType.EXERCISE, // ใช้ค่าเริ่มต้นจาก enum
+    type: AssignmentType.EXERCISE,
     announceDate: "",
     startAt: "",
     expireAt: "",
@@ -57,7 +49,7 @@ export default function Assignment() {
         if (Array.isArray(data.data)) {
           const filteredAssignments = data.data.filter(
             (assignment: IAssignment["assignment"][number]) =>
-              assignment.type === "EXERCISE"
+              assignment.type === AssignmentType.EXERCISE
           );
           if (filteredAssignments.length > 0) {
             setAssignments({ assignment: filteredAssignments });
@@ -77,13 +69,6 @@ export default function Assignment() {
   }, [courseId, param.courseId]);
 
   const handleCreateAssignment = () => {
-    console.log("Creating assignment", {
-      title,
-      type,
-      announceDate,
-      startAt,
-      expireAt,
-    });
     setIsModalOpen(false);
   };
 
@@ -134,6 +119,7 @@ export default function Assignment() {
       ) : (
         <>
           <TopNav
+            className="mb-6"
             disableNotification={false}
             imageUrl={profile?.pictureUrl}
             role={profile?.role}
@@ -141,7 +127,7 @@ export default function Assignment() {
             <p>แบบฝึกหัด</p>
           </TopNav>
 
-          <div className="flex justify-between items-center pt-2 ">
+          <div className="flex justify-between items-center">
             <NavigationTab
               courseId={courseId}
               basePath={`/teacher/course/${courseId}/assignment`}
