@@ -64,7 +64,7 @@ export default function Score() {
 
   return (
     <>
-      <NavigationTab courseId={courseId} basePath={`/student/course/${courseId}/score`} />
+      <NavigationTab courseId={courseId} basePath={`/teacher/course/${courseId}/score`} />
       <ScoreTable assignments={assignments} isLoading={isLoading} error={error} />
 
       <div className="flex justify-end px-8 py-4">
