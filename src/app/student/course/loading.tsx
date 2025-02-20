@@ -1,5 +1,9 @@
-import { Loading } from "@/components/Loading/Loading"
+import { Loading } from "@/components/Loading/Loading";
 
-export default function LoadingPage () {
-     return <Loading className="w-24 h-24"/>
+export default function LoadingPage() {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <Loading className="size-20" />
+    </div>
+  );
 }
