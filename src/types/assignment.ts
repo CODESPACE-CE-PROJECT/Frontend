@@ -25,7 +25,7 @@ export type IAssignment = {
     ];
     totalScore: number;
   }[];
-  dashboard?: IDashboard;
+  
 };
 
 export type ICreateAssignment = {
@@ -53,4 +53,22 @@ export type IDashboard = {
   averageScore: number;
   totalStudent: number;
   range: IScoreRange[];
+};
+
+export type IAssignmentScore = {
+  data: {
+    assignmentId: string;
+    title: string;
+    scores: {
+      username: string;
+      firstName: string;
+      lastName: string;
+      problems: {
+        problemId: string;
+        score: number;
+        status: string;
+      }[];
+      totalScore: number;
+    }[];
+  }[];
 };

@@ -8,7 +8,6 @@ interface Props {
 export const Option: React.FC<Props> = ({ children }) => {
      const [isOpen, setIsOpen] = useState(false)
      const optionRef = useRef<HTMLDivElement>(null);
-
      const handleClickOutside = (event: MouseEvent) => {
           if (optionRef.current && !optionRef.current?.contains(event.target as Node)) {
                setIsOpen(false)
@@ -24,7 +23,6 @@ export const Option: React.FC<Props> = ({ children }) => {
           <div onClick={() => setIsOpen(prev => !prev)} className="z-0 flex hover:bg-primary text-center size-10 items-center justify-center border-[1px] rounded-md border-[#2A3A50] cursor-pointer">
                <MoreHorizOutlinedIcon className=" text-neutral-50" />
           </div>
-
           {
                isOpen && <div className='text-left z-10 absolute right-0 top-12 rounded-xl bg-[#2A3A50]' onClick={() => setIsOpen(prev => !prev)}>
                     {children}

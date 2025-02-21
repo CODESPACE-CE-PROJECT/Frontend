@@ -16,7 +16,6 @@ import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
 import { createAssignment } from "@/actions/assignment";
 import { AssignmentType } from "@/enum/enum";
-
 import { UpdatedLockAssignment } from "@/actions/assignment";
 
 export default function Assignment() {
