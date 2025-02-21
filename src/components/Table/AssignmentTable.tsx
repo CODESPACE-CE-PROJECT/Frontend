@@ -3,11 +3,9 @@ import AssignmentBox from "@/components/Assignment/AssignmentBox";
 
 interface Props {
   assignments: IAssignment;
-  courseId: string;
-  // รับค่าตัวแปรนี้เข้ามาจาก Props
 }
 
-const AssignmentList: React.FC<Props> = ({ assignments, courseId }) => {
+const AssignmentList: React.FC<Props> = ({ assignments }) => {
   return (
     <>
       {/* Table Header */}

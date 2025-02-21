@@ -20,8 +20,8 @@ export type IAssignment = {
   title: string;
   type: AssignmentType;
   isLock: boolean;
-  startAt: string;
-  expireAt: string;
+  startAt: Date;
+  expireAt: Date;
   announceType: AnnounceAssignmentType;
   announceDate: string;
   createdAt: Date;

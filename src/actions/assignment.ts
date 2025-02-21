@@ -1,10 +1,8 @@
-"use server"
+"use server";
 
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
-import { IAssignment, ICreateAssignment, IUpdateLock } from "@/types/assignment";
+import { ICreateAssignment, IUpdateLock } from "@/types/assignment";
 import { getToken } from "@/lib/session";
-
 
 export const getAssignment = async (courseId: string) => {
   const token = await getToken();
@@ -29,7 +27,6 @@ export const getAssignment = async (courseId: string) => {
     return null;
   }
 };
-
 
 export const getAssignmentscore = async (courseId: string) => {
   const token = await getToken();
@@ -58,12 +55,11 @@ export const getAssignmentscore = async (courseId: string) => {
 export const createAssignment = async (formData: ICreateAssignment) => {
   try {
     const token = await getToken();
-  
+
     if (!token) {
       alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
       return;
     }
-
 
     if (new Date(formData.expireAt) <= new Date(formData.startAt)) {
       alert("Expire date must be later than start date.");
@@ -82,7 +78,7 @@ export const createAssignment = async (formData: ICreateAssignment) => {
       },
       {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -91,7 +87,10 @@ export const createAssignment = async (formData: ICreateAssignment) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("Axios Error Response:", error.response?.data || error.response);
+      console.error(
+        "Axios Error Response:",
+        error.response?.data || error.response
+      );
       console.error("Axios Error Message:", error.message);
       if (error.response) {
         console.error("Error Status:", error.response.status);
@@ -104,26 +103,20 @@ export const createAssignment = async (formData: ICreateAssignment) => {
   }
 };
 
-
 export const UpdatedLockAssignment = async (assignmentData: IUpdateLock) => {
   const token = await getToken();
   if (token) {
-
     const response = await axios.patch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${assignmentData.assignmentId}/${assignmentData.isLock}`,
       {
         isLock: assignmentData.isLock,
-
       },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-
     );
     return response.data;
-
   }
 };
-

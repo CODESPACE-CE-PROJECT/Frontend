@@ -72,7 +72,7 @@ export default function Assignment() {
 
           <div className="mt-4">
             {assignments && (
-              <AssignmentTable assignments={assignments} courseId={courseId} />
+              <AssignmentTable assignments={assignments}/>
             )}
           </div>
         </>)}
