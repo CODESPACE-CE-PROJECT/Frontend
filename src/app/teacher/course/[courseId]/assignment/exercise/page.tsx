@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { getAssignment } from "@/actions/assignment";
 import {
   IAssignment,
@@ -24,17 +24,16 @@ export default function Assignment() {
   const courseId = param.courseId;
 
   const [assignments, setAssignments] = useState<IAssignment | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [formData, setFormData] = useState<ICreateAssignment>({
     title: "",
     type: AssignmentType.EXERCISE,
-    announceDate: "",
-    startAt: "",
-    expireAt: "",
+    announceDate: new Date(""),
+    startAt: new Date(""),
+    expireAt: new Date(""),
     courseId: courseId,
   });
 
@@ -42,35 +41,23 @@ export default function Assignment() {
     const fetchAssignments = async () => {
       const profile: IProfile = await getProfile();
       setProfile(profile);
-      if (!courseId) return;
-      setLoading(true);
-      try {
-        const data = await getAssignment(courseId);
-        if (Array.isArray(data.data)) {
-          const filteredAssignments = data.data.filter(
-            (assignment: IAssignment["assignment"][number]) =>
-              assignment.type === AssignmentType.EXERCISE
-          );
-          if (filteredAssignments.length > 0) {
-            setAssignments({ assignment: filteredAssignments });
-          } else {
-            console.error("No assignments of type EXERCISE.");
-          }
-        } else {
-          console.error("Data.data is not an array.");
-        }
-      } catch (err: any) {
-        setError(err.message);
+      const data = await getAssignment(courseId);
+
+      const filteredAssignments = data.data.filter(
+        (assignment: IAssignment["assignment"][number]) =>
+          assignment.type === AssignmentType.EXERCISE
+      );
+      if (filteredAssignments.length > 0) {
+        setAssignments({ assignment: filteredAssignments });
+      } else {
+        console.error("No assignments of type EXERCISE.");
       }
+
       setLoading(false);
     };
 
     fetchAssignments();
   }, [courseId, param.courseId]);
-
-  const handleCreateAssignment = () => {
-    setIsModalOpen(false);
-  };
 
   const handleInputChange = (value: string | number, name: string) => {
     setFormData((prev) => {
@@ -108,8 +95,6 @@ export default function Assignment() {
     });
   };
 
-  if (error) return <div>Error: {error}</div>;
-
   return (
     <>
       {loading ? (
@@ -144,7 +129,6 @@ export default function Assignment() {
             {assignments && (
               <AssignmentTableTeacher
                 assignments={assignments}
-                courseId={courseId}
                 onToggle={handleToggle}
               />
             )}

@@ -36,7 +36,7 @@ export default function Assignment() {
               assignment.type === "EXAMONLINE"
           );
 
-          setAssignments({ assignment: filteredAssignments });
+          setAssignments({ assignment: filteredAssignments });  
         }
       } catch (err: any) {
         console.error("Error fetching assignments:", err);
@@ -73,7 +73,7 @@ export default function Assignment() {
           />
           <div className="mt-4">
             {assignments && (
-              <AssignmentTable assignments={assignments} courseId={courseId} />
+              <AssignmentTable assignments={assignments} />
             )}
           </div>
         </>)}
