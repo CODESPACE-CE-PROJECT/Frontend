@@ -6,19 +6,18 @@ interface Props {
   assignment: IAssignment["assignment"][number]; // ใช้ assignment object ภายใน array
 }
 
-const AssignmentBox: React.FC<Props> = ({ assignment}) => {
+const AssignmentBox: React.FC<Props> = ({ assignment }) => {
   const router = useRouter();
 
-  
   const getBackgroundColor = (state: string) => {
     switch (state) {
-      case "PASS":
-        return "bg-[#00DACC]"; 
-      case "FAILED":
-        return "bg-[#EF4343]"; 
-      case "NOTSEND":
+      case StateSubmission.PASS:
+        return "bg-[#00DACC]";
+      case StateSubmission.FAILED:
+        return "bg-[#EF4343]";
+      case StateSubmission.NOTSEND:
       default:
-        return "bg-[#808080]"; 
+        return "bg-[#808080]";
     }
   };
 
@@ -35,13 +34,15 @@ const AssignmentBox: React.FC<Props> = ({ assignment}) => {
           key={problem.problemId}
           className={`flex flex-col items-center justify-center rounded-sm h-[3.75rem] w-[3.75rem] flex-grow-0 basis-[3.75rem]
             ${
-              assignment.isLock
-                ? `${getBackgroundColor(problem.stateSubmission)}  hover:bg-[#bebebe] `
-                : "border-2 border-dotted border-[#2A3A50] hover:border-[#2A3A50] hover:border-dotted"
+              !assignment.isLock
+                ? `${getBackgroundColor(
+                    problem.stateSubmission
+                  )}  hover:bg-[#bebebe] cursor-pointer `
+                : "border-2 border-dotted border-[#2A3A50] hover:border-[#2A3A50] hover:border-dotted "
             }
             ${assignment.problem.length >= 6 ? "flex-grow" : ""}`}
           onClick={
-            assignment.isLock
+            !assignment.isLock
               ? () => router.push(`/student/problem/${problem.problemId}`)
               : undefined
           }
@@ -52,7 +53,9 @@ const AssignmentBox: React.FC<Props> = ({ assignment}) => {
           </p>
           <p>
             <span>
-              {problem.stateSubmission === StateSubmission.NOTSEND ? 0 : problem.score || 0}
+              {problem.stateSubmission === StateSubmission.NOTSEND
+                ? 0
+                : problem.score || 0}
             </span>
             <span>{"/"}</span>
             <span>{problem.score}</span>

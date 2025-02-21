@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { IAssignment, IUpdateLock } from "@/types/assignment";
 import ToggleButton from "@/components/Button/ToggleButton";
 import { OptionAssignment } from "@/components/Options/OptionAssignment";
@@ -6,15 +7,23 @@ import AssignmentBoxTeacher from "../Assignment/AssignmentBoxTeacher";
 
 interface Props {
   assignments: IAssignment;
-  courseId: string;
   onToggle: (assignmentData: IUpdateLock) => void;
 }
 
-const AssignmentTableTeacher: React.FC<Props> = ({
-  assignments,
-  courseId,
-  onToggle,
-}) => {
+const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
+  const [lockStates, setLockStates] = useState(
+    assignments.assignment.map((assignment) => assignment.isLock)
+  );
+
+  const handleToggle = (index: number, newState: boolean) => {
+    const updatedLockStates = [...lockStates];
+    updatedLockStates[index] = newState;
+    setLockStates(updatedLockStates);
+    onToggle({
+      assignmentId: assignments.assignment[index].assignmentId,
+      isLock: newState,
+    });
+  };
   return (
     <>
       {/* Table Header */}
@@ -34,14 +43,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({
         <div className="text-white text-lg py-3 rounded-md text-center w-[5%]"></div>
       </div>
 
-      {assignments.assignment?.map((assignment) => {
-        const [isChecked, setIsChecked] = useState(assignment.isLock);
-
-        const handleToggle = (newState: boolean) => {
-          setIsChecked(newState);
-          onToggle({ assignmentId: assignment.assignmentId, isLock: newState });
-        };
-
+      {assignments.assignment?.map((assignment, index) => {
         return (
           <div
             key={assignment.assignmentId}
@@ -50,7 +52,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({
             <div className="flex text-white text-lg rounded-md items-center space-x-3 w-[40%]">
               <div
                 className={`rounded-full p-2 ms-5 ${
-                  assignment.isLock
+                  !assignment.isLock
                     ? "bg-[#EF4343] text-white"
                     : "bg-white text-black"
                 }`}
@@ -62,13 +64,16 @@ const AssignmentTableTeacher: React.FC<Props> = ({
 
             {/* ToggleButton */}
             <div className="flex text-white text-lg rounded-md items-center justify-center w-[12.5%]">
-              <ToggleButton initialState={isChecked} onToggle={handleToggle} />
+              <ToggleButton
+                initialState={lockStates[index]}
+                onToggle={(newState) => handleToggle(index, newState)}
+              />
               <span className="ms-3 text-sm font-medium text-white">
-                {isChecked ? "เปิด" : "ปิด"}
+                {!lockStates[index] ? "เปิด" : "ปิด"}
               </span>
             </div>
 
-            <AssignmentBoxTeacher assignment={assignment} courseId={courseId} />
+            <AssignmentBoxTeacher assignment={assignment} />
 
             <div className="text-white text-lg rounded-md text-center w-[12.5%]">
               {assignment.totalScore}

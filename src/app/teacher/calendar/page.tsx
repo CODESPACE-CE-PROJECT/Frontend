@@ -6,7 +6,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import { GetAllAssignmentForCalendar } from "@/actions/calendar";
+import { GetAllAssignmentFromCalendar } from "@/actions/calendar";
 import { ICalendar } from "@/types/calendar";
 import { EventInput } from "@fullcalendar/core/index.js";
 import { getProfile } from "@/actions/user";
@@ -23,7 +23,7 @@ export default function Page() {
     const fetchAssignmentsCalendar = async () => {
       const profile: IProfile = await getProfile();
       setProfile(profile);
-      const assignments: ICalendar[] = await GetAllAssignmentForCalendar();
+      const assignments: ICalendar[] = await GetAllAssignmentFromCalendar();
       const formattedEvents: EventInput[] = assignments.map((assignment) => ({
         id: assignment.assignmentId,
         title: assignment.title,
