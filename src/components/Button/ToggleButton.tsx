@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 interface ToggleButtonProps {
-  initialState?: boolean; // ทำให้เป็น optional และกำหนด default เป็น false
+  initialState?: boolean;
   onToggle: (isLock: boolean) => void;
 }
 
@@ -28,11 +28,11 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ initialState = false, onTog
       />
       <div
         className={`relative w-12 h-6 rounded-full 
-          ${isChecked ? "bg-[#00DACC]" : "bg-[#2A3A50]"}`}
+          ${!isChecked ? "bg-[#00DACC]" : "bg-[#2A3A50]"}`}
       >
         <div
           className={`absolute top-0.5 left-[2px] bg-white border border-gray-300 rounded-full w-5 h-5 transition-transform duration-300 
-          ${isChecked ? "translate-x-6" : "translate-x-0"}`}
+          ${!isChecked ? "translate-x-6" : "translate-x-0"}`}
         />
       </div>
      

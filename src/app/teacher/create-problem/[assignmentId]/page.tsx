@@ -17,13 +17,11 @@ const Page = () => {
   const [showWarning2, setShowWarning2] = useState(true);
   const [showWarning3, setShowWarning3] = useState(true);
   const [subItems, setSubItems] = useState<string[]>([]);
-  const [problems, setProblems] = useState<ICreateProblems[]>([]); 
+  const [problems, setProblems] = useState<ICreateProblems[]>([]);
 
-  
   useEffect(() => {
     console.log("Updated SubItems:", subItems);
   }, [subItems]);
-
 
   useEffect(() => {
     console.log("Updated Problems:", problems);
@@ -33,9 +31,8 @@ const Page = () => {
     setSubItems((prevSubItems) => {
       const newSubItems = prevSubItems.filter((_, i) => i !== index);
 
-      
       setProblems((prevProblems) => {
-        return prevProblems.slice(0, newSubItems.length); 
+        return prevProblems.slice(0, newSubItems.length);
       });
 
       return newSubItems;
@@ -47,7 +44,7 @@ const Page = () => {
     warningSetter: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     if (!setter.trim()) {
-      warningSetter(true); 
+      warningSetter(true);
     } else {
       warningSetter(false);
     }
@@ -57,7 +54,6 @@ const Page = () => {
     if (subItems.length < 6) {
       const newSubItems = [...subItems, `ข้อย่อยข้อที่${subItems.length + 1}`];
 
-      
       const newProblem: ICreateProblems = {
         assignmentId: assignmentId || "",
         problem: [
@@ -70,14 +66,19 @@ const Page = () => {
             isRegex: false,
             score: 0,
             testcase: [{ input: "", output: "", isHidden: false }],
-            constraint: [{ type: ConstraintType.FUNCTION, keyword: "", quantities: 0 }],
+            constraint: [
+              { type: ConstraintType.FUNCTION, keyword: "", quantities: 0 },
+            ],
           },
         ],
       };
 
       // อัปเดตสถานะพร้อมกัน
       setSubItems((prevSubItems) => {
-        const updatedSubItems = [...prevSubItems, `ข้อย่อยข้อที่${prevSubItems.length + 1}`];
+        const updatedSubItems = [
+          ...prevSubItems,
+          `ข้อย่อยข้อที่${prevSubItems.length + 1}`,
+        ];
         return updatedSubItems;
       });
 
@@ -86,7 +87,6 @@ const Page = () => {
         return updatedProblems;
       });
 
-     
       console.log("Updated SubItems:", newSubItems);
       console.log("Updated Problems:", newProblem);
     } else {
@@ -98,7 +98,10 @@ const Page = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log("Current Problems State Before Submit:", JSON.stringify(problems, null, 2));
+      console.log(
+        "Current Problems State Before Submit:",
+        JSON.stringify(problems, null, 2)
+      );
 
       const problemData: ICreateProblems = {
         assignmentId: assignmentId || "",
@@ -124,11 +127,11 @@ const Page = () => {
   return (
     <>
       <div className="text-white font-sans flex justify-between">
-        <div className="flex items-center gap-2">
-          ตั้งเวลาประกาศ
+        <div className="flex items-center gap-x-4">
+          <span>ตั้งเวลาประกาศ</span>
           <input
             type="datetime-local"
-            className="bg-[#2A3A50] ml-4 py-2 px-3 text-white rounded-md cursor-pointer"
+            className="bg-[#2A3A50] py-2 px-3 text-white rounded-md cursor-pointer"
             value={value2}
             onChange={(e) => setValue2(e.target.value)} // Update state properly
           />
@@ -152,38 +155,47 @@ const Page = () => {
 
       <div className="text-white font-sans flex justify-between mt-10 space-x-6">
         <div className="flex flex-col flex-1">
-          <span>ชื่อแบบฝึกหัด {showWarning1 && <span className="text-red-500">*</span>}</span>
+          <span>
+            ชื่อแบบฝึกหัด{" "}
+            {showWarning1 && <span className="text-red-500">*</span>}
+          </span>
           <input
             className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer"
             value={value}
             placeholder="ชื่อแบบฝึกหัด"
             required
-            onChange={(e) => setValue(e.target.value)} 
-            onBlur={() => handleBlur(value, setShowWarning1)} 
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={() => handleBlur(value, setShowWarning1)}
           />
         </div>
 
         <div className="flex flex-row gap-3">
           <div className="flex flex-col">
-            <span>วันเวลาเริ่มต้น {showWarning2 && <span className="text-red-500">*</span>}</span>
+            <span>
+              วันเวลาเริ่มต้น{" "}
+              {showWarning2 && <span className="text-red-500">*</span>}
+            </span>
             <input
               type="datetime-local"
               className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md outline-none"
               value={value2}
               onChange={(e) => setValue2(e.target.value)}
               required
-              onBlur={() => handleBlur(value2, setShowWarning2)} 
+              onBlur={() => handleBlur(value2, setShowWarning2)}
             />
           </div>
           <div className="flex flex-col">
-            <span>วันเวลาสิ้นสุด {showWarning3 && <span className="text-red-500">*</span>}</span>
+            <span>
+              วันเวลาสิ้นสุด{" "}
+              {showWarning3 && <span className="text-red-500">*</span>}
+            </span>
             <input
               type="datetime-local"
               className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer outline-none"
               value={value3}
-              onChange={(e) => setValue3(e.target.value)} 
+              onChange={(e) => setValue3(e.target.value)}
               required
-              onBlur={() => handleBlur(value3, setShowWarning3)} 
+              onBlur={() => handleBlur(value3, setShowWarning3)}
             />
           </div>
         </div>

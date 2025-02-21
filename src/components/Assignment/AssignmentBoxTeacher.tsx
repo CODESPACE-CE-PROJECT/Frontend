@@ -3,10 +3,9 @@ import { IAssignment } from "@/types/assignment";
 
 interface Props {
   assignment: IAssignment["assignment"][number];
-  courseId: string;
 }
 
-const AssignmentBoxTeacher: React.FC<Props> = ({ assignment, courseId }) => {
+const AssignmentBoxTeacher: React.FC<Props> = ({ assignment }) => {
   const router = useRouter();
 
   return (

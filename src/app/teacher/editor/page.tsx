@@ -26,7 +26,6 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { getCookie } from "cookies-next/client";
 import { compileCode } from "@/actions/compiler";
 import { ICompileCode } from "@/types/compile";
-import { getRealTimeURL } from "@/actions/env";
 
 export default function Page() {
   const [profile, setProfile] = useState<IProfile>();
@@ -124,8 +123,7 @@ export default function Page() {
       setCodeFile(codeFile);
       setSelectedFile(codeFile[0])
 
-      const realTimeURL = await getRealTimeURL()
-      await fetchEventSource(`${realTimeURL}/compiler`, {
+      await fetchEventSource(`${process.env.NEXT_PUBLIC_REAL_TIME_URL}/compiler`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,
