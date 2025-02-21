@@ -17,6 +17,7 @@ import { NotifyType } from "@/enum/enum";
 import PlatfromLogo from '@/assets/Login/logo.svg'
 import { useSearchParams } from "next/navigation";
 import { useSetCookie } from 'cookies-next/client';
+import { getBackendURL } from "@/actions/env";
 
 export default function Page() {
   const router = useRouter();
@@ -53,12 +54,14 @@ export default function Page() {
     } else if (status === 201) {
       notify(NotifyType.SUCCESS, 'เข้าสู่ระบบเสร็จสิ้น')
       router.push("/")
+    } else{
+      notify(NotifyType.ERROR, 'เกิดข้อผิดผลาดในการเข้าสู่ระบบ')
     }
     setIsLoading(false)
   };
 
-  const handleGooleLogin = () => {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const handleGooleLogin = async () => {
+    const backendUrl = await getBackendURL();
     window.location.href = `${backendUrl}/auth/google`;
   };
 
