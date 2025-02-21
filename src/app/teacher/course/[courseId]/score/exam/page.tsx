@@ -1,11 +1,19 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getAssignment } from "@/actions/assignment";
-import { IAssignment } from "@/types/assignment";
 import NavigationTab from "@/components/Tab/NavigationTab";
-import ScoreTable from "@/components/Table/ScoreTable";
+import ScoreAssignTable from "@/components/Table/ScoreAssignTable";
+import { getAssignmentscore, getAssignment } from "@/actions/assignment";
+import { IAssignmentScore, IAssignment } from "@/types/assignment";
+import { SearchBar } from "@/components/Input/SerachBar";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import { TopNav } from "@/components/Navbar/TopNav";
+import { IProfile } from "@/types/user";
+import { getProfile } from "@/actions/user";
+import { Loading } from "@/components/Loading/Loading";
+import ScoreStdTable from "@/components/Table/ScoreStdTable";
+
+type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
 export default function Score() {
   const params = useParams<{ courseId: string }>();
@@ -13,45 +21,54 @@ export default function Score() {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [assignments, setAssignments] = useState<IAssignment["assignment"]>([]);
-  const [totalScore, setTotalScore] = useState<number>(0);
-  const [maxTotalScore, setMaxTotalScore] = useState<number>(0);
+  const [assignments, setAssignments] = useState<AssignmentItem[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [profile, setProfile] = useState<IProfile>();
+  const [selectedView, setSelectedView] = useState<"แบบฝึกหัด" | "ผู้เรียน">(
+    "แบบฝึกหัด"
+  );
+  const [assignmentLock, setAssignmentLock] = useState<{
+    [assignmentId: string]: boolean;
+  }>({}); 
 
   useEffect(() => {
     const fetchAssignments = async () => {
-      setIsLoading(true);
       if (courseId) {
         try {
-          const data = await getAssignment(courseId);
-          console.log(data);
+          const profile: IProfile = await getProfile();
+          setProfile(profile);
 
-          if (data?.data?.assignment && Array.isArray(data.data.assignment)) {
-            const exerciseAssignments = data.data.assignment.filter(
-              (assignment: IAssignment["assignment"][number]) => assignment.type === "EXAMONSITE" || assignment.type === "EXAMONLINE"
-            );
-
-
-            setAssignments(exerciseAssignments ?? []);
-
-            const overallTotalScore = exerciseAssignments.reduce(
-              (acc: number, assignment: IAssignment["assignment"][number]) => acc + (assignment.totalScore ?? 0),
-              0
-            );
-
-
-            setTotalScore(overallTotalScore);
-
-            const overallMaxTotalScore = exerciseAssignments.reduce(
-              (acc: number, assignment: IAssignment["assignment"][number]) =>
-                acc + (assignment.problem?.reduce((sum: number, problem) => sum + problem.score, 0) ?? 0),
-              0
-            );
-
-            setMaxTotalScore(overallMaxTotalScore);
+          const data = await getAssignmentscore(courseId);
+          if (data?.data && Array.isArray(data.data)) {
+            const assignmentsArray = data.data as IAssignmentScore["data"];
+            const transformedAssignments: AssignmentItem[] =
+              assignmentsArray.map((assignment) => ({
+                ...assignment,
+                totalScore:
+                  assignment.scores && assignment.scores.length > 0
+                    ? assignment.scores[0].totalScore
+                    : 0,
+              }));
+            setAssignments(transformedAssignments);
           } else {
-            setError("Failed to fetch assignments or data is not in expected format.");
+            setError(
+              "Failed to fetch assignments or data is not in expected format."
+            );
           }
+
+          const assignmentData = await getAssignment(courseId);
+
+          const lockStatus: { [assignmentId: string]: boolean } = {};
+
+          assignmentData.data.forEach(
+            (assignment: IAssignment["assignment"][number]) => {
+              lockStatus[assignment.assignmentId] = assignment.isLock;
+            }
+          );
+
+          setAssignmentLock(lockStatus);
         } catch (err) {
+          console.error("Fetch error:", err);
           setError("An error occurred while fetching assignments.");
         } finally {
           setIsLoading(false);
@@ -62,16 +79,66 @@ export default function Score() {
     fetchAssignments();
   }, [courseId]);
 
+  const filteredAssignments = assignments.filter((assignment) =>
+    assignment.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <>
-      <NavigationTab courseId={courseId} basePath={`/teacher/course/${courseId}/score`} />
-      <ScoreTable assignments={assignments} isLoading={isLoading} error={error} />
-
-      <div className="flex justify-end px-8 py-4">
-        <div className="text-white text-lg px-4 py-3 rounded-md w-48 text-center mr-8">
-          คะแนนรวม {totalScore} / {maxTotalScore}
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+          <Loading className="size-20" />
         </div>
-      </div>
+      ) : (
+        <>
+          <TopNav
+            disableNotification={false}
+            imageUrl={profile?.pictureUrl}
+            role={profile?.role}
+            gender={profile?.gender}
+          >
+            <p>คะแนน</p>
+          </TopNav>
+
+          <div className="mt-4 flex items-center gap-4">
+            <NavigationTab
+              courseId={courseId}
+              basePath={`/teacher/course/${courseId}/score`}
+            />
+
+            <div className="flex flex-col">
+              <select
+                className="px-4 w-[160px] rounded-md border border-[#2A3A50] bg-[#0c121c] text-white my-2"
+                value={selectedView}
+                onChange={(e) =>
+                  setSelectedView(e.target.value as "แบบฝึกหัด" | "ผู้เรียน")
+                }
+              >
+                <option value="แบบฝึกหัด">แบบฝึกหัด</option>
+                <option value="ผู้เรียน">ผู้เรียน</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center gap-4">
+            <SearchBar onChange={(value) => setSearch(value)} />
+
+            <button className="bg-white text-[#5572FA] font-bold text-lg text-nowrap flex items-center justify-center gap-2 w-[160px] px-4 py-2 rounded-lg shadow-md hover:bg-[#f1f5ff] transition-all duration-200">
+              <NoteAddIcon className="text-[#5572FA]" />
+              ส่งออกไฟล์
+            </button>
+          </div>
+
+          {selectedView === "แบบฝึกหัด" ? (
+            <ScoreAssignTable
+              assignments={filteredAssignments}
+              assignmentLock={assignmentLock}
+            />
+          ) : (
+            <ScoreStdTable assignments={filteredAssignments} />
+          )}
+        </>
+      )}
     </>
   );
 }
