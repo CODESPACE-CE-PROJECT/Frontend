@@ -4,6 +4,7 @@ import ToggleButton from "@/components/Button/ToggleButton";
 import { OptionAssignment } from "@/components/Options/OptionAssignment";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import AssignmentBoxTeacher from "../Assignment/AssignmentBoxTeacher";
+import { useState } from "react";
 
 interface Props {
   assignments: IAssignment;
@@ -42,8 +43,12 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
         </div>
         <div className="text-white text-lg py-3 rounded-md text-center w-[5%]"></div>
       </div>
+      {assignments.assignment?.map((assignment) => {
 
-      {assignments.assignment?.map((assignment, index) => {
+        const handleToggle = (newState: boolean) => {
+          onToggle({ assignmentId: assignment.assignmentId, isLock: newState });
+        };
+
         return (
           <div
             key={assignment.assignmentId}
@@ -64,12 +69,10 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
 
             {/* ToggleButton */}
             <div className="flex text-white text-lg rounded-md items-center justify-center w-[12.5%]">
-              <ToggleButton
-                initialState={lockStates[index]}
-                onToggle={(newState) => handleToggle(index, newState)}
-              />
+              <ToggleButton initialState={assignment.isLock} onToggle={handleToggle} />
               <span className="ms-3 text-sm font-medium text-white">
-                {!lockStates[index] ? "เปิด" : "ปิด"}
+                {assignment.isLock ? "เปิด" : "ปิด"}
+
               </span>
             </div>
 
