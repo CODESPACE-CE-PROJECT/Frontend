@@ -28,6 +28,7 @@ import { notify, updateNotify } from "@/utils/toast.util"
 import { fetchEventSource } from "@microsoft/fetch-event-source"
 import { getCookie } from "cookies-next/client"
 import { IRealtimeSubmission } from "@/types/realtime"
+import { getRealTimeURL } from "@/actions/env"
 
 export default function Page() {
      const router = useRouter()
@@ -83,8 +84,8 @@ export default function Page() {
                     setSuibmission(problem.submission[0])
                     setSourceCode(problem.submission[0]?.sourceCode)
                }
-
-               await fetchEventSource(`${process.env.NEXT_PUBLIC_REAL_TIME_URL}/compiler/submission`, {
+               const realTimeURL = await getRealTimeURL()
+               await fetchEventSource(`${realTimeURL}/compiler/submission`, {
                     method: "GET",
                     headers: {
                          Authorization: `Bearer ${accessToken}`,
@@ -175,7 +176,7 @@ export default function Page() {
                          <ProblemLanguage language={problem?.language} />
                          <div className="flex flex-row items-center gap-x-4">
                               {
-                                   problem?.submission[0].stateSubmission !== StateSubmission.PASS &&
+                                   problem?.submission[0]?.stateSubmission !== StateSubmission.PASS &&
                                    <div
                                         onClick={() => document.getElementById('sourCodeUpload')?.click()}
                                         className={`flex flex-row items-center gap-x-3 bg-transparent border-[1px] border-blackground-text hover:bg-gray-500 px-4 py-3 rounded-md cursor-pointer`}>
@@ -198,7 +199,7 @@ export default function Page() {
                               }
                               <ConfirmButton
                                    onClick={handleSubmitCode}
-                                   disabled={problem?.submission[0].stateSubmission === StateSubmission.PASS}
+                                   disabled={problem?.submission[0]?.stateSubmission === StateSubmission.PASS}
                                    className="flex flex-row items-center gap-x-3 px-4">
                                    <CloudUploadOutlinedIcon fontSize="medium" />
                                    <p className="font-medium">ส่งคำตอบ</p>
