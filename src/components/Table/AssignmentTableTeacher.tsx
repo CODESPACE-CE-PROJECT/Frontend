@@ -52,13 +52,14 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
             <div className="flex text-white text-lg rounded-md items-center space-x-3 w-[40%]">
               <div
                 className={`rounded-full p-2 ms-5 ${
-                  !assignment.isLock
+                  assignment.announceType === "ANNOUNCED"
                     ? "bg-[#EF4343] text-white"
                     : "bg-white text-black"
                 }`}
               >
                 <CampaignIcon fontSize="inherit" className="text-2xl" />
               </div>
+
               <span>{assignment.title}</span>
             </div>
 

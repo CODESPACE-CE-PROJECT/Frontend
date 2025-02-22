@@ -17,6 +17,7 @@ import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal
 import { createAssignment } from "@/actions/assignment";
 import { AssignmentType } from "@/enum/enum";
 import { UpdatedLockAssignment } from "@/actions/assignment";
+import { ConfirmButton } from "@/components/Button/ConfirmButton";
 
 export default function Assignment() {
   const param = useParams<{ courseId: string }>();
@@ -116,12 +117,12 @@ export default function Assignment() {
               courseId={courseId}
               basePath={`/teacher/course/${courseId}/assignment`}
             />
-            <button
+            <ConfirmButton
               onClick={() => setIsModalOpen(true)}
               className="bg-[#5572FA] text-white px-4 py-3 rounded-[6px] text-center h-14 text-nowrap"
             >
               สร้างแบบฝึกหัด/การทดสอบ
-            </button>
+            </ConfirmButton>
           </div>
 
           <div className="mt-4">
