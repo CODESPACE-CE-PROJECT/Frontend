@@ -3,7 +3,7 @@
 import React from "react";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { Role } from "@/enum/enum";
 
 export default function ClassRoomNav() {

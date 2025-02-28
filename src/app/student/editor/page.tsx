@@ -57,6 +57,7 @@ export default function Page() {
       if (response.status === 201) {
         const codeFile: ICodeSpace[] = await getCodeSpace();
         setCodeFile(codeFile);
+        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
         updateNotify(notifyId, NotifyType.SUCCESS, "สร้างไฟล์สำเร็จ");
       } else {
         updateNotify(
@@ -82,6 +83,7 @@ export default function Page() {
       if (response.status === 200) {
         updateNotify(notifyId, NotifyType.SUCCESS, "เปลี่ยนชื่อไฟล์สำเร็จ");
         const codeFile: ICodeSpace[] = await getCodeSpace();
+        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
         setCodeFile(codeFile);
         setEditState({
           isLoading: false,
@@ -119,11 +121,15 @@ export default function Page() {
     const fetchData = async () => {
       const profile: IProfile = await getProfile();
       const codeFile: ICodeSpace[] = await getCodeSpace();
-
       setProfile(profile);
       setCodeFile(codeFile);
-      setSelectedFile(codeFile[0])
-
+      const fileCache = localStorage.getItem("fileCache")
+      if (fileCache) {
+        setSelectedFile(JSON.parse(fileCache))
+      }else {
+        setSelectedFile(codeFile[0])
+        localStorage.setItem("fileCache", JSON.stringify(codeFile[0]))
+      }
       const realTimeURL = await getRealTimeURL()
       await fetchEventSource(`${realTimeURL}/compiler`, {
         method: "GET",
@@ -139,7 +145,6 @@ export default function Page() {
           if (ev.data === "ok") {
             console.log("compiler connected")
           } else {
-            console.log(JSON.parse(ev.data))
             setOutput(JSON.parse(ev.data).result)
           }
         },
@@ -162,20 +167,19 @@ export default function Page() {
       const { status } = await updateFileCodeSpace(selectedFile?.codeSpaceId, updateForm);
       if (status === 200 && profile) {
         const submitCode: ICompileCode = {
-          fileName: "",
+          fileName: selectedFile.language === LanguageType.JAVA ? 'Main' : '',
           input: input || "",
           language: selectedFile.language,
           sourceCode: selectedFile.sourceCode,
           username: profile?.username
         }
+        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
         const { status } = await compileCode(submitCode)
         if (status === 200) {
           updateNotify(id, NotifyType.SUCCESS, "ประมวลผลเสร็จสิ้น")
         } else {
           updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการประมวลผล')
         }
-        const codeFile: ICodeSpace[] = await getCodeSpace();
-        setCodeFile(codeFile);
       } else {
         updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการประมวลผล')
         return;

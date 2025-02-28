@@ -11,6 +11,7 @@ export interface IProblem {
   revaleCode: string;
   score: number;
   isRegex: boolean;
+  isExpire: boolean;
   createdAt: string;
   updatedAt: string;
   assignmentTitle: string;

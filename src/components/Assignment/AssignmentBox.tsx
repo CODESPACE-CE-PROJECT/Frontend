@@ -12,12 +12,12 @@ const AssignmentBox: React.FC<Props> = ({ assignment }) => {
   const getBackgroundColor = (state: string) => {
     switch (state) {
       case StateSubmission.PASS:
-        return "bg-[#00DACC]";
+        return "bg-[#00DACC] hover:bg-green-400";
       case StateSubmission.FAILED:
-        return "bg-[#EF4343]";
+        return "bg-[#EF4343] hover:bg-red-300";
       case StateSubmission.NOTSEND:
       default:
-        return "bg-[#808080]";
+        return "bg-[#808080] hover:bg-[#bebebe]";
     }
   };
 
@@ -37,7 +37,7 @@ const AssignmentBox: React.FC<Props> = ({ assignment }) => {
               !assignment.isLock
                 ? `${getBackgroundColor(
                     problem.stateSubmission
-                  )}  hover:bg-[#bebebe] cursor-pointer `
+                  )} cursor-pointer `
                 : "border-2 border-dotted border-[#2A3A50] hover:border-[#2A3A50] hover:border-dotted "
             }
             ${assignment.problem.length >= 6 ? "flex-grow" : ""}`}

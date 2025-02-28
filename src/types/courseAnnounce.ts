@@ -1,8 +1,4 @@
-interface IUser {
-  firstName: string;
-  lastName: string;
-  pictureUrl: string;
-}
+import { IProfile } from "./user";
 
 export type ICourseAnnounce = {
   courseAnnounceId: string;
@@ -12,7 +8,7 @@ export type ICourseAnnounce = {
   updatedAt: Date;
   courseId: string;
   replyAnnounce: IReplyAnnounce[];
-  user: IUser;
+  user: IProfile;
 };
 
 export type IReplyAnnounce = {
@@ -22,7 +18,7 @@ export type IReplyAnnounce = {
   createAt: Date;
   updateAt: Date;
   courseAnnounceId: string;
-  user: IUser;
+  user: IProfile;
 };
 
 export type ICreateReply = {

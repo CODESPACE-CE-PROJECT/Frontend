@@ -56,7 +56,7 @@ export default function Page() {
           if (problem) {
                const submitCode: ISubmitCode = {
                     problemId: params.problemId,
-                    fileName: problem?.language === LanguageType.JAVA ? 'main' : '',
+                    fileName: problem?.language === LanguageType.JAVA ? 'Main' : '',
                     language: problem?.language,
                     sourceCode: sourceCode
                }
@@ -155,7 +155,9 @@ export default function Page() {
 
           <div className="flex flex-col gap-y-2 md:flex-row items-center w-full md:gap-x-2">
                <div className="w-full h-[calc(100vh-10rem-56px-10px)] flex flex-col gap-y-4 overflow-y-auto pr-3 dropdown">
-                    <NavigateSubmission index={indexTab} onClick={(index) => setIndexTab(index)} />
+                    <div className="sticky top-0 z-10 bg-[#0B111B]">
+                         <NavigateSubmission index={indexTab} onClick={(index) => setIndexTab(index)} />
+                    </div>
                     {
                          indexTab === 1 ? (<>
                               <ProblemDescription title={problem?.title} value={problem?.description} />
@@ -176,7 +178,7 @@ export default function Page() {
                          <ProblemLanguage language={problem?.language} />
                          <div className="flex flex-row items-center gap-x-4">
                               {
-                                   problem?.submission[0]?.stateSubmission !== StateSubmission.PASS &&
+                                   (problem?.submission[0]?.stateSubmission !== StateSubmission.PASS && !problem?.isExpire) && 
                                    <div
                                         onClick={() => document.getElementById('sourCodeUpload')?.click()}
                                         className={`flex flex-row items-center gap-x-3 bg-transparent border-[1px] border-blackground-text hover:bg-gray-500 px-4 py-3 rounded-md cursor-pointer`}>
@@ -199,7 +201,7 @@ export default function Page() {
                               }
                               <ConfirmButton
                                    onClick={handleSubmitCode}
-                                   disabled={problem?.submission[0]?.stateSubmission === StateSubmission.PASS}
+                                   disabled={problem?.submission[0]?.stateSubmission === StateSubmission.PASS || problem?.isExpire}
                                    className="flex flex-row items-center gap-x-3 px-4">
                                    <CloudUploadOutlinedIcon fontSize="medium" />
                                    <p className="font-medium">ส่งคำตอบ</p>

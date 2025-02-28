@@ -1,5 +1,5 @@
 export default function Divider() {
     return (
-        <div className="h-px border-blackground-text border-t-2 mx-8" />
+        <div className="h-px border-blackground-text border-t-2" />
     );
 }

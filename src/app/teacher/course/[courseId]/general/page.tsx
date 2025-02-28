@@ -80,7 +80,7 @@ export default function Page() {
             {courseDetails?.description}
           </p>
 
-          <div className="flex flex-col items-center space-y-5 px-40">
+          <div className="flex flex-col items-center space-y-5 px-14">
             {announce.length > 0 ? (
               announce.map((announce) => (
                 <AnnounceCard

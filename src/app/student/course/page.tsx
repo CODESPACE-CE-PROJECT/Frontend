@@ -38,6 +38,7 @@ export default function Courses() {
           <TopNav
             disableNotification={false}
             imageUrl={profile?.pictureUrl}
+            gender={profile?.gender}
             role={profile?.role}
           >
             <p className="p-[10px]">คอร์สเรียน</p>

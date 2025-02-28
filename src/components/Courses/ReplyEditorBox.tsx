@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import UserProfileIcon from "@/assets/CoursesAssets/UserProfileIcon.svg";
-import ReplyEditor from "@/components/Courses/ReplyEditor";
+import SendIcon from '@mui/icons-material/Send';
+import { ReplyEditor } from "../LexicalEditor/ReplyEditor";
 
 interface ReplyEditorBoxProps {
   courseAnnounceId: string;
@@ -18,25 +19,23 @@ const ReplyEditorBox: React.FC<ReplyEditorBoxProps> = ({
   setActiveReplyId,
   handleReply,
 }) => {
+  const [isFocus, setIsFocus] = useState<boolean>(false)
+  const [message, setMessage] = useState<string>("")
   return (
-    <div className="flex flex-row items-start space-x-2 mx-8 my-4">
+    <div className="flex flex-row items-center justify-start gap-x-2 my-4 w-full">
       <Image
         src={profilePicture || UserProfileIcon}
         width={100}
         height={100}
         alt="User Profile"
-        className="h-10 w-10 border rounded-full border-blackground-text"
+        className={`size-8 ${isFocus ? 'mt-1 self-start': ''} border rounded-full border-blackground-text`}
       />
-      {activeReplyId !== courseAnnounceId ? (
-        <button
-          className="text-sm px-2 py-1 self-center hover:bg-blackground-text rounded"
-          onClick={() => setActiveReplyId(courseAnnounceId)}
-        >
-          Reply
-        </button>
-      ) : (
-        <ReplyEditor onSend={(message) => handleReply(message, courseAnnounceId)} />
-      )}
+      <div className="w-full h-full">
+        <ReplyEditor isFocus={isFocus} onFocus={(value) => setIsFocus(value)} onChange={(value) => setMessage(value)}/>
+      </div>
+      <button className={`${isFocus ? 'mt-2 self-start' : ''} hover:text-gray-400`} onClick={() => handleReply(message, courseAnnounceId)}>
+        <SendIcon fontSize="medium"/>
+      </button>
     </div>
   );
 };

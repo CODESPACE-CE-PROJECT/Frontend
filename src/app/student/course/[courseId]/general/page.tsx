@@ -13,6 +13,7 @@ import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
 import AnnounceCard from "@/components/Courses/AnnounceCard";
 import { Loading } from "@/components/Loading/Loading";
+import { getAvatar } from "@/utils/gender.util";
 
 export default function Page() {
   const param = useParams<{ courseId: string }>();
@@ -80,13 +81,13 @@ export default function Page() {
             {courseDetails?.description}
           </p>
 
-          <div className="flex flex-col items-center space-y-5 px-40">
+          <div className="flex flex-col items-center space-y-5 px-14">
             {announce.length > 0 ? (
               announce.map((announce) => (
                 <AnnounceCard
                   key={announce.courseAnnounceId}
                   announce={announce}
-                  profilePicture={profile?.pictureUrl || ""}
+                  profilePicture={profile?.pictureUrl || (profile?.gender && getAvatar(profile?.gender))}
                   handleReply={handleReply}
                 />
               ))

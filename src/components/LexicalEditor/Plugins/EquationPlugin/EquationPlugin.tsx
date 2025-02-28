@@ -48,7 +48,6 @@ export const EquationPlugin = () => {
                                    <KatexRenderer 
                                         equation={equation}
                                         inline={true}
-                                        onDoubleClick={() => {}}
                                    />
                                    <div className='flex flex-row w-full items-center justify-center'>
                                         <Button

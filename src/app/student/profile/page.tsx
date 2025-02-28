@@ -32,6 +32,7 @@ export default function Setting() {
           ...response,
           IpAddress: response.IpAddress || "-",
         });
+        console.log(response);
 
         setEditData({
           ...response,
@@ -119,6 +120,7 @@ export default function Setting() {
         <TopNav
           disableNotification={false}
           imageUrl={profile?.pictureUrl}
+          gender={profile?.gender}
           role={profile?.role}
         >
           <p>โปรไฟล์</p>

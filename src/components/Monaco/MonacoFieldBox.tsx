@@ -3,11 +3,12 @@ import { Loading } from "@/components/Loading/Loading";
 
 interface Props {
      value?: string,
-     onChange?: (value: string | undefined) => void
+     onChange?: (value: string | undefined) => void,
+     readOnly: boolean
 }
 
 
-export const MonacoFieldBox: React.FC<Props> = ({ value, onChange }) => {
+export const MonacoFieldBox: React.FC<Props> = ({ value, onChange, readOnly }) => {
      const handleEditorWillMount = (monaco: Monaco) => {
           monaco.editor.defineTheme("custom", {
                base: "vs-dark",
@@ -44,7 +45,7 @@ export const MonacoFieldBox: React.FC<Props> = ({ value, onChange }) => {
           },
           selectOnLineNumbers: true,
           roundedSelection: false,
-          readOnly: false,
+          readOnly: readOnly,
           cursorStyle: "line",
           automaticLayout: true,
           lineNumbers: "on",

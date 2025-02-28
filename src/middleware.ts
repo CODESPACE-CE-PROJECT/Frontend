@@ -13,18 +13,19 @@ export default async function middleware(req: NextRequest) {
   const isPublicRoute = publicRoute.includes(path)
 
   const refreshToken = (await cookies()).get('refreshToken')?.value
+  
+  if (!refreshToken) {
+    if (isPublicRoute && path !== "/") {
+      return NextResponse.next()
+    }
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
   const payload = await decrypt(refreshToken)
 
   if (isProtectedRoute && !payload?.username) {
     deleteSession()
     return NextResponse.redirect(new URL('/login', req.nextUrl))
-  }
-
-  if (!refreshToken) {
-    if (isPublicRoute) {
-      return NextResponse.next()
-    }
-    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   await getAccessToken(refreshToken)
