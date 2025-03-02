@@ -43,7 +43,7 @@ export default function Assignment() {
       setProfile(profile);
       const data = await getAssignment(courseId);
 
-      const filteredAssignments = data.data.filter(
+      const filteredAssignments = data.data?.filter(
         (assignment: IAssignment["assignment"][number]) =>
           assignment.type === AssignmentType.EXERCISE
       );
@@ -78,7 +78,7 @@ export default function Assignment() {
       const result = await createAssignment(assignmentData);
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Error creating assignment:", error);
+      console.log("Error creating assignment:", error);
     }
   };
 
@@ -107,6 +107,7 @@ export default function Assignment() {
             className="mb-6"
             disableNotification={false}
             imageUrl={profile?.pictureUrl}
+            gender={profile?.gender}
             role={profile?.role}
           >
             <p>แบบฝึกหัด</p>

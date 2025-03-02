@@ -6,13 +6,18 @@ import { getCoursesById } from "@/actions/course";
 import { getProfile } from "@/actions/user";
 import { IProfile } from "@/types/user";
 import { ICourse } from "@/types/course";
-import { ICourseAnnounce } from "@/types/courseAnnounce";
-import { createReplyAnnounce } from "@/actions/announcement";
+import { ICourseAnnounce, ICreateAnnounce } from "@/types/courseAnnounce";
+import { createAnnonuncement, createReplyAnnounce } from "@/actions/announcement";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
 import AnnounceCard from "@/components/Courses/AnnounceCard";
 import { Loading } from "@/components/Loading/Loading";
+import { getAvatar } from "@/utils/gender.util";
+import { LexicalEditor } from "@/components/LexicalEditor/LexicalEditor";
+import { ConfirmButton } from "@/components/Button/ConfirmButton";
+import { CancelButton } from "@/components/Button/CancelButton";
+import { checkValidMessage } from "@/utils/text.util";
 
 export default function Page() {
   const param = useParams<{ courseId: string }>();
@@ -21,6 +26,10 @@ export default function Page() {
   const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [createForm, setCreateForm] = useState<ICreateAnnounce>({
+    courseId: courseId,
+    description: "",
+  })
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -35,8 +44,7 @@ export default function Page() {
     fetchCourseData();
   }, [courseId]);
 
-  const handleReply = async (courseAnnounceId: string, message: string) => {
-    if (!message.trim()) return;
+  const handleReply = async (message: string, courseAnnounceId: string) => {
     const id = notify(NotifyType.LOADING, "กำลังตอบกลับ");
     const { status } = await createReplyAnnounce({
       courseAnnounceId,
@@ -46,18 +54,28 @@ export default function Page() {
     if (id !== undefined) {
       if (status === 201) {
         updateNotify(id, NotifyType.SUCCESS, "ตอบกลับสำเร็จ");
-        setAnnounce((prevAnnounce) =>
-          prevAnnounce.map((announce) =>
-            announce.courseAnnounceId === courseAnnounceId
-              ? { ...announce, replyAnnounce: [...announce.replyAnnounce] }
-              : announce
-          )
-        );
+        const response: ICourse = await getCoursesById(courseId);
+        setAnnounce(response.courseAnnounce);
       } else {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการตอบกลับ");
       }
     }
   };
+
+  const handleCreateAnnounce = async() => {
+    console.log(createForm);
+    const id = notify(NotifyType.LOADING, "กำลังสร้างประกาศ");
+    const { status } = await createAnnonuncement(createForm);
+    if (id !== undefined) {
+      if (status === 201) {
+        updateNotify(id, NotifyType.SUCCESS, "สร้างประกาศสำเร็จ");
+        const response: ICourse = await getCoursesById(courseId);
+        setAnnounce(response.courseAnnounce);
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการสร้างประกาศ");
+      }
+    }
+  }
 
   return (
     <>
@@ -76,17 +94,30 @@ export default function Page() {
             <p>{courseDetails?.title}</p>
           </TopNav>
 
-          <p className="flex px-4 py-3 my-6 text-lg text-wrap">
+          <p className="flex mt-6 text-lg text-wrap">
             {courseDetails?.description}
           </p>
 
-          <div className="flex flex-col items-center space-y-5 px-14">
+          <div className="flex flex-col items-center gap-y-5 px-14 py-6">
+            <LexicalEditor onChange={(editorState) => setCreateForm(prev => ({
+              ...prev,
+              description: editorState,
+            }))} className="min-h-28 h-full">
+              <div className="flex flex-row items-center justify-end gap-x-4 pt-2 border-t-[1px] border-white">
+                <CancelButton className="border-white hover:bg-gray-600">
+                  <p>ยกเลิก</p>
+                </CancelButton>
+                <ConfirmButton onClick={handleCreateAnnounce} disabled={!checkValidMessage(createForm.description)}>
+                  <p className="px-11">สร้าง</p>
+                </ConfirmButton>
+              </div>
+            </LexicalEditor>
             {announce.length > 0 ? (
               announce.map((announce) => (
                 <AnnounceCard
                   key={announce.courseAnnounceId}
                   announce={announce}
-                  profilePicture={profile?.pictureUrl || ""}
+                  profilePicture={profile?.pictureUrl || (profile?.gender && getAvatar(profile?.gender))}
                   handleReply={handleReply}
                 />
               ))

@@ -49,11 +49,11 @@ export default function Page() {
             <p>{courseDetails?.title}</p>
           </TopNav>
 
-          <p className="flex px-4 py-3 my-6 text-lg text-wrap">
+          <p className="flex mt-6 text-lg text-wrap">
             {courseDetails?.description}
           </p>
 
-          <div className="flex flex-col items-center space-y-5 px-40">
+          <div className="flex flex-col items-center gap-y-5 px-14 py-6">
             {announcement.length > 0 ? (
               announcement.map((announce) => (
                 <AnnouncementCard

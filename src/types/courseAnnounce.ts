@@ -25,3 +25,8 @@ export type ICreateReply = {
   courseAnnounceId: string;
   message: string;
 };
+
+export type ICreateAnnounce = {
+  courseId: string;
+  description: string;
+}

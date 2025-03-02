@@ -11,7 +11,6 @@ import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { theme } from "@/components/LexicalEditor/theme"
 import { ToolbarPlugin } from "@/components/LexicalEditor/Plugins/ToolbarPlugin/ToolbarPlugin";
-import { TreeViewPlugin } from "@/components/LexicalEditor/Plugins/TreeViewPlugin";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ImageNode } from "@/components/LexicalEditor/node/ImageNode";
@@ -22,7 +21,9 @@ import { MyOnChangePlugin } from '@/components/LexicalEditor/Plugins/MyOnChangeP
 
 interface Props {
      value?: string,
-     onChange: (editorState: string) => void
+     onChange: (editorState: string) => void,
+     className?: string,
+     children?: React.ReactNode
 }
 
 const PlaygroundNodes = [
@@ -38,7 +39,7 @@ const PlaygroundNodes = [
      FileNode
 ]
 
-export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
+export const LexicalEditor:React.FC<Props> = ({onChange, value, className, children}) => {
 
      const initialConfig = {
           namespace: 'Lexical Editor',
@@ -54,13 +55,13 @@ export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
      const placeholder = 'พิมพ์ที่นี่ .....';
 
      return <LexicalComposer initialConfig={initialConfig}>
-          <div className="relative rounded-md bg-blackground-text">
+          <div className="relative rounded-md bg-blackground-text w-full">
                <ToolbarPlugin />
                <div className="relative p-4">
                     <RichTextPlugin
                          contentEditable={
                               <ContentEditable
-                                   className="relative h-96 overflow-y-auto bg-blackground-text outline-0"
+                                   className={`relative ${className} bg-blackground-text outline-0`}
                                    aria-placeholder={placeholder}
                                    placeholder={
                                         <div className="absolute top-[16px] left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">{placeholder}</div>
@@ -69,12 +70,12 @@ export const LexicalEditor:React.FC<Props> = ({onChange, value}) => {
                          }
                          ErrorBoundary={LexicalErrorBoundary}
                     />
+                    {children}
                </div>
           </div>
           <HistoryPlugin />
           <ListPlugin />
           <CheckListPlugin />
-          <TreeViewPlugin />
           <AutoFocusPlugin />
           <MyOnChangePlugin onChange={(editorState) => onChange(JSON.stringify(editorState))}/>
      </LexicalComposer>

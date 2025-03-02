@@ -3,17 +3,27 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { NotiPopupItem } from "@/components/Navbar/NotiPopupItem";
 import CloseIcon from '@mui/icons-material/Close';
 import { createUserNotification, getNotification } from "@/actions/notification";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { INotification } from "@/types/notification";
 export const NotificationPopup = () => {
      const [isOpen, setIsOpen] = useState<boolean>(false);
      const [notifications, setNotifications] = useState<INotification[]>();
+     const notiPopupRef = useRef<HTMLDivElement>(null);
+     
+     const handleClickOutside = (event: MouseEvent) => {
+          if (notiPopupRef.current && !notiPopupRef.current.contains(event.target as Node)) {
+               setIsOpen(false);
+          }
+     };
+
      useEffect(() => {
           const fetchNotification = async () => {
                const { data } = await getNotification();
                setNotifications(data);
           }
           fetchNotification();
+          document.addEventListener("mousedown", handleClickOutside);
+          return () => document.removeEventListener("mousedown", handleClickOutside);
      }, [])
 
      const handleCloseNotification = async (notificationId: string) => {
@@ -26,7 +36,7 @@ export const NotificationPopup = () => {
      }
 
      return (
-          <div className="relative">
+          <div className="relative" ref={notiPopupRef}>
                <button className="hover:text-gray-300 rounded-md" onClick={() => setIsOpen(prev => !prev)}>
                     <NotificationsNoneIcon fontSize="large" />
                </button>

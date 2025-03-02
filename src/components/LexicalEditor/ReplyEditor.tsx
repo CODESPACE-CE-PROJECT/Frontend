@@ -13,8 +13,7 @@ import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { MyOnChangePlugin } from '@/components/LexicalEditor/Plugins/MyOnChangePlugin/MyOnChangePlugin';
 import { ReplyToolbarPlugin } from '@/components/LexicalEditor/Plugins/ReplyToolbarPlugin/ReplyToolbarPlugin';
-import { useEffect, useRef, useState } from 'react';
-
+import { useEffect, useRef } from 'react';
 interface Props {
      value?: string,
      onChange: (value: string) => void,
@@ -34,7 +33,6 @@ const PlaygroundNodes = [
 export const ReplyEditor: React.FC<Props> = ({ onChange, value, isFocus, onFocus }) => {
      const replyRef = useRef<HTMLDivElement>(null)
 
-     
      useEffect(() => {
           const handleClickOutside = (event: MouseEvent) => {
                if (replyRef.current && !replyRef.current.contains(event.target as Node) && onFocus) {
@@ -61,7 +59,7 @@ export const ReplyEditor: React.FC<Props> = ({ onChange, value, isFocus, onFocus
      return <LexicalComposer initialConfig={initialConfig}>
           <div className="relative rounded-md bg-blackground-text focus-within:border-[1px] focus-within:border-primary"
                ref={replyRef}
-               onFocus={() => onFocus && onFocus(true)} 
+               onClick={() => onFocus && onFocus(true)}
           >
                <div className="relative py-2 px-4">
                     <RichTextPlugin

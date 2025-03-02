@@ -22,7 +22,6 @@ export default function Page() {
   const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
   const [loading, setLoading] = useState<boolean>(true);
-  
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -37,8 +36,7 @@ export default function Page() {
     fetchCourseData();
   }, [courseId]);
 
-  const handleReply = async (courseAnnounceId: string, message: string) => {
-    if (!message.trim()) return;
+  const handleReply = async (message: string, courseAnnounceId: string) => {
     const id = notify(NotifyType.LOADING, "กำลังตอบกลับ");
     const { status } = await createReplyAnnounce({
       courseAnnounceId,
@@ -48,13 +46,8 @@ export default function Page() {
     if (id !== undefined) {
       if (status === 201) {
         updateNotify(id, NotifyType.SUCCESS, "ตอบกลับสำเร็จ");
-        setAnnounce((prevAnnounce) =>
-          prevAnnounce.map((announce) =>
-            announce.courseAnnounceId === courseAnnounceId
-              ? { ...announce, replyAnnounce: [...announce.replyAnnounce] }
-              : announce
-          )
-        );
+        const response: ICourse = await getCoursesById(courseId);
+        setAnnounce(response.courseAnnounce);
       } else {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการตอบกลับ");
       }
@@ -77,11 +70,11 @@ export default function Page() {
             <p>{courseDetails?.title}</p>
           </TopNav>
 
-          <p className="flex py-3 my-6 text-lg text-wrap">
+          <p className="flex mt-6 text-lg text-wrap">
             {courseDetails?.description}
           </p>
 
-          <div className="flex flex-col items-center space-y-5 px-14">
+          <div className="flex flex-col items-center gap-y-5 px-14 py-6">
             {announce.length > 0 ? (
               announce.map((announce) => (
                 <AnnounceCard

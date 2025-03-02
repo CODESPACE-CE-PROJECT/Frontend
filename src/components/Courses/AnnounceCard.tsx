@@ -5,6 +5,7 @@ import ReplyBox from "@/components/Courses/ReplyBox";
 import ReplyEditorBox from "@/components/Courses/ReplyEditorBox";
 import { ICourseAnnounce } from "@/types/courseAnnounce";
 import { getAvatar } from "@/utils/gender.util";
+import { LexicalViewer } from "@/components/LexicalEditor/LexicalViewer";
 
 interface AnnounceProps {
   announce: ICourseAnnounce;
@@ -39,12 +40,13 @@ const AnnounceCard: React.FC<AnnounceProps> = ({
           </p>
         </div>
 
-        <div className="my-6">{announce.description}</div>
+        <LexicalViewer namespace="Announcement Description" value={announce.description}/>
+        
         <Divider />
+
         {/* Reply Box */}
         <ReplyBox
           replies={announce.replyAnnounce}
-          courseAnnounceId={announce.courseAnnounceId}
         />
 
         {announce.replyAnnounce.length > 0 && <Divider />}
@@ -58,8 +60,6 @@ const AnnounceCard: React.FC<AnnounceProps> = ({
           handleReply={handleReply}
         />
       </div>
-
-
     </div>
   );
 };

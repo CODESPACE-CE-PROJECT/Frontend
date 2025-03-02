@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import UserProfileIcon from "@/assets/CoursesAssets/UserProfileIcon.svg";
 import SendIcon from '@mui/icons-material/Send';
 import { ReplyEditor } from "../LexicalEditor/ReplyEditor";
+import { checkValidMessage } from "@/utils/text.util";
 
 interface ReplyEditorBoxProps {
   courseAnnounceId: string;
@@ -15,25 +15,29 @@ interface ReplyEditorBoxProps {
 const ReplyEditorBox: React.FC<ReplyEditorBoxProps> = ({    
   courseAnnounceId,
   profilePicture,
-  activeReplyId,
-  setActiveReplyId,
   handleReply,
 }) => {
   const [isFocus, setIsFocus] = useState<boolean>(false)
-  const [message, setMessage] = useState<string>("")
+  const [message, setMessage] = useState<string>(`{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}`)
+  
+  const handleReplyMessage = () => {
+    handleReply(message, courseAnnounceId)
+    setMessage(`{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}`)
+  }
+
   return (
     <div className="flex flex-row items-center justify-start gap-x-2 my-4 w-full">
       <Image
-        src={profilePicture || UserProfileIcon}
+        src={profilePicture}
         width={100}
         height={100}
         alt="User Profile"
         className={`size-8 ${isFocus ? 'mt-1 self-start': ''} border rounded-full border-blackground-text`}
       />
       <div className="w-full h-full">
-        <ReplyEditor isFocus={isFocus} onFocus={(value) => setIsFocus(value)} onChange={(value) => setMessage(value)}/>
+        <ReplyEditor isFocus={isFocus} value={message} onFocus={(value) => setIsFocus(value)} onChange={(value) => setMessage(value)}/>
       </div>
-      <button className={`${isFocus ? 'mt-2 self-start' : ''} hover:text-gray-400`} onClick={() => handleReply(message, courseAnnounceId)}>
+      <button className={`${isFocus ? 'mt-2 self-start' : ''} hover:text-gray-400 disabled:text-gray-600`} onClick={() => handleReplyMessage()} disabled={!checkValidMessage(message)}>
         <SendIcon fontSize="medium"/>
       </button>
     </div>
