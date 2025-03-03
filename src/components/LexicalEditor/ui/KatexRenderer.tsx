@@ -8,11 +8,9 @@ import { useEffect, useRef } from 'react';
 export default function KatexRenderer({
      equation,
      inline,
-     onDoubleClick,
 }: Readonly<{
      equation: string;
      inline: boolean;
-     onDoubleClick: () => void;
 }>): JSX.Element {
      const katexElementRef = useRef(null);
 
@@ -35,9 +33,7 @@ export default function KatexRenderer({
           <>
                <img src="#" alt="" />
                <span
-                    role="button"
                     tabIndex={-1}
-                    onDoubleClick={onDoubleClick}
                     ref={katexElementRef}
                />
                <img src="#" alt="" />

@@ -97,6 +97,7 @@ export default function Page() {
             className="mb-6"
             disableNotification={false}
             imageUrl={profile?.pictureUrl}
+            gender={profile?.gender}
             role={profile?.role}
           >
             <p className="p-[10px]">คอร์สเรียน</p>

@@ -57,10 +57,12 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
      }
 
      static importJSON(serializedNode: SerializedEquationNode): EquationNode {
-          return $createEquationNode(
+          const node = $createEquationNode(
                serializedNode.equation,
                serializedNode.inline,
           ).updateFromJSON(serializedNode);
+          node.markDirty();
+          return node;
      }
 
      exportJSON(): SerializedEquationNode {
@@ -131,6 +133,7 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
      setEquation(equation: string): void {
           const writable = this.getWritable();
           writable.__equation = equation;
+          writable.markDirty();
      }
 
      decorate(): JSX.Element {
@@ -140,7 +143,6 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
                          equation={this.__equation}
                          inline={this.__inline}
                          key={this.__key}
-                         onDoubleClick={() => {}}
                     />
                </Suspense>
           )

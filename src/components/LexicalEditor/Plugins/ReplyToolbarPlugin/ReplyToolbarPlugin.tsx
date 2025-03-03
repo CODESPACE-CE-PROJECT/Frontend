@@ -25,10 +25,10 @@ import { registerCodeHighlighting } from '@lexical/code';
 import { Button } from '@/components/LexicalEditor/ui/Button';
 
 interface Props {
-     isActive: boolean
+     isFocus: boolean
 }
 
-export const ReplyToolbarPlugin:React.FC<Props> = ({isActive}) => {
+export const ReplyToolbarPlugin:React.FC<Props> = ({isFocus}) => {
      const [editor] = useLexicalComposerContext();
      const [activeEditor, setActiveEditor] = useState(editor)
      const [isBold, setIsBold] = useState(false)
@@ -101,7 +101,7 @@ export const ReplyToolbarPlugin:React.FC<Props> = ({isActive}) => {
           );
      }, [$updateToolbar, activeEditor, editor]);
 
-     return isActive && (<div className="flex flex-wrap items-center px-2 py-2 gap-x-3">
+     return isFocus && (<div className="flex flex-wrap items-center px-2 py-2 gap-x-3">
           <div className='flex flex-row items-center gap-x-2 border-r-[1px] pr-3 border-r-gray-600 h-10'>
                <Button
                     disabled={!canUndo}

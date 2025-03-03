@@ -1,5 +1,4 @@
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { NotificationPopup } from "@/components/Navbar/NotificationPopup";
 import { ReactNode, FC } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -30,8 +29,9 @@ export const TopNav: FC<Props> = ({
     >
       {children}
       <div className="flex flex-row items-center gap-x-6">
-        {!disableNotification && <NotificationsNoneIcon fontSize="large" />}
-
+        {!disableNotification && 
+          <NotificationPopup />
+        }
         <Link href={`/${getRole(role)}/profile`}>
           <Image
             src={imageUrl || (gender && getAvatar(gender))}

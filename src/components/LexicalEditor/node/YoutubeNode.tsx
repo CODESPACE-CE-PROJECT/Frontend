@@ -91,7 +91,6 @@ export class YoutubeNode extends DecoratorNode<JSX.Element> {
      decorate(): JSX.Element {
           return (
                <iframe
-                    className="mt-2"
                     height={HEIGHT}
                     width={WIDTH}
                     src={getYoutubeLink(this.__id)}

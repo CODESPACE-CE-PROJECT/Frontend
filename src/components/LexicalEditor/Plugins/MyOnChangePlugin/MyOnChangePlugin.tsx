@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { EditorState } from "lexical";
+import { EditorState, LexicalEditor } from "lexical";
 import { useEffect } from "react";
 import { useDebouncedCallback } from 'use-debounce';
 

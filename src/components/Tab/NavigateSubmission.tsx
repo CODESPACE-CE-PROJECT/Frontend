@@ -1,10 +1,11 @@
 interface Props {
      index: number
-     onClick: (index: number) => void
+     onClick: (index: number) => void,
+     className?: string
 }
 
-export const NavigateSubmission: React.FC<Props> = ({ index, onClick }) => {
-     return <div className="relative w-full">
+export const NavigateSubmission: React.FC<Props> = ({ index, onClick, className }) => {
+     return <div className={`${className} relative w-full`}>
           <div className="flex gap-12">
                <div
                     className={`text-base font-semibold cursor-pointer px-4 py-2 pb-2  

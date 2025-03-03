@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Divider from "@/components/Courses/Divider";
-import TeacherProfile from "@/assets/CoursesAssets/TeacherIcon.svg";
 import ReplyBox from "@/components/Courses/ReplyBox";
 import ReplyEditorBox from "@/components/Courses/ReplyEditorBox";
 import { ICourseAnnounce } from "@/types/courseAnnounce";
+import { getAvatar } from "@/utils/gender.util";
+import { LexicalViewer } from "@/components/LexicalEditor/LexicalViewer";
 
 interface AnnounceProps {
   announce: ICourseAnnounce;
@@ -17,14 +18,13 @@ const AnnounceCard: React.FC<AnnounceProps> = ({
   profilePicture,
   handleReply,
 }) => {
-  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
 
   return (
     <div className="bg-[#16233A] rounded-md w-full">
-      <div className="mx-8">
+      <div className="px-8">
         <div className="flex flex-row items-center space-x-5 font-light text-lg my-4">
           <Image
-            src={announce.user.pictureUrl || TeacherProfile}
+            src={announce.user.pictureUrl || getAvatar(announce.user.gender)}
             width={100}
             height={100}
             alt="Teacher Profile"
@@ -34,32 +34,29 @@ const AnnounceCard: React.FC<AnnounceProps> = ({
             <p className="text-xl">{announce?.user?.firstName}</p>
             <p className="text-xl">{announce?.user?.lastName}</p>
           </div>
-          <h2 className="text-sm">
+          <p className="text-sm">
             {new Date(announce.createdAt).toLocaleString("th")}
-          </h2>
+          </p>
         </div>
 
-        <div className="pb-3">{announce.description}</div>
+        <LexicalViewer namespace="Announcement Description" value={announce.description}/>
+        
+        <Divider />
+
+        {/* Reply Box */}
+        <ReplyBox
+          replies={announce.replyAnnounce}
+        />
+
+        {announce.replyAnnounce.length > 0 && <Divider />}
+
+        {/* Reply Editor Box */}
+        <ReplyEditorBox
+          profilePicture={profilePicture}
+          courseAnnounceId={announce.courseAnnounceId}
+          handleReply={handleReply}
+        />
       </div>
-
-      <Divider />
-
-      {/* Reply Box */}
-      <ReplyBox
-        replies={announce.replyAnnounce}
-        courseAnnounceId={announce.courseAnnounceId}
-      />
-
-      {announce.replyAnnounce.length > 0 && <Divider />}
-
-      {/* Reply Editor Box */}
-      <ReplyEditorBox
-        profilePicture={profilePicture}
-        activeReplyId={activeReplyId}
-        setActiveReplyId={setActiveReplyId}
-        courseAnnounceId={announce.courseAnnounceId}
-        handleReply={handleReply}
-      />
     </div>
   );
 };

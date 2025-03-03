@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import TeacherProfile from "@/assets/CoursesAssets/TeacherIcon.svg";
 import { IAssignment } from "@/types/course";
 import Link from "next/link";
 import { getAvatar } from "@/utils/gender.util";
@@ -16,7 +15,7 @@ const AnnouncementCard: React.FC<AnnouncementProps> = ({
 }) => {
   return (
     <div className="bg-[#16233A] rounded-md w-full">
-      <div className="mx-8">
+      <div className="px-8">
         <div className="flex flex-row items-center space-x-5 font-light text-lg my-4">
           <Image
             src={announcement.user.pictureUrl || getAvatar(announcement.user.gender)}

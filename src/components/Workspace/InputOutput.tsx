@@ -19,7 +19,7 @@ export const InputOutput: React.FC<Props> = ({ output, onInputChange }) => {
             <p className="text-[#C2C8CC] min-w-32">INPUT</p>
           </div>
           <div className=" border-blackground-text border-t-[0.5px]"></div>
-          <MonacoFieldBox onChange={onInputChange} />
+          <MonacoFieldBox onChange={onInputChange} readOnly={false}/>
         </div>
 
         <div className="flex flex-col w-full h-[50vh] pt-2 bg-[#161D2D]">
@@ -28,7 +28,7 @@ export const InputOutput: React.FC<Props> = ({ output, onInputChange }) => {
             <p className="text-[#C2C8CC] min-w-32">OUTPUT</p>
           </div>
           <div className=" border-blackground-text border-t-[0.5px]"></div>
-          <MonacoFieldBox value={output} />
+          <MonacoFieldBox value={output} readOnly={true}/>
         </div>
       </div>
     </>

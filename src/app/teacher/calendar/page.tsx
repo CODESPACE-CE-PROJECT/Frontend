@@ -54,6 +54,7 @@ export default function Page() {
             disableNotification={false}
             imageUrl={profile?.pictureUrl}
             role={profile?.role}
+            gender={profile?.gender}
           >
             <p className="p-2">ปฏิทิน</p>
           </TopNav>

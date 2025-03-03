@@ -8,16 +8,18 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { theme } from "@/components/LexicalEditor/theme"
-import { TreeViewPlugin } from "@/components/LexicalEditor/Plugins/TreeViewPlugin";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { MyOnChangePlugin } from '@/components/LexicalEditor/Plugins/MyOnChangePlugin/MyOnChangePlugin';
 import { ReplyToolbarPlugin } from '@/components/LexicalEditor/Plugins/ReplyToolbarPlugin/ReplyToolbarPlugin';
-import { useState } from 'react';
+import { useEffect, useRef, forwardRef} from 'react';
+import { ClearEditorPlugin } from '@/components/LexicalEditor/Plugins/ClearEditorPlugin';
 
 interface Props {
-     value: string,
-     onChange: (value: string) => void
+     value?: string;
+     onChange: (value: string) => void;
+     isFocus: boolean;
+     onFocus?: (isFocus: boolean) => void;
 }
 
 const PlaygroundNodes = [
@@ -27,15 +29,25 @@ const PlaygroundNodes = [
      ListItemNode,
      CodeNode,
      CodeHighlightNode,
-]
+];
 
-export const ReplyEditor:React.FC<Props> = ({onChange, value}) => {
-     const [isActive, setIsActive] = useState(false);
-     const [valueChange, setValueChange] = useState<string>()
+export const ReplyEditor = forwardRef(({ onChange, value, isFocus, onFocus }: Props, ref) => {
+     const replyRef = useRef<HTMLDivElement>(null);
+
+     useEffect(() => {
+          const handleClickOutside = (event: MouseEvent) => {
+               if (replyRef.current && !replyRef.current.contains(event.target as Node) && onFocus) {
+                    onFocus(false);
+               }
+          };
+          document.addEventListener("mousedown", handleClickOutside);
+          return () => document.removeEventListener("mousedown", handleClickOutside);
+     }, [onFocus]);
 
      const initialConfig = {
           namespace: 'Lexical Reply Editor',
           nodes: [...PlaygroundNodes],
+          editorState: value,
           editable: true,
           theme: theme,
           onError: (error: Error) => {
@@ -43,44 +55,41 @@ export const ReplyEditor:React.FC<Props> = ({onChange, value}) => {
           },
      };
 
-     const onFocus = () => setIsActive(true);
-     const onBlur = () => setIsActive(false);
-     const onValueChange = (value: string) => {
-          if(value !== `<p class="editor-paragraph"><br></p>`){
-               setValueChange(value)
-               onChange(value)
-          }else {
-               setValueChange(undefined)
-          }
-     }
-     
      const placeholder = 'พิมพ์ที่นี่ .....';
 
-     return <LexicalComposer initialConfig={initialConfig}>
-          <div className="relative rounded-md bg-blackground-text focus-within:border-[1px] focus-within:border-primary"
-               onFocus={onFocus} 
-               onBlur={onBlur}
-          >
-               <div className="relative p-4">
-                    <RichTextPlugin
-                         contentEditable={
-                              <ContentEditable
-                              className={`relative ${isActive || valueChange !== undefined ? 'h-24': 'h-8'} overflow-y-auto bg-blackground-text outline-0`}
-                              aria-placeholder={placeholder}
-                              placeholder={
-                                   <div className="absolute top-[16px] left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">{placeholder}</div>
+     return (
+          <LexicalComposer initialConfig={initialConfig}>
+               <div
+                    className="relative rounded-md bg-blackground-text focus-within:border-[1px] focus-within:border-primary"
+                    ref={replyRef}
+                    onClick={() => onFocus && onFocus(true)}
+               >
+                    <div className="relative py-2 px-4">
+                         <RichTextPlugin
+                              contentEditable={
+                                   <ContentEditable
+                                        className="relative overflow-y-auto z-0 bg-blackground-text outline-0"
+                                        aria-placeholder={placeholder}
+                                        placeholder={
+                                             <div className="absolute top-[10px] z-10 left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">
+                                                  {placeholder}
+                                             </div>
+                                        }
+                                   />
                               }
-                              />
-                         }
-                         ErrorBoundary={LexicalErrorBoundary}
-                    />
+                              ErrorBoundary={LexicalErrorBoundary}
+                         />
+                    </div>
+                    <ReplyToolbarPlugin isFocus={isFocus} />
                </div>
-               <ReplyToolbarPlugin isActive={isActive || valueChange !== undefined}/>
-          </div>
-          <HistoryPlugin />
-          <ListPlugin />
-          <CheckListPlugin />
-          <AutoFocusPlugin />
-          <MyOnChangePlugin onChange={(val) => {}}/>
-     </LexicalComposer>
-}
+               <HistoryPlugin />
+               <ListPlugin />
+               <CheckListPlugin />
+               <AutoFocusPlugin />
+               <MyOnChangePlugin onChange={(editorState) => onChange(JSON.stringify(editorState))} />
+               <ClearEditorPlugin ref={ref}/>
+          </LexicalComposer>
+     );
+});
+
+ReplyEditor.displayName = "ReplyEditor";

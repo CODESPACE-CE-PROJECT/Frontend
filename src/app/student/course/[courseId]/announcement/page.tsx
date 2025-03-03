@@ -34,39 +34,39 @@ export default function Page() {
 
   return (
     <>
-    {loading ? (
-            <div className="flex flex-col items-center justify-center h-[70vh]">
-              <Loading className="size-20" />
-            </div>
-          ) : (
-            <>
-      <TopNav
-        disableNotification={false}
-        imageUrl={profile?.pictureUrl}
-        role={profile?.role}
-        gender={profile?.gender}
-      >
-        <p>{courseDetails?.title}</p>
-      </TopNav>
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-[70vh]">
+          <Loading className="size-20" />
+        </div>
+      ) : (
+        <>
+          <TopNav
+            disableNotification={false}
+            imageUrl={profile?.pictureUrl}
+            role={profile?.role}
+            gender={profile?.gender}
+          >
+            <p>{courseDetails?.title}</p>
+          </TopNav>
 
-      <p className="flex py-3 my-6 text-lg text-wrap">
-        {courseDetails?.description}
-      </p>
+          <p className="flex mt-6 text-lg text-wrap">
+            {courseDetails?.description}
+          </p>
 
-      <div className="flex flex-col items-center space-y-5 px-20">
-        {announcement.length > 0 ? (
-          announcement.map((announce) => (
-            <AnnouncementCard
-              key={announce.assignmentId}
-              courseId={courseId}
-              announcement={announce}
-            />
-          ))
-        ) : (
-          <p className="text-center">ยังไม่มีการประกาศ</p>
-        )}
-      </div>
-      </>)}
+          <div className="flex flex-col items-center gap-y-5 px-14 py-6">
+            {announcement.length > 0 ? (
+              announcement.map((announce) => (
+                <AnnouncementCard
+                  key={announce.assignmentId}
+                  courseId={courseId}
+                  announcement={announce}
+                />
+              ))
+            ) : (
+              <p className="text-center">ยังไม่มีการประกาศ</p>
+            )}
+          </div>
+        </>)}
     </>
   );
 }

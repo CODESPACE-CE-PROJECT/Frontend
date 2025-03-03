@@ -11,3 +11,7 @@ export const getCompilerURL = async () => {
 export const getRealTimeURL = async () => {
      return process.env.NEXT_PUBLIC_REAL_TIME_URL
 }
+
+export const getTerminalStreamURL = async () => {
+     return
+}

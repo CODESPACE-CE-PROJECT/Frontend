@@ -50,9 +50,7 @@ export default function Assignment() {
       );
       if (filteredAssignments.length > 0) {
         setAssignments({ assignment: filteredAssignments });
-      } else {
-        console.error("No assignments of type EXAM.");
-      }
+      } 
 
       setLoading(false);
     };
@@ -79,7 +77,7 @@ export default function Assignment() {
       const result = await createAssignment(assignmentData);
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Error creating assignment:", error);
+      console.log("Error creating assignment:", error);
     }
   };
 
@@ -109,6 +107,7 @@ export default function Assignment() {
             disableNotification={false}
             imageUrl={profile?.pictureUrl}
             role={profile?.role}
+            gender={profile?.gender}
           >
             <p>แบบฝึกหัด</p>
           </TopNav>

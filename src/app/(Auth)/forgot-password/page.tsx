@@ -48,7 +48,7 @@ export default function Page() {
               </div> : 'ยืนยัน'
             }
         </ConfirmButton>
-        <CancelButton className="w-full" onClick={() => router.push('/login')}>
+        <CancelButton className="w-full hover:bg-gray-600" onClick={() => router.push('/login')}>
           ยกเลิก
         </CancelButton>
       </div>

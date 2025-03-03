@@ -144,7 +144,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     return (
       <Suspense fallback={null}>
         <img
-          className="mt-1"
+          className="my-1"
           src={this.__src}
           alt={this.__altText}
           width={100}
