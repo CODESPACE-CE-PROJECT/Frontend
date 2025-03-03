@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { getCoursesById } from "@/actions/course";
 import { getProfile } from "@/actions/user";
@@ -26,6 +26,7 @@ export default function Page() {
   const [courseDetails, setCourseDetails] = useState<ICourse>();
   const [profile, setProfile] = useState<IProfile>();
   const [loading, setLoading] = useState<boolean>(true);
+  const editorRef = useRef<{ clearEditor: () => void } | null>(null);
   const [createForm, setCreateForm] = useState<ICreateAnnounce>({
     courseId: courseId,
     description: "",
@@ -62,12 +63,14 @@ export default function Page() {
     }
   };
 
-  const handleCreateAnnounce = async() => {
-    console.log(createForm);
+  const handleCreateAnnounce = async () => {
     const id = notify(NotifyType.LOADING, "กำลังสร้างประกาศ");
     const { status } = await createAnnonuncement(createForm);
     if (id !== undefined) {
       if (status === 201) {
+        if (editorRef.current) {
+          editorRef.current.clearEditor();
+        }
         updateNotify(id, NotifyType.SUCCESS, "สร้างประกาศสำเร็จ");
         const response: ICourse = await getCoursesById(courseId);
         setAnnounce(response.courseAnnounce);
@@ -99,12 +102,20 @@ export default function Page() {
           </p>
 
           <div className="flex flex-col items-center gap-y-5 px-14 py-6">
-            <LexicalEditor onChange={(editorState) => setCreateForm(prev => ({
-              ...prev,
-              description: editorState,
-            }))} className="min-h-28 h-full">
+            <LexicalEditor
+              ref={editorRef}
+              onChange={(editorState) => {
+                setCreateForm(prev => ({
+                  ...prev,
+                  description: editorState,
+                }))
+              }} className="min-h-28 h-full">
               <div className="flex flex-row items-center justify-end gap-x-4 pt-2 border-t-[1px] border-white">
-                <CancelButton className="border-white hover:bg-gray-600">
+                <CancelButton className="border-white hover:bg-gray-600" onClick={() => {
+                  if (editorRef.current) {
+                    editorRef.current.clearEditor();
+                  }
+                }}>
                   <p>ยกเลิก</p>
                 </CancelButton>
                 <ConfirmButton onClick={handleCreateAnnounce} disabled={!checkValidMessage(createForm.description)}>

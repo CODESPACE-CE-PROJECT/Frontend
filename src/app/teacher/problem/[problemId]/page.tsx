@@ -25,10 +25,7 @@ import { ISubmission, ISubmitCode } from "@/types/submission"
 import { LanguageType, NotifyType, StateSubmission } from "@/enum/enum"
 import { submissionCode } from "@/actions/submission"
 import { notify, updateNotify } from "@/utils/toast.util"
-import { fetchEventSource } from "@microsoft/fetch-event-source"
 import { getCookie } from "cookies-next/client"
-import { IRealtimeSubmission } from "@/types/realtime"
-import { getRealTimeURL } from "@/actions/env"
 
 export default function Page() {
      const router = useRouter()
@@ -84,34 +81,6 @@ export default function Page() {
                     setSuibmission(problem.submission[0])
                     setSourceCode(problem.submission[0]?.sourceCode)
                }
-               const realTimeURL = await getRealTimeURL()
-               await fetchEventSource(`${realTimeURL}/compiler/submission`, {
-                    method: "GET",
-                    headers: {
-                         Authorization: `Bearer ${accessToken}`,
-                    },
-                    async onopen(response) {
-                         if (response.ok) {
-                              setIsLoading(false)
-                         }
-                    },
-                    async onmessage(ev) {
-                         if (ev.data === "ok") {
-                              console.log("compiler connected")
-                         } else {
-                              const data: IRealtimeSubmission = JSON.parse(ev.data)
-                              if (data.submissionId && data.submissionState === 'false') {
-                                   const { status, data } = await getProblemById(params.problemId)
-                                   const problem: IProblem = data
-                                   if (status === 200) {
-                                        setProblem(problem)
-                                        setSuibmission(problem.submission[0])
-                                        setSourceCode(problem.submission[0]?.sourceCode)
-                                   }
-                              }
-                         }
-                    },
-               });
                setIsLoading(false)
           }
           fetchData()

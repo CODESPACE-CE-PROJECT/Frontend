@@ -18,7 +18,8 @@ import { YoutubeNode } from "@/components/LexicalEditor/node/YoutubeNode";
 import { EquationNode } from "@/components/LexicalEditor/node/EquationNode";
 import { FileNode } from "@/components/LexicalEditor/node/FileNode";
 import { MyOnChangePlugin } from '@/components/LexicalEditor/Plugins/MyOnChangePlugin/MyOnChangePlugin';
-
+import { ClearEditorPlugin } from './Plugins/ClearEditorPlugin';
+import { forwardRef } from 'react';
 interface Props {
      value?: string,
      onChange: (editorState: string) => void,
@@ -39,7 +40,7 @@ const PlaygroundNodes = [
      FileNode
 ]
 
-export const LexicalEditor:React.FC<Props> = ({onChange, value, className, children}) => {
+export const LexicalEditor = forwardRef(({onChange, value, className, children}:Props, ref) => {
 
      const initialConfig = {
           namespace: 'Lexical Editor',
@@ -78,5 +79,8 @@ export const LexicalEditor:React.FC<Props> = ({onChange, value, className, child
           <CheckListPlugin />
           <AutoFocusPlugin />
           <MyOnChangePlugin onChange={(editorState) => onChange(JSON.stringify(editorState))}/>
+          <ClearEditorPlugin ref={ref}/>
      </LexicalComposer>
-}
+});
+
+LexicalEditor.displayName = "LexicalEditor";

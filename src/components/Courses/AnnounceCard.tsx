@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Divider from "@/components/Courses/Divider";
 import ReplyBox from "@/components/Courses/ReplyBox";
@@ -18,7 +18,6 @@ const AnnounceCard: React.FC<AnnounceProps> = ({
   profilePicture,
   handleReply,
 }) => {
-  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
 
   return (
     <div className="bg-[#16233A] rounded-md w-full">
@@ -54,8 +53,6 @@ const AnnounceCard: React.FC<AnnounceProps> = ({
         {/* Reply Editor Box */}
         <ReplyEditorBox
           profilePicture={profilePicture}
-          activeReplyId={activeReplyId}
-          setActiveReplyId={setActiveReplyId}
           courseAnnounceId={announce.courseAnnounceId}
           handleReply={handleReply}
         />

@@ -22,7 +22,7 @@ const AssignmentBoxTeacher: React.FC<Props> = ({ assignment }) => {
           className={`flex flex-col items-center justify-center rounded-sm cursor-pointer h-[3.75rem] w-[3.75rem] flex-grow-0 basis-[3.75rem]
             bg-[#808080] hover:bg-[#bebebe]
             ${assignment.problem.length >= 6 ? "grow" : ""}`}
-          onClick={() => router.push(`/student/problem/${problem.problemId}`)}
+          onClick={() => router.push(`/teacher/problem/${problem.problemId}`)}
         >
           <p className="space-x-1">
             <span>ข้อ</span>
