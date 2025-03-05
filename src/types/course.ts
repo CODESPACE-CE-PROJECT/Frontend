@@ -54,3 +54,9 @@ export type IPeople = {
     user: IProfile;
   }[];
 };
+
+export type ICreateCourse = {
+  title: string;
+  description: string;
+  picture: File | null;
+}
