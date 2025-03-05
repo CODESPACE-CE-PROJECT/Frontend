@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DescriptionIcon from "@mui/icons-material/Description";
+import { CancelButton } from "@/components/Button/CancelButton";
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 interface SectionProps {
   title: string;
-  items: { name: string; count: number }[]; 
+  items: { name: string; count: number }[];
   expandedSections: { [key: string]: boolean };
   toggleSection: (section: string) => void;
 }
 
 const Section: React.FC<SectionProps> = ({ title, items, expandedSections, toggleSection }) => (
-  <div>
+  <div className="flex flex-col">
     <div className="bg-[#3049724D] h-[54px] flex items-center rounded-md text-white font-medium shadow px-4 justify-between">
       {title} ({items.length})
       <KeyboardArrowDownIcon
@@ -18,7 +20,8 @@ const Section: React.FC<SectionProps> = ({ title, items, expandedSections, toggl
         onClick={() => toggleSection(title)}
       />
     </div>
-    {expandedSections[title] && (
+
+    {expandedSections[title] && (<>
       <div className="flex flex-col space-y-2 mt-2">
         {items.map((item, index) => (
           <div key={index} className="flex">
@@ -27,6 +30,13 @@ const Section: React.FC<SectionProps> = ({ title, items, expandedSections, toggl
           </div>
         ))}
       </div>
+      <CancelButton className="hover:bg-gray-600 py-3 px-2 w-40">
+        <div className="flex flex-row items-center justify-center w-full gap-x-2">
+          <AddRoundedIcon />
+          <p>เพิ่มคีย์เวิร์ด</p>
+        </div>
+      </CancelButton>
+    </>
     )}
   </div>
 );
@@ -40,8 +50,7 @@ interface KeywordLimitationsState {
 export const Constraint: React.FC = () => {
   const [expandedSections, setExpandedSections] = useState<KeywordLimitationsState["expandedSections"]>({
     function: false,
-    methods: false,
-    classes: false,
+    import: false,
   });
 
   const toggleSection = (section: string) => {
@@ -60,10 +69,10 @@ export const Constraint: React.FC = () => {
   return (
     <div className="flex w-full py-9 gap-8">
       <div className="w-1/2">
-        <p className="text-white font-medium text-lg pb-2 mb-4 flex flex-row items-center gap-2">
+        <div className="text-white font-medium text-lg pb-2 mb-4 flex flex-row items-center gap-2">
           <DescriptionIcon className="size-6" />
           <p>ข้อจำกัดของคีย์เวิร์ดที่กำหนด</p>
-        </p>
+        </div>
         <div className="space-y-3">
           <Section
             title="Function"

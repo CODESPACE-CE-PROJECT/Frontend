@@ -2,6 +2,7 @@ import { Option } from "@/components/Options/Option"
 import ModeOutlinedIcon from '@mui/icons-material/ModeOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Link from "next/link";
+
 interface Props {
     assignmentId: string;
     courseId: string;
@@ -24,4 +25,4 @@ export const OptionAssignment: React.FC<Props> = ({
             </div>
         </div>
     </Option>
-}
+};

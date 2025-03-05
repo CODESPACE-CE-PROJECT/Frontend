@@ -8,7 +8,6 @@ interface Props {
      onChange?: (value: string|undefined) => void
 }
 
-
 export const MonacoTextEditor:React.FC<Props> = ({language, sourceCode, onChange}) => {
      const handleEditorWillMount = (monaco: Monaco) => {
           monaco.editor.defineTheme("custom", {

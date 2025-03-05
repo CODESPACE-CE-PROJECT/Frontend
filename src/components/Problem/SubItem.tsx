@@ -8,7 +8,7 @@ import ToggleButton from "@/components/Button/ToggleButton";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { Label } from "@/components/Input/Label";
 import { TextField } from "@/components/Input/TextField/TextField";
-import { Dropdown } from "../Input/Dropdown";
+import { Dropdown } from "@/components/Input/Dropdown";
 import { LexicalEditor } from "@/components/LexicalEditor/LexicalEditor";
 interface Props {
   subItems: string[];
@@ -57,12 +57,12 @@ const SubItem: React.FC<Props> = ({ subItems, assignmentId, problems, setProblem
   return (
     <>
       {subItems.map((subItem, index) => (
-        <div key={index} className="flex flex-col">
-          <div className="flex justify-between items-center border-b border-[#2A3A50] px-5 py-5">
+        <div key={index} className="flex flex-col py-4">
+          <div className="flex justify-between items-center border-b border-[#2A3A50] p-5">
             <div>{subItem}</div>
             <div className="flex flex-row items-center gap-x-4">
               <CancelButton
-                className="px-12 border-red-l text-red-l hover:bg-red-600 hover:text-pure-white"
+                className="px-12 py-2 border-red-l text-red-l hover:bg-red-600 hover:text-pure-white"
                 onClick={() => deleteSubItem(index)}
               >
                 <p>ลบ</p>
@@ -80,7 +80,7 @@ const SubItem: React.FC<Props> = ({ subItems, assignmentId, problems, setProblem
                 <div className="flex flex-col items-start flex-1">
                   <Label text="หัวข้อ" isRequired={true} />
                   <TextField
-                    className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md"
+                    className="mt-2 py-2 px-3 text-white rounded-md"
                     placeholder="หัวข้อ"
                     value={problems[index]?.problem?.[0]?.title || ''}
                     onChange={(value, _name) => updateProblem(index, "title", value)}
@@ -122,7 +122,7 @@ const SubItem: React.FC<Props> = ({ subItems, assignmentId, problems, setProblem
                 </div>
               </div>
 
-              <div className="w-full h-[368px]">
+              <div className="w-full h-[400px]">
                 <MonacoTextEditor 
                   language={problems[index]?.problem?.[0]?.language || 'C'} 
                 />
@@ -148,45 +148,46 @@ const SubItem: React.FC<Props> = ({ subItems, assignmentId, problems, setProblem
                 </div>
               </div>
 
-              {examples.map((example) => (
+              {examples.map((example, index) => (
                 <div key={example.id}>
-                  <div className="flex items-center justify-between bg-[#2A3A50] p-4 shadow-md h-[39px] ">
-                    <span className="text-white text-lg font-medium">ตัวอย่าง 1:</span>
-
-                    <div className="flex space-x-6">
-                      <div className="flex items-center space-x-3">
-                        <ToggleButton
-                          initialState={true}
-                          onToggle={(newState) => console.log("Toggled:", newState)}
-                        />
-                        <span className="text-white text-sm">วิเคราะห์ช่องว่าง</span>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <ToggleButton
-                          initialState={true}
-                          onToggle={(newState) => console.log("Toggled:", newState)}
-                        />
-                        <span className="text-white text-sm">แสดงตัวอย่างให้นักเรียน</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex w-full pb-5">
-                    <input
-                      className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
-                      placeholder="กรุณาใส่ข้อความ ..."
-                    />
-                    <div className="w-[1px] bg-gray-600"></div>
-                    <input
-                      className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
-                      placeholder="กรุณาใส่ข้อความ ..."
-                    />
-                  </div>
+                  {index}
                 </div>
+                // <div key={example.id}>
+                //   <div className="flex items-center justify-between bg-[#2A3A50] p-4 shadow-md h-[39px]">
+                //     <span className="text-white text-lg font-medium">ตัวอย่าง {index+1}:</span>
+
+                //     <div className="flex space-x-6">
+                //       <div className="flex items-center space-x-3">
+                //         <ToggleButton
+                //           initialState={true}
+                //           onToggle={(newState) => console.log("Toggled:", newState)}
+                //         />
+                //         <span className="text-white text-sm">วิเคราะห์ช่องว่าง</span>
+                //       </div>
+
+                //       <div className="flex items-center space-x-3">
+                //         <ToggleButton
+                //           initialState={true}
+                //           onToggle={(newState) => console.log("Toggled:", newState)}
+                //         />
+                //         <span className="text-white text-sm">แสดงตัวอย่างให้นักเรียน</span>
+                //       </div>
+                //     </div>
+                //   </div>
+                //   <div className="flex w-full pb-5">
+                //     <input
+                //       className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
+                //       placeholder="กรุณาใส่ข้อความ ..."
+                //     />
+                //     <div className="w-[1px] bg-gray-600"></div>
+                //     <input
+                //       className="bg-[#16233A] text-white w-1/2 px-4 py-2 outline-none placeholder-gray-400 h-[131px]"
+                //       placeholder="กรุณาใส่ข้อความ ..."
+                //     />
+                //   </div>
+                // </div>
               ))}
-
             </>
-
           )}
         </div>
       ))}

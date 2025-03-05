@@ -19,7 +19,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ initialState = false, onTog
   };
 
   return (
-    <label className=" items-center cursor-pointer ">
+    <div className=" items-center cursor-pointer ">
       <input
         type="checkbox"
         className="sr-only peer"
@@ -36,7 +36,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ initialState = false, onTog
         />
       </div>
      
-    </label>
+    </div>
   );
 };
 

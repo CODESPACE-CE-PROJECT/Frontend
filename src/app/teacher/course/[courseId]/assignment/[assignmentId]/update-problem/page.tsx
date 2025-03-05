@@ -140,7 +140,7 @@ const Page = () => {
       <Loading className="size-20" />
     </div>
   ) : (
-    <div>
+    <>
       <TopNav
         gender={profile?.gender}
         imageUrl={profile?.pictureUrl}
@@ -150,85 +150,88 @@ const Page = () => {
       >
         <p>แก้ไขการทดสอบ</p>
       </TopNav>
-      <div className="text-white font-sans flex justify-between">
-        <div className="flex items-center gap-x-4">
-          <span>ตั้งเวลาประกาศ</span>
-          <input
-            type="datetime-local"
-            className="bg-[#2A3A50] py-2 px-3 text-white rounded-md cursor-pointer"
-            value={value2}
-            onChange={(e) => setValue2(e.target.value)}
-          />
-        </div>
-
-        <div className="space-x-3">
-          <CancelButton className="hover:bg-gray-600">
-            <p>ยกเลิก</p>
-          </CancelButton>
-          <ConfirmButton onClick={handleSubmit} className="px-11">
-            <p>บันทึก</p>
-          </ConfirmButton>
-        </div>
-      </div>
-
-      <div className="flex flex-row justify-between mt-10 gap-x-6">
-        <div className="flex flex-col items-start flex-1 gap-y-2">
-          <Label text="ชื่อแบบฝึกหัด" isRequired={true}/>
-          <TextField
-            value={title}
-            placeholder="ชื่อแบบฝึกหัด"
-            onChange={(value, _name) => setTitle(value as string)}
-          />
-        </div>
-
-        <div className="flex flex-row gap-3">
-          <div className="flex flex-col items-start">
-            <Label text="วันเวลาเริ่มต้น" isRequired={true}/>
+      <div>
+        <div className="text-white font-sans flex justify-between">
+          <div className="flex items-center gap-x-4">
+            <span>ตั้งเวลาประกาศ</span>
             <input
               type="datetime-local"
-              className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md outline-none"
-              value={value2 ?? Date.now().toString()}
+              className="bg-[#2A3A50] py-2 px-3 text-white rounded-md cursor-pointer"
+              value={value2}
               onChange={(e) => setValue2(e.target.value)}
-              onBlur={() => handleBlur(value2, setShowWarning2)}
             />
           </div>
-          <div className="flex flex-col items-start">
-            <Label text="วันเวลาสิ้นสุด" isRequired={true}/>
-            <input
-              type="datetime-local"
-              className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer outline-none"
-              value={value3}
-              onChange={(e) => setValue3(e.target.value)}
-              onBlur={() => handleBlur(value3, setShowWarning3)}
-            />
-          </div>
-        </div>
-      </div>
 
-      <div className="justify-between flex flex-row py-5 px-5">
-        <div>
-          <p>ข้อย่อย</p>
-          <div className="flex flex-row gap-x-2 mt-1 text-red-l text-[15px] font-normal">
-            <p>**</p>
-            <p>ไม่เกิน 6 ข้อ</p>
+          <div className="space-x-3">
+            <CancelButton className="hover:bg-gray-600">
+              <p>ยกเลิก</p>
+            </CancelButton>
+            <ConfirmButton onClick={handleSubmit} className="px-11">
+              <p>บันทึก</p>
+            </ConfirmButton>
           </div>
         </div>
+
+        <div className="flex flex-row justify-between mt-10 gap-x-6">
+          <div className="flex flex-col items-start flex-1 gap-y-2">
+            <Label text="ชื่อแบบฝึกหัด" isRequired={true} />
+            <TextField
+              value={title}
+              placeholder="ชื่อแบบฝึกหัด"
+              onChange={(value, _name) => setTitle(value as string)}
+            />
+          </div>
+
+          <div className="flex flex-row gap-3">
+            <div className="flex flex-col items-start">
+              <Label text="วันเวลาเริ่มต้น" isRequired={true} />
+              <input
+                type="datetime-local"
+                className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md outline-none"
+                value={value2 ?? Date.now().toString()}
+                onChange={(e) => setValue2(e.target.value)}
+                onBlur={() => handleBlur(value2, setShowWarning2)}
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <Label text="วันเวลาสิ้นสุด" isRequired={true} />
+              <input
+                type="datetime-local"
+                className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer outline-none"
+                value={value3}
+                onChange={(e) => setValue3(e.target.value)}
+                onBlur={() => handleBlur(value3, setShowWarning3)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="justify-between flex flex-row py-5 px-5">
+          <div>
+            <p>ข้อย่อย</p>
+            <div className="flex flex-row gap-x-2 mt-1 text-red-l text-[15px] font-normal">
+              <p>**</p>
+              <p>ไม่เกิน 6 ข้อ</p>
+            </div>
+          </div>
           <CancelButton
             className="px-6 py-2 hover:bg-gray-600"
             onClick={addSubItem}
           >
             เพิ่มข้อย่อย
           </CancelButton>
-      </div>
+        </div>
 
-      <SubItem
-        subItems={subItems}
-        assignmentId={assignmentId}
-        problems={problems}
-        setProblems={setProblems}
-        deleteSubItem={deleteSubItem}
-      />
-    </div>
+        <SubItem
+          subItems={subItems}
+          assignmentId={assignmentId}
+          problems={problems}
+          setProblems={setProblems}
+          deleteSubItem={deleteSubItem}
+
+        />
+      </div>
+    </>
   )
 };
 

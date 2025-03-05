@@ -5,7 +5,7 @@ import { getAvatar } from "@/utils/gender.util";
 import { ICourse } from "@/types/course";
 
 interface Props {
-  data: ICourse
+  data: ICourse;
 }
 
 export const CoursesCard: React.FC<Props> = ({ data }) => {
@@ -16,7 +16,6 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
     const role = pathname.startsWith("/teacher") ? "teacher" : "student";
     router.push(`/${role}/course/${courseId}/general`);
   };
-
 
   return (
     <div
@@ -45,20 +44,21 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
       )}
       <Image
         className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
-        src={data.user.pictureUrl || getAvatar(data.user.gender)}
+        src={data.user?.pictureUrl || getAvatar(data.user?.gender || "other")}
         alt={data.title}
         width={100}
         height={100}
         priority={true}
       />
+
       <div className="px-7 py-3 bg-[#FAFAFA] rounded-b-xl pt-10 h-full flex flex-col gap-y-3">
         <p className=" text-xl font-semibold text-pretty truncate">
           {data.title}
         </p>
         <p className="text-sm text-pretty truncate">
-          {data.user.firstName} {data.user.lastName}
+          {data.user?.firstName} {data.user?.lastName}
         </p>
       </div>
     </div>
   );
-}
+};
