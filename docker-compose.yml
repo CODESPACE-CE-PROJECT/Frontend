@@ -11,10 +11,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - 3001:3000
     env_file:
-      - path: .env
+      - path: ./.env
     labels:
       traefik.enable: 'true'
       traefik.http.services.codespace.loadbalancer.server.port: '3000'
