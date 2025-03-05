@@ -14,10 +14,12 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
-import { createAssignment } from "@/actions/assignment";
+import { createAssignment, deleteAssignment } from "@/actions/assignment";
 import { AssignmentType } from "@/enum/enum";
 import { UpdatedLockAssignment } from "@/actions/assignment";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
+import { notify, updateNotify } from "@/utils/toast.util"; // นำเข้า notify ฟังก์ชัน
+import { NotifyType } from "@/enum/enum"; // นำเข้า NotifyType
 
 export default function Assignment() {
   const param = useParams<{ courseId: string }>();
@@ -37,25 +39,26 @@ export default function Assignment() {
     courseId: courseId,
   });
 
+  // Function to fetch assignments
+  const fetchAssignments = async () => {
+    const profile: IProfile = await getProfile();
+    setProfile(profile);
+    const data = await getAssignment(courseId);
+
+    const filteredAssignments = data.data?.filter(
+      (assignment: IAssignment["assignment"][number]) =>
+        assignment.type === AssignmentType.EXERCISE
+    );
+    if (filteredAssignments.length > 0) {
+      setAssignments({ assignment: filteredAssignments });
+    } else {
+      console.log("No assignment:");
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchAssignments = async () => {
-      const profile: IProfile = await getProfile();
-      setProfile(profile);
-      const data = await getAssignment(courseId);
-
-      const filteredAssignments = data.data?.filter(
-        (assignment: IAssignment["assignment"][number]) =>
-          assignment.type === AssignmentType.EXERCISE
-      );
-      if (filteredAssignments.length > 0) {
-        setAssignments({ assignment: filteredAssignments });
-      } else {
-        console.error("No assignments of type EXERCISE.");
-      }
-
-      setLoading(false);
-    };
-
     fetchAssignments();
   }, [courseId, param.courseId]);
 
@@ -74,11 +77,21 @@ export default function Assignment() {
       courseId,
     };
 
+    const id = notify(NotifyType.LOADING, "กำลังสร้างแบบฝึกหัด...");
+
     try {
       const result = await createAssignment(assignmentData);
       setIsModalOpen(false);
+      if (id) {
+        updateNotify(id, NotifyType.SUCCESS, "สร้างแบบฝึกหัดสำเร็จ!");
+      }
+      // Fetch assignments again after creating a new one
+      await fetchAssignments(); // Re-fetch assignments after creation
     } catch (error) {
       console.log("Error creating assignment:", error);
+      if (id) {
+        updateNotify(id, NotifyType.ERROR, "ไม่สามารถสร้างแบบฝึกหัดได้");
+      }
     }
   };
 
@@ -95,10 +108,34 @@ export default function Assignment() {
     });
   };
 
+  const handleDelete = async (assignmentId: string) => {
+    const id = notify(NotifyType.LOADING, "กำลังลบแบบฝึกหัด...");
+
+    try {
+      await deleteAssignment(assignmentId);
+      setAssignments((prevAssignments) => {
+        if (!prevAssignments) return prevAssignments;
+        const updatedAssignments = prevAssignments.assignment.filter(
+          (assignment) => assignment.assignmentId !== assignmentId
+        );
+        return { assignment: updatedAssignments };
+      });
+
+      if (id) {
+        updateNotify(id, NotifyType.SUCCESS, "ลบแบบฝึกหัดสำเร็จ!");
+      }
+    } catch (error) {
+      console.log("Error deleting assignment:", error);
+      if (id) {
+        updateNotify(id, NotifyType.ERROR, "ไม่สามารถลบแบบฝึกหัดได้");
+      }
+    }
+  };
+
   return (
     <>
       {loading ? (
-        <div className="flex flex-col items-center justify-center h-[70vh]">
+        <div className="flex flex-col items-center justify-center h-full">
           <Loading className="size-20" />
         </div>
       ) : (
@@ -131,11 +168,11 @@ export default function Assignment() {
               <AssignmentTableTeacher
                 assignments={assignments}
                 onToggle={handleToggle}
+                handleDelete={handleDelete}  
               />
             )}
           </div>
 
-          {/* CreateAssignmentModal - Add to bottom of the page */}
           <CreateAssignmentModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}

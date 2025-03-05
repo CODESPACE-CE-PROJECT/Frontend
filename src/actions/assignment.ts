@@ -53,55 +53,54 @@ export const getAssignmentscore = async (courseId: string) => {
 };
 
 export const createAssignment = async (formData: ICreateAssignment) => {
-  try {
-    const token = await getToken();
+  const token = await getToken();
 
-    if (!token) {
-      alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
-      return;
-    }
-
-    if (new Date(formData.expireAt) <= new Date(formData.startAt)) {
-      alert("Expire date must be later than start date.");
-      return;
-    }
-
-    const response: AxiosResponse = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment`,
-      {
-        courseId: formData.courseId,
-        title: formData.title,
-        type: formData.type,
-        announceDate: new Date(new Date(formData.announceDate).toUTCString()),
-        startAt: new Date(new Date(formData.startAt).toUTCString()),
-        expireAt: new Date(new Date(formData.expireAt).toUTCString()),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error(
-        "Axios Error Response:",
-        error.response?.data || error.response
-      );
-      console.error("Axios Error Message:", error.message);
-      if (error.response) {
-        console.error("Error Status:", error.response.status);
-        console.error("Error Headers:", error.response.headers);
-      }
-    } else {
-      console.error("Unexpected Error:", error);
-    }
-    throw error;
+  if (!token) {
+    alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
+    return;
   }
+
+  if (new Date(formData.expireAt) <= new Date(formData.startAt)) {
+    alert("Expire date must be later than start date.");
+    return;
+  }
+
+  const response: AxiosResponse = await axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment`,
+    {
+      courseId: formData.courseId,
+      title: formData.title,
+      type: formData.type,
+      announceDate: new Date(new Date(formData.announceDate).toUTCString()),
+      startAt: new Date(new Date(formData.startAt).toUTCString()),
+      expireAt: new Date(new Date(formData.expireAt).toUTCString()),
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
 };
+
+export const deleteAssignment = async (assignmentId: string) => {
+  
+  const token = await getToken();
+  
+  const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${assignmentId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+    },
+  });
+  
+  
+  return response.data.data;
+
+};
+
 
 export const UpdatedLockAssignment = async (assignmentData: IUpdateLock) => {
   const token = await getToken();
