@@ -6,26 +6,28 @@ import { createProblem } from "@/actions/problem";
 import SubItem from "@/components/Problem/SubItem";
 import { LanguageType } from "@/enum/enum";
 import { ConstraintType } from "@/enum/enum";
+import { TopNav } from "@/components/Navbar/TopNav";
+import { IProfile } from "@/types/user";
+import { getProfile } from "@/actions/user";
+import { TextField } from "@/components/Input/TextField/TextField";
+import { Label } from "@/components/Input/Label";
+import { Loading } from "@/components/Loading/Loading";
+import { ConfirmButton } from "@/components/Button/ConfirmButton";
+import { CancelButton } from "@/components/Button/CancelButton";
 
 const Page = () => {
-  const [value, setValue] = useState("");
-  const [value2, setValue2] = useState("");
-  const [value3, setValue3] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [value2, setValue2] = useState(Date.now().toString());
+  const [value3, setValue3] = useState(Date.now().toString());
   const { assignmentId } = useParams<{ assignmentId: string }>();
+  const [profile, setProfile] = useState<IProfile>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [showWarning1, setShowWarning1] = useState(true);
   const [showWarning2, setShowWarning2] = useState(true);
   const [showWarning3, setShowWarning3] = useState(true);
   const [subItems, setSubItems] = useState<string[]>([]);
   const [problems, setProblems] = useState<ICreateProblems[]>([]);
-
-  useEffect(() => {
-    console.log("Updated SubItems:", subItems);
-  }, [subItems]);
-
-  useEffect(() => {
-    console.log("Updated Problems:", problems);
-  }, [problems]);
 
   const deleteSubItem = (index: number) => {
     setSubItems((prevSubItems) => {
@@ -52,7 +54,7 @@ const Page = () => {
 
   const addSubItem = () => {
     if (subItems.length < 6) {
-      const newSubItems = [...subItems, `ข้อย่อยข้อที่${subItems.length + 1}`];
+      const newSubItems = [...subItems, `ข้อย่อยข้อที่ ${subItems.length + 1}`];
 
       const newProblem: ICreateProblems = {
         assignmentId: assignmentId || "",
@@ -107,7 +109,7 @@ const Page = () => {
         assignmentId: assignmentId || "",
         problem: problems.map((problem) => ({
           ...problem.problem[0],
-          title: value.trim() || problem.problem[0].title,
+          title: title.trim() || problem.problem[0].title,
           score: problem.problem[0].score ?? 0,
           language: problem.problem[0].language ?? LanguageType.C,
         })),
@@ -124,8 +126,30 @@ const Page = () => {
     }
   };
 
-  return (
-    <>
+  useEffect(() => {
+    const fetchhData = async () => {
+      const profile: IProfile = await getProfile();
+      setProfile(profile);
+      setIsLoading(false);
+    }
+    fetchhData()
+  }, [])
+
+  return isLoading ? (
+    <div className="flex flex-col items-center justify-center h-full">
+      <Loading className="size-20" />
+    </div>
+  ) : (
+    <div>
+      <TopNav
+        gender={profile?.gender}
+        imageUrl={profile?.pictureUrl}
+        disableNotification={false}
+        role={profile?.role}
+        className="mb-6"
+      >
+        <p>แก้ไขการทดสอบ</p>
+      </TopNav>
       <div className="text-white font-sans flex justify-between">
         <div className="flex items-center gap-x-4">
           <span>ตั้งเวลาประกาศ</span>
@@ -133,68 +157,48 @@ const Page = () => {
             type="datetime-local"
             className="bg-[#2A3A50] py-2 px-3 text-white rounded-md cursor-pointer"
             value={value2}
-            onChange={(e) => setValue2(e.target.value)} // Update state properly
+            onChange={(e) => setValue2(e.target.value)}
           />
         </div>
 
         <div className="space-x-3">
-          <button
-            className="border border-[#2A3A50] w-[120px] h-[43px] rounded-[6px] text-center hover:bg-[#424951]"
-            onClick={() => alert("ยกเลิก")}
-          >
-            ยกเลิก
-          </button>
-          <button
-            className="bg-primary w-[120px] h-[43px] rounded-[6px] text-center hover:bg-[#7991f9]"
-            onClick={handleSubmit}
-          >
-            บันทึก
-          </button>
+          <CancelButton className="hover:bg-gray-600">
+            <p>ยกเลิก</p>
+          </CancelButton>
+          <ConfirmButton onClick={handleSubmit} className="px-11">
+            <p>บันทึก</p>
+          </ConfirmButton>
         </div>
       </div>
 
-      <div className="text-white font-sans flex justify-between mt-10 space-x-6">
-        <div className="flex flex-col flex-1">
-          <span>
-            ชื่อแบบฝึกหัด{" "}
-            {showWarning1 && <span className="text-red-500">*</span>}
-          </span>
-          <input
-            className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer"
-            value={value}
+      <div className="flex flex-row justify-between mt-10 gap-x-6">
+        <div className="flex flex-col items-start flex-1 gap-y-2">
+          <Label text="ชื่อแบบฝึกหัด" isRequired={true}/>
+          <TextField
+            value={title}
             placeholder="ชื่อแบบฝึกหัด"
-            required
-            onChange={(e) => setValue(e.target.value)}
-            onBlur={() => handleBlur(value, setShowWarning1)}
+            onChange={(value, _name) => setTitle(value as string)}
           />
         </div>
 
         <div className="flex flex-row gap-3">
-          <div className="flex flex-col">
-            <span>
-              วันเวลาเริ่มต้น{" "}
-              {showWarning2 && <span className="text-red-500">*</span>}
-            </span>
+          <div className="flex flex-col items-start">
+            <Label text="วันเวลาเริ่มต้น" isRequired={true}/>
             <input
               type="datetime-local"
               className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md outline-none"
-              value={value2}
+              value={value2 ?? Date.now().toString()}
               onChange={(e) => setValue2(e.target.value)}
-              required
               onBlur={() => handleBlur(value2, setShowWarning2)}
             />
           </div>
-          <div className="flex flex-col">
-            <span>
-              วันเวลาสิ้นสุด{" "}
-              {showWarning3 && <span className="text-red-500">*</span>}
-            </span>
+          <div className="flex flex-col items-start">
+            <Label text="วันเวลาสิ้นสุด" isRequired={true}/>
             <input
               type="datetime-local"
               className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md cursor-pointer outline-none"
               value={value3}
               onChange={(e) => setValue3(e.target.value)}
-              required
               onBlur={() => handleBlur(value3, setShowWarning3)}
             />
           </div>
@@ -203,17 +207,18 @@ const Page = () => {
 
       <div className="justify-between flex flex-row py-5 px-5">
         <div>
-          <div>ข้อย่อย</div>
-          <div className="mt-1">** ไม่เกิน 6 ข้อ</div>
+          <p>ข้อย่อย</p>
+          <div className="flex flex-row gap-x-2 mt-1 text-red-l text-[15px] font-normal">
+            <p>**</p>
+            <p>ไม่เกิน 6 ข้อ</p>
+          </div>
         </div>
-        <div>
-          <button
-            className="mt-2 border border-[#2A3A50] py-3 w-[7.5rem] rounded-md hover:bg-[#424951]"
+          <CancelButton
+            className="px-6 py-2 hover:bg-gray-600"
             onClick={addSubItem}
           >
             เพิ่มข้อย่อย
-          </button>
-        </div>
+          </CancelButton>
       </div>
 
       <SubItem
@@ -223,8 +228,8 @@ const Page = () => {
         setProblems={setProblems}
         deleteSubItem={deleteSubItem}
       />
-    </>
-  );
+    </div>
+  )
 };
 
 export default Page;

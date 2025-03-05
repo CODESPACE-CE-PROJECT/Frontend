@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CodeIcon from "@mui/icons-material/Code";
 import { MonacoTextEditor } from "@/components/Monaco/MonacoTextEditor";
-import Constraint from "@/components/Problem/Constraint";
+import {Constraint} from "@/components/Problem/Constraint";
 import { ICreateProblems } from "@/types/problem";
 import ToggleButton from "@/components/Button/ToggleButton";
-
+import { CancelButton } from "@/components/Button/CancelButton";
+import { Label } from "@/components/Input/Label";
+import { TextField } from "@/components/Input/TextField/TextField";
+import { Dropdown } from "../Input/Dropdown";
+import { LexicalEditor } from "@/components/LexicalEditor/LexicalEditor";
 interface Props {
   subItems: string[];
   assignmentId: string;
@@ -56,75 +60,73 @@ const SubItem: React.FC<Props> = ({ subItems, assignmentId, problems, setProblem
         <div key={index} className="flex flex-col">
           <div className="flex justify-between items-center border-b border-[#2A3A50] px-5 py-5">
             <div>{subItem}</div>
-            <div className="flex items-center">
-              <button
-                className="border border-[#EF4343] text-[#EF4343] py-3 w-[7.5rem] rounded-md mr-4 hover:bg-[#f15252] hover:text-white"
+            <div className="flex flex-row items-center gap-x-4">
+              <CancelButton
+                className="px-12 border-red-l text-red-l hover:bg-red-600 hover:text-pure-white"
                 onClick={() => deleteSubItem(index)}
               >
-                ลบ
-              </button>
+                <p>ลบ</p>
+              </CancelButton>
               <KeyboardArrowDownIcon
                 onClick={() => toggleForm(index)}
-                className={`cursor-pointer ${expandedIndex === index ? 'rotate-180' : ''}`}
+                className={`cursor-pointer ${expandedIndex === index ? 'rotate-180' : ''} hover:text-primary`}
               />
             </div>
           </div>
 
           {expandedIndex === index && (
             <>
-              <div className="text-white font-sans flex justify-between mt-5 space-x-6">
-                <div className="flex flex-col flex-1">
-                  <span>หัวข้อ <span className="text-red-500">*</span></span>
-                  <input
+              <div className="text-white font-sans flex justify-between my-5 gap-x-6">
+                <div className="flex flex-col items-start flex-1">
+                  <Label text="หัวข้อ" isRequired={true} />
+                  <TextField
                     className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md"
                     placeholder="หัวข้อ"
                     value={problems[index]?.problem?.[0]?.title || ''}
-                    onChange={(e) => updateProblem(index, "title", e.target.value)}
+                    onChange={(value, _name) => updateProblem(index, "title", value)}
                   />
                 </div>
 
                 <div className="flex gap-3">
-                  <div className="flex flex-col">
-                    <span>ภาษาโปรแกรม <span className="text-red-500">*</span></span>
-                    <select
-                      className="px-4 w-[160px] rounded-md bg-[#2A3A50] text-white my-2"
+                  <div className="flex flex-col gap-y-2">
+                    <Label text="ภาษาโปรแกรมมิ่ง" isRequired={true} />
+                    <Dropdown 
+                      name="language" 
+                      options={["PYTHON", "JAVA", "C", "CPP"]} 
+                      className="z-50" 
                       value={problems[index]?.problem?.[0]?.language || 'C'}
-                      onChange={(e) => updateProblem(index, "language", e.target.value)}
-                    >
-                      <option value="PYTHON">Python</option>
-                      <option value="JAVA">Java</option>
-                      <option value="C">C</option>
-                      <option value="CPP">C++</option>
-                    </select>
+                      onChange={(value, _name) => updateProblem(index, "language", value)}
+                    />
                   </div>
-                  <div className="flex flex-col">
-                    <span>คะแนน <span className="text-red-500">*</span></span>
-                    <input
+                  <div className="flex flex-col items-start">
+                    <Label text="คะแนน" isRequired={true} />
+                    <TextField
                       className="bg-[#2A3A50] mt-2 py-2 px-4 text-white rounded-md w-[160px]"
-                      value={problems[index]?.problem?.[0]?.score || 0}
-                      onChange={(e) => updateProblem(index, "score", Number(e.target.value))}
+                      value={problems[index]?.problem?.[0]?.score.toString() || "0"}
+                      isNumberic={true}
+                      onChange={(value, _name) => updateProblem(index, "score", Number(value))}
                     />
                   </div>
                 </div>
               </div>
 
-              <textarea
-                className="bg-[#2A3A50] mt-2 py-2 px-3 text-white rounded-md"
-                placeholder="คำอธิบาย"
-                value={problems[index]?.problem?.[0]?.description || ''}
-                onChange={(e) => updateProblem(index, "description", e.target.value)}
+              <LexicalEditor
+                className="h-80 overflow-y-auto rounded-md"
+                onChange={() => {}}
               />
 
-              <div className="my-3 flex items-center rounded-lg justify-between">
-                <div className="space-x-2">
+              <div className="mb-4 mt-9 flex items-center rounded-lg justify-between">
+                <div className="flex flex-row items-center gap-x-2">
                   <CodeIcon />
-                  <span className="text-white font-medium">Source Code:</span>
+                  <p className="font-medium">Source Code:</p>
                 </div>
-                <button className="border border-[#2A3A50] text-white py-3 w-[131px] h-[54px] rounded-md hover:bg-[#424951]">
-                  วิเคราะห์ Code
-                </button>
               </div>
-              <div className="bg-[#16233A] w-full h-[368px]"><MonacoTextEditor /></div>
+
+              <div className="w-full h-[368px]">
+                <MonacoTextEditor 
+                  language={problems[index]?.problem?.[0]?.language || 'C'} 
+                />
+              </div>
 
               <Constraint />
 

@@ -41,7 +41,7 @@ export default async function middleware(req: NextRequest) {
   const userRole = payload.role;
   const allowedRoute = roleRoutes[userRole];
 
-  if (path === "/") {
+  if (path === "/" || isPublicRoute) {
     return NextResponse.redirect(new URL(`${allowedRoute}`, req.url));
   }
 

@@ -83,7 +83,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
             </div>
 
             <div className="text-white text-lg rounded-md text-center w-[5%]">
-              <OptionAssignment assignmentId={assignment.assignmentId} />
+              <OptionAssignment assignmentId={assignment.assignmentId} courseId={assignment.courseId} />
             </div>
           </div>
         );

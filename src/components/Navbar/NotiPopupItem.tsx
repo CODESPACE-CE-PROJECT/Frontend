@@ -18,7 +18,7 @@ export const NotiPopupItem: React.FC<Props> = ({ data, onClose }) => {
      const prefixPath = pathname.startsWith('/student') ? '/student' : pathname.startsWith('/teacher') ? '/teacher' : '/admin';
 
      return <div className="flex flex-col items-start font-normal gap-y-3">
-          <div className="flex flex-row items-center gap-x-2 w-full">
+          <div className="flex flex-row items-center gap-x-2 w-full justify-between">
                <TripOriginIcon className="text-primary" />
                <p className='truncate w-32 text-primary'>{data.detail}</p>
                <p className='text-[#808080] text-nowrap'>{new Date(data.createdAt).toLocaleString('th')}</p>

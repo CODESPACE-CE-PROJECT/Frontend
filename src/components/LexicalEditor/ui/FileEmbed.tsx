@@ -25,7 +25,7 @@ export const FileEmbed: React.FC<Props> = ({ fileName, src, size }) => {
           href={src}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-row text-wrap w-44 justify-center items-center gap-x-4 bg-primary bg-opacity-35 p-4 rounded-md cursor-pointer hover:bg-opacity-70"
+          className="flex flex-row mt-2 text-wrap w-44 justify-center items-center gap-x-4 bg-primary bg-opacity-35 p-4 rounded-md cursor-pointer hover:bg-opacity-70"
      >
           <FcFile className="text-4xl" />
           <div className="flex flex-col">

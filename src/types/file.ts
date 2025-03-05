@@ -1,4 +1,5 @@
 export type IImageFile = {
+     message: string,
      imageUrl: string
 }
 
