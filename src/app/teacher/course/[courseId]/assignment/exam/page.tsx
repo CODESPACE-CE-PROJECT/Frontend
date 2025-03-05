@@ -50,7 +50,7 @@ export default function Assignment() {
       );
       if (filteredAssignments.length > 0) {
         setAssignments({ assignment: filteredAssignments });
-      } 
+      }
 
       setLoading(false);
     };

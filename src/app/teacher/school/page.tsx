@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getUserBySchoolId } from "@/actions/school";
 import { SearchBar } from "@/components/Input/SerachBar";
 import { ICreateUser, IProfile, IUpdateUser } from "@/types/user";
-import AddIcon from "@mui/icons-material/Add";
 import {
   createUserBySchoolId,
   getProfile,

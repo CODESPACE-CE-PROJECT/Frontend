@@ -18,7 +18,6 @@ import { notify, updateNotify } from "@/utils/toast.util"
 
 export default function Page() {
      const router = useRouter()
-     const param = useParams<{ schoolId: string }>()
      const [isLoading, setIsLoading] = useState<boolean>(true)
      const [profile, setProfile] = useState<IProfile>()
      const [fileData, setFileData] = useState<IFileFormat[]>()
@@ -30,7 +29,7 @@ export default function Page() {
           const fetchData = async () => {
                const profile = await getProfile()
                setProfile(profile)
-               const fileData = sessionStorage.getItem(`dataFile-${param.schoolId}`)
+               const fileData = sessionStorage.getItem(`dataFile-${profile.schoolId}`)
                if (fileData) {
                     setFileData(JSON.parse(fileData))
                     setUser(JSON.parse(fileData))
@@ -40,7 +39,7 @@ export default function Page() {
                setIsLoading(false)
           }
           fetchData()
-     }, [param.schoolId])
+     }, [])
 
      const onClickOption = (index: number | undefined) => {
           setFileData(prev => prev?.filter((_, i) => i !== index))
@@ -58,6 +57,10 @@ export default function Page() {
      }
 
      const handleOnClickCreateUser = async () => {
+          if (!profile || !profile.schoolId) {
+                notify(NotifyType.ERROR, "ข้อมูลโรงเรียนไม่ถูกต้อง");
+                return;
+              }
           const userFormat = user?.map((item) => {
                return {
                     username: item.username,
@@ -72,12 +75,12 @@ export default function Page() {
 
           if(userFormat){
                const id = notify(NotifyType.LOADING, 'กำลังสร้างบัญชีผู้ใช้งาน')
-               
                if(id){
-                    const {status} = await createMultipleUserBySchoolId(param.schoolId, userFormat as ICreateUser[])
+                    const {status} = await createMultipleUserBySchoolId(profile?.schoolId, userFormat as ICreateUser[])
+                    console.log(status)
                     if(status === 201){
                          updateNotify(id,NotifyType.SUCCESS, 'สร้างบัญชีผู้ใช้งานสำเร็จ')
-                         sessionStorage.removeItem(`dataFile-${param.schoolId}`)
+                         sessionStorage.removeItem(`dataFile-${profile?.schoolId}`)
                     }else{
                          updateNotify(id,NotifyType.ERROR, 'เกิดข้อผิดผลาดในการสร้างบัญชีผู้ใช้งาน')
                     }
