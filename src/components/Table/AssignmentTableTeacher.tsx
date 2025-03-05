@@ -8,9 +8,10 @@ import AssignmentBoxTeacher from "../Assignment/AssignmentBoxTeacher";
 interface Props {
   assignments: IAssignment;
   onToggle: (assignmentData: IUpdateLock) => void;
+  handleDelete: (assignmentId: string) => void; // Add handleDelete here
 }
 
-const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
+const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle, handleDelete }) => { // Add handleDelete in the destructured props
   const [lockStates, setLockStates] = useState(
     assignments.assignment.map((assignment) => assignment.isLock)
   );
@@ -24,6 +25,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
       isLock: newState,
     });
   };
+
   return (
     <>
       {/* Table Header */}
@@ -42,8 +44,8 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
         </div>
         <div className="text-white text-lg py-3 rounded-md text-center w-[5%]"></div>
       </div>
-      {assignments.assignment?.map((assignment) => {
 
+      {assignments.assignment?.map((assignment) => {
         const handleToggle = (newState: boolean) => {
           onToggle({ assignmentId: assignment.assignmentId, isLock: newState });
         };
@@ -71,8 +73,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
             <div className="flex text-white text-lg rounded-md items-center justify-center w-[12.5%]">
               <ToggleButton initialState={assignment.isLock} onToggle={handleToggle} />
               <span className="ms-3 text-sm font-medium text-white">
-                {assignment.isLock ? "เปิด" : "ปิด"}
-
+                {assignment.isLock ? "ปิด" : "เปิด"}
               </span>
             </div>
 
@@ -83,7 +84,10 @@ const AssignmentTableTeacher: React.FC<Props> = ({ assignments, onToggle }) => {
             </div>
 
             <div className="text-white text-lg rounded-md text-center w-[5%]">
-              <OptionAssignment assignmentId={assignment.assignmentId} />
+              <OptionAssignment
+                assignmentId={assignment.assignmentId}
+                handleDelete={handleDelete} 
+              />
             </div>
           </div>
         );
