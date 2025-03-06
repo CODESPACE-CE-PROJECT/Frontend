@@ -21,7 +21,7 @@ export const OptionAssignment: React.FC<Props> = ({ assignmentId, handleDelete }
           </div>
         </Link>
         <div
-          onClick={() => handleDelete(assignmentId)}  // Trigger delete on click
+          onClick={() => handleDelete(assignmentId)} 
           className="flex flex-row gap-x-2 p-3 rounded-b-xl hover:bg-[#16233A] cursor-pointer"
         >
           <DeleteOutlinedIcon fontSize="small" />

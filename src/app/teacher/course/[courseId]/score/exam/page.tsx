@@ -12,6 +12,7 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import ScoreStdTable from "@/components/Table/ScoreStdTable";
+import { AssignmentType } from "@/enum/enum";
 
 type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
@@ -29,7 +30,7 @@ export default function Score() {
   );
   const [assignmentLock, setAssignmentLock] = useState<{
     [assignmentId: string]: boolean;
-  }>({}); 
+  }>({});
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -40,15 +41,23 @@ export default function Score() {
 
           const data = await getAssignmentscore(courseId);
           if (data?.data && Array.isArray(data.data)) {
-            const assignmentsArray = data.data as IAssignmentScore["data"];
+            const assignmentsArray: IAssignmentScore["data"] = data.data;
+
+            const filteredAssignments = assignmentsArray.filter(
+              (assignment: IAssignmentScore["data"][number]) =>
+                assignment.type === AssignmentType.EXAMONLINE ||
+                assignment.type === AssignmentType.EXAMONSITE
+            );
+
             const transformedAssignments: AssignmentItem[] =
-              assignmentsArray.map((assignment) => ({
+              filteredAssignments.map((assignment) => ({
                 ...assignment,
                 totalScore:
                   assignment.scores && assignment.scores.length > 0
                     ? assignment.scores[0].totalScore
                     : 0,
               }));
+
             setAssignments(transformedAssignments);
           } else {
             setError(
@@ -133,6 +142,7 @@ export default function Score() {
             <ScoreAssignTable
               assignments={filteredAssignments}
               assignmentLock={assignmentLock}
+              courseId={courseId}
             />
           ) : (
             <ScoreStdTable assignments={filteredAssignments} />

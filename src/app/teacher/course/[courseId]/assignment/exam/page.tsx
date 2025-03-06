@@ -86,8 +86,8 @@ export default function Assignment() {
       if (id) {
         updateNotify(id, NotifyType.SUCCESS, "สร้างแบบฝึกหัดสำเร็จ!");
       }
-      // Fetch assignments again after creating a new one
-      await fetchAssignments(); // Re-fetch assignments after creation
+      
+      await fetchAssignments(); 
     } catch (error) {
       console.log("Error creating assignment:", error);
       if (id) {
