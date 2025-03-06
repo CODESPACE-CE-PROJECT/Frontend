@@ -9,14 +9,14 @@ interface Props {
 export const PeopleTableTeacher: React.FC<Props> = ({ teachers, students }) => {
   return (
     <>
-      <div className="flex justify-between items-center rounded-lg">
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-[65%] text-center mr-4">
+      <div className="flex justify-between items-center rounded-lg gap-x-4">
+        <div className="text-white text-lg py-3 rounded-md bg-[#1E2A38] w-[65%] text-center">
           ชื่อผู้เรียน
         </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-[15%] text-center mr-4">
+        <div className="text-white text-lg py-3 rounded-md bg-[#1E2A38] w-[15%] text-center">
           ประเภท
         </div>
-        <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-[15%] text-center">
+        <div className="text-white text-lg py-3 rounded-md bg-[#1E2A38] w-[15%] text-center">
           สถานะ
         </div>
         <div className="text-white text-lg py-3 rounded-md text-center w-[5%]"></div>

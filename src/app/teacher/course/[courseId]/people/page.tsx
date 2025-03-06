@@ -5,15 +5,16 @@ import { useParams } from "next/navigation";
 import { getpeople } from "@/actions/course";
 
 import { SearchBar } from "@/components/Input/SerachBar";
-import { ICourse, IPeople } from "@/types/course";
+import { IPeople } from "@/types/course";
 import { IProfile } from "@/types/user";
-import { getAvatar } from "@/utils/gender.util";
 import { PeopleTableTeacher } from "@/components/Table/PeopleTableTeacher";
 import AddIcon from "@mui/icons-material/Add";
 import { getProfile } from "@/actions/user";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { Loading } from "@/components/Loading/Loading";
 import { AddPeopleModal } from "@/components/Modals/AddPeopleModal";
+import { ISchool } from "@/types/school";
+import { getUserBySchoolId } from "@/actions/school";
 
 export default function People() {
   const params = useParams<{ courseId: string }>();
@@ -23,24 +24,31 @@ export default function People() {
     useState<{ courseTeacherId: string; user: IProfile }[]>();
   const [students, setStudents] =
     useState<{ courseStudentId: string; user: IProfile }[]>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [alluser, SetAlluser] = useState<IPeople>();
+  const [alluser, setAlluser] = useState<IPeople>();
   const [profile, setProfile] = useState<IProfile>();
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [school, setSchool] = useState<ISchool>();
 
   useEffect(() => {
     const fetchPeople = async () => {
       if (!courseId) return;
       setLoading(true);
       try {
-        const data: IPeople = await getpeople(courseId);
-        const teacherData = data.courseTeacher;
-        const studentData = data.courseStudent;
+        const response: IPeople = await getpeople(courseId);
+        const teacherData = response.courseTeacher;
+        const studentData = response.courseStudent;
         const profile: IProfile = await getProfile();
         setProfile(profile);
 
-        SetAlluser(data);
+        const { status, data } = await getUserBySchoolId(profile.schoolId);
+        if (status === 200) {
+          setSchool(data);
+        } else {
+          return;
+        }
+        setAlluser(response);
         setTeachers(teacherData);
         setStudents(studentData);
       } catch (err: any) {
@@ -90,7 +98,7 @@ export default function People() {
           <div className="flex items-center my-3 py-3 rounded-md focus:border-[#1E90FF] duration-200  space-x-9 ">
             <SearchBar onChange={(value) => setSearch(value)} />
             <button
-              onClick={() => setIsModalOpen(true)} // Open the modal when the button is clicked
+              onClick={() => setIsModalOpen(true)}
               className="bg-[#5572FA] rounded-md hover:bg-[#788ff7] w-36 py-3 px-4 "
             >
               <AddIcon /> เพิ่มสมาชิก
@@ -100,15 +108,11 @@ export default function People() {
 
           <AddPeopleModal
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)} 
+            onClose={() => setIsModalOpen(false)}
             onClick={() => {
-             
               console.log("Confirmed");
             }}
-            onInput={(file: File) => {
-              
-              console.log("File uploaded:", file);
-            }}
+            users={school?.users}
           />
         </>
       )}

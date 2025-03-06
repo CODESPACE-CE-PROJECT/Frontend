@@ -9,17 +9,17 @@ interface CoursesRoleProps {
 }
 
 const CourseUserTeacher: React.FC<CoursesRoleProps> = ({ data }) => {
-    const handleOptionClick = (name: string, allowLogin: boolean | null) => {
-          console.log(`ลบบัญชีของ ${data.username}`);
-      };
+  const handleOptionClick = (name: string, allowLogin: boolean | null) => {
+    console.log(` นำบัญชีของ ${data.username} ออกจากคอร์ส`);
+  };
 
   return (
     <>
       <div
-        className="flex justify-between py-1 items-center rounded-lg"
+        className="flex justify-between items-center rounded-lg gap-x-4"
         key={data.username}
       >
-        <div className="flex text-white text-lg px-4 py-3 rounded-md text-center  w-[65%] space-x-4 items-center">
+        <div className="flex text-white text-lg px-4 py-3 rounded-md text-center w-[65%] space-x-4 items-center">
           <Image
             src={data.pictureUrl || getAvatar(data.gender)}
             alt="Profile"
@@ -37,27 +37,32 @@ const CourseUserTeacher: React.FC<CoursesRoleProps> = ({ data }) => {
           </div>
         </div>
 
-        <div className="text-white text-lg px-4 py-3 rounded-md w-[15%] text-center mr-4">
+        <div className="text-white text-lg px-4 py-3 rounded-md w-[15%] text-center">
           {data.role === Role.TEACHER ? "ผู้สอน" : "ผู้เรียน"}
         </div>
 
-        <div
-          className={`flex text-white text-lg py-3 rounded-md border mx-6 w-36 space-x-2 text-center items-center justify-center ${
-            data.isActived ? "border-green-l" : "border-white"
-          }`}
-        >
+        <div className="flex justify-center w-[15%]">
           <div
-            className={`w-3 h-3 rounded-full ${
-              data.isActived ? "bg-green-l" : "bg-white"
-            }`}
-          ></div>
-          <div className={`${data.isActived ? "text-green-l" : "text-white"}`}>
-            {data.isActived ? "ออนไลน์" : "ออฟไลน์"}
+            className={`flex text-white text-lg py-3 rounded-md border w-3/4 space-x-2 text-center items-center justify-center ${
+              data.isActived ? "border-green-l" : "border-white"
+            }`} 
+          >
+            <p
+              className={`w-3 h-3 rounded-full ${
+                data.isActived ? "bg-green-l" : "bg-white"
+              }`}
+            ></p>
+            <p className={`${data.isActived ? "text-green-l" : "text-white"}`}>
+              {data.isActived ? "ออนไลน์" : "ออฟไลน์"}
+            </p>
           </div>
         </div>
         <div className="text-white text-lg py-3 rounded-md text-center w-[5%]">
-        <OptionPeople onClick={handleOptionClick} allowLogin={data.allowLogin} />
-      </div>
+          <OptionPeople
+            onClick={handleOptionClick}
+            allowLogin={data.allowLogin}
+          />
+        </div>
       </div>
     </>
   );
