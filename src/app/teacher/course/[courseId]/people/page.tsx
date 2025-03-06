@@ -109,9 +109,6 @@ export default function People() {
           <AddPeopleModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onClick={() => {
-              console.log("Confirmed");
-            }}
             users={school?.users}
           />
         </>
