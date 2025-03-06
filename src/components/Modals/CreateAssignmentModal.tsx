@@ -1,11 +1,12 @@
 import { Modal } from "@/components/Modals/Modal";
 import { useState } from "react";
+import InputDateTimePicker from "@/components/Input/InputDateTimePicker";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: () => void;
-  handleInputChange: (value: string | number, name: string) => void;
+  handleInputChange: (value: string, name: string) => void;
 }
 
 export const CreateAssignmentModal: React.FC<Props> = ({
@@ -52,13 +53,12 @@ export const CreateAssignmentModal: React.FC<Props> = ({
               <label className="font-medium text-black">
                 วันเวลาแจ้งเตือน <span className="text-red-500">*</span>
               </label>
-              <input
-                type="datetime-local"
-                className="w-full p-2 border border-gray-300 rounded-md text-black"
-                onChange={(e) =>
-                  handleInputChange(e.target.value, "announceDate")
-                }
-              />
+              <InputDateTimePicker
+                value=""
+                name="announceDate"
+                bgColor="#FFFFFF"
+                textColor="#0F1119"
+                onChange={handleInputChange}/>
             </div>
           </div>
 
@@ -67,21 +67,23 @@ export const CreateAssignmentModal: React.FC<Props> = ({
               <label className="font-medium text-black">
                 วันเวลาเริ่มต้น <span className="text-red-500">*</span>
               </label>
-              <input
-                type="datetime-local"
-                className="w-full p-2 border border-gray-300 rounded-md text-black"
-                onChange={(e) => handleInputChange(e.target.value, "startAt")}
-              />
+              <InputDateTimePicker
+                value=""
+                name="startAt"
+                bgColor="#FFFFFF"
+                textColor="#0F1119"
+                onChange={handleInputChange}/>
             </div>
             <div className="flex flex-col">
               <label className="font-medium text-black">
                 วันเวลาสิ้นสุด <span className="text-red-500">*</span>
               </label>
-              <input
-                type="datetime-local"
-                className="w-full p-2 border border-gray-300 rounded-md text-black"
-                onChange={(e) => handleInputChange(e.target.value, "expireAt")}
-              />
+              <InputDateTimePicker
+                value=""
+                name="expireAt"
+                bgColor="#FFFFFF"
+                textColor="#0F1119"
+                onChange={handleInputChange}/>
             </div>
           </div>
         </div>

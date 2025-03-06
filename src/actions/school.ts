@@ -148,3 +148,22 @@ export const deleteSchoolById = async (schoolId:string) => {
           }
      })
 }
+
+export const getUserBySchoolId = async (schoolId: string) => {
+     const token = await getToken()
+     return await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${schoolId}/user`, {
+          headers: {
+               Authorization: `Bearer ${token}`
+          }
+     }).then((res) => {
+          return {
+               status: res.status,
+               data: res.data.data
+          }
+     }).catch((e:AxiosError) => {
+          return {
+               status: e.status,
+               data: e.response?.data
+          }
+     })
+}
