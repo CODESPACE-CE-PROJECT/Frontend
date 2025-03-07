@@ -81,8 +81,10 @@ export default function Page() {
                setProfile(profile)
                if (status === 200) {
                     setProblem(problem)
-                    setSuibmission(problem.submission[0])
-                    setSourceCode(problem.submission[0]?.sourceCode)
+                    if(problem.submission){
+                         setSuibmission(problem.submission[0])
+                         setSourceCode(problem.submission[0]?.sourceCode)
+                    }
                }
                const realTimeURL = await getRealTimeURL()
                await fetchEventSource(`${realTimeURL}/compiler/submission`, {
@@ -105,8 +107,10 @@ export default function Page() {
                                    const problem: IProblem = data
                                    if (status === 200) {
                                         setProblem(problem)
-                                        setSuibmission(problem.submission[0])
-                                        setSourceCode(problem.submission[0]?.sourceCode)
+                                        if(problem.submission){
+                                             setSuibmission(problem.submission[0])
+                                             setSourceCode(problem.submission[0]?.sourceCode)
+                                        }
                                    }
                               }
                          }
@@ -140,7 +144,7 @@ export default function Page() {
           <div className="flex flex-col gap-y-2 md:gap-y-0 md:flex-row items-center justify-between">
                <div className="flex flex-col gap-y-6 md:flex-row items-center justify-start md:gap-x-6">
                     {
-                         problem?.other.map((item, index) =>
+                         problem?.other && problem?.other.map((item, index) =>
                               <ProblemChoice
                                    key={item.problemId}
                                    index={index + 1}
@@ -178,7 +182,7 @@ export default function Page() {
                          <ProblemLanguage language={problem?.language} />
                          <div className="flex flex-row items-center gap-x-4">
                               {
-                                   (problem?.submission[0]?.stateSubmission !== StateSubmission.PASS && !problem?.isExpire) && 
+                                   ( problem?.submission && problem?.submission[0]?.stateSubmission !== StateSubmission.PASS && !problem?.isExpire) && 
                                    <div
                                         onClick={() => document.getElementById('sourCodeUpload')?.click()}
                                         className={`flex flex-row items-center gap-x-3 bg-transparent border-[1px] border-blackground-text hover:bg-gray-500 px-4 py-3 rounded-md cursor-pointer`}>
@@ -201,7 +205,7 @@ export default function Page() {
                               }
                               <ConfirmButton
                                    onClick={handleSubmitCode}
-                                   disabled={problem?.submission[0]?.stateSubmission === StateSubmission.PASS || problem?.isExpire}
+                                   disabled={problem?.submission && problem?.submission[0]?.stateSubmission === StateSubmission.PASS || problem?.isExpire}
                                    className="flex flex-row items-center gap-x-3 px-4">
                                    <CloudUploadOutlinedIcon fontSize="medium" />
                                    <p className="font-medium">ส่งคำตอบ</p>

@@ -1,4 +1,4 @@
-import { PackageType, Role } from "../enum/enum"
+import { LanguageType, PackageType, Role } from "../enum/enum"
 
 export const textActivedUser = (isActived: boolean, allowLogin: boolean) => {
      if (!allowLogin) {
@@ -15,6 +15,18 @@ export const textPackage = (packageType: PackageType | undefined) => {
           return "Premium"
      } else {
           return "Standard"
+     }
+}
+
+export const textLanguage = (language:LanguageType | undefined) => {
+     if (language === LanguageType.C) {
+          return "C"
+     } else if(language === LanguageType.CPP){
+          return "Cpp"
+     } else if(language === LanguageType.JAVA){
+          return "Java"
+     } else {
+          return "Python"
      }
 }
 

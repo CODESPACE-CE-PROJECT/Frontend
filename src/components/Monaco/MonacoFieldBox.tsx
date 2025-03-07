@@ -7,7 +7,6 @@ interface Props {
      readOnly: boolean
 }
 
-
 export const MonacoFieldBox: React.FC<Props> = ({ value, onChange, readOnly }) => {
      const handleEditorWillMount = (monaco: Monaco) => {
           monaco.editor.defineTheme("custom", {
@@ -20,8 +19,8 @@ export const MonacoFieldBox: React.FC<Props> = ({ value, onChange, readOnly }) =
                     },
                ],
                colors: {
-                    "editor.forefround": "#161D2D",
-                    "editor.background": "#161D2D",
+                   "editor.forefround": "#16233A",
+                    "editor.background": "#16233A",
                     "editor.selectionBackground": "#2A3A50",
                     "editor.lineHighlightBackground": "#2A3A50",
                     "editorCursor.foreground": "#F8F8F0",

@@ -1,23 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { getAssignment } from "@/actions/assignment";
-import { IAssignment } from "@/types/assignment";
+import { useParams } from "next/navigation";
+import { getAssignmentByCourseId } from "@/actions/assignment";
+import { IAssignmentStudent } from "@/types/assignment";
 import AssignmentTable from "@/components/Table/AssignmentTable";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
+import { AssignmentType } from "@/enum/enum";
 
 export default function Assignment() {
   const param = useParams<{ courseId: string }>();
   const courseId = param.courseId;
 
-  const [assignments, setAssignments] = useState<IAssignment | null>(null);
+  const [assignments, setAssignments] = useState<IAssignmentStudent>();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<IProfile>();
 
   useEffect(() => {
@@ -25,31 +25,17 @@ export default function Assignment() {
       const profile: IProfile = await getProfile();
       setProfile(profile);
 
-      if (!courseId) return;
-      setLoading(true);
-      try {
-        const data = await getAssignment(courseId);
-        if (data) {
-          const filteredAssignments = data.data.assignment.filter(
-            (assignment: IAssignment["assignment"][number]) =>
-              assignment.type === "EXAMONSITE" ||
-              assignment.type === "EXAMONLINE"
-          );
-
-          setAssignments({ assignment: filteredAssignments });  
-        }
-      } catch (err: any) {
-        console.error("Error fetching assignments:", err);
-        setError(err.message);
-      }
+      const data: IAssignmentStudent = await getAssignmentByCourseId(param.courseId);
+      const filteredAssignments = data.assignment.filter((item) => item.type !== AssignmentType.EXERCISE);
+      setAssignments({
+        assignment: filteredAssignments,
+        dashboard: data.dashboard
+      })
       setLoading(false);
     };
 
     fetchAssignments();
   }, [courseId, param.courseId]);
-
-
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
@@ -73,7 +59,7 @@ export default function Assignment() {
           />
           <div className="mt-4">
             {assignments && (
-              <AssignmentTable assignments={assignments} />
+              <AssignmentTable data={assignments.assignment} />
             )}
           </div>
         </>)}

@@ -12,7 +12,6 @@ export const ProblemConstraint:React.FC<Props> = ({data}) => {
                     {
                          data?.map((itme) => <li key={itme.constraintId}>ห้ามใช้ {itme.keyword}</li>)
                     }
-
                </ul>
           </div>
      </div>

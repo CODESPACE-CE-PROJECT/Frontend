@@ -105,13 +105,14 @@ export default function Page() {
             <LexicalEditor
               ref={editorRef}
               onChange={(editorState) => {
+                console.log(editorState)
                 setCreateForm(prev => ({
                   ...prev,
                   description: editorState,
                 }))
               }} className="min-h-28 h-full">
               <div className="flex flex-row items-center justify-end gap-x-4 pt-2 border-t-[1px] border-white">
-                <CancelButton className="border-white hover:bg-gray-600" onClick={() => {
+                <CancelButton className="border-white py-3 hover:bg-gray-600" onClick={() => {
                   if (editorRef.current) {
                     editorRef.current.clearEditor();
                   }

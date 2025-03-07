@@ -57,7 +57,7 @@ export default function Page() {
   return (
     <>
       {loading ? (
-        <div className="flex flex-col items-center justify-center h-[70vh]">
+        <div className="flex flex-col items-center justify-center h-full">
           <Loading className="size-20" />
         </div>
       ) : (

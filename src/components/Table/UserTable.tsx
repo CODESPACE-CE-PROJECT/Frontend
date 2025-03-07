@@ -44,7 +44,7 @@ export const UserTable:React.FC<Props> = ({title, data, onClickOption}) => {
                                              </div>
                                         </div>
                                    </div>
-                                   <div className="table-cell align-middle text-end p-4 ">
+                                   <div className="table-cell align-middle text-end p-4">
                                         <div className="flex flex-row justify-end items-center w-full gap-x-4">
                                              <p className={`py-2 font-normal px-3 text-center flex items-center ${textStatusActiveColor(item.isActived, item.allowLogin)} justify-center gap-2 border-2 ${borderStatusActiveColor(item.isActived, item.allowLogin)} rounded-md`}>
                                                   <CircleIcon /> {textActivedUser(item.isActived, item.allowLogin)}

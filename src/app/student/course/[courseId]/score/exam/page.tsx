@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getAssignment } from "@/actions/assignment";
-import { IAssignment, IDashboard } from "@/types/assignment";
+import { getAssignmentByCourseId } from "@/actions/assignment";
+import { IAssignmentStudent, IDashboard} from "@/types/assignment";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreTable from "@/components/Table/ScoreTable";
 import { TopNav } from "@/components/Navbar/TopNav";
@@ -18,7 +18,7 @@ export default function Score() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [assignments, setAssignments] = useState<IAssignment["assignment"]>([]);
+  const [assignments, setAssignments] = useState<IAssignmentStudent>();
   const [totalScore, setTotalScore] = useState<number>(0);
   const [maxTotalScore, setMaxTotalScore] = useState<number>(0);
   const [profile, setProfile] = useState<IProfile>();
@@ -56,7 +56,7 @@ export default function Score() {
       setLoading(true);
       if (courseId) {
         try {
-          const data = await getAssignment(courseId);
+          const data = await getAssignmentByCourseId(courseId);
           const profile: IProfile = await getProfile();
           setProfile(profile);
           if (data?.data?.assignment && Array.isArray(data.data.assignment)) {

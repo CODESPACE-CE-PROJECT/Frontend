@@ -1,16 +1,17 @@
 import { useRouter } from "next/navigation";
-import { IAssignment } from "@/types/assignment";
+import { IProblem } from "@/types/assignment";
 import { StateSubmission } from "@/enum/enum";
 
 interface Props {
-  assignment: IAssignment["assignment"][number]; // ใช้ assignment object ภายใน array
+  data: IProblem[];
+  isLock: boolean
 }
 
-const AssignmentBox: React.FC<Props> = ({ assignment }) => {
+const AssignmentBox: React.FC<Props> = ({ data, isLock }) => {
   const router = useRouter();
 
-  const getBackgroundColor = (state: string) => {
-    switch (state) {
+  const getBackgroundColor = (stateSubmission: StateSubmission | undefined) => {
+    switch (stateSubmission) {
       case StateSubmission.PASS:
         return "bg-[#00DACC] hover:bg-green-400";
       case StateSubmission.FAILED:
@@ -23,27 +24,27 @@ const AssignmentBox: React.FC<Props> = ({ assignment }) => {
 
   return (
     <div
-      className={`flex w-4/12 text-center ${
-        assignment.problem.length >= 6
+      className={`flex text-center ${
+        data.length >= 6
           ? "justify-stretch space-x-1 md:space-x-4"
           : "justify-start space-x-4"
       }`}
     >
-      {assignment.problem.map((problem, index) => (
+      {data.map((item, index) => (
         <div
-          key={problem.problemId}
-          className={`flex flex-col items-center justify-center rounded-sm h-[3.75rem] w-[3.75rem] flex-grow-0 basis-[3.75rem]
+          key={item.problemId}
+          className={`flex flex-col items-center justify-center rounded-sm w-16 h-16 flex-grow-0
             ${
-              !assignment.isLock
+              !isLock
                 ? `${getBackgroundColor(
-                    problem.stateSubmission
+                    item.stateSubmission
                   )} cursor-pointer `
                 : "border-2 border-dotted border-[#2A3A50] hover:border-[#2A3A50] hover:border-dotted "
             }
-            ${assignment.problem.length >= 6 ? "flex-grow" : ""}`}
+            ${data.length >= 6 ? "flex-grow" : ""}`}
           onClick={
-            !assignment.isLock
-              ? () => router.push(`/student/problem/${problem.problemId}`)
+            !isLock
+              ? () => router.push(`/student/problem/${item.problemId}`)
               : undefined
           }
         >
@@ -53,12 +54,12 @@ const AssignmentBox: React.FC<Props> = ({ assignment }) => {
           </p>
           <p>
             <span>
-              {problem.stateSubmission === StateSubmission.NOTSEND
+              {item.stateSubmission === StateSubmission.NOTSEND
                 ? 0
-                : problem.score || 0}
+                : item.score || 0}
             </span>
             <span>{"/"}</span>
-            <span>{problem.score}</span>
+            <span>{item.score}</span>
           </p>
         </div>
       ))}

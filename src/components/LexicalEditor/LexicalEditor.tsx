@@ -62,7 +62,7 @@ export const LexicalEditor = forwardRef(({onChange, value, className, children}:
                     <RichTextPlugin
                          contentEditable={
                               <ContentEditable
-                                   className={`relative ${className} bg-blackground-text outline-0`}
+                                   className={`relative ${className} min-h-40 h-full bg-blackground-text outline-0`}
                                    aria-placeholder={placeholder}
                                    placeholder={
                                         <div className="absolute top-[16px] left-[15px] inline-block text-ellipsis overflow-hidden text-gray-400">{placeholder}</div>

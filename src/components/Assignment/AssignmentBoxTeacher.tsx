@@ -1,27 +1,26 @@
 import { useRouter } from "next/navigation";
-import { IAssignment } from "@/types/assignment";
+import { IProblem } from "@/types/assignment";
 
 interface Props {
-  assignment: IAssignment["assignment"][number];
+  data: IProblem[];
 }
 
-const AssignmentBoxTeacher: React.FC<Props> = ({ assignment }) => {
+const AssignmentBoxTeacher: React.FC<Props> = ({ data }) => {
   const router = useRouter();
 
   return (
     <div
-      className={`flex w-[30%] text-center gap-1 ${
-        assignment.problem.length >= 6
+      className={`flex text-center gap-x-2 ${data.length >= 6
           ? "justify-stretch flex-wrap"
           : "justify-start"
-      }`}
+        }`}
     >
-      {assignment.problem.map((problem, index) => (
+      {data.map((problem, index) => (
         <div
           key={problem.problemId}
-          className={`flex flex-col items-center justify-center rounded-sm cursor-pointer h-[3.75rem] w-[3.75rem] flex-grow-0 basis-[3.75rem]
+          className={`flex flex-col items-center cursor-pointer w-16 h-16 justify-center rounded-sm cursor-pointe flex-grow-0 
             bg-[#808080] hover:bg-[#bebebe]
-            ${assignment.problem.length >= 6 ? "grow" : ""}`}
+            ${data.length >= 6 ? "grow" : ""}`}
           onClick={() => router.push(`/teacher/problem/${problem.problemId}`)}
         >
           <p className="space-x-1">

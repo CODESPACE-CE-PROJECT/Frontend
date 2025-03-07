@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getAssignment } from "@/actions/assignment";
-import { IAssignment } from "@/types/assignment";
+import { getAssignmentByCourseId } from "@/actions/assignment";
+import { IAssignmentStudent } from "@/types/assignment";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreTable from "@/components/Table/ScoreTable";
 import { TopNav } from "@/components/Navbar/TopNav";
@@ -16,7 +16,7 @@ export default function Score() {
   const { courseId } = params;
   const [loading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [assignments, setAssignments] = useState<IAssignment["assignment"]>([]);
+  const [assignments, setAssignments] = useState<IAssignmentStudent>();
   const [totalScore, setTotalScore] = useState<number>(0);
   const [maxTotalScore, setMaxTotalScore] = useState<number>(0);
   const [profile, setProfile] = useState<IProfile>();
@@ -26,9 +26,9 @@ export default function Score() {
       setIsLoading(true);
       if (courseId) {
         try {
-          const data = await getAssignment(courseId);
           const profile: IProfile = await getProfile();
           setProfile(profile);
+          const data = await getAssignmentByCourseId(courseId);
           if (data?.data?.assignment && Array.isArray(data.data.assignment)) {
             const exerciseAssignments = data.data.assignment.filter(
               (assignment: IAssignment["assignment"][number]) =>
