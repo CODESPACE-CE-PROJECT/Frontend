@@ -121,7 +121,7 @@ export default function Page() {
           >
             <div className="flex flex-row items-center gap-x-4">
               <PersonAddIcon />
-              <p>สร้างชั้นเรียน</p>
+              <p>สร้างคอร์สเรียน</p>
             </div>
           </ConfirmButton>
 

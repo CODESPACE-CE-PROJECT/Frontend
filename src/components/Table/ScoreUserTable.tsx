@@ -59,7 +59,7 @@ export default function ScoreUserTable({ assignments, assignmentId }: Props) {
     <div className="mt-4 overflow-x-auto">
       <table className="w-full table-auto border-separate border-spacing-2">
         <thead>
-          <tr className="bg-[#161f2e] text-white text-lg">
+          <tr className="bg-[#161f2e] text-white text-lg last:border-none">
             <th className="px-4 py-3 w-[708px]  rounded-xl text-center">ชื่อผู้เรียน</th>
             <th className="p-3 rounded-xl text-center">
               <div className="flex flex-col items-center">
