@@ -26,8 +26,8 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
       {data.backgroundUrl ? (
         <Image
           className="self-center rounded-t-2xl max-w-[286px] max-h-[169px] object-cover"
-          src={data.backgroundUrl}
-          alt={data.title}
+          src={data?.backgroundUrl }
+          alt={data?.title || "คอร์สเรียน"}
           width={500}
           height={500}
           priority={true}
@@ -36,7 +36,7 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
         <Image
           className="self-center rounded-t-2xl w-full h-full object-cover"
           src={CourseBg}
-          alt={data.title}
+          alt={data?.title || "คอร์สเรียน"}
           width={500}
           height={500}
           priority={true}
@@ -44,8 +44,8 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
       )}
       <Image
         className="absolute inset-y-32 left-4 w-16 rounded-full border-[#FAFAFA] border-2 "
-        src={data.user?.pictureUrl || getAvatar(data.user?.gender || "other")}
-        alt={data.title}
+        src={data?.user?.pictureUrl || getAvatar(data?.user?.gender || "other")}
+        alt={data?.title || "คอร์สเรียน"}
         width={100}
         height={100}
         priority={true}
@@ -53,10 +53,10 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
 
       <div className="px-7 py-3 bg-[#FAFAFA] rounded-b-xl pt-10 h-full flex flex-col gap-y-3">
         <p className=" text-xl font-semibold text-pretty truncate">
-          {data.title}
+          {data?.title || "คอร์สเรียน"}
         </p>
         <p className="text-sm text-pretty truncate">
-          {data.user?.firstName} {data.user?.lastName}
+          {data?.user?.firstName} {data?.user?.lastName}
         </p>
       </div>
     </div>

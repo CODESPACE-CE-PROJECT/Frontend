@@ -107,7 +107,7 @@ export default function Score() {
             gender={profile?.gender}
           >
             <div className="flex items-center gap-2 ">
-              <ArrowBackIosIcon className="" onClick={() => router.back()} />
+              <ArrowBackIosIcon className="cursor-pointer hover:text-primary " onClick={() => router.back()} />
               <p className="font-semibold">{assignmentTitle}</p>
             </div>
           </TopNav>
