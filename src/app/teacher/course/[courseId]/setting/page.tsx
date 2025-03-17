@@ -1,10 +1,14 @@
-"use client"; // Add this at the top of the file
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import CourseBg from "@/assets/CoursesAssets/CourseBg.png";
 import { useParams } from "next/navigation";
-import { getCoursesById, editCourse, deleteCoursesById } from "@/actions/course";
+import {
+  getCoursesById,
+  editCourse,
+  deleteCoursesById,
+} from "@/actions/course";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { getProfile } from "@/actions/user";
 import { IProfile } from "@/types/user";
@@ -12,6 +16,9 @@ import { Loading } from "@/components/Loading/Loading";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
+import { CancelButton } from "@/components/Button/CancelButton";
+import { DeleteCourseModal } from "@/components/Modals/DeleteCoursModal";
+import { ICourse } from "@/types/course";
 
 interface ICourseDetails {
   title: string;
@@ -23,12 +30,15 @@ export default function Setting() {
   const param = useParams<{ courseId: string }>();
   const courseId = param?.courseId;
   const [profile, setProfile] = useState<IProfile | null>(null);
-  const [courseDetails, setCourseDetails] = useState<ICourseDetails | null>(null);
+  const [courseDetails, setCourseDetails] = useState<ICourseDetails | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [editData, setEditData] = useState<ICourseDetails | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -38,13 +48,17 @@ export default function Setting() {
       try {
         const profile: IProfile = await getProfile();
         setProfile(profile);
-        const response = await getCoursesById(courseId);
-        
-        if (response?.data) {
-          setCourseDetails(response.data);
+        console.log("Course ID:", courseId);
+
+        const response: ICourse  = await getCoursesById(courseId);
+        console.log("Course API response:", response.title);
+
+        if (response) {
+          setCourseDetails(response);
           setEditData({
-            title: response.data.title || "",
-            description: response.data.description || "",
+            title: response.title || "",
+            description: response.description || "",
+            backgroundUrl: response.backgroundUrl || "",
           });
         }
       } catch (err: any) {
@@ -58,22 +72,29 @@ export default function Setting() {
   }, [courseId]);
 
   const handleEditClick = async () => {
-    if (!editData || !courseId) return;
+    if (!courseDetails || !courseId) return;
 
     const id = notify(NotifyType.LOADING, "กำลังบันทึกการแก้ไข...");
-    
+
     if (id) {
       try {
         const formData = new FormData();
-        formData.append("title", editData.title);
-        formData.append("description", editData.description);
+        formData.append("title", courseDetails.title);
+        formData.append("description", courseDetails.description);
         if (imageFile) {
           formData.append("picture", imageFile);
         }
-  
+
         const updatedCourse = await editCourse(courseId, formData);
-        setCourseDetails((prev) => ({ ...prev!, ...updatedCourse }));
-  
+
+        setCourseDetails((prev) => ({
+          ...prev!,
+          ...updatedCourse,
+          backgroundUrl: imageFile
+            ? updatedCourse.backgroundUrl
+            : prev!.backgroundUrl,
+        }));
+
         updateNotify(id, NotifyType.SUCCESS, "บันทึกการแก้ไขสำเร็จ!");
       } catch (error) {
         console.error("Error updating course:", error);
@@ -91,9 +112,8 @@ export default function Setting() {
       try {
         await deleteCoursesById(courseId);
         updateNotify(id, NotifyType.SUCCESS, "ลบคอร์สเรียนสำเร็จ!");
-        // Redirect to the course list page after deletion
+
         window.location.href = "/teacher/course";
-        
       } catch (error) {
         console.error("Error deleting course:", error);
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการลบคอร์สเรียน");
@@ -105,7 +125,10 @@ export default function Setting() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { id, value } = e.target;
-    setEditData((prev) => ({ ...prev!, [id]: value }));
+    setCourseDetails((prev) => ({
+      ...prev!,
+      [id]: value,
+    }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +170,7 @@ export default function Setting() {
                 />
                 <button
                   onClick={() => document.getElementById("fileInput")?.click()}
-                  className="font-semibold border-[1px] border-[#2A3A50] rounded-xl px-4 py-3"
+                  className="font-semibold border-[1px] border-[#2A3A50]  px-4 py-3 rounded-md"
                 >
                   <p>เลือกรูปภาพพื้นหลังของคอร์สเรียน</p>
                   <input
@@ -155,50 +178,54 @@ export default function Setting() {
                     id="fileInput"
                     onChange={handleFileChange}
                     style={{ display: "none" }}
-                    accept="image/png, image/jpg"
-                  />
+                    accept="image/png, image/jpeg"
+                    />
                 </button>
               </div>
+              
 
               <div className="space-y-3">
                 <div>ชื่อชั้นเรียน</div>
                 <input
                   id="title"
-                  type="text"
-                  value={editData?.title ?? ""}
-                  placeholder="ชื่อชั้นเรียน"
+                  value={courseDetails?.title || ""}
+                  className="w-[32vw] border-[1px] border-[#2A3A50] rounded-lg shadow-sm bg-transparent py-2 px-4"
                   onChange={handleChange}
-                  className="w-[32vw] border-[1px] border-[#2A3A50] rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-transparent py-2 px-4"
-                  required
                 />
                 <div>รายละเอียด</div>
+
                 <textarea
                   id="description"
-                  value={editData?.description ?? ""}
-                  placeholder="รายละเอียด"
+                  value={courseDetails?.description || ""}
                   onChange={handleChange}
-                  className="min-h-28 max-h-48 w-[32vw] border-[1px] border-[#2A3A50] rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-transparent py-2 px-4"
+                  className="min-h-28 max-h-48 w-[32vw] border-[1px] border-[#2A3A50] rounded-lg shadow-sm bg-transparent py-2 px-4"
                   maxLength={200}
                 />
                 <div className="text-right text-xs">
-                  {editData?.description?.length || 0}/200
+                  {courseDetails?.description?.length || 0}/200
                 </div>
               </div>
             </div>
             <div className="flex flex-row justify-self-end space-x-4">
-              <button
-                onClick={handleDeleteClick}
-                className="text-[#EF4343] border-[1px] border-[#EF4343] rounded-xl px-8 py-4 hover:bg-[#151920]"
+              <CancelButton
+                onClick={() => setIsModalOpen(true)}
+                className="text-red-l border-red-l  px-8 py-4 hover:bg-red-600 hover:text-white"
               >
                 ลบคอร์สเรียน
-              </button>
+              </CancelButton>
               <ConfirmButton
                 onClick={handleEditClick}
-                className="bg-[#5572FA] rounded-xl px-8 py-4"
+                className="bg-[#5572FA]  px-8 py-4"
               >
                 บันทึกการแก้ไข
               </ConfirmButton>
             </div>
+
+            <DeleteCourseModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onConfirm={handleDeleteClick}
+            />
           </div>
         </>
       )}

@@ -29,7 +29,7 @@ export default function Score() {
   );
   const [assignmentLock, setAssignmentLock] = useState<{
     [assignmentId: string]: boolean;
-  }>({}); 
+  }>({});
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -40,15 +40,22 @@ export default function Score() {
 
           const data = await getAssignmentscore(courseId);
           if (data?.data && Array.isArray(data.data)) {
-            const assignmentsArray = data.data as IAssignmentScore["data"];
+            const assignmentsArray: IAssignmentScore["data"] = data.data;
+
+            const filteredAssignments = assignmentsArray.filter(
+              (assignment: IAssignmentScore["data"][number]) =>
+                assignment.type === "EXERCISE"
+            );
+
             const transformedAssignments: AssignmentItem[] =
-              assignmentsArray.map((assignment) => ({
+              filteredAssignments.map((assignment) => ({
                 ...assignment,
                 totalScore:
                   assignment.scores && assignment.scores.length > 0
                     ? assignment.scores[0].totalScore
                     : 0,
               }));
+
             setAssignments(transformedAssignments);
           } else {
             setError(
@@ -57,6 +64,11 @@ export default function Score() {
           }
 
           const assignmentData = await getAssignmentByCourseId(courseId);
+
+          if (!assignmentData || !assignmentData.data) {
+            setError("Failed to fetch assignment data.");
+            return;
+          }
 
           const lockStatus: { [assignmentId: string]: boolean } = {};
 
@@ -133,6 +145,7 @@ export default function Score() {
             <ScoreAssignTable
               assignments={filteredAssignments}
               assignmentLock={assignmentLock}
+              courseId={courseId}
             />
           ) : (
             <ScoreStdTable assignments={filteredAssignments} />

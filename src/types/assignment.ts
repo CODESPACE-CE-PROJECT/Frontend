@@ -83,6 +83,7 @@ export type IAssignmentScore = {
   data: {
     assignmentId: string;
     title: string;
+    type: AssignmentType;
     scores: {
       username: string;
       firstName: string;

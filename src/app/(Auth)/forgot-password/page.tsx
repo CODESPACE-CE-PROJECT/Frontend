@@ -8,8 +8,7 @@ import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { forgotPassword } from "@/actions/auth";
 import { Loading } from "@/components/Loading/Loading";
-import { AxiosError } from "axios";
-import { notify } from "@/utils/toast.util";
+import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
 
 export default function Page() {
@@ -25,10 +24,16 @@ export default function Page() {
     }
 
     setIsLoading(true)
+    const id = notify(NotifyType.LOADING, "กำลังส่งข้อมูลไปทางอีเมล")
     
-    await forgotPassword(email)
-    notify(NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
-    notify(NotifyType.ERROR, 'ไม่เจออีเมลล์ในระบบ')
+    const { status } = await forgotPassword(email)
+    if(id){
+      if(status === 201){
+        updateNotify(id,NotifyType.SUCCESS,'ส่งข้อมูลทางอีเมลเสร็จสิ้น')
+      }else{
+        updateNotify(id,NotifyType.ERROR, 'ไม่เจออีเมลล์ในระบบ')
+      }
+    }
     redirect('/login')
   }
 
@@ -48,7 +53,7 @@ export default function Page() {
               </div> : 'ยืนยัน'
             }
         </ConfirmButton>
-        <CancelButton className="w-full hover:bg-gray-600" onClick={() => router.push('/login')}>
+        <CancelButton className="w-full hover:bg-gray-600 py-2" onClick={() => router.push('/login')}>
           ยกเลิก
         </CancelButton>
       </div>

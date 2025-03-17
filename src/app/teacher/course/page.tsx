@@ -51,7 +51,7 @@ export default function Page() {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
+    
     setErrorMessage("");
   
     const id = notify(NotifyType.LOADING, "กำลังสร้างคอร์สเรียน..."); 

@@ -59,4 +59,9 @@ export type ICreateCourse = {
   title: string;
   description: string;
   picture: File | null;
-}
+};
+
+export type IAddPeopleToCourse = {
+  courseId: string;
+  users: string[];
+};
