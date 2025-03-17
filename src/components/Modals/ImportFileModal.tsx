@@ -27,7 +27,7 @@ export const ImportFileModal:React.FC<Props> = ({isOpen, onClose, onClick, onInp
                     <UploadFileExel className="w-full py-4" onInput={onInput}/>
                     
                     <div className="flex flex-row gap-x-4">
-                         <CancelButton className="px-16 hover:bg-gray-100 text-[#64748B] border-border-text-light" onClick={onClose}>
+                         <CancelButton className="px-16  py-4 hover:bg-gray-100 text-[#64748B] border-border-text-light" onClick={onClose}>
                               <p>ยกเลิก</p>
                          </CancelButton>
                          <ConfirmButton className="py-4 px-16 text-pure-white" onClick={onClick}>

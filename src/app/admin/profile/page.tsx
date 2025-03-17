@@ -93,7 +93,7 @@ export default function Setting() {
       setIsEditing(false);
       setIsUpdate(false)
     } else {
-      router.push("/student/profile/update-password");
+      router.push("/admin/profile/update-password");
     }
   };
 
@@ -140,7 +140,7 @@ export default function Setting() {
 
             <CancelButton
               onClick={() => document.getElementById("fileInput")?.click()}
-              className="hover:bg-gray-600">
+              className="hover:bg-gray-600 py-4">
               <p>เปลี่ยนโปรไฟล์</p>
               <input type="file" id="fileInput" onInput={handleFileChange} style={{ display: "none" }} accept="image/png, image/jpg" />
             </CancelButton>

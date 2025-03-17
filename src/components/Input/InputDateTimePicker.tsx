@@ -9,6 +9,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/th";
 import React, { useMemo } from "react";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 interface InputDateTimePickerProps {
   value: string;
@@ -22,8 +24,8 @@ const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
   value,
   onChange,
   name,
-  bgColor = "#2A3A50", // Default bgColor
-  textColor = "#FAFAFA" // Default textColor
+  bgColor = "#2A3A50",
+  textColor = "#FAFAFA"
 }) => {
   const thaiLocaleText = {
     cancelButtonLabel: "ยกเลิก",
@@ -38,7 +40,10 @@ const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
   };
 
   const dayjsValue = useMemo(() => dayjs(value), [value]);
-
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.locale("th"); 
+    
   const handleDateTimeChange = (newValue: Dayjs | null) => {
     if (newValue) {
       onChange(newValue.toISOString(), name);
@@ -56,6 +61,15 @@ const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
           "& .MuiSvgIcon-root": {
             color: "#93C5FD",
           },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+          },
         }}
         slotProps={{
           textField: {
@@ -65,6 +79,7 @@ const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
         }}
         value={dayjsValue}
         localeText={thaiLocaleText}
+        timezone="Asia/Bangkok"
         viewRenderers={{
           hours: renderTimeViewClock,
           minutes: renderTimeViewClock,

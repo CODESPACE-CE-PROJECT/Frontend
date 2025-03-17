@@ -13,12 +13,12 @@ interface Props {
 export default function ScoreTableTeacher({ assignments, assignmentLock, courseId }: Props) {
   return (
     <>
-      <table className="w-full mt-2 table-auto border-spacing-x-4 border-separate text-white" >
+      <table className="w-full mt-4 table-auto border-separate text-white" >
         <thead>
           <tr className="bg-[#161f2e] text-lg ">
-            <th className="p-3 w-[968px] rounded-md text-center">แบบฝึกหัด</th>
-            <th className="p-3 w-[200px] rounded-md text-center">สถานะ</th>
-            <th className="p-3 w-[200px] rounded-md text-center">คะแนน</th>
+            <th className="py-3 w-[968px] rounded-md text-center">แบบฝึกหัด</th>
+            <th className="py-3 w-[200px] rounded-md text-center">สถานะ</th>
+            <th className="py-3 w-[200px] rounded-md text-center">คะแนน</th>
           </tr>
         </thead>
         <tbody>

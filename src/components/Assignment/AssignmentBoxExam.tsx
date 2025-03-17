@@ -1,15 +1,13 @@
 import { IAssignment } from "@/types/assignment";
 import { AssignmentType } from "@/enum/enum";
-// ใช้ Enum จาก IAssignment
 
 interface Props {
-  assignment: IAssignment["assignment"][number];
+  assignment: IAssignment;
   
   isStudentOnSite: boolean;
 }
 
 const AssignmentBox: React.FC<Props> = ({ assignment,  isStudentOnSite }) => {
-  // ตรวจสอบว่าการสอบเป็นรูปแบบ Online หรือ Onsite
   const isExam = assignment.type ===  AssignmentType.EXAMONLINE || assignment.type ===  AssignmentType.EXAMONSITE;
   const isExamActive = !assignment.isLock; // ถ้าการสอบไม่ถูกล็อก แสดงว่ากำลังเปิดสอบ
   const showWarning = isExam && isExamActive && !isStudentOnSite; // นักเรียนไม่ได้อยู่ที่สถานที่สอบ

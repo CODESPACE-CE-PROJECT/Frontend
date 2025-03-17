@@ -1,32 +1,47 @@
-import { AssignmentType } from "@/enum/enum";
+import { AssignmentType, LanguageType } from "@/enum/enum";
 import { AnnounceAssignmentType } from "@/enum/enum";
-import { StateSubmission } from "@/enum/enum";
+import { StateSubmission } from "@/enum/enum"
+import { ITestCase, IConstraint } from "./problem";
+
+export type IProblem = {
+  problemId?: string;
+  title: string;
+  description: string;
+  hint: string;
+  language: LanguageType;
+  revaleCode: string;
+  score: number;
+  isRegex: boolean;
+  isExpire?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  assignmentId?: string;
+  testCases: ITestCase[],
+  constraint: IConstraint[],
+  stateSubmission?: StateSubmission;
+}
 
 export type IAssignment = {
-  assignment: {
-    assignmentId: string;
-    username: string;
-    title: string;
-    type: AssignmentType;
-    isLock: boolean;
-    startAt: Date;
-    expireAt: Date;
-    announceType: AnnounceAssignmentType;
-    announceDate: Date;
-    createdAt: Date;
-    updatedAt: Date;
-    courseId: string;
-    problem: [
-      {
-        problemId: string;
-        score: number;
-        stateSubmission: StateSubmission;
-      }
-    ];
-    totalScore: number;
-  }[];
-  
-};
+  assignmentId: string;
+  username: string;
+  title: string;
+  type: AssignmentType;
+  isLock: boolean;
+  startAt: Date;
+  expireAt: Date;
+  announceType: AnnounceAssignmentType;
+  announceDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  courseId: string;
+  problem: IProblem[];
+  totalScore: number;
+}
+
+export type IAssignmentStudent = {
+  assignment: IAssignment[];
+  dashboard: IDashboard
+}
 
 export type ICreateAssignment = {
   courseId: string;
@@ -73,3 +88,11 @@ export type IAssignmentScore = {
     }[];
   }[];
 };
+
+export type IUpdateAssignment = {
+  title: string;
+  type?: AssignmentType;
+  announceDate: Date;
+  startAt: Date;
+  expireAt: Date;
+}

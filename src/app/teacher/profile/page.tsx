@@ -93,7 +93,7 @@ export default function Setting() {
       setIsEditing(false);
       setIsUpdate(false)
     } else {
-      router.push("/student/profile/update-password");
+      router.push("/teacher/profile/update-password");
     }
   };
 

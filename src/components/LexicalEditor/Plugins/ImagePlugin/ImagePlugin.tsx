@@ -25,6 +25,7 @@ export const ImagePlugin = () => {
                if(status === 201){
                     src = image.imageUrl
                }
+               console.log(src)
           }
 
           editor.update(() => {

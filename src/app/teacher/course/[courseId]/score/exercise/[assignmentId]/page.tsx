@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getAssignmentscore, getAssignment } from "@/actions/assignment";
-import { IAssignmentScore, IAssignment } from "@/types/assignment";
+import { getAssignmentscore } from "@/actions/assignment";
+import { IAssignmentScore } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { TopNav } from "@/components/Navbar/TopNav";
@@ -36,11 +36,9 @@ export default function Score() {
       try {
         setIsLoading(true);
 
-        
         const profileData = await getProfile();
         setProfile(profileData);
 
-        
         const data = await getAssignmentscore(courseId);
         const assignmentsArray: IAssignmentScore["data"] = data.data;
 
@@ -57,7 +55,6 @@ export default function Score() {
           setAssignments(transformedAssignments);
           setFilteredAssignments(transformedAssignments); 
 
-          
           const assignment = transformedAssignments.find(
             (assignment) => assignment.assignmentId === assignmentId
           );
@@ -122,8 +119,7 @@ export default function Score() {
           </div>
 
           {error && <p className="text-red-500 text-center">{error}</p>}
-
-      
+          
           <ScoreUserTable assignments={filteredAssignments} assignmentId={assignmentId} />
         </>
       )}

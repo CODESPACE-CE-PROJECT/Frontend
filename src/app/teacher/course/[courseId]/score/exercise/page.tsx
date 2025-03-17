@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreAssignTable from "@/components/Table/ScoreAssignTable";
-import { getAssignmentscore, getAssignment } from "@/actions/assignment";
+import { getAssignmentscore, getAssignmentByCourseId } from "@/actions/assignment";
 import { IAssignmentScore, IAssignment } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
@@ -63,17 +63,12 @@ export default function Score() {
             );
           }
 
-          const assignmentData = await getAssignment(courseId);
-
-          if (!assignmentData || !assignmentData.data) {
-            setError("Failed to fetch assignment data.");
-            return;
-          }
+          const assignmentData = await getAssignmentByCourseId(courseId);
 
           const lockStatus: { [assignmentId: string]: boolean } = {};
 
-          assignmentData.data.forEach(
-            (assignment: IAssignment["assignment"][number]) => {
+          assignmentData.data?.map(
+            (assignment: IAssignment) => {
               lockStatus[assignment.assignmentId] = assignment.isLock;
             }
           );

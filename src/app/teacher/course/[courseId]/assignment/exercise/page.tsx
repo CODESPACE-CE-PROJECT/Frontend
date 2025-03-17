@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getAssignment } from "@/actions/assignment";
+import { getAssignmentByCourseId } from "@/actions/assignment";
 import {
   IAssignment,
   ICreateAssignment,
@@ -16,16 +16,14 @@ import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
 import { createAssignment, deleteAssignment } from "@/actions/assignment";
 import { AssignmentType } from "@/enum/enum";
-import { UpdatedLockAssignment } from "@/actions/assignment";
+import { updatedLockAssignment } from "@/actions/assignment";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
-import { notify, updateNotify } from "@/utils/toast.util"; // นำเข้า notify ฟังก์ชัน
-import { NotifyType } from "@/enum/enum"; // นำเข้า NotifyType
+import { notify, updateNotify } from "@/utils/toast.util";
+import { NotifyType } from "@/enum/enum";
 
 export default function Assignment() {
   const param = useParams<{ courseId: string }>();
-  const courseId = param.courseId;
-
-  const [assignments, setAssignments] = useState<IAssignment | null>(null);
+  const [assignments, setAssignments] = useState<IAssignment[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,31 +34,20 @@ export default function Assignment() {
     announceDate: new Date(""),
     startAt: new Date(""),
     expireAt: new Date(""),
-    courseId: courseId,
+    courseId: param.courseId,
   });
 
-  // Function to fetch assignments
-  const fetchAssignments = async () => {
-    const profile: IProfile = await getProfile();
-    setProfile(profile);
-    const data = await getAssignment(courseId);
-
-    const filteredAssignments = data.data?.filter(
-      (assignment: IAssignment["assignment"][number]) =>
-        assignment.type === AssignmentType.EXERCISE
-    );
-    if (filteredAssignments.length > 0) {
-      setAssignments({ assignment: filteredAssignments });
-    } else {
-      console.log("No assignment:");
-    }
-
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchAssignments = async () => {
+      const profile: IProfile = await getProfile();
+      setProfile(profile);
+      const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+      const filteredAssignments = data.filter((item) => item.type === AssignmentType.EXERCISE);
+      setAssignments(filteredAssignments)
+      setLoading(false);
+    };
     fetchAssignments();
-  }, [courseId, param.courseId]);
+  }, [param.courseId]);
 
   const handleInputChange = (value: string | number, name: string) => {
     setFormData((prev) => {
@@ -74,7 +61,7 @@ export default function Assignment() {
   const handleSubmit = async () => {
     const assignmentData = {
       ...formData,
-      courseId,
+      courseId: param.courseId,
     };
 
     const id = notify(NotifyType.LOADING, "กำลังสร้างแบบฝึกหัด...");
@@ -85,8 +72,7 @@ export default function Assignment() {
       if (id) {
         updateNotify(id, NotifyType.SUCCESS, "สร้างแบบฝึกหัดสำเร็จ!");
       }
-      // Fetch assignments again after creating a new one
-      await fetchAssignments(); // Re-fetch assignments after creation
+
     } catch (error) {
       console.log("Error creating assignment:", error);
       if (id) {
@@ -95,39 +81,32 @@ export default function Assignment() {
     }
   };
 
-  const handleToggle = async (assignmentData: IUpdateLock) => {
-    await UpdatedLockAssignment(assignmentData);
-    setAssignments((prevAssignments) => {
-      if (!prevAssignments) return prevAssignments;
-      const updatedAssignments = prevAssignments.assignment.map((assignment) =>
-        assignment.assignmentId === assignmentData.assignmentId
-          ? { ...assignment, isLock: assignmentData.isLock }
-          : assignment
-      );
-      return { assignment: updatedAssignments };
-    });
+  const handleToggle = async (updateForm: IUpdateLock) => {
+    const id = notify(NotifyType.LOADING, "กำลังแก้ไขแบบฝึกหัด")
+    const { status } = await updatedLockAssignment(updateForm);
+    if (id) {
+      if (status === 200) {
+        const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+        const filteredAssignments = data.filter((item) => item.type === AssignmentType.EXERCISE);
+        setAssignments(filteredAssignments)
+        updateNotify(id, NotifyType.SUCCESS, "แก้ไขแบบฝึกหัดสำเร็จ")
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการแก้ไขแบบฝึกหัด")
+      }
+    }
   };
 
   const handleDelete = async (assignmentId: string) => {
-    const id = notify(NotifyType.LOADING, "กำลังลบแบบฝึกหัด...");
-
-    try {
-      await deleteAssignment(assignmentId);
-      setAssignments((prevAssignments) => {
-        if (!prevAssignments) return prevAssignments;
-        const updatedAssignments = prevAssignments.assignment.filter(
-          (assignment) => assignment.assignmentId !== assignmentId
-        );
-        return { assignment: updatedAssignments };
-      });
-
-      if (id) {
-        updateNotify(id, NotifyType.SUCCESS, "ลบแบบฝึกหัดสำเร็จ!");
-      }
-    } catch (error) {
-      console.log("Error deleting assignment:", error);
-      if (id) {
-        updateNotify(id, NotifyType.ERROR, "ไม่สามารถลบแบบฝึกหัดได้");
+    const id = notify(NotifyType.LOADING, "กำลังลบแบบฝึกหัด");
+    const {status} = await deleteAssignment(assignmentId);
+    if (id) {
+      if(status === 200){
+        const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+        const filteredAssignments = data.filter((item) => item.type === AssignmentType.EXERCISE);
+        setAssignments(filteredAssignments)
+        updateNotify(id, NotifyType.SUCCESS, "ลบแบบฝึกหัดสำเร็จ");
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผลาดในการลบแบบฝึกหัด");
       }
     }
   };
@@ -152,8 +131,8 @@ export default function Assignment() {
 
           <div className="flex justify-between items-center">
             <NavigationTab
-              courseId={courseId}
-              basePath={`/teacher/course/${courseId}/assignment`}
+              courseId={param.courseId}
+              basePath={`/teacher/course/${param.courseId}/assignment`}
             />
             <ConfirmButton
               onClick={() => setIsModalOpen(true)}
@@ -166,9 +145,9 @@ export default function Assignment() {
           <div className="mt-4">
             {assignments && (
               <AssignmentTableTeacher
-                assignments={assignments}
+                data={assignments}
                 onToggle={handleToggle}
-                handleDelete={handleDelete}  
+                handleDelete={handleDelete}
               />
             )}
           </div>

@@ -2,7 +2,8 @@ import { StateSubmission } from "@/enum/enum";
 import { LanguageType } from "@/enum/enum";
 import { ConstraintType } from "@/enum/enum";
 import { ISubmission } from "@/types/submission";
-export interface IProblem {
+
+export type IProblem = {
   problemId: string;
   title: string;
   description: string;
@@ -16,27 +17,28 @@ export interface IProblem {
   updatedAt: string;
   assignmentTitle: string;
   courseTitle: string;
+  courseId: string,
   assignmentId: string;
   testCases: ITestCase[],
   constraint: IConstraint[],
-  submission: ISubmission[],
-  other: IOtherProblem[]
+  submission?: ISubmission[],
+  other?: IOtherProblem[]
 }
 
 export type ITestCase = {
-  testCaseId: string;
+  testCaseId?: string;
   input: string;
   output: string;
   isHidden: boolean;
-  problemId: string;
+  problemId?: string;
 };
 
 export type IConstraint = {
-  constraintId: string;
-  type: string;
+  constraintId?: string;
+  type: ConstraintType;
   keyword: string;
   quantities: number;
-  problemId: string;
+  problemId?: string;
 };
 
 export type IOtherProblem = {
@@ -55,15 +57,20 @@ export type ICreateProblems = {
     revaleCode: string;
     isRegex: boolean;
     score: number;
-    testcase: {
-      input: string;
-      output: string;
-      isHidden: boolean;
-    }[];
-    constraint: {
-      type: ConstraintType; 
-      keyword: string;
-      quantities: number;
-    }[];
+    testCases: ITestCase[];
+    constraint: IConstraint[];
   }[];
 };
+
+export type IUpdateProblem = {
+  problemId?:string;
+  title: string;
+  description: string;
+  hint: string;
+  language: LanguageType;
+  revaleCode: string;
+  isRegex: boolean;
+  score: number;
+  testCases: ITestCase[];
+  constraint: IConstraint[];
+}

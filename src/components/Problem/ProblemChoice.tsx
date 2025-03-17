@@ -13,7 +13,7 @@ export const ProblemChoice: React.FC<Props> = ({ index, data, isSelect }) => {
      const pathname = usePathname()
      return <>
           <Link
-           href={`/${pathname.includes('student') ? 'student': 'teacher'}/problem/${data?.problemId}`}
+               href={`/${pathname.includes('student') ? 'student' : 'teacher'}/problem/${data?.problemId}`}
           >
                {
                     data?.stateSubmission === StateSubmission.PASS ? (<div className={`flex flex-row items-center gap-x-1 p-4 text-black bg-green-l rounded-md ${!isSelect ? 'hover:bg-green-200 cursor-pointer px-5' : ''}`}>

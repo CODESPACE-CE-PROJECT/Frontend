@@ -100,7 +100,7 @@ export const CreateUserModal:React.FC<Props> = ({onSubmit, isOpen, onClose, crea
 
 
                     <div className="flex flex-row gap-x-6">
-                         <CancelButton className="text-[#64748B] border-border-text-light" onClick={() => {onClose(); setIsSubmited(false)}}>
+                         <CancelButton className="text-[#64748B] py-3 border-border-text-light" onClick={() => {onClose(); setIsSubmited(false)}}>
                               ยกเลิก
                          </CancelButton>
                          <ConfirmButton className="text-pure-white px-16" onClick={() => {handleSubmit()}}>

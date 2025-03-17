@@ -1,14 +1,13 @@
-import { LanguageType } from "@/enum/enum";
 import { Editor, Monaco } from "@monaco-editor/react"
 import { Loading } from "@/components/Loading/Loading";
 
 interface Props {
-     language?: LanguageType,
-     sourceCode?: string,
-     onChange?: (value: string | undefined) => void
+     value?: string,
+     onChange?: (value: string | undefined) => void,
+     readOnly: boolean
 }
 
-export const MonacoTextEditor: React.FC<Props> = ({ language, sourceCode, onChange }) => {
+export const MonacoTestCase: React.FC<Props> = ({ value, onChange, readOnly }) => {
      const handleEditorWillMount = (monaco: Monaco) => {
           monaco.editor.defineTheme("custom", {
                base: "vs-dark",
@@ -20,13 +19,10 @@ export const MonacoTextEditor: React.FC<Props> = ({ language, sourceCode, onChan
                     },
                ],
                colors: {
-                    "editor.forefround": "#16233A",
-                    "editor.background": "#16233A",
-                    "editor.selectionBackground": "#2A3A50",
-                    "editor.lineHighlightBackground": "#2A3A50",
+                    "editor.forefround": "#161D2D",
+                    "editor.background": "#161D2D",
                     "editorCursor.foreground": "#F8F8F0",
                     "editorWhitespace.foreground": "#3B3A32",
-                    "editorIndentGuide.activeBackground": "#9D550FB0",
                },
           });
      };
@@ -45,16 +41,18 @@ export const MonacoTextEditor: React.FC<Props> = ({ language, sourceCode, onChan
           },
           selectOnLineNumbers: true,
           roundedSelection: false,
-          readOnly: false,
+          readOnly: readOnly,
           cursorStyle: "line",
           automaticLayout: true,
           lineNumbers: "on",
           lineNumbersMinChars: 3,
           padding: {
-               top: 16,
+               top: 10,
+          },
+          minimap: {
+               enabled: false,
           },
      };
-
 
      const handleEditorOnMount = (_editor: any, monaco: Monaco) => {
           monaco.editor.setTheme("custom");
@@ -62,10 +60,9 @@ export const MonacoTextEditor: React.FC<Props> = ({ language, sourceCode, onChan
 
      return <Editor
           options={options}
-          language={language === LanguageType.C || language === LanguageType.CPP ? 'cpp' : language?.toLowerCase()}
-          value={sourceCode}
+          value={value}
           loading={<Loading />}
-          className="rounded-md h-screen md:h-full  bg-[#16233A] border border-transparent p-1 py-3"
+          className="h-36 bg-[#16233A] border border-transparent overflow-hidden"
           onChange={onChange}
           beforeMount={handleEditorWillMount}
           onMount={handleEditorOnMount}

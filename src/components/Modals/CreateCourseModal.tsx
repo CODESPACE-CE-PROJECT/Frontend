@@ -144,13 +144,13 @@ export const CreateCourseModal: React.FC<Props> = ({
           <div className="flex flex-row gap-x-6">
             <CancelButton
               onClick={onClose}
-              className="hover:bg-[#f3f4f6] border-border-text-light w-[160px] h-[54px]"
+              className="hover:bg-[#f3f4f6] border-border-text-light py-3"
             >
               ยกเลิก
             </CancelButton>
             <ConfirmButton
               onClick={onSubmit}
-              className="text-pure-white w-[160px] h-[54px]"
+              className="text-pure-white px-11"
             >
               สร้าง
             </ConfirmButton>
