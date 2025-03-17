@@ -30,6 +30,18 @@ export const textLanguage = (language:LanguageType | undefined) => {
      }
 }
 
+export const convertEnumLanguage = (language: string) => {
+     if (language === "Python"){
+          return LanguageType.PYTHON
+     } else if(language === "C") {
+          return LanguageType.C
+     } else if(language === "Cpp"){
+          return LanguageType.CPP
+     } else {
+          return LanguageType.JAVA
+     }
+}
+
 export const getRole = (role: Role | undefined) => {
      if (role === Role.ADMIN) {
           return "admin"

@@ -44,7 +44,7 @@ export const UpdateUserModal:React.FC<Props> = ({onSubmit, isOpen, onClose, upda
                          เพิ่มสมาชิกในโรงเรียน
                     </p>
 
-                    <UploadFile className="w-full py-4" text="เลือกรูปภาพโปรไฟล์ของผู้ใช้งาน" onInput={handleFileInputChange} imageUrl={updateForm.pictureUrl}/>
+                    <UploadFile className="w-full py-2" text="เลือกรูปภาพโปรไฟล์ของผู้ใช้งาน" onInput={handleFileInputChange} imageUrl={updateForm.pictureUrl}/>
                     <div className="flex flex-row justify-start gap-x-4 w-full">
                          <div className="flex flex-col items-start w-full gap-y-2">
                               <Label text="ประเภท" isRequired={true} />
@@ -104,7 +104,7 @@ export const UpdateUserModal:React.FC<Props> = ({onSubmit, isOpen, onClose, upda
 
 
                     <div className="flex flex-row gap-x-6">
-                         <CancelButton className="text-[#64748B] border-border-text-light" onClick={() => {onClose(updateForm.username); setIsSubmited(false)}}>
+                         <CancelButton className="text-[#64748B] py-3 border-border-text-light" onClick={() => {onClose(updateForm.username); setIsSubmited(false)}}>
                               ยกเลิก
                          </CancelButton>
                          <ConfirmButton className="text-pure-white px-16" onClick={() => {handleSubmit()}}>

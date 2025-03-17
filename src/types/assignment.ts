@@ -40,16 +40,7 @@ export type IAssignment = {
 
 export type IAssignmentStudent = {
   assignment: IAssignment[];
-  dashboard: {
-    maxScore: number,
-    minScore: number,
-    averageScore: number,
-    totalStudent: number,
-    range: {
-      range: string,
-      count: number
-    }[]
-  }
+  dashboard: IDashboard
 }
 
 export type ICreateAssignment = {

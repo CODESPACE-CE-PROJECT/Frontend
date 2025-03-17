@@ -65,15 +65,10 @@ export default function Score() {
 
           const assignmentData = await getAssignmentByCourseId(courseId);
 
-          if (!assignmentData || !assignmentData.data) {
-            setError("Failed to fetch assignment data.");
-            return;
-          }
-
           const lockStatus: { [assignmentId: string]: boolean } = {};
 
-          assignmentData.data.forEach(
-            (assignment: IAssignment["assignment"][number]) => {
+          assignmentData.data?.map(
+            (assignment: IAssignment) => {
               lockStatus[assignment.assignmentId] = assignment.isLock;
             }
           );

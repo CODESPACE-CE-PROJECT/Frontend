@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 interface Props {
   courseId: string;
-  basePath: string; // กำหนด path หลักของหน้าที่ใช้ component นี้
+  basePath: string;
 }
 
 export default function NavigationTab({ courseId, basePath }: Props) {
@@ -15,22 +15,22 @@ export default function NavigationTab({ courseId, basePath }: Props) {
     <div className="relative w-full">
       <div className="flex gap-12 pl-4 mt-6">
         <Link href={`${basePath}/exercise`}>
-          <h1
+          <p
             className={`text-lg font-semibold cursor-pointer px-4 py-2 pb-2 hover:bg-[#3049724D]${
               pathname.includes("exercise") ? "text-white border-b-4 border-[#5572FA]" : "text-white"
             }`}
           >
             แบบฝึกหัด
-          </h1>
+          </p>
         </Link>
         <Link href={`${basePath}/exam`}>
-          <h1
+          <p
             className={`text-lg font-semibold cursor-pointer px-4 py-2 pb-2 hover:bg-[#3049724D]${
               pathname.includes("exam") ? "text-white border-b-4 border-[#5572FA]" : "text-white"
             }`}
           >
             การทดสอบ
-          </h1>
+          </p>
         </Link>
       </div>
     </div>

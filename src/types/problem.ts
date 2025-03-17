@@ -17,6 +17,7 @@ export type IProblem = {
   updatedAt: string;
   assignmentTitle: string;
   courseTitle: string;
+  courseId: string,
   assignmentId: string;
   testCases: ITestCase[],
   constraint: IConstraint[],

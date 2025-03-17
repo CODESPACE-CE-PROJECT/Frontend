@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { ICreateProblems, IProblem, IUpdateProblem } from "@/types/problem";
-import { createProblem } from "@/actions/problem";
+import { IConstraint, ICreateProblems, ITestCase, IUpdateProblem } from "@/types/problem";
+import { createProblem, deleteProblemById, updateProblemById } from "@/actions/problem";
 import { ProblemSubItem } from "@/components/Problem/ProblemSubItem";
-import { LanguageType } from "@/enum/enum";
-import { ConstraintType } from "@/enum/enum";
+import { LanguageType, NotifyType } from "@/enum/enum";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
@@ -16,8 +15,9 @@ import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
 import InputDateTimePicker from "@/components/Input/InputDateTimePicker";
 import { IAssignment, IUpdateAssignment } from "@/types/assignment";
-import { getAssignmentByCourseId } from "@/actions/assignment";
+import { getAssignmentByCourseId, updateAssignmentById } from "@/actions/assignment";
 import { useRouter } from "next/navigation"
+import { notify, updateNotify } from "@/utils/toast.util";
 
 const Page = () => {
   const router = useRouter()
@@ -36,6 +36,8 @@ const Page = () => {
   const [updateProblemForm, setUpdateProblemForm] = useState<IUpdateProblem[]>([])
   const [profile, setProfile] = useState<IProfile>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isUpdateAssignment, setIsUpdateAssignment] = useState<boolean>(false)
+  const [isUpdateProblem, setIsUpdateProblem] = useState<boolean>(false)
 
   const deleteSubItem = useCallback((index: number, type: "create" | "update", problemId: string | undefined) => {
     if (type === 'update' && problemId) {
@@ -56,16 +58,18 @@ const Page = () => {
       ...prev,
       [name]: value
     }))
+    setIsUpdateAssignment(true)
   }
 
   const handleOnChangeProblem = useCallback(
-    (value: string | number, name: string, type: "create" | "update", index: number) => {
+    (value: string | number | boolean, name: string, type: "create" | "update", index: number) => {
       if (type === "update") {
         setUpdateProblemForm((prev) => {
           const updated = [...prev];
           updated[index] = { ...updated[index], [name]: value };
           return updated;
         });
+        setIsUpdateProblem(true)
       } else if (type === "create") {
         setCreateProblemForm((prev) => ({
           ...prev,
@@ -98,11 +102,120 @@ const Page = () => {
     }
   };
 
+  const handleConstraintChange = (item: IConstraint[], type: "create" | "update", index: number) => {
+    if(type === "update"){
+      setUpdateProblemForm((prev) => {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], "constraint": item };
+        return updated;
+      });
+    }else if(type === "create"){
+       setCreateProblemForm((prev) => ({
+          ...prev,
+          problem: prev.problem.map((value, i) =>
+            i === index ? { ...value, "constraint": item } : value
+          ),
+       }));
+    }
+  }
+
+  const handleTestCaseChange = (item: ITestCase[], type: "create" | "update", index: number) => {
+    if(type === "update"){
+      console.log(item)
+      setUpdateProblemForm((prev) => {
+        const updated = [...prev]
+        updated[index] = { ...updated[index], "testCases": item}
+        return updated
+      })
+    } else if (type === "create") {
+      setCreateProblemForm((prev) => ({
+        ...prev,
+        problem: prev.problem.map((value, i) =>
+          i === index ? { ...value, "testCases": item } : value
+        ),
+     }));
+    }
+  }
+
   const handleSubmit = async () => {
-    console.log(updateProblemForm)
-    console.log(deleteProblem)
-    console.log(createProblemForm)
-    console.log(updateAssignmentForm)
+      if(isUpdateAssignment){
+        const id = notify(NotifyType.LOADING, "กำลังแก้ไขข้อมูลแบบฝึกหัด")
+        const {status} = await updateAssignmentById(param.assignmentId, updateAssignmentForm)
+        if(id){
+          if(status === 200) {
+            updateNotify(id, NotifyType.SUCCESS, "แก้ไขข้อมูลแบบฝึกหัดเสร็จสิ้น")
+          }else{
+            updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการแก้ไขข้อมูลแบบฝึกหัด")
+          }
+        }
+      }
+      if(isUpdateProblem && updateProblemForm.length > 0) {
+        const id = notify(NotifyType.LOADING, "กำลังแก้ไขข้อมูลข้อย่อย")
+        const updatePromises = updateProblemForm.map(item => {
+          if(item.problemId){
+            const updateProblem: IUpdateProblem = {
+              title: item.title,
+              hint: item.hint,
+              description: item.description,
+              isRegex: item.isRegex,
+              language: item.language,
+              revaleCode: item.revaleCode,
+              score: item.score,
+              testCases: item.testCases.map((testcase) => {
+                return {
+                  input: testcase.input,
+                  output: testcase.output,
+                  isHidden: testcase.isHidden
+                }
+              }),
+              constraint: item.constraint.map((constraint) => {
+                return {
+                    type: constraint.type,
+                    keyword: constraint.keyword,
+                    quantities: 0
+                }
+              })
+            }
+            return updateProblemById(item.problemId, updateProblem)
+          }
+          return
+        }
+        );
+        if(id){
+          Promise.all(updatePromises).then((result) => {
+            const allUpdatedProblem = result.every(res => res && res.status === 200);
+            updateNotify(id, allUpdatedProblem ? NotifyType.SUCCESS : NotifyType.ERROR,
+              allUpdatedProblem ? "แก้ไขข้อย่อยเสร็จสิ้น" : "เกิดข้อผิดพลาดในการแก้ไขข้อย่อย"
+            );
+          })
+        }
+      }
+      if(createProblemForm.problem.length > 0) {
+        const id = notify(NotifyType.LOADING, "กำลังสร้างข้อย่อย")
+        const {status} = await createProblem(createProblemForm)
+        if(id){
+          if(status === 201){
+            updateNotify(id, NotifyType.SUCCESS, 'สร้างข้อย่อยสำเร็จ')
+          }else{
+            updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลากในการสร้างข้อย่อย")
+          }
+        }
+      }
+      if(deleteProblem && deleteProblem?.length > 0){
+        const id = notify(NotifyType.LOADING, "กำลังลบข้อย่อย")
+        const deletePromise = deleteProblem.map((item) => {
+          return deleteProblemById(item)
+        })
+        if(id){
+          Promise.all(deletePromise).then((result) => {
+            const allDeleteProblem = result.every(res => res && res.status === 200);
+            updateNotify(id, allDeleteProblem ? NotifyType.SUCCESS : NotifyType.ERROR,
+              allDeleteProblem ? "ลบข้อย่อยเสร็จสิ้น" : "เกิดข้อผิดพลาดในการลบข้อย่อย"
+            );
+          })
+        }
+      }
+      router.back()
   };
 
   const memoizedProblemSubItem = useMemo(() => {
@@ -112,6 +225,8 @@ const Page = () => {
         createData={createProblemForm.problem}
         deleteSubItem={deleteSubItem}
         onChange={handleOnChangeProblem}
+        onConstraintChange={handleConstraintChange}
+        onTestCaseChange={handleTestCaseChange}
       />
     );
   }, [updateProblemForm, createProblemForm.problem, deleteSubItem, handleOnChangeProblem]);
@@ -159,7 +274,7 @@ const Page = () => {
             <CancelButton className="hover:bg-gray-600" onClick={() => router.back()}>
               <p>ยกเลิก</p>
             </CancelButton>
-            <ConfirmButton onClick={handleSubmit} className="px-11">
+            <ConfirmButton onClick={handleSubmit} className="px-11" disabled={!isUpdateAssignment && !isUpdateProblem && !deleteProblem && createProblemForm.problem.length === 0}>
               <p>บันทึก</p>
             </ConfirmButton>
           </div>

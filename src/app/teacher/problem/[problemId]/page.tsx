@@ -95,7 +95,7 @@ export default function Page() {
      ) : (<div className="flex flex-col p-10 pb-8 w-full gap-y-6">
           <TopNav disableNotification={false} imageUrl={profile?.pictureUrl} role={profile?.role} gender={profile?.gender}>
                <div className="flex flex-row items-center gap-x-3">
-                    <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
+                    <div className="cursor-pointer hover:text-primary" onClick={() => router.push(`/teacher/course/${problem?.courseId}/assignment/exercise`)}>
                          <ArrowBackIosNewRoundedIcon />
                     </div>
                     <div className="flex flex-row items-center gap-2">
@@ -132,7 +132,9 @@ export default function Page() {
                     {
                          indexTab === 1 ? (<>
                               <ProblemDescription title={problem?.title} value={problem?.description} />
-                              <ProblemConstraint data={problem?.constraint} />
+                              {
+                                   problem?.constraint && <ProblemConstraint data={problem?.constraint} />
+                              }
                               {
                                    problem?.testCases.map((item, index) =>
                                         <ProblemTestCase key={index} testCase={item} index={index + 1} submissionResult={submission?.result[index]} />

@@ -38,7 +38,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ data, onToggle, handleDelete 
               <td>
                 <div className="flex flex-row gap-x-4 items-center">
                   <div className={`p-2 ${item.announceType === AnnounceAssignmentType.ANNOUNCED ? 'bg-[#EF4343]': 'bg-white text-black'} rounded-full`}>
-                    <CampaignIcon fontSize="inherit" className="size-7" />
+                    <CampaignIcon fontSize="medium" />
                   </div>
                   <p>{index + 1}. {item.title}</p>
                 </div>

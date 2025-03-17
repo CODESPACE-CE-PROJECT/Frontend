@@ -70,7 +70,7 @@ export default function Score() {
           const lockStatus: { [assignmentId: string]: boolean } = {};
 
           assignmentData.data.forEach(
-            (assignment: IAssignment["assignment"][number]) => {
+            (assignment: IAssignment) => {
               lockStatus[assignment.assignmentId] = assignment.isLock;
             }
           );

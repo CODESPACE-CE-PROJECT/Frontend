@@ -41,10 +41,10 @@ export default function ScoreTableTeacher({ assignments }: Props) {
 
   return (
     <div>
-      <table className="w-full border-separate border-spacing-2 ">
+      <table className="w-full border-separate mt-4">
         <thead>
           <tr className="bg-[#161f2e] text-white text-lg mb-2 w-[300px]">
-            <th className="p-3 w-96 rounded-xl">ชื่อผู้เรียน</th>
+            <th className="p-3 w-96 rounded-lg">ชื่อผู้เรียน</th>
             {assignments.map((assignment) => (
               <th
                 key={assignment.assignmentId}
@@ -53,14 +53,14 @@ export default function ScoreTableTeacher({ assignments }: Props) {
                 {assignment.title}
               </th>
             ))}
-            <th className="p-3 w-40 rounded-xl">รวม</th>
+            <th className="p-3 w-40 rounded-lg">รวม</th>
           </tr>
         </thead>
         <tbody>
-          {[...studentMap.entries()].map(([username, student]) => (
+          {[...studentMap.entries()].map(([username, student], index) => (
             <tr key={username} className="text-center">
-              <td className="p-3">
-                {student.firstName} {student.lastName}
+              <td className="p-3 text-left">
+                {index+1}. {student.firstName} {student.lastName}
               </td>
               {student.scores.map((score, index) => (
                 <td key={index} className="p-3">

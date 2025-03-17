@@ -1,7 +1,7 @@
 "use server";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { ICreateAssignment, IUpdateLock } from "@/types/assignment";
+import { ICreateAssignment, IUpdateAssignment, IUpdateLock } from "@/types/assignment";
 import { getToken } from "@/lib/session";
 
 export const getAssignmentByCourseId = async (courseId: string) => {
@@ -76,6 +76,21 @@ export const createAssignment = async (formData: ICreateAssignment) => {
   return response.data;
 };
 
+export const updateAssignmentById = async (id: string, updateForm: IUpdateAssignment) => {
+  const token = await getToken()
+  return await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${id}`, updateForm, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => ({
+    status: res.status,
+    data: res.data.data
+  })).catch((err: AxiosError) => ({
+    status: err.status,
+    data: err.response?.data
+  }))
+}
+
 export const deleteAssignment = async (assignmentId: string) => {
 
   const token = await getToken();
@@ -87,7 +102,7 @@ export const deleteAssignment = async (assignmentId: string) => {
   }).then((res) => ({
     status: res.status,
     data: res.data.data
-  })).catch((err:AxiosError) => ({
+  })).catch((err: AxiosError) => ({
     status: err.status,
     data: err.response?.data
   }));

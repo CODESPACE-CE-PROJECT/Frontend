@@ -9,17 +9,20 @@ import { TextField } from "@/components/Input/TextField/TextField";
 import { Dropdown } from "@/components/Input/Dropdown";
 import { LexicalEditor } from "@/components/LexicalEditor/LexicalEditor";
 import { IProblem } from "@/types/assignment";
-import { textLanguage } from "@/utils/text.util";
+import { convertEnumLanguage, textLanguage } from "@/utils/text.util";
 import { ProblemCreateTestCase } from "@/components/Problem/ProblemCreateTestCase";
+import { IConstraint, ITestCase } from "@/types/problem";
 
 interface Props {
   updateData?: IProblem[],
   createData?: IProblem[],
-  onChange: (value: string | number, name:string, type: "create" | "update", index: number) => void,
-  deleteSubItem: (index: number, type: "create" | "update", problemId: string | undefined) => void;
+  onChange: (value: string | number | boolean, name: string, type: "create" | "update", index: number) => void,
+  deleteSubItem: (index: number, type: "create" | "update", problemId: string | undefined) => void,
+  onConstraintChange: (item: IConstraint[], type: "create" | "update", index: number) => void,
+  onTestCaseChange: (item: ITestCase[], type: "create" | "update", index: number) => void,
 }
 
-export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, deleteSubItem, onChange }) => {
+export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, deleteSubItem, onChange, onConstraintChange, onTestCaseChange }) => {
   const [expanded, setExpanded] = useState<{
     index: number,
     type: "update" | "create",
@@ -29,7 +32,7 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
     setExpanded((prev) => ({
       index: index,
       type: type,
-      isOpen: prev?.index === index || prev?.type === type ? !prev?.isOpen: true
+      isOpen: prev?.index === index || prev?.type === type ? !prev?.isOpen : true
     }));
   };
   return (
@@ -52,7 +55,7 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
             </div>
           </div>
 
-          { expanded?.isOpen &&  expanded?.type === "update" && expanded?.index === index && (
+          {expanded?.isOpen && expanded?.type === "update" && expanded?.index === index && (
             <>
               <div className="text-white font-sans flex justify-between my-5 gap-x-6">
                 <div className="flex flex-col items-start flex-1">
@@ -74,7 +77,7 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
                       value={textLanguage(item.language)}
                       options={["Python", "Java", "C", "Cpp"]}
                       className="z-50"
-                      onChange={(value, name) => onChange(value, name, "update", index)}
+                      onChange={(value, name) => onChange(convertEnumLanguage(value), name, "update", index)}
                     />
                   </div>
                   <div className="flex flex-col items-start">
@@ -112,28 +115,16 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
 
               <ProblemCreateConstraint
                 data={item.constraint}
-                onChange={() => { }}
+                onChange={(item) => onConstraintChange(item, "update", index)}
               />
 
-              <div className="my-4 flex items-center rounded-lg justify-between">
-                <span className="text-white font-medium text-lg">ตัวอย่าง</span>
-                <div className="space-x-3 flex">
-                  <CancelButton
-                    className="py-2 px-4 hover:bg-gray-600"
-                    onClick={() => { }}
-                  >
-                    เพิ่มตัวอย่าง
-                  </CancelButton>
-                </div>
-              </div>
+              <ProblemCreateTestCase
+                data={item.testCases}
+                onChange={(item) => onTestCaseChange(item, "update", index)}
+                onChangeRegex={() => onChange(!item.isRegex, "isRegex", "update", index)}
+                isRegex={item.isRegex}
+              />
 
-              <div className="flex flex-col gap-y-3">
-                {
-                  item.testCases.map((testcase, index) => (
-                    <ProblemCreateTestCase data={testcase} index={index + 1} key={testcase.testCaseId} isRegex={item.isRegex} />
-                  ))
-                }
-              </div>
             </>
           )}
         </div>
@@ -157,7 +148,7 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
             </div>
           </div>
 
-          { expanded?.isOpen && expanded?.type === "create" && expanded?.index === index  && (
+          {expanded?.isOpen && expanded?.type === "create" && expanded?.index === index && (
             <>
               <div className="text-white font-sans flex justify-between my-5 gap-x-6">
                 <div className="flex flex-col items-start flex-1">
@@ -167,7 +158,7 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
                     value={item?.title}
                     className="mt-2 py-2 px-3 text-white rounded-md"
                     placeholder="หัวข้อ"
-                    onChange={(value, name) => onChange(value, name, "create",index)}
+                    onChange={(value, name) => onChange(value, name, "create", index)}
                   />
                 </div>
 
@@ -179,7 +170,7 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
                       name="language"
                       options={["Python", "Java", "C", "Cpp"]}
                       className="z-50"
-                      onChange={(value, name) => onChange(value, name, "create", index)}
+                      onChange={(value, name) => onChange(convertEnumLanguage(value), name, "create", index)}
                     />
                   </div>
                   <div className="flex flex-col items-start">
@@ -217,28 +208,15 @@ export const ProblemSubItem: React.FC<Props> = ({ updateData, createData, delete
 
               <ProblemCreateConstraint
                 data={item.constraint}
-                onChange={(constraint) => console.log(constraint)}
+                onChange={(item) => onConstraintChange(item, "create", index)}
               />
 
-              <div className="my-4 flex items-center rounded-lg justify-between">
-                <span className="text-white font-medium text-lg">ตัวอย่าง</span>
-                <div className="space-x-3 flex">
-                  <CancelButton
-                    className="py-2 px-4 hover:bg-gray-600"
-                    onClick={() => { }}
-                  >
-                    เพิ่มตัวอย่าง
-                  </CancelButton>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-y-3">
-                {
-                  item.testCases.map((testcase, index) => (
-                    <ProblemCreateTestCase data={testcase} index={index + 1} key={testcase.testCaseId} isRegex={item.isRegex} />
-                  ))
-                }
-              </div>
+              <ProblemCreateTestCase
+                data={item.testCases}
+                onChange={(item) => onTestCaseChange(item, "create", index)}
+                onChangeRegex={() => onChange(!item.isRegex, "isRegex", "create", index)}
+                isRegex={item.isRegex}
+              />
             </>
           )}
         </div>

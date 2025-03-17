@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getAssignmentByCourseId } from "@/actions/assignment";
-import { IAssignmentStudent, IDashboard} from "@/types/assignment";
+import { IAssignment, IAssignmentStudent, IDashboard } from "@/types/assignment";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreTable from "@/components/Table/ScoreTable";
 import { TopNav } from "@/components/Navbar/TopNav";
@@ -11,92 +11,34 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import ScoreChart from "@/components/Dashboard/ScoreChart";
+import { AssignmentType } from "@/enum/enum";
 
 export default function Score() {
   const params = useParams<{ courseId: string }>();
   const { courseId } = params;
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [assignments, setAssignments] = useState<IAssignmentStudent>();
+  const [assignments, setAssignments] = useState<IAssignment[]>();
   const [totalScore, setTotalScore] = useState<number>(0);
   const [maxTotalScore, setMaxTotalScore] = useState<number>(0);
   const [profile, setProfile] = useState<IProfile>();
-  const [dashboard, setDashboard] = useState<IDashboard>({
-    maxScore: 0,
-    minScore: 0,
-    averageScore: 0,
-    totalStudent: 0,
-    range: [
-      {
-        range: "0-5",
-        count: 0,
-      },
-      {
-        range: "6-10",
-        count: 0,
-      },
-      {
-        range: "11-15",
-        count: 0,
-      },
-      {
-        range: "16-20",
-        count: 0,
-      },
-      {
-        range: "21-25",
-        count: 0,
-      },
-    ],
-  });
+  const [dashboard, setDashboard] = useState<IDashboard>();
 
   useEffect(() => {
     const fetchAssignments = async () => {
       setLoading(true);
       if (courseId) {
-        try {
-          const data = await getAssignmentByCourseId(courseId);
-          const profile: IProfile = await getProfile();
-          setProfile(profile);
-          if (data?.data?.assignment && Array.isArray(data.data.assignment)) {
-            const exerciseAssignments = data.data.assignment.filter(
-              (assignment: IAssignment["assignment"][number]) =>
-                assignment.type === "EXAMONSITE" ||
-                assignment.type === "EXAMONLINE"
-            );
-
-            setAssignments(exerciseAssignments ?? []);
-            setDashboard(data.data.dashboard);
-            const overallTotalScore = exerciseAssignments.reduce(
-              (acc: number, assignment: IAssignment["assignment"][number]) =>
-                acc + (assignment.totalScore ?? 0),
-              0
-            );
-
-            setTotalScore(overallTotalScore);
-
-            const overallMaxTotalScore = exerciseAssignments.reduce(
-              (acc: number, assignment: IAssignment["assignment"][number]) =>
-                acc +
-                (assignment.problem?.reduce(
-                  (sum: number, problem) => sum + problem.score,
-                  0
-                ) ?? 0),
-              0
-            );
-
-            setMaxTotalScore(overallMaxTotalScore);
-          } else {
-            setError(
-              "Failed to fetch assignments or data is not in expected format."
-            );
-          }
-        } catch (err) {
-          setError("An error occurred while fetching assignments.");
-        } finally {
-          setLoading(false);
-        }
+        const profile: IProfile = await getProfile();
+        setProfile(profile);
+        const data: IAssignmentStudent = await getAssignmentByCourseId(courseId);
+        const exerciseAssignments = data.assignment.filter((item) => item.type !== AssignmentType.EXERCISE)
+        setAssignments(exerciseAssignments)
+        const overallTotalScore = exerciseAssignments.reduce((acc: number, assignment) => acc + (assignment.totalScore ?? 0), 0)
+        setTotalScore(overallTotalScore)
+        const overallMaxTotalScore = exerciseAssignments.reduce((acc: number, assignment) => acc + (assignment.problem.reduce((sum: number, problem) => sum + problem.score, 0) ?? 0), 0)
+        setMaxTotalScore(overallMaxTotalScore)
+        setDashboard(data.dashboard)
+        setLoading(false)
       }
     };
 
@@ -106,7 +48,7 @@ export default function Score() {
   return (
     <>
       {loading ? (
-        <div className="flex flex-col items-center justify-center h-[70vh]">
+        <div className="flex flex-col items-center justify-center h-full">
           <Loading className="size-20" />
         </div>
       ) : (
@@ -126,7 +68,6 @@ export default function Score() {
           <ScoreTable
             assignments={assignments}
             isLoading={loading}
-            error={error}
           />
 
           <div className="flex justify-between items-center rounded-lg my-6">

@@ -82,7 +82,6 @@ export default function Assignment() {
   };
 
   const handleToggle = async (updateForm: IUpdateLock) => {
-    console.log(updateForm)
     const id = notify(NotifyType.LOADING, "กำลังแก้ไขแบบฝึกหัด")
     const { status } = await updatedLockAssignment(updateForm);
     if (id) {

@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getAssignmentscore, getAssignment } from "@/actions/assignment";
-import { IAssignmentScore, IAssignment } from "@/types/assignment";
+import { getAssignmentscore } from "@/actions/assignment";
+import { IAssignmentScore } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { TopNav } from "@/components/Navbar/TopNav";

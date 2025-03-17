@@ -57,11 +57,11 @@ export default function ScoreUserTable({ assignments, assignmentId }: Props) {
 
   return (
     <div className="mt-4 overflow-x-auto">
-      <table className="w-full table-auto border-separate border-spacing-2">
+      <table className="w-full table-auto border-separate">
         <thead>
           <tr className="bg-[#161f2e] text-white text-lg last:border-none">
             <th className="px-4 py-3 w-[708px]  rounded-xl text-center">ชื่อผู้เรียน</th>
-            <th className="p-3 rounded-xl text-center">
+            <th className="p-3 rounded-lg text-center">
               <div className="flex flex-col items-center">
                 <span className="font-medium">ข้อย่อย</span>
                 <div className="w-full flex flex-wrap justify-center">
@@ -72,7 +72,7 @@ export default function ScoreUserTable({ assignments, assignmentId }: Props) {
                         {assignment.scores[0]?.problems.map((_, index) => (
                           <span
                             key={`problem-${assignment.assignmentId}-${index}`}
-                            className="px-3 py-2 rounded-md text-center m-1"
+                            className="px-3  rounded-md text-center m-1"
                           >
                             {index + 1}
                           </span>
