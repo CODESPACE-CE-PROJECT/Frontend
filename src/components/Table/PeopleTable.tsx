@@ -11,7 +11,7 @@ export const PeopleTable: React.FC<Props> = ({ teachers, students }) => {
     <>
       <div className="flex justify-between items-center rounded-lg">
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-2/3 text-center mr-4">
-          ชื่อผู้เรียน
+          รายชื่อ
         </div>
         <div className="text-white text-lg px-4 py-3 rounded-md bg-[#1E2A38] w-48 text-center mr-4">
           ประเภท
