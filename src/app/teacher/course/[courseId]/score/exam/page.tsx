@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreAssignTable from "@/components/Table/ScoreAssignTable";
-import { getAssignmentscore, getAssignmentByCourseId } from "@/actions/assignment";
+import {
+  getAssignmentscore,
+  getAssignmentByCourseId,
+} from "@/actions/assignment";
 import { IAssignmentScore, IAssignment } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
@@ -13,6 +16,7 @@ import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import ScoreStdTable from "@/components/Table/ScoreStdTable";
 import { AssignmentType } from "@/enum/enum";
+import ExportButton from "@/components/Button/ExportButton";
 
 type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
@@ -34,54 +38,56 @@ export default function Score() {
 
   useEffect(() => {
     const fetchAssignments = async () => {
-      if (courseId) {
-        try {
-          const profile: IProfile = await getProfile();
-          setProfile(profile);
+      if (!courseId) return;
 
-          const data = await getAssignmentscore(courseId);
-          if (data?.data && Array.isArray(data.data)) {
-            const assignmentsArray: IAssignmentScore["data"] = data.data;
+      try {
+        const profileData = await getProfile();
+        setProfile(profileData);
 
-            const filteredAssignments = assignmentsArray.filter(
-              (assignment: IAssignmentScore["data"][number]) =>
-                assignment.type === AssignmentType.EXAMONLINE ||
-                assignment.type === AssignmentType.EXAMONSITE
-            );
+        // ดึงคะแนนจาก API
+        const data = await getAssignmentscore(courseId);
+        if (data?.data && Array.isArray(data.data)) {
+          const assignmentsArray: IAssignmentScore["data"] = data.data;
 
-            const transformedAssignments: AssignmentItem[] =
-              filteredAssignments.map((assignment) => ({
-                ...assignment,
-                totalScore:
-                  assignment.scores && assignment.scores.length > 0
-                    ? assignment.scores[0].totalScore
-                    : 0,
-              }));
-
-            setAssignments(transformedAssignments);
-          } else {
-            setError(
-              "Failed to fetch assignments or data is not in expected format."
-            );
-          }
-
-          const assignmentData = await getAssignmentByCourseId(courseId);
-
-          const lockStatus: { [assignmentId: string]: boolean } = {};
-
-          assignmentData.data.forEach(
-            (assignment: IAssignment) => {
-              lockStatus[assignment.assignmentId] = assignment.isLock;
-            }
+          const filteredAssignments = assignmentsArray.filter(
+            (assignment: IAssignmentScore["data"][number]) =>
+              assignment.type === AssignmentType.EXAMONLINE ||
+              assignment.type === AssignmentType.EXAMONSITE
           );
 
-          setAssignmentLock(lockStatus);
-        } catch (err) {
-          console.error("Fetch error:", err);
-          setError("An error occurred while fetching assignments.");
-        } finally {
-          setIsLoading(false);
+          const transformedAssignments: AssignmentItem[] =
+            filteredAssignments.map((assignment) => ({
+              ...assignment,
+              totalScore:
+                assignment.scores && assignment.scores.length > 0
+                  ? assignment.scores.reduce(
+                      (acc, curr) => acc + curr.totalScore,
+                      0
+                    )
+                  : 0,
+            }));
+
+          setAssignments(transformedAssignments);
+        } else {
+          setError(
+            "Failed to fetch assignments or data is not in expected format."
+          );
         }
+
+        const assignmentData = await getAssignmentByCourseId(courseId);
+
+        const lockStatus: { [assignmentId: string]: boolean } = {};
+
+        assignmentData.data?.map((assignment: IAssignment) => {
+          lockStatus[assignment.assignmentId] = assignment.isLock;
+        });
+
+        setAssignmentLock(lockStatus);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("An error occurred while fetching assignments.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -131,11 +137,8 @@ export default function Score() {
 
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
-
-            <button className="bg-white text-[#5572FA] font-bold text-lg text-nowrap flex items-center justify-center gap-2 w-[160px] px-4 py-2 rounded-lg shadow-md hover:bg-[#f1f5ff] transition-all duration-200">
-              <NoteAddIcon className="text-[#5572FA]" />
-              ส่งออกไฟล์
-            </button>
+            <ExportButton assignments={assignments} />{" "}
+           
           </div>
 
           {selectedView === "แบบฝึกหัด" ? (
