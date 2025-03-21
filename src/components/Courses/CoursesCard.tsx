@@ -25,7 +25,7 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
     >
       {data.backgroundUrl ? (
         <Image
-          className="self-center rounded-t-2xl max-w-[286px] max-h-[169px] object-cover"
+          className="self-center rounded-t-2xl max-w-[286px] max-h-[160px] object-cover"
           src={data?.backgroundUrl }
           alt={data?.title || "คอร์สเรียน"}
           width={500}
@@ -52,10 +52,10 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
       />
 
       <div className="px-7 py-3 bg-[#FAFAFA] rounded-b-xl pt-10 h-full flex flex-col gap-y-3">
-        <p className=" text-xl font-semibold text-pretty truncate">
+        <p className=" text-xl font-semibold line-clamp-2">
           {data?.title || "คอร์สเรียน"}
         </p>
-        <p className="text-sm text-pretty truncate">
+        <p className="text-sm text-pretty line-clamp-1">
           {data?.user?.firstName} {data?.user?.lastName}
         </p>
       </div>

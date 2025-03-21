@@ -1,34 +1,47 @@
 import { Modal } from "@/components/Modals/Modal";
 import { DownLoadFileButton } from "@/components/Button/DownLoadFileButton";
-import { UploadFileExel } from "@/components/Input/UploadFileExel";
+import { UploadFilePeople } from "../Input/UploadFilePeople";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { SearchBar } from "../Input/SerachBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { InpuFileButton } from "../Button/InputFileButton";
 import { IProfile } from "@/types/user";
 import { getAvatar } from "@/utils/gender.util";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
+import { IPeople } from "@/types/course";
 
 interface Props {
   isOpen: boolean;
   onClose?: () => void;
-  onClick?: () => void;
-  onInput?: (file: File) => void;
+  onClick?: (selectedUsers: string[]) => void;
   users?: IProfile[];
+  currentCourseUsers?: IPeople;
 }
 
 export const AddPeopleModal: React.FC<Props> = ({
   isOpen,
   onClose,
   onClick,
-  onInput,
   users,
+  currentCourseUsers,
 }) => {
   const [search, setSearch] = useState<string>("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [usersInCourse, setUsersInCourse] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (currentCourseUsers) {
+      const teachersUsernames = currentCourseUsers.courseTeacher.map(
+        (teacher) => teacher.user.username
+      );
+      const studentsUsernames = currentCourseUsers.courseStudent.map(
+        (student) => student.user.username
+      );
+      setUsersInCourse([...teachersUsernames, ...studentsUsernames]);
+    }
+  }, [currentCourseUsers]);
 
   const filteredUsers = users?.filter(
     (user) =>
@@ -45,6 +58,22 @@ export const AddPeopleModal: React.FC<Props> = ({
     }
   };
 
+  const handleUploadedUsernames = (uploadedUsernames: string[]) => {
+    const matchedUsers = uploadedUsernames.filter((username) =>
+      users?.some((user) => user.username === username)
+    );
+    setSelectedUsers([...new Set([...selectedUsers, ...matchedUsers])]);
+  };
+
+  const handleConfirm = () => {
+    if (onClick && typeof onClick === "function") {
+      onClick(selectedUsers);
+    }
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="mx-24 my-20 w-[40vw] min-h-60 rounded-lg">
@@ -58,14 +87,12 @@ export const AddPeopleModal: React.FC<Props> = ({
               <DownLoadFileButton className="font-semibold items-center gap-x-2 border-[1px] border-primary px-4 py-2 rounded-md transition" />
               <p className="text-lg text-gray-700">ดาวน์โหลดตัวอย่างไฟล์</p>
             </div>
-            <div className="flex items-center">
-              <InpuFileButton className="flex font-semibold items-center gap-x-2 px-4 py-2 rounded-md transition" />
-            </div>
+            <UploadFilePeople onInput={handleUploadedUsernames} />
           </div>
 
           <SearchBar onChange={(value) => setSearch(value)} />
 
-          <div className="flex flex-col w-full max-h-64 min-h-40 mx-10">
+          <div className="flex flex-col w-full max-h-64 min-h-40 mx-10 overflow-auto overscroll-contain custom-scrollbar">
             {filteredUsers?.map((user) => (
               <div
                 key={user.username}
@@ -90,10 +117,12 @@ export const AddPeopleModal: React.FC<Props> = ({
                   </div>
                 </div>
                 <div
-                  className="rounded-md border-2 border-border-text-light p-1 cursor-pointer"
+                  className="rounded-md border-2 border-border-text-light cursor-pointer p-1 mr-5"
                   onClick={() => handleUserSelection(user.username)}
                 >
-                  {selectedUsers.includes(user.username) ? (
+                  {usersInCourse.includes(user.username) ? (
+                    <CheckIcon className="text-green-500" />
+                  ) : selectedUsers.includes(user.username) ? (
                     <CheckIcon className="text-green-500" />
                   ) : (
                     <AddIcon className="text-[#64748B]" />
@@ -112,7 +141,7 @@ export const AddPeopleModal: React.FC<Props> = ({
             </CancelButton>
             <ConfirmButton
               className="py-3 px-12 bg-primary text-white rounded-md hover:bg-primary-dark transition"
-              onClick={onClick}
+              onClick={handleConfirm}
             >
               <p>ตกลง</p>
             </ConfirmButton>
