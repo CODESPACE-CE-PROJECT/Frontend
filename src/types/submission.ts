@@ -22,3 +22,8 @@ export type ISubmitCode = {
   language: LanguageType;
   fileName?: string;
 }
+
+export type IErrorConstraint = {
+  functions: string[],
+  imports:string[]
+}

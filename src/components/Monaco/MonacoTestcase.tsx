@@ -4,10 +4,11 @@ import { Loading } from "@/components/Loading/Loading";
 interface Props {
      value?: string,
      onChange?: (value: string | undefined) => void,
-     readOnly: boolean
+     readOnly: boolean,
+     linenumber: boolean,
 }
 
-export const MonacoTestCase: React.FC<Props> = ({ value, onChange, readOnly }) => {
+export const MonacoTestCase: React.FC<Props> = ({ value, onChange, readOnly, linenumber }) => {
      const handleEditorWillMount = (monaco: Monaco) => {
           monaco.editor.defineTheme("custom", {
                base: "vs-dark",
@@ -44,7 +45,7 @@ export const MonacoTestCase: React.FC<Props> = ({ value, onChange, readOnly }) =
           readOnly: readOnly,
           cursorStyle: "line",
           automaticLayout: true,
-          lineNumbers: "on",
+          lineNumbers: linenumber === true ? 'on': 'off',
           lineNumbersMinChars: 3,
           padding: {
                top: 10,
