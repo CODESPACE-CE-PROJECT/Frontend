@@ -1,5 +1,6 @@
 import { ITestCase } from "@/types/problem"
 import { ISubmissionResult } from "@/types/submission"
+import { MonacoDisplayTestCase } from "@/components/Monaco/MonacoDisplayTestCase"
 
 interface Props {
      testCase?: ITestCase,
@@ -20,9 +21,12 @@ export const ProblemTestCase: React.FC<Props> = ({ testCase, submissionResult, i
                     <div className="flex flex-row w-full gap-x-3">
                          <div className="flex flex-col w-1/2 gap-y-2">
                               <p className="text-lg">โจทย์ที่กำหนด</p>
-                              <div className="flex flex-col gap-y-[10px] px-4 py-2 bg-blackground-text rounded-md">
+                              <div className="flex flex-col gap-y-[10px] px-4 py-2 bg-[#16233A] rounded-md">
                                    <p>Input:</p>
-                                   <p>{testCase?.input}</p>
+                                   <MonacoDisplayTestCase
+                                        readOnly={true}
+                                        value={testCase?.input}
+                                   />
                               </div>
                          </div>
 
@@ -30,9 +34,12 @@ export const ProblemTestCase: React.FC<Props> = ({ testCase, submissionResult, i
                               submissionResult &&
                               <div className="flex flex-col w-1/2 gap-y-2">
                                    <p className="text-lg">ผลลัพธ์</p>
-                                   <div className="flex flex-col gap-y-[10px] px-4 py-2 bg-blackground-text rounded-md">
+                                   <div className="flex flex-col gap-y-[10px] px-4 py-2 bg-[#16233A] rounded-md">
                                         <p>Input:</p>
-                                        <p>{testCase?.input}</p>
+                                        <MonacoDisplayTestCase
+                                             readOnly={true}
+                                             value={testCase?.input}
+                                        />
                                    </div>
                               </div>
                          }
@@ -41,15 +48,21 @@ export const ProblemTestCase: React.FC<Props> = ({ testCase, submissionResult, i
                     {/* Result Submit */}
                     {
                          <div className="flex flex-row w-full gap-x-3">
-                              <div className="flex flex-col w-1/2 gap-y-[10px] px-4 py-2 bg-blackground-text rounded-md">
+                              <div className="flex flex-col w-1/2 gap-y-[10px] px-4 py-2 bg-[#16233A] rounded-md">
                                    <p>Output:</p>
-                                   <p>{testCase?.output}</p>
+                                   <MonacoDisplayTestCase
+                                        readOnly={true}
+                                        value={testCase?.output}
+                                   />
                               </div>
 
                               {
-                                   submissionResult && <div className="flex flex-col w-1/2 gap-y-[10px] px-4 py-2 bg-blackground-text rounded-md">
+                                   submissionResult && <div className="flex flex-col w-1/2 gap-y-[10px] px-4 py-2 bg-[#16233A] rounded-md">
                                         <p>Output:</p>
-                                        <p>{submissionResult.output}</p>
+                                        <MonacoDisplayTestCase
+                                             readOnly={true}
+                                             value={submissionResult?.output}
+                                        />
                                    </div>
                               }
                          </div>

@@ -1,3 +1,4 @@
+import { ConstraintType } from "@/enum/enum"
 import { IConstraint } from "@/types/problem"
 
 interface Props {
@@ -10,7 +11,7 @@ export const ProblemConstraint:React.FC<Props> = ({data}) => {
           <div className="flex flex-col items-center justify-center">
                <ul style={{listStyleType: 'inherit'}} className="text-lg">
                     {
-                         data?.map((itme) => <li key={itme.constraintId}>ห้ามใช้ {itme.keyword}</li>)
+                         data?.map((itme) => <li key={itme.constraintId}>ห้ามใช้ {itme.type === ConstraintType.CLASS ? 'ไลบราลี่ ': 'ฟังก์ชัน '}{itme.keyword}</li>)
                     }
                </ul>
           </div>

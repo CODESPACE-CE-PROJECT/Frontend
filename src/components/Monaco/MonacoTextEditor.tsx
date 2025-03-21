@@ -20,7 +20,7 @@ export const MonacoTextEditor: React.FC<Props> = ({ language, sourceCode, onChan
                     },
                ],
                colors: {
-                    "editor.forefround": "#16233A",
+                    "editor.foreground": "#ffffff",
                     "editor.background": "#16233A",
                     "editor.selectionBackground": "#2A3A50",
                     "editor.lineHighlightBackground": "#2A3A50",

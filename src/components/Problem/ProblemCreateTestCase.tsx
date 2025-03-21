@@ -68,7 +68,7 @@ export const ProblemCreateTestCase: React.FC<TestCaseProps> = ({ data, onChange,
                   <p>วิเคราะห์ช่องว่าง</p>
                 </div>
                 <div className="flex flex-row items-center gap-x-2">
-                  <ToggleButton onToggle={() => handleHiddenTestCase(index)} isChecked={item.isHidden} />
+                  <ToggleButton onToggle={() => handleHiddenTestCase(index)} isChecked={!item.isHidden} />
                   <p>แสดงตัวอย่างให้นักเรียน</p>
                 </div>
                 <button onClick={() => handleRemoveItem(index)}>
@@ -81,11 +81,13 @@ export const ProblemCreateTestCase: React.FC<TestCaseProps> = ({ data, onChange,
                 readOnly={false}
                 value={item.input}
                 onChange={(value) => handleChange(index, value, "input")}
+                linenumber={true}
               />
               <MonacoTestCase
                 readOnly={false}
                 value={item.output}
                 onChange={(value) => handleChange(index, value, "output")}
+                linenumber={true}
               />
             </div>
           </div>

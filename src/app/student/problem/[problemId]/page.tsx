@@ -21,7 +21,7 @@ import { SubmissionTable } from "@/components/Table/SubmissionTable"
 import { Loading } from "@/components/Loading/Loading"
 import { IProblem } from "@/types/problem"
 import { getProblemById } from "@/actions/problem"
-import { ISubmission, ISubmitCode } from "@/types/submission"
+import { IErrorConstraint, ISubmission, ISubmitCode } from "@/types/submission"
 import { LanguageType, NotifyType, StateSubmission } from "@/enum/enum"
 import { submissionCode } from "@/actions/submission"
 import { notify, updateNotify } from "@/utils/toast.util"
@@ -61,11 +61,20 @@ export default function Page() {
                     sourceCode: sourceCode
                }
                const id = notify(NotifyType.LOADING, "กำลังส่งคำตอบ")
-               const { status } = await submissionCode(submitCode)
+               const { status, data } = await submissionCode(submitCode)
 
                if (id) {
                     if (status === 200) {
                          updateNotify(id, NotifyType.SUCCESS, 'ส่งคำตอบสำเร็จ')
+                    } else if(status === 406) {
+                         const errConstraint: IErrorConstraint = data.data
+                         updateNotify(id, NotifyType.ERROR, 'คำตอบของคุณมีการใช้งานข้อจำกัดที่ห้ามใช้')
+                         errConstraint.functions?.map((item) => {
+                              notify(NotifyType.ERROR, `มีการใช้งานฟังก์ชัน ${item}`)
+                         })
+                         errConstraint.imports?.map((item) => {
+                              notify(NotifyType.ERROR, `มีการใช้งานไลบราลี่ ${item}`)
+                         })
                     } else {
                          updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการส่งคำตอบ')
                     }

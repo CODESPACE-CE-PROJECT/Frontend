@@ -121,7 +121,6 @@ const Page = () => {
 
   const handleTestCaseChange = (item: ITestCase[], type: "create" | "update", index: number) => {
     if(type === "update"){
-      console.log(item)
       setUpdateProblemForm((prev) => {
         const updated = [...prev]
         updated[index] = { ...updated[index], "testCases": item}
@@ -215,7 +214,6 @@ const Page = () => {
           })
         }
       }
-      router.back()
   };
 
   const memoizedProblemSubItem = useMemo(() => {
