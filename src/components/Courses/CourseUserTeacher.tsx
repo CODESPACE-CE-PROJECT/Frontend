@@ -6,13 +6,13 @@ import { OptionPeople } from "../Options/OptionPeople";
 
 interface CoursesRoleProps {
   data: IProfile;
+  onClickOption: (name: string, username: string) => void;
 }
 
-const CourseUserTeacher: React.FC<CoursesRoleProps> = ({ data }) => {
-  const handleOptionClick = (name: string, allowLogin: boolean | null) => {
-    console.log(` นำบัญชีของ ${data.username} ออกจากคอร์ส`);
-  };
-
+const CourseUserTeacher: React.FC<CoursesRoleProps> = ({
+  data,
+  onClickOption,
+}) => {
   return (
     <>
       <div
@@ -45,7 +45,7 @@ const CourseUserTeacher: React.FC<CoursesRoleProps> = ({ data }) => {
           <div
             className={`flex text-white text-lg py-3 rounded-md border w-3/4 space-x-2 text-center items-center justify-center ${
               data.isActived ? "border-green-l" : "border-white"
-            }`} 
+            }`}
           >
             <p
               className={`w-3 h-3 rounded-full ${
@@ -59,8 +59,7 @@ const CourseUserTeacher: React.FC<CoursesRoleProps> = ({ data }) => {
         </div>
         <div className="text-white text-lg py-3 rounded-md text-center w-[5%]">
           <OptionPeople
-            onClick={handleOptionClick}
-            allowLogin={data.allowLogin}
+            onClick={(name) => onClickOption(name, data.username)}
           />
         </div>
       </div>

@@ -4,9 +4,10 @@ import CourseUserTeacher from "../Courses/CourseUserTeacher";
 interface Props {
   teachers: { courseTeacherId: string; user: IProfile }[] | undefined;
   students: { courseStudentId: string; user: IProfile }[] | undefined;
+  onClickOption: (name: string, username: string) => void;
 }
 
-export const PeopleTableTeacher: React.FC<Props> = ({ teachers, students }) => {
+export const PeopleTableTeacher: React.FC<Props> = ({ teachers, students, onClickOption}) => {
   return (
     <>
       <div className="flex justify-between items-center rounded-lg gap-x-4">
@@ -23,11 +24,11 @@ export const PeopleTableTeacher: React.FC<Props> = ({ teachers, students }) => {
       </div>
 
       {teachers?.map(({ user }) => (
-        <CourseUserTeacher data={user} key={user.username} />
+        <CourseUserTeacher data={user} key={user.username} onClickOption={onClickOption} />
       ))}
 
       {students?.map(({ user }) => (
-        <CourseUserTeacher data={user} key={user.username} />
+        <CourseUserTeacher data={user} key={user.username} onClickOption={onClickOption} />
       ))}
     </>
   );

@@ -210,9 +210,9 @@ export default function People() {
       return;
     }
     const id = notify(NotifyType.LOADING, "กำลังสร้างบัญชีผู้ใช้งาน");
-    if (school?.schoolId && id) {
+    if (profile?.schoolId && id) {
       const { status } = await createUserBySchoolId(
-        school?.schoolId,
+        profile?.schoolId,
         createFrom
       );
       if (status === 201) {
@@ -232,7 +232,7 @@ export default function People() {
         updateNotify(
           id,
           NotifyType.ERROR,
-          "มีชื่อผู้ใช้งานหรืออีเมลนี้อยู่ในระบบแล้ว"
+          "มีชื่อผู้ใช้งานหรืออีเมลนี้อยู่ในระบบแล้ว หรือคุณไม่มีสิทธิ์ในการสร้างบัญชีผู้ใช้"
         );
       } else {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการสร้างบัญชี");
@@ -246,7 +246,7 @@ export default function People() {
       return;
     }
     const id = notify(NotifyType.LOADING, "กำลังแก้ไขข้อมูลบัญชีผู้ใช้งาน");
-    if (school?.schoolId && id) {
+    if (profile?.schoolId && id) {
       const { status } = await updateUserByUsername(updateForm);
       if (status === 200) {
         updateNotify(id, NotifyType.SUCCESS, "แก้ไขข้อมูลบัญชีผู้ใช้เสร็จสิ้น");

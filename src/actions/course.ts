@@ -147,3 +147,33 @@ export const addPeopleToCourse = async (formData: IAddPeopleToCourse) => {
       };
     });
 };
+
+export const deletePeopleByCoursesId = async (
+  courseId: string,
+  username: string
+) => {
+  const token = await getToken();
+
+  return await axios
+    .delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}/user/${username}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then((res) => {
+      return {
+        status: res.status,
+        data: res.data.data,
+      };
+    })
+    .catch((e: AxiosError) => {
+      return {
+        status: e.response?.status,
+        data: e.response?.data,
+      };
+    });
+};
+
