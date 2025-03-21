@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreAssignTable from "@/components/Table/ScoreAssignTable";
-import { getAssignmentscore, getAssignmentByCourseId } from "@/actions/assignment";
+import {
+  getAssignmentscore,
+  getAssignmentByCourseId,
+} from "@/actions/assignment";
 import { IAssignmentScore, IAssignment } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
@@ -12,6 +15,9 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import ScoreStdTable from "@/components/Table/ScoreStdTable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import ExportButton from "@/components/Button/ExportButton";
 
 type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
@@ -67,11 +73,9 @@ export default function Score() {
 
           const lockStatus: { [assignmentId: string]: boolean } = {};
 
-          assignmentData.data?.map(
-            (assignment: IAssignment) => {
-              lockStatus[assignment.assignmentId] = assignment.isLock;
-            }
-          );
+          assignmentData.data?.map((assignment: IAssignment) => {
+            lockStatus[assignment.assignmentId] = assignment.isLock;
+          });
 
           setAssignmentLock(lockStatus);
         } catch (err) {
@@ -89,6 +93,8 @@ export default function Score() {
   const filteredAssignments = assignments.filter((assignment) =>
     assignment.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  
 
   return (
     <>
@@ -129,11 +135,8 @@ export default function Score() {
 
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
-
-            <button className="bg-white text-[#5572FA] font-bold text-lg text-nowrap flex items-center justify-center gap-2 w-[160px] px-4 py-2 rounded-lg shadow-md hover:bg-[#f1f5ff] transition-all duration-200">
-              <NoteAddIcon className="text-[#5572FA]" />
-              ส่งออกไฟล์
-            </button>
+            <ExportButton assignments={assignments} />{" "}
+           
           </div>
 
           {selectedView === "แบบฝึกหัด" ? (

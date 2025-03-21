@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getpeople } from "@/actions/course";
+import {
+  getpeople,
+  addPeopleToCourse,
+  deletePeopleByCoursesId,
+} from "@/actions/course";
 
 import { SearchBar } from "@/components/Input/SerachBar";
 import { IPeople } from "@/types/course";
@@ -15,6 +19,8 @@ import { Loading } from "@/components/Loading/Loading";
 import { AddPeopleModal } from "@/components/Modals/AddPeopleModal";
 import { ISchool } from "@/types/school";
 import { getUserBySchoolId } from "@/actions/school";
+import { NotifyType } from "@/enum/enum";
+import { notify, updateNotify } from "@/utils/toast.util";
 
 export default function People() {
   const params = useParams<{ courseId: string }>();
@@ -25,36 +31,85 @@ export default function People() {
   const [students, setStudents] =
     useState<{ courseStudentId: string; user: IProfile }[]>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [alluser, setAlluser] = useState<IPeople>();
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [school, setSchool] = useState<ISchool>();
 
+  const handleAddPeople = async (selectedUsers: string[]) => {
+    const id = notify(NotifyType.LOADING, "กำลังเพิ่มบัญชีผู้ใช้เข้าสู่คอร์ส");
+    const response = await addPeopleToCourse({
+      courseId: courseId,
+      users: selectedUsers,
+    });
+
+    if (id) {
+      if (selectedUsers.length != 0 && response.status === 201) {
+        setIsModalOpen(false);
+        updateNotify(
+          id,
+          NotifyType.SUCCESS,
+          "เพิ่มบัญชีผู้ใช้เข้าสู่คอร์สเสร็จสิ้น"
+        );
+        const response: IPeople = await getpeople(courseId);
+        setAlluser(response);
+      } else if (response.status === 400) {
+        updateNotify(
+          id,
+          NotifyType.ERROR,
+          "มีบัญชีผู้ใช้อยู่ในคอร์สแล้วหรือไม่พบบัญชีผู้ใช้"
+        );
+      } else if (selectedUsers.length == 0) {
+        updateNotify(
+          id,
+          NotifyType.ERROR,
+          "กรุณาเลือกบัญชีผู้ใช้ เพื่อเพิ่มผู้ใช้เข้าสู่คอร์ส"
+        );
+      } else {
+        updateNotify(
+          id,
+          NotifyType.ERROR,
+          "เกิดข้อผิดผลาดในการเพิ่มผู้ใช้เข้าสู่คอร์ส"
+        );
+      }
+    }
+  };
+
+  const handleOnClickOption = async (name: string, username: string) => {
+    if (name === "delete") {
+      const id = notify(NotifyType.LOADING, "กำลังนำบัญชีผู้ใช้ออกจากคอร์ส");
+      const { status } = await deletePeopleByCoursesId(courseId, username);
+      if (id) {
+        if (status === 200) {
+          updateNotify(
+            id,
+            NotifyType.SUCCESS,
+            "นำบัญชีผู้ใช้ออกจากคอร์สเสร็จสิ้น"
+          );
+          const response: IPeople = await getpeople(courseId);
+          setAlluser(response);
+        } else {
+          updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการนำออก");
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchPeople = async () => {
-      if (!courseId) return;
-      setLoading(true);
-      try {
-        const response: IPeople = await getpeople(courseId);
-        const teacherData = response.courseTeacher;
-        const studentData = response.courseStudent;
-        const profile: IProfile = await getProfile();
-        setProfile(profile);
+      const response: IPeople = await getpeople(courseId);
+      const teacherData = response.courseTeacher;
+      const studentData = response.courseStudent;
 
-        const { status, data } = await getUserBySchoolId(profile.schoolId);
-        if (status === 200) {
-          setSchool(data);
-        } else {
-          return;
-        }
-        setAlluser(response);
-        setTeachers(teacherData);
-        setStudents(studentData);
-      } catch (err: any) {
-        console.error("Error fetching people data:", err);
-        setError(err.message);
-      }
+      const profile: IProfile = await getProfile();
+      setProfile(profile);
+
+      const { data } = await getUserBySchoolId(profile.schoolId);
+      setSchool(data);
+
+      setAlluser(response);
+      setTeachers(teacherData);
+      setStudents(studentData);
       setLoading(false);
     };
     fetchPeople();
@@ -76,8 +131,6 @@ export default function People() {
       )
     );
   }, [search, alluser]);
-
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
@@ -104,12 +157,18 @@ export default function People() {
               <AddIcon /> เพิ่มสมาชิก
             </button>
           </div>
-          <PeopleTableTeacher teachers={teachers} students={students} />
+          <PeopleTableTeacher
+            teachers={teachers}
+            students={students}
+            onClickOption={handleOnClickOption}
+          />
 
           <AddPeopleModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             users={school?.users}
+            currentCourseUsers={alluser}
+            onClick={handleAddPeople}
           />
         </>
       )}
