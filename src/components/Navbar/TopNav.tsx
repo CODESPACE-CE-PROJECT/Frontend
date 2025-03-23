@@ -35,7 +35,7 @@ export const TopNav: FC<Props> = ({
         <Link href={`/${getRole(role)}/profile`}>
           <Image
             src={imageUrl || (gender && getAvatar(gender))}
-            alt="avatart"
+            alt="avatar"
             priority={true}
             width={100}
             height={100}

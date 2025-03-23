@@ -37,7 +37,7 @@ export const SchoolTable: React.FC<Props> = ({ schools,  onClickOption}) => {
                                                   alt="school logo"
                                                   width={60}
                                                   height={60}
-                                                  className="object-cover"
+                                                  className="object-cover size-16 rounded-full"
                                              />
                                              <p className="text-center">{item.schoolName}</p>
                                         </div>

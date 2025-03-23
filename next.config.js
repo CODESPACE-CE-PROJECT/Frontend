@@ -3,7 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   images: {
-    domains: ["s3.minio.srv-demo-2.home.unixvextor.com"],
     remotePatterns: [
       {
         protocol: "https",
