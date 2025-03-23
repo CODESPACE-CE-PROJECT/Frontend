@@ -263,13 +263,18 @@ export default function Page() {
      }, [search, school?.users]);
 
      return isLoading ? (
-          <div className="flex flex-col items-center justify-center h-[70vh]">
+          <div className="flex flex-col items-center justify-center h-screen">
                <Loading className="size-20" />
           </div>
      ) : (<div className="flex flex-col gap-y-12">
-          <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role} gender={profile?.gender}>
+          <TopNav 
+               disableNotification={true} 
+               imageUrl={profile?.pictureUrl} 
+               role={profile?.role} 
+               gender={profile?.gender}
+          >
                <div className="flex flex-row items-center gap-x-3">
-                    <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
+                    <div className="cursor-pointer hover:text-primary" onClick={() => router.push('/admin/school')}>
                          <ArrowBackIosNewRoundedIcon />
                     </div>
                     <p>{school?.schoolName}</p>

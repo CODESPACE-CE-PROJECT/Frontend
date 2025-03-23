@@ -265,7 +265,7 @@ export default function SchoolEdit() {
      }, [param.schoolId])
 
      return isLoading ? (
-          <div className="flex flex-col items-center justify-center h-[70vh]">
+          <div className="flex flex-col items-center justify-center h-screen">
                <Loading className="size-20" />
           </div>
      ) : (
@@ -367,7 +367,6 @@ export default function SchoolEdit() {
                                                   <Dropdown key="province" className="w-full" name="province" value={updateForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited} />
                                              </div>
 
-                                             {/* จำกัดจำนวนคอร์ส */}
                                              <div className="flex flex-col items-start gap-2.5 w-full">
                                                   <Label text="รหัสไปรษณีย์" isRequired={true} />
                                                   <ZipCode value={updateForm?.postCode} onChange={handleZipCodeChange} />
@@ -375,7 +374,7 @@ export default function SchoolEdit() {
                                         </div>
                                    </div>
                                    <div className="flex align-center gap-4">
-                                        <CancelButton className="w-40" onClick={() => router.back()}>
+                                        <CancelButton className="w-40 hover:bg-gray-600" onClick={() => router.back()}>
                                              <p>ยกเลิก</p>
                                         </CancelButton>
                                         <ConfirmButton className="w-40" onClick={() => handleSubmit()}>

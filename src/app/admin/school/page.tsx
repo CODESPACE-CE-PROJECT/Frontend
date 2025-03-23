@@ -64,12 +64,17 @@ export default function Page() {
      }, [search, schoolsData])
 
      return isLoading ? (
-          <div className="flex flex-col items-center justify-center h-[70vh]">
+          <div className="flex flex-col items-center justify-center h-[100vh]">
                <Loading className="size-20" />
           </div>
      ) : (
           <div className="flex flex-col w-full h-full gap-y-12">
-               <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role} gender={profile?.gender}>
+               <TopNav 
+                    disableNotification={true} 
+                    imageUrl={profile?.pictureUrl} 
+                    role={profile?.role} 
+                    gender={profile?.gender}
+               >
                     <p>โรงเรียน</p>
                </TopNav>
                <div className="flex flex-row items-center w-full gap-x-5">

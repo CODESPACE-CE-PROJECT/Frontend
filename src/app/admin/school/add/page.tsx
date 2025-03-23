@@ -22,12 +22,14 @@ import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
+import { Loading } from "@/components/Loading/Loading";
 
 export default function Schooladd() {
   const router = useRouter()
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [provinceData, setProvinceData] = useState<IProvince[] | undefined>([])
   const [isSubmited, setIsSubmited] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [profile, setProfile] = useState<IProfile>()
   const [provinceFilterData, setProvinceFilterData] = useState<{
     provinces: string[],
@@ -144,6 +146,11 @@ export default function Schooladd() {
   }
 
   const handleZipCodeChange = (value: string) => {
+    setCreateForm((prev) => ({
+      ...prev,
+      postCode: value
+    }))
+
     if (value.length === 5 && !isDropdownSelect) {
       const data = provinceData?.filter((item) => item.zipCode === value)
       const provinces = [...new Set(data?.map(item => item.province))]
@@ -154,18 +161,16 @@ export default function Schooladd() {
         if (!prev) return prev
         return {
           ...prev,
-          postCode: value,
           province: provinces.length === 1 ? provinces[0] : "",
           district: distrcts.length === 1 ? distrcts[0] : "",
           subDistrict: subDistricts.length === 1 ? subDistricts[0] : ""
         }
       })
 
-      setProvinceFilterData({
-        provinces: provinces,
-        districts: distrcts,
+      setProvinceFilterData((prev) => ({
+        ...prev,
         subDistricts: subDistricts
-      })
+      }))
     } else {
       setIsDropdownSelect(false)
       setProvinceFilterData((prev) => {
@@ -225,14 +230,24 @@ export default function Schooladd() {
           provinces: [...new Set(response?.map(item => item.province))]
         }
       })
+      setIsLoading(false)
     }
     fetchProvinceData()
   }, [])
 
-  return (
+  return isLoading ? (
+            <div className="flex flex-col items-center justify-center h-screen">
+                 <Loading className="size-20" />
+            </div>
+       ) : (
     <>
       <div className="flex flex-col items-center self-stretch gap-[80px] w-full h-screen">
-        <TopNav imageUrl={profile?.pictureUrl} disableNotification={true} role={profile?.role} >
+        <TopNav 
+          imageUrl={profile?.pictureUrl} 
+          disableNotification={true} 
+          role={profile?.role} 
+          gender={profile?.gender}
+        >
           <div className="cursor-pointer hover:text-primary" onClick={() => router.push('/admin/school')}>
             <ArrowBackIosNewRoundedIcon />
           </div>
@@ -257,7 +272,7 @@ export default function Schooladd() {
 
                     {/* จำกัดจำนวนคอร์ส */}
                     <div className="flex flex-col items-start gap-2.5 w-full">
-                      <Label text="จำกัดจำนวนคอร์ส" isRequired={true} />
+                      <Label text="จำกัดจำนวนคอร์สต่อคุณครู 1 คน" isRequired={true} />
                       <TextField name="maxCreateCoursePerTeacher" value={createForm.maxCreateCoursePerTeacher?.toString()} onChange={handleTextFieldChange} isNumberic={true} maxLength={3} validateText="จำนวนคอร์สต้องมากกว่า 0" isSubmited={isSubmited} />
                     </div>
                   </div>
@@ -320,13 +335,13 @@ export default function Schooladd() {
                   </div>
 
                   <div className="flex items-start gap-[32px] self-stretch w-full">
-                    {/* จังหวัด / รหัสไปรษณีย์ */}
+                    {/* จังหวัด */}
                     <div className="flex flex-col items-start gap-2.5 w-full ">
                       <Label text="จังหวัด" isRequired={true} />
                       <Dropdown className="w-full" name="province" value={createForm?.province} options={provinceFilterData?.provinces} onChange={handleDropDownChange} validateText="กรุณาเลือกจังหวัด" isSubmited={isSubmited} />
                     </div>
 
-                    {/* จำกัดจำนวนคอร์ส */}
+                    
                     <div className="flex flex-col items-start gap-2.5 w-full">
                       <Label text="รหัสไปรษณีย์" isRequired={true} />
                       <ZipCode value={createForm?.postCode} onChange={handleZipCodeChange} />
@@ -334,7 +349,7 @@ export default function Schooladd() {
                   </div>
                 </div>
                 <div className="flex align-center gap-4">
-                  <CancelButton className="w-40" onClick={() => router.back()}>
+                  <CancelButton className="w-40 hover:bg-gray-600" onClick={() => router.back()}>
                     <p>ยกเลิก</p>
                   </CancelButton>
                   <ConfirmButton className="w-40" onClick={() => handleSubmit()}>
