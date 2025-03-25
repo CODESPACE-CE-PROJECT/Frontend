@@ -19,7 +19,7 @@ export const TextArea: React.FC<Props> = ({ value, onChange, name, validateText,
                value={value}
                name={name}
                placeholder={placeholder}
-               className={`w-full ${bgColor ? bgColor: 'bg-[#2A3A50] '} ${className} rounded-md p-2 ${textColor ? textColor: 'text-zinc-50'} focus:outline-[#5572FA]`}
+               className={`w-full ${bgColor ? bgColor: 'bg-[#2A3A50] '} ${className} rounded-md p-2 px-4 ${textColor ? textColor: 'text-zinc-50'} focus:outline-[#5572FA]`}
                onChange={(e) => onChange(e.target.value, e.target.name)}
                required={require}
           />

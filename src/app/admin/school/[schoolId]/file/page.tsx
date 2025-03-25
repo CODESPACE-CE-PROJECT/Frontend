@@ -78,6 +78,7 @@ export default function Page() {
                     if(status === 201){
                          updateNotify(id,NotifyType.SUCCESS, 'สร้างบัญชีผู้ใช้งานสำเร็จ')
                          sessionStorage.removeItem(`dataFile-${param.schoolId}`)
+                         router.push(`/admin/school/${param.schoolId}`)
                     }else{
                          updateNotify(id,NotifyType.ERROR, 'เกิดข้อผิดผลาดในการสร้างบัญชีผู้ใช้งาน')
                     }
@@ -90,12 +91,12 @@ export default function Page() {
      }, [search, fileData])
 
      return isLoading ? (
-          <div className="flex flex-col items-center justify-center h-[70vh]">
+          <div className="flex flex-col items-center justify-center h-full">
                <Loading className="size-20" />
           </div>
      ) : (
           <div className="flex flex-col gap-y-12">
-               <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role}>
+               <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role} gender={profile?.gender}>
                     <div className="flex flex-row items-center gap-x-3">
                          <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
                               <ArrowBackIosNewRoundedIcon />

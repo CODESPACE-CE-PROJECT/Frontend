@@ -32,7 +32,7 @@ export const ConfirmFilModal: React.FC<Props> = ({ onClose, isOpen, onClick, isD
                     <p className="text-black text-xl">กรุณาตรวจสอบก่อนดำเนินการอีกครั้ง</p>
                </div>
                <div className="flex flex-row items-center gap-x-8">
-                    <CancelButton className="text-[#64748B] px-16 border-border-text-light" onClick={() => onClose && onClose()}>
+                    <CancelButton className="text-[#64748B] px-16 py-3 border-border-text-light" onClick={() => onClose && onClose()}>
                          ยกเลิก
                     </CancelButton>
                     <ConfirmButton className="text-pure-white px-16" onClick={() => onClick && onClick()} disabled={isDuplicate || isExist}>
