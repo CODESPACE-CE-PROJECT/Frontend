@@ -1,7 +1,7 @@
 "use server"
 
 import axios, { AxiosError } from "axios"
-import { ICreateSchool, IUpdateSchool } from "@/types/school"
+import { ICreateSchool, ISchool, IUpdateSchool } from "@/types/school"
 import { PackageType } from "@/enum/enum"
 import { getToken } from "@/lib/session"
 
@@ -45,17 +45,7 @@ export const getSchoolBinInfo = async () => {
 export const createSchool = async (createForm: ICreateSchool) => {
      const token = await getToken()
 
-     if (createForm.picture) {
-          const formData = new FormData()
-          formData.append('picture', createForm.picture as File)
-          await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school`, formData, {
-               headers: {
-                    Authorization: `Bearer ${token}`,
-               },
-          })
-     }
-
-     return await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school`, {
+     const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school`, {
           ...createForm,
           package: createForm.package === "Premium" ? PackageType.PREMIUM : PackageType.STANDARD,
      }, {
@@ -73,6 +63,19 @@ export const createSchool = async (createForm: ICreateSchool) => {
                data: e.response?.data
           }
      })
+
+     const school:ISchool = res.data
+
+     if (createForm.picture) {
+          const formData = new FormData()
+          formData.append('picture', createForm.picture)
+          await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/school/${school.schoolId}`, formData, {
+               headers: {
+                    Authorization: `Bearer ${token}`,
+               },
+          })
+     }
+     return res
 }
 
 export const updateSchoolById = async (updateForm: IUpdateSchool, schoolId: string) => {

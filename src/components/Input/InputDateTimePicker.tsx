@@ -18,12 +18,14 @@ interface InputDateTimePickerProps {
   name: string;
   bgColor?: string;
   textColor?: string;
+  border?: string;
 }
 
 const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
   value,
   onChange,
   name,
+  border,
   bgColor = "#2A3A50",
   textColor = "#FAFAFA"
 }) => {
@@ -54,10 +56,11 @@ const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="th">
       <DateTimePicker
         sx={{
-          input: { backgroundColor: bgColor, color: textColor },
+          input: { backgroundColor: bgColor, color: textColor, borderRadius: 2, borderColor: "transparent" },
           bgcolor: bgColor,
           borderRadius: 2,
-          p: "4px",
+          border: border,
+          p: "0px",
           "& .MuiSvgIcon-root": {
             color: "#93C5FD",
           },
@@ -65,7 +68,7 @@ const InputDateTimePicker: React.FC<InputDateTimePickerProps> = ({
             border: "none",
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            border: "none",
+            border: "none", 
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             border: "none",

@@ -44,36 +44,21 @@ export const getAssignmentscore = async (courseId: string) => {
 
 export const createAssignment = async (formData: ICreateAssignment) => {
   const token = await getToken();
-
-  if (!token) {
-    alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
-    return;
-  }
-
-  if (new Date(formData.expireAt) <= new Date(formData.startAt)) {
-    alert("Expire date must be later than start date.");
-    return;
-  }
-
-  const response: AxiosResponse = await axios.post(
+  return await axios.post(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment`,
-    {
-      courseId: formData.courseId,
-      title: formData.title,
-      type: formData.type,
-      announceDate: new Date(new Date(formData.announceDate).toUTCString()),
-      startAt: new Date(new Date(formData.startAt).toUTCString()),
-      expireAt: new Date(new Date(formData.expireAt).toUTCString()),
-    },
+    formData,
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
     }
-  );
-
-  return response.data;
+  ).then((res) => ({
+    status: res.status,
+    data: res.data
+  })).catch((err: AxiosError) => ({
+    status: err.status,
+    data: err.response?.data
+  }));
 };
 
 export const updateAssignmentById = async (id: string, updateForm: IUpdateAssignment) => {
@@ -91,10 +76,8 @@ export const updateAssignmentById = async (id: string, updateForm: IUpdateAssign
   }))
 }
 
-export const deleteAssignment = async (assignmentId: string) => {
-
+export const deleteAssignmentById = async (assignmentId: string) => {
   const token = await getToken();
-
   return await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${assignmentId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
