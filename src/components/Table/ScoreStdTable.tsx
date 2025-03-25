@@ -4,7 +4,7 @@ import React from "react";
 import { IAssignmentScore } from "@/types/assignment";
 
 interface Props {
-  assignments: IAssignmentScore["data"];
+  assignments: IAssignmentScore[];
 }
 
 export default function ScoreTableTeacher({ assignments }: Props) {

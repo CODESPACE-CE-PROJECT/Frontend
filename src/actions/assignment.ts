@@ -20,26 +20,14 @@ export const getAssignmentByCourseId = async (courseId: string) => {
 
 export const getAssignmentscore = async (courseId: string) => {
   const token = await getToken();
-
-  if (token) {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}/score`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching assignment:", error);
-      return null;
+  return await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/assignment/${courseId}/score`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-  } else {
-    console.error("No access token found.");
-    return null;
-  }
+  ).then((res) => res.data.data);
 };
 
 export const createAssignment = async (formData: ICreateAssignment) => {

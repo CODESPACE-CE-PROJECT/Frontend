@@ -19,6 +19,10 @@ import { NotifyType } from "@/enum/enum";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { DeleteCourseModal } from "@/components/Modals/DeleteCoursModal";
 import { ICourse } from "@/types/course";
+import { TextArea } from "@/components/Input/TextArea";
+import { TextField } from "@/components/Input/TextField/TextField";
+import { Label } from "@/components/Input/Label";
+import { useRouter } from "next/navigation"
 
 interface ICourseDetails {
   title: string;
@@ -29,42 +33,25 @@ interface ICourseDetails {
 export default function Setting() {
   const param = useParams<{ courseId: string }>();
   const courseId = param?.courseId;
-  const [profile, setProfile] = useState<IProfile | null>(null);
-  const [courseDetails, setCourseDetails] = useState<ICourseDetails | null>(
-    null
-  );
+  const router = useRouter();
+  const [profile, setProfile] = useState<IProfile>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [editData, setEditData] = useState<ICourseDetails | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [updateForm, setUpdateForm] = useState<ICourseDetails>();
+  const [previewImage, setPreviewImage] = useState<string>();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourseData = async () => {
-      if (!courseId) return;
-      setLoading(true);
-      setError(null);
-      try {
-        const profile: IProfile = await getProfile();
-        setProfile(profile);
-        console.log("Course ID:", courseId);
+      const profile: IProfile = await getProfile();
+      setProfile(profile)
 
-        const response: ICourse  = await getCoursesById(courseId);
-        console.log("Course API response:", response.title);
-
-        if (response) {
-          setCourseDetails(response);
-          setEditData({
-            title: response.title || "",
-            description: response.description || "",
-            backgroundUrl: response.backgroundUrl || "",
-          });
-        }
-      } catch (err: any) {
-        console.error("Error fetching data:", err);
-        setError(err.message || "An error occurred while fetching data.");
-      }
+      const response: ICourse = await getCoursesById(courseId);
+      setUpdateForm({
+        title: response.title || "",
+        description: response.description || "",
+        backgroundUrl: response.backgroundUrl || "",
+      });
       setLoading(false);
     };
 
@@ -72,69 +59,55 @@ export default function Setting() {
   }, [courseId]);
 
   const handleEditClick = async () => {
-    if (!courseDetails || !courseId) return;
-
     const id = notify(NotifyType.LOADING, "กำลังบันทึกการแก้ไข...");
 
-    if (id) {
-      try {
+    if (id && updateForm) {
         const formData = new FormData();
-        formData.append("title", courseDetails.title);
-        formData.append("description", courseDetails.description);
+        formData.append("title", updateForm.title);
+        formData.append("description", updateForm.description);
         if (imageFile) {
           formData.append("picture", imageFile);
         }
 
-        const updatedCourse = await editCourse(courseId, formData);
-
-        setCourseDetails((prev) => ({
-          ...prev!,
-          ...updatedCourse,
-          backgroundUrl: imageFile
-            ? updatedCourse.backgroundUrl
-            : prev!.backgroundUrl,
-        }));
-
-        updateNotify(id, NotifyType.SUCCESS, "บันทึกการแก้ไขสำเร็จ!");
-      } catch (error) {
-        console.error("Error updating course:", error);
-        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการบันทึกการแก้ไข");
-      }
+        const {status} = await editCourse(courseId, formData);
+        if (status === 200) {
+          updateNotify(id, NotifyType.SUCCESS, "บันทึกการแก้ไขสำเร็จ!");
+          router.push("/teacher/course");
+        }else{
+          updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการแก้ไขข้อมูล");
+        }
     }
   };
 
   const handleDeleteClick = async () => {
-    if (!courseId) return;
-
     const id = notify(NotifyType.LOADING, "กำลังลบคอร์สเรียน...");
-
     if (id) {
-      try {
-        await deleteCoursesById(courseId);
-        updateNotify(id, NotifyType.SUCCESS, "ลบคอร์สเรียนสำเร็จ!");
-
-        window.location.href = "/teacher/course";
-      } catch (error) {
-        console.error("Error deleting course:", error);
-        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการลบคอร์สเรียน");
-      }
+        const {status} = await deleteCoursesById(courseId);
+        if(status === 200){
+          updateNotify(id, NotifyType.SUCCESS, "ลบคอร์สเรียนสำเร็จ!");
+          router.push("/teacher/course");
+        }else{
+          updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการลบคอร์สเรียน"); 
+        }
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    value: string | number,
+    name: string,
   ) => {
-    const { id, value } = e.target;
-    setCourseDetails((prev) => ({
-      ...prev!,
-      [id]: value,
-    }));
+    setUpdateForm((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        [name]: value,
+      }
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const objectUrl = URL.createObjectURL(file);
     setPreviewImage(objectUrl);
     setImageFile(file);
@@ -157,76 +130,72 @@ export default function Setting() {
             <p>ตั้งค่า</p>
           </TopNav>
 
-          <div className="justify-self-center mt-6">
-            <div className="flex flex-row justify-center items-center space-x-16 mb-80">
-              <div className="items-center justify-items-center space-y-5">
-                <Image
-                  className="self-center rounded-2xl w-[25rem] min-h-48 max-h-64 object-cover"
-                  src={previewImage || courseDetails?.backgroundUrl || CourseBg}
-                  alt={courseDetails?.title || "course"}
-                  width={500}
-                  height={500}
-                  priority={true}
-                />
-                <button
-                  onClick={() => document.getElementById("fileInput")?.click()}
-                  className="font-semibold border-[1px] border-[#2A3A50]  px-4 py-3 rounded-md"
-                >
-                  <p>เลือกรูปภาพพื้นหลังของคอร์สเรียน</p>
-                  <input
-                    type="file"
-                    id="fileInput"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                    accept="image/png, image/jpeg"
-                    />
-                </button>
-              </div>
-              
-
-              <div className="space-y-3">
-                <div>ชื่อชั้นเรียน</div>
+          <div className="flex flex-row justify-start mb-80 mt-6 gap-x-20">
+            <div className="flex flex-col items-start justify-start space-y-5 w-full">
+              <Image
+                className="rounded-2xl w-full min-h-48 max-h-64 object-cover"
+                src={previewImage || updateForm?.backgroundUrl || CourseBg}
+                alt={updateForm?.title || "course"}
+                width={500}
+                height={500}
+                priority={true}
+              />
+              <button
+                onClick={() => document.getElementById("fileInput")?.click()}
+                className="font-semibold border-[1px] border-[#2A3A50]  px-4 py-3 rounded-md w-full"
+              >
+                <p>เลือกรูปภาพพื้นหลังของคอร์สเรียน</p>
                 <input
-                  id="title"
-                  value={courseDetails?.title || ""}
-                  className="w-[32vw] border-[1px] border-[#2A3A50] rounded-lg shadow-sm bg-transparent py-2 px-4"
-                  onChange={handleChange}
+                  type="file"
+                  id="fileInput"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                  accept="image/png, image/jpeg"
                 />
-                <div>รายละเอียด</div>
+              </button>
+            </div>
 
-                <textarea
-                  id="description"
-                  value={courseDetails?.description || ""}
-                  onChange={handleChange}
-                  className="min-h-28 max-h-48 w-[32vw] border-[1px] border-[#2A3A50] rounded-lg shadow-sm bg-transparent py-2 px-4"
-                  maxLength={200}
-                />
-                <div className="text-right text-xs">
-                  {courseDetails?.description?.length || 0}/200
-                </div>
+            <div className="flex flex-col items-start justify-start h-full gap-y-3 w-full">
+              <Label text="ชื่อคอร์สเรียน" isRequired={true} />
+              <TextField
+                name="title"
+                value={updateForm?.title}
+                className="w-full border-[#2A3A50]  bg-transparent"
+                onChange={handleChange}
+              />
+              <Label text="คำอธิบาย" isRequired={false} />
+              <TextArea
+                name="description"
+                value={updateForm?.description}
+                onChange={handleChange}
+                className="min-h-28 max-h-48 w-full border-[#2A3A50]  bg-transparent"
+              />
+              <div className="text-right text-xs self-end">
+                {updateForm?.description?.length || 0}/200
               </div>
             </div>
-            <div className="flex flex-row justify-self-end space-x-4">
-              <CancelButton
-                onClick={() => setIsModalOpen(true)}
-                className="text-red-l border-red-l  px-8 py-4 hover:bg-red-600 hover:text-white"
-              >
-                ลบคอร์สเรียน
-              </CancelButton>
-              <ConfirmButton
-                onClick={handleEditClick}
-                className="bg-[#5572FA]  px-8 py-4"
-              >
-                บันทึกการแก้ไข
-              </ConfirmButton>
-            </div>
-
-            <DeleteCourseModal
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              onConfirm={handleDeleteClick}
-            />
           </div>
+
+          <div className="flex flex-row self-end space-x-4">
+            <CancelButton
+              onClick={() => setIsModalOpen(true)}
+              className="text-red-l border-red-l  px-8 py-4 hover:bg-red-600 hover:text-white"
+            >
+              ลบคอร์สเรียน
+            </CancelButton>
+            <ConfirmButton
+              onClick={handleEditClick}
+              className="bg-[#5572FA]  px-8 py-4"
+            >
+              บันทึกการแก้ไข
+            </ConfirmButton>
+          </div>
+
+          <DeleteCourseModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onConfirm={handleDeleteClick}
+          />
         </>
       )}
     </>

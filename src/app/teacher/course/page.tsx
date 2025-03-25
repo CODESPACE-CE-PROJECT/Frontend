@@ -16,7 +16,6 @@ import { NotifyType } from "@/enum/enum";
 
 export default function Page() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [profile, setProfile] = useState<IProfile | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,58 +50,33 @@ export default function Page() {
   };
 
   const handleSubmit = async () => {
-    setErrorMessage("");
 
-    const id = notify(NotifyType.LOADING, "กำลังสร้างคอร์สเรียน...");
+    const id = notify(NotifyType.LOADING, "กำลังสร้างคอร์สเรียน");
 
-    try {
-      const courseData = new FormData();
-      courseData.append("title", formData.title);
-      courseData.append("description", formData.description);
-      if (imageFile) courseData.append("picture", imageFile);
+    const courseData = new FormData();
+    courseData.append("title", formData.title);
+    courseData.append("description", formData.description);
+    if (imageFile) courseData.append("picture", imageFile);
 
-      const newCourse = await createCourse(courseData);
-      setCourses((prevCourses) => [...prevCourses, newCourse]);
-      setIsModalOpen(false);
-
-      if (id) {
+    const {status, data} = await createCourse(courseData);
+    console.log(status)
+    console.log(data)
+    if(id){
+      if(status === 201){
         updateNotify(id, NotifyType.SUCCESS, "สร้างคอร์สเรียนสำเร็จ!");
         const { status, data } = await getAllCourse();
         if (status === 200) setCourses(data);
-      }
-    } catch (error: any) {
-      console.error("Error creating course:", error.response?.data || error);
-
-      const errorMessage = error.response?.data?.message || "";
-
-      if (errorMessage.includes("Over limit Create Course Per Teacher 3")) {
-        setErrorMessage("ไม่สามารถสร้างชั้นเรียนเกิน 3 ชั้นเรียนได้");
-        if (id) {
-          updateNotify(
-            id,
-            NotifyType.ERROR,
-            "ไม่สามารถสร้างชั้นเรียนเกิน 3 ชั้นเรียนได้"
-          );
-        }
-      } else if (errorMessage.includes("Duplicate course")) {
-        setErrorMessage("ไม่สามารถสร้างชั้นเรียนซ้ำได้");
-        if (id) {
-          updateNotify(id, NotifyType.ERROR, "ไม่สามารถสร้างชั้นเรียนซ้ำได้");
-        }
+        setIsModalOpen(false);
+      } else if (status === 400 && data.message.includes("Over limit Create Course Per Teacher")) {
+        updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างชั้นคอร์สเรียนเกินที่กำหนดได้`);
+      } else if (status === 400 && data.message === "Duplicate course") {
+        updateNotify(id, NotifyType.ERROR, "มีชื่อคอร์สนี้อยู่ในระบบแล้ว");
       } else {
-        setErrorMessage("เกิดข้อผิดพลาดในการสร้างคอร์สเรียน");
-        if (id) {
-          updateNotify(
-            id,
-            NotifyType.ERROR,
-            "เกิดข้อผิดพลาดในการสร้างคอร์สเรียน"
-          );
-        }
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการสร้างคอร์สเรียน");
       }
-    } finally {
-      setLoading(false);
     }
   };
+
 
   return (
     <>

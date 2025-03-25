@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { getAssignmentscore } from "@/actions/assignment";
 import { IAssignmentScore } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
@@ -12,10 +11,7 @@ import { Loading } from "@/components/Loading/Loading";
 import ScoreUserTable from "@/components/Table/ScoreUserTable";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/navigation"; 
-import { AssignmentType } from "@/enum/enum";
 import ExportButtonScoreUser from "@/components/Button/ExportButtonScoreUser";
-
-type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
 export default function Score() {
   const { courseId, assignmentId } = useParams<{
@@ -24,82 +20,30 @@ export default function Score() {
   }>();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>(""); // Error message
-  const [assignments, setAssignments] = useState<AssignmentItem[]>([]);
-  const [filteredAssignments, setFilteredAssignments] = useState<
-    AssignmentItem[]
-  >([]); 
+  const [assignment, setAssignment] = useState<IAssignmentScore>();
+  const [filterUserAssignments, setFilterUserAssignments] = useState<IAssignmentScore["scores"]>();
   const [search, setSearch] = useState<string>(""); 
   const [profile, setProfile] = useState<IProfile | null>(null);
-  const [selectedAssignment, setSelectedAssignment] =
-    useState<AssignmentItem | null>(null);
-
   const router = useRouter(); 
 
   useEffect(() => {
     const fetchAssignments = async () => {
-      try {
-        setIsLoading(true);
-
-       
         const profileData = await getProfile();
         setProfile(profileData);
 
-        const data = await getAssignmentscore(courseId);
-        const assignmentsArray: IAssignmentScore["data"] = data.data;
-
-        if (data?.data && Array.isArray(data.data)) {
-          const filteredAssignments = assignmentsArray.filter(
-            (assignment: IAssignmentScore["data"][number]) =>
-              assignment.type === AssignmentType.EXAMONLINE ||
-              assignment.type === AssignmentType.EXAMONSITE
-          );
-
-          const transformedAssignments: AssignmentItem[] =
-            filteredAssignments.map((assignment) => ({
-              ...assignment,
-              totalScore: assignment.scores?.[0]?.totalScore || 0,
-            }));
-
-          setAssignments(transformedAssignments);
-          setFilteredAssignments(transformedAssignments);
-
-          
-          const assignment = transformedAssignments.find(
-            (assignment) => assignment.assignmentId === assignmentId
-          );
-          setSelectedAssignment(assignment || null); 
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError("เกิดข้อผิดพลาดในการโหลดข้อมูล");
-      } finally {
+        const data:IAssignmentScore[] = await getAssignmentscore(courseId);
+        setAssignment(data.filter((item) => item.assignmentId === assignmentId)[0]);
+        setFilterUserAssignments(data.filter((item) => item.assignmentId === assignmentId)[0].scores);
         setIsLoading(false);
-      }
     };
 
     fetchAssignments();
   }, [courseId, assignmentId]);
 
   useEffect(() => {
-    if (assignments && Array.isArray(assignments)) {
-      const newFilteredAssignments = assignments.filter((assignment) =>
-        assignment.scores.some((score) => {
-          const firstName = score.firstName
-            ? score.firstName.toLowerCase()
-            : "";
-          const lastName = score.lastName ? score.lastName.toLowerCase() : "";
-          const searchTerm = search.toLowerCase().trim();
-          return (
-            firstName.includes(searchTerm) || lastName.includes(searchTerm)
-          );
-        })
-      );
-      setFilteredAssignments(newFilteredAssignments);
-    }
-  }, [search, assignments]);
+    setFilterUserAssignments(assignment?.scores.filter((user) => user.firstName.toLowerCase().includes(search.toLowerCase()) || user.lastName.toLowerCase().includes(search.toLowerCase())))
+  }, [search, assignment]);
 
-  const assignmentTitle = selectedAssignment?.title || "ไม่พบชื่อแบบฝึกหัด";
 
   return (
     <>
@@ -116,23 +60,16 @@ export default function Score() {
             gender={profile?.gender}
           >
             <div className="flex items-center gap-2 ">
-              <ArrowBackIosIcon className="" onClick={() => router.back()} />
-              <p className="font-semibold">{assignmentTitle}</p>
+              <ArrowBackIosIcon className="cursor-pointer hover:text-primary" onClick={() => router.back()} />
+              <p className="font-semibold">{assignment?.title}</p>
             </div>
           </TopNav>
 
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
-
-            <ExportButtonScoreUser assignments={assignments} />
+            <ExportButtonScoreUser assignment={assignment} />
           </div>
-
-          {error && <p className="text-red-500 text-center">{error}</p>}
-
-          <ScoreUserTable
-            assignments={filteredAssignments}
-            assignmentId={assignmentId}
-          />
+          <ScoreUserTable assignment={assignment && { ...assignment, assignmentId: assignment.assignmentId || "", scores: filterUserAssignments || [] }} />
         </>
       )}
     </>

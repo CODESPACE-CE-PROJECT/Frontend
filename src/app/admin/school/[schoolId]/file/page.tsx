@@ -96,7 +96,12 @@ export default function Page() {
           </div>
      ) : (
           <div className="flex flex-col gap-y-12">
-               <TopNav disableNotification={true} imageUrl={profile?.pictureUrl} role={profile?.role} gender={profile?.gender}>
+               <TopNav 
+                    disableNotification={true} 
+                    imageUrl={profile?.pictureUrl} 
+                    role={profile?.role}
+                    gender={profile?.gender}
+               >
                     <div className="flex flex-row items-center gap-x-3">
                          <div className="cursor-pointer hover:text-primary" onClick={() => router.back()}>
                               <ArrowBackIosNewRoundedIcon />

@@ -50,33 +50,33 @@ export const getCoursesById = async (courseId: string) => {
 
 export const editCourse = async (courseId: string, courseData: FormData) => {
   const token = await getToken();
-
-  if (!token) {
-    throw new Error("No access token found");
-  }
-
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-  const response: AxiosResponse = await axios.patch(
+  return await axios.patch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}`,
-    courseData, // ใช้ `FormData` แทน JSON
+    courseData,
     {
       headers: {
-        "Content-Type": "multipart/form-data", // เปลี่ยนเป็น `multipart/form-data`
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
       },
     }
-  );
-  return response.data.data;
+  ).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data,
+    };
+  }).catch((e: AxiosError) => {
+    return {
+      status: e.response?.status,
+      data: e.response?.data,
+    }
+  });
 };
 
 export const uploadCoursePicture = async (courseId: string, picture: File) => {
   const token = await getToken();
-  if (!token) throw new Error("No access token found");
-
   const formData = new FormData();
-
-  formData.append("picture", picture);
-  const response: AxiosResponse = await axios.patch(
+  formData.append("picture", picture);  
+  return await axios.patch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}`,
     formData,
     {
@@ -85,18 +85,22 @@ export const uploadCoursePicture = async (courseId: string, picture: File) => {
         "Content-Type": "multipart/form-data",
       },
     }
-  );
-  return response.data.data;
+  ).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data,
+    }
+  }).catch((e: AxiosError) => {
+    return {
+      status: e.response?.status,
+      data: e.response?.data,
+    }
+  });
 };
 
 export const createCourse = async (formData: FormData) => {
   const token = await getToken();
-  if (!token) {
-    alert("คุณไม่ได้รับอนุญาต โปรดเข้าสู่ระบบ");
-    return;
-  }
-
-  const response: AxiosResponse = await axios.post(
+  return await axios.post(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/course`,
     formData,
     {
@@ -105,24 +109,36 @@ export const createCourse = async (formData: FormData) => {
         "Content-Type": "multipart/form-data",
       },
     }
-  );
-
-  return response.data;
+  ).then((res) => ({
+    status: res.status,
+    data: res.data.data
+  })
+  ).catch((err: AxiosError) => ({
+    status: err.status,
+    data: err.response?.data
+  }));
 };
 
 export const deleteCoursesById = async (courseId: string) => {
   const token = await getToken();
-
-  const response = await axios.delete(
+  return await axios.delete(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${courseId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
-  );
-
-  return response.data.data;
+  ).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data,
+    };
+  }).catch((e: AxiosError) => {
+    return {
+      status: e.response?.status,
+      data: e.response?.data,
+    };
+  });
 };
 
 export const addPeopleToCourse = async (formData: IAddPeopleToCourse) => {

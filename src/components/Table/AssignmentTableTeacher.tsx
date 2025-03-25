@@ -3,7 +3,7 @@ import ToggleButton from "@/components/Button/ToggleButton";
 import { OptionAssignment } from "@/components/Options/OptionAssignment";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import AssignmentBoxTeacher from "../Assignment/AssignmentBoxTeacher";
-import { AnnounceAssignmentType } from "@/enum/enum";
+import { AnnounceAssignmentType, AssignmentType } from "@/enum/enum";
 
 interface Props {
   data: IAssignment[];
@@ -24,7 +24,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ data, onToggle, handleDelete 
     <table className="w-full border-separate border-spacing-4">
       <thead className="text-lg font-medium">
         <tr>
-          <th className="py-4 rounded-md bg-table-header">แบบฝึกหัด</th>
+          <th className="py-4 rounded-md bg-table-header">{data[0].type === AssignmentType.EXERCISE ? 'แบบฝึกหัด': 'การทดสอบ'}</th>
           <th className="py-4 rounded-md bg-table-header">สถานะ</th>
           <th className="py-4 rounded-md bg-table-header">ข้อย่อย</th>
           <th className="py-4 rounded-md bg-table-header">คะแนน</th>
