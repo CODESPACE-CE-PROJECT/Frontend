@@ -5,11 +5,9 @@ import NavigationTab from "@/components/Tab/NavigationTab";
 import ScoreAssignTable from "@/components/Table/ScoreAssignTable";
 import {
   getAssignmentscore,
-  getAssignmentByCourseId,
 } from "@/actions/assignment";
-import { IAssignmentScore, IAssignment } from "@/types/assignment";
+import { IAssignmentScore } from "@/types/assignment";
 import { SearchBar } from "@/components/Input/SerachBar";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
@@ -17,87 +15,43 @@ import { Loading } from "@/components/Loading/Loading";
 import ScoreStdTable from "@/components/Table/ScoreStdTable";
 import { AssignmentType } from "@/enum/enum";
 import ExportButton from "@/components/Button/ExportButton";
+import { Dropdown } from "@/components/Input/Dropdown";
 
-type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
 export default function Score() {
   const params = useParams<{ courseId: string }>();
   const { courseId } = params;
-
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [assignments, setAssignments] = useState<AssignmentItem[]>([]);
+  const [assignments, setAssignments] = useState<IAssignmentScore[]>([]);
+  const [filteredAssignments, setFilteredAssignments] = useState<IAssignmentScore[]>([]);
   const [search, setSearch] = useState<string>("");
   const [profile, setProfile] = useState<IProfile>();
-  const [selectedView, setSelectedView] = useState<"แบบฝึกหัด" | "ผู้เรียน">(
-    "แบบฝึกหัด"
+  const [selectedView, setSelectedView] = useState<"การทดสอบ" | "ผู้เรียน">(
+    "การทดสอบ"
   );
-  const [assignmentLock, setAssignmentLock] = useState<{
-    [assignmentId: string]: boolean;
-  }>({});
 
   useEffect(() => {
     const fetchAssignments = async () => {
-      if (!courseId) return;
+      const profile: IProfile = await getProfile();
+      setProfile(profile);
 
-      try {
-        const profileData = await getProfile();
-        setProfile(profileData);
-
-        // ดึงคะแนนจาก API
-        const data = await getAssignmentscore(courseId);
-        if (data?.data && Array.isArray(data.data)) {
-          const assignmentsArray: IAssignmentScore["data"] = data.data;
-
-          const filteredAssignments = assignmentsArray.filter(
-            (assignment: IAssignmentScore["data"][number]) =>
-              assignment.type === AssignmentType.EXAMONLINE ||
-              assignment.type === AssignmentType.EXAMONSITE
-          );
-
-          const transformedAssignments: AssignmentItem[] =
-            filteredAssignments.map((assignment) => ({
-              ...assignment,
-              totalScore:
-                assignment.scores && assignment.scores.length > 0
-                  ? assignment.scores.reduce(
-                      (acc, curr) => acc + curr.totalScore,
-                      0
-                    )
-                  : 0,
-            }));
-
-          setAssignments(transformedAssignments);
-        } else {
-          setError(
-            "Failed to fetch assignments or data is not in expected format."
-          );
-        }
-
-        const assignmentData = await getAssignmentByCourseId(courseId);
-
-        const lockStatus: { [assignmentId: string]: boolean } = {};
-
-        assignmentData.data?.map((assignment: IAssignment) => {
-          lockStatus[assignment.assignmentId] = assignment.isLock;
-        });
-
-        setAssignmentLock(lockStatus);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError("An error occurred while fetching assignments.");
-      } finally {
-        setIsLoading(false);
-      }
+      const data: IAssignmentScore[] = await getAssignmentscore(courseId);
+      const filteredAssignments = data.filter((item) => item.type !== AssignmentType.EXERCISE)
+      setAssignments(filteredAssignments)
+      setFilteredAssignments(filteredAssignments)
+      setIsLoading(false);
     };
 
     fetchAssignments();
   }, [courseId]);
 
-  const filteredAssignments = assignments.filter((assignment) =>
-    assignment.title.toLowerCase().includes(search.toLowerCase())
-  );
-
+  useEffect(() => {
+      if(selectedView === "การทดสอบ") {
+        setFilteredAssignments(assignments.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())))
+      } else {
+        setFilteredAssignments(assignments.filter((item) => item.scores.filter((user) => user.firstName.toLowerCase().includes(search.toLowerCase()) || user.lastName.toLowerCase().includes(search.toLowerCase())).length > 0))
+      }
+    }, [search])
   return (
     <>
       {isLoading ? (
@@ -122,29 +76,27 @@ export default function Score() {
             />
 
             <div className="flex flex-col">
-              <select
-                className="px-4 w-[160px] rounded-md border border-[#2A3A50] bg-[#0c121c] text-white my-2"
+              <Dropdown
+                name="viewSelector"
+                options={["การทดสอบ", "ผู้เรียน"]}
                 value={selectedView}
-                onChange={(e) =>
-                  setSelectedView(e.target.value as "แบบฝึกหัด" | "ผู้เรียน")
+                onChange={(value) =>
+                  setSelectedView(value as "การทดสอบ" | "ผู้เรียน")
                 }
-              >
-                <option value="แบบฝึกหัด">แบบฝึกหัด</option>
-                <option value="ผู้เรียน">ผู้เรียน</option>
-              </select>
+                className="w-48 z-10"
+              />
             </div>
           </div>
 
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
             <ExportButton assignments={assignments} />{" "}
-           
+
           </div>
 
-          {selectedView === "แบบฝึกหัด" ? (
+          {selectedView === "การทดสอบ" ? (
             <ScoreAssignTable
               assignments={filteredAssignments}
-              assignmentLock={assignmentLock}
               courseId={courseId}
             />
           ) : (

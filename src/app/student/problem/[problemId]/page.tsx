@@ -62,6 +62,7 @@ export default function Page() {
                }
                const id = notify(NotifyType.LOADING, "กำลังส่งคำตอบ")
                const { status, data } = await submissionCode(submitCode)
+               console.log(data)
 
                if (id) {
                     if (status === 200) {

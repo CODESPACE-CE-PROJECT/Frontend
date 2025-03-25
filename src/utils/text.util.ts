@@ -80,3 +80,13 @@ export const textAssignmentType = (type: AssignmentType) => {
           return "การสอบออนไซต์"
      }
 }
+
+export const textToAssignmentType = (type: string) => {
+     if (type === "แบบฝึกหัด") {
+          return AssignmentType.EXERCISE
+     } else if (type === "การทดสอบออนไลน์") {
+          return AssignmentType.EXAMONLINE
+     } else if (type === "การทดสอบออนไซต์") {
+          return AssignmentType.EXAMONSITE
+     }
+}

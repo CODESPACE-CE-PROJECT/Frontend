@@ -1,27 +1,22 @@
 import { IAssignment } from "@/types/assignment";
-import { AssignmentType } from "@/enum/enum";
+import AssignmentBox from "@/components/Assignment/AssignmentBox";
 
 interface Props {
-  assignment: IAssignment;
-  
-  isStudentOnSite: boolean;
+  data: IAssignment;
 }
 
-const AssignmentBox: React.FC<Props> = ({ assignment,  isStudentOnSite }) => {
-  const isExam = assignment.type ===  AssignmentType.EXAMONLINE || assignment.type ===  AssignmentType.EXAMONSITE;
-  const isExamActive = !assignment.isLock; // ถ้าการสอบไม่ถูกล็อก แสดงว่ากำลังเปิดสอบ
-  const showWarning = isExam && isExamActive && !isStudentOnSite; // นักเรียนไม่ได้อยู่ที่สถานที่สอบ
+export const AssignmentBoxExam: React.FC<Props> = ({ data }) => {
+
   return (
-    <div className="text-white text-lg">
-      {showWarning ? (
-        <div className="text-[#FAFAFA] border border-[#2A3A50] rounded-md">นักเรียนไม่ได้อยู่ในสถานที่สอบ</div>
-      ) : isExam ? (
-        <div className="border-2 border-[#2A3A50] p-2 rounded-md"> การสอบเปิดอยู่</div>
-      ) : (
-        <div className="bg-[#FF9811] py-4 px-8 border-dotted rounded-md">อนุญาตทำการทดสอบในพื้นที่ที่กำหนด</div>
-      )}
+    <div className="text-white text-lg text-center">
+      {
+        data.checkOutside && !data.isLock ? 
+        <div className="text-white border border-dotted rounded-md py-5 bg-[#FF9811] bg-opacity-50">อนุญาตทำการทดสอบในพื้นที่ที่กำหนด</div>
+        : data.checkOutside && data.isLock ? <div className="text-white border border-dotted rounded-md py-5 bg-opacity-50">อนุญาตทำการทดสอบในพื้นที่ที่กำหนด</div>:
+        <AssignmentBox data={data.problem} isLock={data.isLock} />
+      }
     </div>
   );
 };
 
-export default AssignmentBox;
+

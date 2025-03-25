@@ -4,7 +4,7 @@ import { ICreateAssignment } from "@/types/assignment";
 import { Label } from "@/components/Input/Label";
 import { TextField } from "@/components/Input/TextField/TextField";
 import { Dropdown } from "@/components/Input/Dropdown";
-import { textAssignmentType } from "@/utils/text.util";
+import { textAssignmentType, textToAssignmentType } from "@/utils/text.util";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 
@@ -48,7 +48,7 @@ export const CreateAssignmentModal: React.FC<Props> = ({
               <Dropdown
                 value={textAssignmentType(data.type)}
                 name="type"
-                onChange={handleInputChange}
+                onChange={(value, name) => handleInputChange(textToAssignmentType(value) as string, name)}
                 options={["แบบฝึกหัด", "การทดสอบออนไซต์", "การทดสอบออนไลน์"]}
                 className="border-border-text-light border-[1px] rounded-md w-full"
                 bgColor="bg-white"

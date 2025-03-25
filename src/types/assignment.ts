@@ -33,6 +33,7 @@ export type IAssignment = {
   announceDate: Date;
   createdAt: Date;
   updatedAt: Date;
+  checkOutside: boolean;
   courseId: string;
   problem: IProblem[];
   totalScore: number;
@@ -71,10 +72,10 @@ export type IDashboard = {
 };
 
 export type IAssignmentScore = {
-  data: {
     assignmentId: string;
     title: string;
     type: AssignmentType;
+    isLock: boolean;
     scores: {
       username: string;
       firstName: string;
@@ -86,7 +87,7 @@ export type IAssignmentScore = {
       }[];
       totalScore: number;
     }[];
-  }[];
+    totalScoreProblem?: number;
 };
 
 export type IUpdateAssignment = {

@@ -3,7 +3,7 @@ import React from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import { useParams } from "next/navigation";
+import { IAssignmentScore } from "@/types/assignment";
 
 interface IProblem {
   problemId: string;
@@ -18,34 +18,17 @@ interface IStudentScore {
 }
 
 interface Props {
-  assignments: {
-    assignmentId: string;
-    scores: IStudentScore[];
-  }[];
+  assignment?: IAssignmentScore;
 }
 
-const ExportButtonScoreUser: React.FC<Props> = ({ assignments }) => {
-  const { assignmentId } = useParams();
+const ExportButtonScoreUser: React.FC<Props> = ({ assignment }) => {
 
   const exportToExcel = () => {
-    if (!assignmentId) {
-      alert("ไม่พบ assignmentId");
-      return;
-    }
-
-    const currentAssignment = assignments.find(
-      (assignment) => assignment.assignmentId === assignmentId
-    );
-
-    if (!currentAssignment) {
-      alert("ไม่พบข้อมูลสำหรับส่งออก");
-      return;
-    }
 
     const studentScores: Record<string, Record<string, number> & { total: number }> = {};
     let allProblemIds: string[] = [];
 
-    currentAssignment.scores.forEach((score: IStudentScore) => {
+    assignment?.scores.forEach((score: IStudentScore) => {
       const studentName = `${score.firstName} ${score.lastName}`;
 
       if (!studentScores[studentName]) {
@@ -84,12 +67,12 @@ const ExportButtonScoreUser: React.FC<Props> = ({ assignments }) => {
 
     const ws = XLSX.utils.aoa_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "คะแนนนักเรียน");
+    XLSX.utils.book_append_sheet(wb, ws, assignment?.title);
 
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
 
-    saveAs(data, `คะแนนนักเรียน.xlsx`);
+    saveAs(data, `${assignment?.title}.xlsx`);
   };
 
   return (

@@ -15,7 +15,8 @@ jobs:
             env:
                NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
                NEXT_PUBLIC_COMPILER_URL: ${{ secrets.NEXT_PUBLIC_COMPILER_URL }}
-               NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL }}
+               NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL }}\
+               NEXT_PUBLIC_TERMINAL_STREAM_URL: ${{ secrets.NEXT_PUBLIC_TERMINAL_STREAM_URL }}
             run: |
                echo "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" >> .env
                echo "NEXT_PUBLIC_COMPILER_URL=$NEXT_PUBLIC_COMPILER_URL" >> .env

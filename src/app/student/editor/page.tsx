@@ -28,6 +28,7 @@ import { compileCode } from "@/actions/compiler";
 import { ICompileCode } from "@/types/compile";
 import { getRealTimeURL, getTerminalStreamURL } from "@/actions/env";
 import { Socket, io } from 'socket.io-client'
+import { Terminal } from "@xterm/xterm";
 
 export default function Page() {
   const [profile, setProfile] = useState<IProfile>();
@@ -38,6 +39,7 @@ export default function Page() {
   const socketRef = useRef<Socket | null>(null)
   const [output, setOutput] = useState<string>()
   const [input, setInput] = useState<string>()
+  const terminalRef = useRef<Terminal | null>(null)
   const accessToken = getCookie('accessToken')
 
   const [editState, setEditState] = useState<{
@@ -229,14 +231,27 @@ export default function Page() {
   }
 
   const handleExecutePremiumPackage = async () => {
-    const payload = {
-      sourceCode: selectedFile?.sourceCode,
-      language: selectedFile?.language,
-      fileName: selectedFile?.language === LanguageType.JAVA ? selectedFile.fileName.split('.')[0]: '' 
-    }
-
-    if(socket?.connected){
-      socket.emit('runCode', payload)
+    terminalRef.current?.clear()
+    if(selectedFile){
+      const payload = {
+        sourceCode: selectedFile?.sourceCode,
+        language: selectedFile?.language,
+        fileName: selectedFile?.language === LanguageType.JAVA ? selectedFile.fileName.split('.')[0]: '' 
+      }
+      if(socket?.connected){
+        socket.emit('runCode', payload)
+      }
+      const updateForm: IUpdateCodeSpace = {
+        filename: selectedFile.fileName,
+        language: selectedFile.language,
+        sourceCode: selectedFile.sourceCode
+      }
+      const { status } = await updateFileCodeSpace(selectedFile?.codeSpaceId, updateForm);
+      if (status === 200 && profile) {
+        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
+      } else {
+        return;
+      }
     }
   }
 
@@ -274,7 +289,7 @@ export default function Page() {
           />
           {
             isPremium ?
-              <WorkSpaceTerminal socket={socketRef.current}/> :
+              <WorkSpaceTerminal ref={terminalRef} socket={socketRef.current}/> :
               <InputOutput onInputChange={(value) => setInput(value)} output={output} />
           }
         </>
