@@ -33,7 +33,7 @@ export const CreateCourseModal: React.FC<Props> = ({
     sem: string,
     year: string
   ) => {
-    const newTitle = `${subject} ${level}/${sem}/${year}`.trim();
+    const newTitle = `${subject} ${level}/${sem}/${year}`;
     handleInputChange(newTitle, "title");
   };
 

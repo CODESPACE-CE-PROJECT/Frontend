@@ -13,5 +13,5 @@ export const getRealTimeURL = async () => {
 }
 
 export const getTerminalStreamURL = async () => {
-     return
+     return process.env.NEXT_PUBLIC_TERMINAL_STREAM_URL
 }

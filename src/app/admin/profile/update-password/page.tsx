@@ -93,7 +93,7 @@ export default function Page() {
                         </ConfirmButton>
                     </div>
                     <div className="mt-6 w-full">
-                        <CancelButton className="w-full hover:bg-gray-600" onClick={handleCancel}>
+                        <CancelButton className="w-full hover:bg-gray-600 py-3" onClick={handleCancel}>
                             ยกเลิก
                         </CancelButton>
                     </div>

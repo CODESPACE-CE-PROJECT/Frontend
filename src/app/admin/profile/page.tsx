@@ -115,7 +115,7 @@ export default function Setting() {
         <Loading className="size-20" />
       </div>
     ) : (
-      <div className="flex flex-col w-full p-10">
+      <div className="flex flex-col w-full h-full p-10">
         <TopNav
           disableNotification={false}
           imageUrl={profile?.pictureUrl}

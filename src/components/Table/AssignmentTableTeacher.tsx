@@ -57,7 +57,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ data, onToggle, handleDelete 
               <td className="text-center">{item.totalScore}</td>
               <td className="w-4">
                 <div className="flex flex-row w-full justify-center">
-                  <OptionAssignment assignmentId={item.assignmentId} courseId={item.courseId} />
+                  <OptionAssignment assignmentId={item.assignmentId} courseId={item.courseId} onDelete={() => handleDelete(item.assignmentId)}/>
                 </div>
               </td>
             </tr>

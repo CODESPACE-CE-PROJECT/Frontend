@@ -78,6 +78,7 @@ export default function Page() {
                     if(status === 201){
                          updateNotify(id,NotifyType.SUCCESS, 'สร้างบัญชีผู้ใช้งานสำเร็จ')
                          sessionStorage.removeItem(`dataFile-${param.schoolId}`)
+                         router.push(`/admin/school/${param.schoolId}`)
                     }else{
                          updateNotify(id,NotifyType.ERROR, 'เกิดข้อผิดผลาดในการสร้างบัญชีผู้ใช้งาน')
                     }
@@ -90,7 +91,7 @@ export default function Page() {
      }, [search, fileData])
 
      return isLoading ? (
-          <div className="flex flex-col items-center justify-center h-[70vh]">
+          <div className="flex flex-col items-center justify-center h-full">
                <Loading className="size-20" />
           </div>
      ) : (

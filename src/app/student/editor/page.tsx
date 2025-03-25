@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FileExplorer from "@/components/Workspace/FileExplorer";
 import WorkSpaceEditor from "@/components/Workspace/WorkSpaceEditor";
-import WorkSpaceTerminal from "@/components/Workspace/WorkSpaceTerminal";
+import { WorkSpaceTerminal } from "@/components/Workspace/WorkSpaceTerminal";
 import { InputOutput } from "@/components/Workspace/InputOutput";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
@@ -26,13 +26,16 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { getCookie } from "cookies-next/client";
 import { compileCode } from "@/actions/compiler";
 import { ICompileCode } from "@/types/compile";
-import { getRealTimeURL } from "@/actions/env";
+import { getRealTimeURL, getTerminalStreamURL } from "@/actions/env";
+import { Socket, io } from 'socket.io-client'
 
 export default function Page() {
   const [profile, setProfile] = useState<IProfile>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [codeFile, setCodeFile] = useState<ICodeSpace[]>();
   const [selectedFile, setSelectedFile] = useState<ICodeSpace>();
+  const [socket, setSocket] = useState<Socket | null>(null)
+  const socketRef = useRef<Socket | null>(null)
   const [output, setOutput] = useState<string>()
   const [input, setInput] = useState<string>()
   const accessToken = getCookie('accessToken')
@@ -130,28 +133,65 @@ export default function Page() {
         setSelectedFile(codeFile[0])
         localStorage.setItem("fileCache", JSON.stringify(codeFile[0]))
       }
-      const realTimeURL = await getRealTimeURL()
-      await fetchEventSource(`${realTimeURL}/compiler`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        async onopen(response) {
-          if (response.ok) {
+
+      if(profile.school.package === PackageType.STANDARD){
+        const realTimeURL = await getRealTimeURL()
+        await fetchEventSource(`${realTimeURL}/compiler`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          async onopen(response) {
+            if (response.ok) {
+              setIsLoading(false)
+            }
+          },
+          async onmessage(ev) {
+            if (ev.data === "ok") {
+              console.log("compiler connected")
+            } else {
+              setOutput(JSON.parse(ev.data).result)
+            }
+          },
+        });
+      } else if (profile.school.package === PackageType.PREMIUM){
+        const terminalStreamURL = await getTerminalStreamURL();
+        
+        if(!socketRef.current){
+          const sockerTeminal = io(terminalStreamURL, {
+            autoConnect: false,
+            extraHeaders: {
+              "authorization": accessToken as string
+            }
+          })
+          sockerTeminal.connect()
+          socketRef.current = sockerTeminal
+          
+          setSocket(sockerTeminal)
+          
+          sockerTeminal.on('connect', () => {
+            console.log("Terminal Stream connnect")
+          })
+
+          sockerTeminal.on('init', (msg) => {
+            console.log(msg)
             setIsLoading(false)
-          }
-        },
-        async onmessage(ev) {
-          if (ev.data === "ok") {
-            console.log("compiler connected")
-          } else {
-            setOutput(JSON.parse(ev.data).result)
-          }
-        },
-      });
+          })
+
+          sockerTeminal.on('error', (err) => {
+            console.log("socket error:", err)
+          })
+        }
+      }
     };
     fetchData();
-    setIsLoading(false)
+    
+    return () => {
+      if(socketRef.current){
+        socketRef.current.disconnect()
+        socketRef.current = null;
+      }
+    }
   }, [accessToken]);
 
   const isPremium = profile?.school?.package === PackageType.PREMIUM;
@@ -188,6 +228,18 @@ export default function Page() {
     }
   }
 
+  const handleExecutePremiumPackage = async () => {
+    const payload = {
+      sourceCode: selectedFile?.sourceCode,
+      language: selectedFile?.language,
+      fileName: selectedFile?.language === LanguageType.JAVA ? selectedFile.fileName.split('.')[0]: '' 
+    }
+
+    if(socket?.connected){
+      socket.emit('runCode', payload)
+    }
+  }
+
   return (
     <>
       {isLoading ? (
@@ -207,7 +259,7 @@ export default function Page() {
             editState={editState}
             onSelect={(file) => setSelectedFile(file)}
             selectedFile={selectedFile}
-            onExecute={handleExecuteStandardPackage}
+            onExecute={() => isPremium ? handleExecutePremiumPackage() : handleExecuteStandardPackage()}
           />
           <WorkSpaceEditor
             codeFile={selectedFile}
@@ -222,7 +274,7 @@ export default function Page() {
           />
           {
             isPremium ?
-              <WorkSpaceTerminal /> :
+              <WorkSpaceTerminal socket={socketRef.current}/> :
               <InputOutput onInputChange={(value) => setInput(value)} output={output} />
           }
         </>

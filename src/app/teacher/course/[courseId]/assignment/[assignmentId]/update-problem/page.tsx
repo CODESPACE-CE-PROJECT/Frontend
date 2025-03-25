@@ -264,6 +264,7 @@ const Page = () => {
             <InputDateTimePicker
               value={updateAssignmentForm.announceDate.toString()}
               onChange={handleUpdateAssignment}
+              textColor="#FAFAFA"
               name="announceDate"
             />
           </div>
