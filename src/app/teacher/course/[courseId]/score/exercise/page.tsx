@@ -18,6 +18,7 @@ import ScoreStdTable from "@/components/Table/ScoreStdTable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ExportButton from "@/components/Button/ExportButton";
+import { Dropdown } from "@/components/Input/Dropdown";
 
 type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
@@ -94,8 +95,6 @@ export default function Score() {
     assignment.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  
-
   return (
     <>
       {isLoading ? (
@@ -120,23 +119,21 @@ export default function Score() {
             />
 
             <div className="flex flex-col">
-              <select
-                className="px-4 w-[160px] rounded-md border border-[#2A3A50] bg-[#0c121c] text-white my-2"
+              <Dropdown
+                name="viewSelector"
+                options={["แบบฝึกหัด", "ผู้เรียน"]}
                 value={selectedView}
-                onChange={(e) =>
-                  setSelectedView(e.target.value as "แบบฝึกหัด" | "ผู้เรียน")
+                onChange={(value) =>
+                  setSelectedView(value as "แบบฝึกหัด" | "ผู้เรียน")
                 }
-              >
-                <option value="แบบฝึกหัด">แบบฝึกหัด</option>
-                <option value="ผู้เรียน">ผู้เรียน</option>
-              </select>
+                className="h-[39px] px-4 w-[200px]"
+              />
             </div>
           </div>
 
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
             <ExportButton assignments={assignments} />{" "}
-           
           </div>
 
           {selectedView === "แบบฝึกหัด" ? (

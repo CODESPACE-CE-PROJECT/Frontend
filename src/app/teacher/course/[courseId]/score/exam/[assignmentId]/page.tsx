@@ -13,6 +13,7 @@ import ScoreUserTable from "@/components/Table/ScoreUserTable";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/navigation"; 
 import { AssignmentType } from "@/enum/enum";
+import ExportButtonScoreUser from "@/components/Button/ExportButtonScoreUser";
 
 type AssignmentItem = IAssignmentScore["data"][number] & { totalScore: number };
 
@@ -123,10 +124,7 @@ export default function Score() {
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
 
-            <button className="bg-white text-[#5572FA] font-bold text-lg text-nowrap flex items-center justify-center gap-2 w-[160px] px-4 py-2 rounded-lg shadow-md hover:bg-[#f1f5ff] transition-all duration-200">
-              <NoteAddIcon className="text-[#5572FA]" />
-              ส่งออกไฟล์
-            </button>
+            <ExportButtonScoreUser assignments={assignments} />
           </div>
 
           {error && <p className="text-red-500 text-center">{error}</p>}
