@@ -25,7 +25,7 @@ export const CoursesCard: React.FC<Props> = ({ data }) => {
     >
       {data.backgroundUrl ? (
         <Image
-          className="self-center rounded-t-2xl max-w-[286px] max-h-[160px] object-cover"
+          className="self-center rounded-t-2xl min-w-[286px] max-w-[286px] min-h-[160px] max-h-[160px] object-cover"
           src={data?.backgroundUrl }
           alt={data?.title || "คอร์สเรียน"}
           width={500}
