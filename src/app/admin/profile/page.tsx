@@ -120,6 +120,7 @@ export default function Setting() {
           disableNotification={false}
           imageUrl={profile?.pictureUrl}
           role={profile?.role}
+          gender={profile?.gender}
         >
           <p>โปรไฟล์</p>
         </TopNav>

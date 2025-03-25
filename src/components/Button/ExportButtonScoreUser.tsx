@@ -25,7 +25,11 @@ const ExportButtonScoreUser: React.FC<Props> = ({ assignment }) => {
 
   const exportToExcel = () => {
 
-    const studentScores: Record<string, Record<string, number> & { total: number }> = {};
+    const title = assignment?.title || "ไม่มีชื่อ"; 
+    const studentScores: Record<
+      string,
+      Record<string, number> & { total: number }
+    > = {};
     let allProblemIds: string[] = [];
 
     assignment?.scores.forEach((score: IStudentScore) => {
@@ -40,27 +44,35 @@ const ExportButtonScoreUser: React.FC<Props> = ({ assignment }) => {
         studentScores[studentName].total += problem.score;
       });
 
-      allProblemIds = [...new Set([...allProblemIds, ...score.problems.map((p) => p.problemId)])];
+      allProblemIds = [
+        ...new Set([
+          ...allProblemIds,
+          ...score.problems.map((p) => p.problemId),
+        ]),
+      ];
     });
 
-    allProblemIds.sort(); 
+    allProblemIds.sort();
 
-  
     const problemIndexMap: Record<string, number> = {};
     allProblemIds.forEach((problemId, index) => {
       problemIndexMap[problemId] = index + 1;
     });
 
-   
-    const headerRow: (string | number)[] = ["ชื่อผู้เรียน", ...allProblemIds.map((problemId) => problemIndexMap[problemId]), "รวม"];
+    const headerRow: (string | number)[] = [
+      "ชื่อผู้เรียน",
+      ...allProblemIds.map((problemId) => problemIndexMap[problemId]),
+      "รวม",
+      "คะแนนเต็ม",
+    ];
     const dataToExport: (string | number)[][] = [headerRow];
 
-    
     Object.entries(studentScores).forEach(([studentName, scores], index) => {
       const row: (string | number)[] = [
-        `${index + 1}. ${studentName}`, 
-        ...allProblemIds.map((problemId) => scores[problemId] ?? 0), 
-        scores.total, 
+        `${index + 1}. ${studentName}`,
+        ...allProblemIds.map((problemId) => scores[problemId] ?? 0),
+        scores.total,
+        assignment?.totalScoreProblem || 0,
       ];
       dataToExport.push(row);
     });
@@ -72,7 +84,7 @@ const ExportButtonScoreUser: React.FC<Props> = ({ assignment }) => {
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
 
-    saveAs(data, `${assignment?.title}.xlsx`);
+    saveAs(data, `คะแนนนักเรียน-${title}.xlsx`);
   };
 
   return (

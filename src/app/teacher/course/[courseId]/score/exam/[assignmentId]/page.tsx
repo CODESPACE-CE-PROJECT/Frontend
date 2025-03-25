@@ -42,7 +42,7 @@ export default function Score() {
 
   useEffect(() => {
     setFilterUserAssignments(assignment?.scores.filter((user) => user.firstName.toLowerCase().includes(search.toLowerCase()) || user.lastName.toLowerCase().includes(search.toLowerCase())))
-  }, [search]);
+  }, [search, assignment]);
 
 
   return (

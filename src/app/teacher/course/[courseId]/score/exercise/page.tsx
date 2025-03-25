@@ -52,7 +52,7 @@ export default function Score() {
     } else {
       setFilteredAssignments(assignments.filter((item) => item.scores.filter((user) => user.firstName.toLowerCase().includes(search.toLowerCase()) || user.lastName.toLowerCase().includes(search.toLowerCase())).length > 0))
     }
-  }, [search])
+  }, [search, selectedView, assignments])
 
   return (
     <>

@@ -17,7 +17,6 @@ import { AssignmentType } from "@/enum/enum";
 import ExportButton from "@/components/Button/ExportButton";
 import { Dropdown } from "@/components/Input/Dropdown";
 
-
 export default function Score() {
   const params = useParams<{ courseId: string }>();
   const { courseId } = params;
@@ -51,7 +50,8 @@ export default function Score() {
       } else {
         setFilteredAssignments(assignments.filter((item) => item.scores.filter((user) => user.firstName.toLowerCase().includes(search.toLowerCase()) || user.lastName.toLowerCase().includes(search.toLowerCase())).length > 0))
       }
-    }, [search])
+    }, [search, assignments, selectedView])
+  
   return (
     <>
       {isLoading ? (
@@ -91,7 +91,6 @@ export default function Score() {
           <div className="mt-4 flex items-center gap-4">
             <SearchBar onChange={(value) => setSearch(value)} />
             <ExportButton assignments={assignments} />{" "}
-
           </div>
 
           {selectedView === "การทดสอบ" ? (
