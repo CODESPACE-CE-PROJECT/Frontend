@@ -14,7 +14,7 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
-import { createAssignment, deleteAssignment } from "@/actions/assignment";
+import { createAssignment, deleteAssignmentById } from "@/actions/assignment";
 import { AssignmentType } from "@/enum/enum";
 import { updatedLockAssignment } from "@/actions/assignment";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
@@ -29,12 +29,12 @@ export default function Assignment() {
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState<ICreateAssignment>({
+  const [createData, setCreateData] = useState<ICreateAssignment>({
     title: "",
-    type: AssignmentType.EXAMONSITE,
-    announceDate: new Date(""),
-    startAt: new Date(""),
-    expireAt: new Date(""),
+    type: AssignmentType.EXAMONLINE,
+    announceDate: new Date(),
+    startAt: new Date(),
+    expireAt: new Date(new Date().setDate(new Date().getDate() + 1)),
     courseId: param.courseId,
   });
 
@@ -51,71 +51,56 @@ export default function Assignment() {
   }, [param.courseId]);
 
   const handleInputChange = (value: string | number, name: string) => {
-    setFormData((prev) => {
+    setCreateData((prev) => {
       return {
         ...prev,
         [name]: value,
-      } as ICreateAssignment;
+      };
     });
   };
 
   const handleSubmit = async () => {
-    const assignmentData = {
-      ...formData,
-      courseId: param.courseId,
-    };
-
-    const id = notify(NotifyType.LOADING, "กำลังสร้างแบบฝึกหัด...");
-
-    try {
-      const result = await createAssignment(assignmentData);
-      setIsModalOpen(false);
-      if (id) {
-        updateNotify(id, NotifyType.SUCCESS, "สร้างแบบฝึกหัดสำเร็จ!");
-      }
-      // Fetch assignments again after creating a new one
-      // await fetchAssignments(); // Re-fetch assignments after creation
-    } catch (error) {
-      console.log("Error creating assignment:", error);
-      if (id) {
-        updateNotify(id, NotifyType.ERROR, "ไม่สามารถสร้างแบบฝึกหัดได้");
+    const id = notify(NotifyType.LOADING, "กำลังสร้างการทดสอบ");
+    const { status } = await createAssignment(createData);
+    if (id) {
+      if (status === 201) {
+        const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+        const filteredAssignments = data.filter((item) => item.type !== AssignmentType.EXERCISE);
+        setAssignments(filteredAssignments)
+        updateNotify(id, NotifyType.SUCCESS, "สร้างการทดสอบสำเร็จ");
+        setIsModalOpen(false);
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการสร้างการทดสอบ");
       }
     }
   };
 
-  const handleToggle = async (assignmentData: IUpdateLock) => {
-    await updatedLockAssignment(assignmentData);
-    // setAssignments((prevAssignments) => {
-    //   if (!prevAssignments) return prevAssignments;
-    //   const updatedAssignments = prevAssignments.assignment.map((assignment) =>
-    //     assignment.assignmentId === assignmentData.assignmentId
-    //       ? { ...assignment, isLock: assignmentData.isLock }
-    //       : assignment
-    //   );
-    //   return { assignment: updatedAssignments };
-    // });
+  const handleToggle = async (updateForm: IUpdateLock) => {
+    const id = notify(NotifyType.LOADING, "กำลังแก้ไขการทดสอบ")
+    const { status } = await updatedLockAssignment(updateForm);
+    if (id) {
+      if (status === 200) {
+        const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+        const filteredAssignments = data.filter((item) => item.type !== AssignmentType.EXERCISE);
+        setAssignments(filteredAssignments)
+        updateNotify(id, NotifyType.SUCCESS, "แก้ไขการทดสอบสำเร็จ")
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการแก้ไขการทดสอบ")
+      }
+    }
   };
 
   const handleDelete = async (assignmentId: string) => {
-    const id = notify(NotifyType.LOADING, "กำลังลบแบบฝึกหัด...");
-
-    try {
-      await deleteAssignment(assignmentId);
-      // setAssignments((prevAssignments) => {
-      //   if (!prevAssignments) return prevAssignments;
-      //   const updatedAssignments = prevAssignments.assignment.filter(
-      //     (assignment) => assignment.assignmentId !== assignmentId
-      //   );
-      //   return { assignment: updatedAssignments };
-      // });
-
-      if (id) {
-        updateNotify(id, NotifyType.SUCCESS, "ลบแบบฝึกหัดสำเร็จ!");
-      }
-    } catch (error) {
-      console.log("Error deleting assignment:", error);
-      if (id) {
-        updateNotify(id, NotifyType.ERROR, "ไม่สามารถลบแบบฝึกหัดได้");
+    const id = notify(NotifyType.LOADING, "กำลังลบการทดสอบ");
+    const { status } = await deleteAssignmentById(assignmentId);
+    if (id) {
+      if (status === 200) {
+        const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+        const filteredAssignments = data.filter((item) => item.type !== AssignmentType.EXERCISE);
+        setAssignments(filteredAssignments)
+        updateNotify(id, NotifyType.SUCCESS, "ลบการทดสอบสำเร็จ");
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผลาดในการลบการทดสอบ");
       }
     }
   };
@@ -162,6 +147,7 @@ export default function Assignment() {
           </div>
 
           <CreateAssignmentModal
+            data={createData}
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             handleInputChange={handleInputChange}

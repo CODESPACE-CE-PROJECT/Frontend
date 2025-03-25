@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import FileExplorer from "@/components/Workspace/FileExplorer";
 import WorkSpaceEditor from "@/components/Workspace/WorkSpaceEditor";
-import WorkSpaceTerminal from "@/components/Workspace/WorkSpaceTerminal";
+import { WorkSpaceTerminal } from "@/components/Workspace/WorkSpaceTerminal";
 import { InputOutput } from "@/components/Workspace/InputOutput";
 import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
@@ -215,11 +215,11 @@ export default function Page() {
                 };
               })}
           />
-          {
+          {/* {
             isPremium ?
-              <WorkSpaceTerminal /> :
+              <WorkSpaceTerminal socket={}/> :
               <InputOutput onInputChange={(value) => setInput(value)} output={output} />
-          }
+          } */}
         </>
       )}
     </>

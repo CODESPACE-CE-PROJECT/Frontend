@@ -82,14 +82,14 @@ export default function FileExplorer({
             onClick={() => onExecute()}
           >
             <PlayArrowIcon
-              fontSize="inherit"
+              fontSize="medium"
               className={`text-3xl ${codeFile && codeFile?.length > 0 ? 'hover:text-primary': 'text-gray-500'}`}
             />
           </button>
 
           <button onClick={onCreateFile}>
             <NoteAddIcon
-              fontSize="inherit"
+              fontSize="medium"
               className="text-3xl hover:text-primary cursor-pointer"
             />
           </button>

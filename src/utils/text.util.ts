@@ -1,4 +1,4 @@
-import { LanguageType, PackageType, Role } from "../enum/enum"
+import { AssignmentType, LanguageType, PackageType, Role } from "../enum/enum"
 
 export const textActivedUser = (isActived: boolean, allowLogin: boolean) => {
      if (!allowLogin) {
@@ -69,4 +69,14 @@ export const checkValidMessage = (text: string) => {
           return false
      }
      return true
+}
+
+export const textAssignmentType = (type: AssignmentType) => {
+     if (type === AssignmentType.EXERCISE) {
+          return "แบบฝึกหัด"
+     } else if (type === AssignmentType.EXAMONLINE) {
+          return "การทดสอบออนไลน์"
+     } else if (type === AssignmentType.EXAMONSITE) {
+          return "การสอบออนไซต์"
+     }
 }

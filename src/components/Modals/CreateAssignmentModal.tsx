@@ -1,16 +1,24 @@
 import { Modal } from "@/components/Modals/Modal";
-import { useState } from "react";
 import InputDateTimePicker from "@/components/Input/InputDateTimePicker";
+import { ICreateAssignment } from "@/types/assignment";
+import { Label } from "@/components/Input/Label";
+import { TextField } from "@/components/Input/TextField/TextField";
+import { Dropdown } from "@/components/Input/Dropdown";
+import { textAssignmentType } from "@/utils/text.util";
+import { CancelButton } from "@/components/Button/CancelButton";
+import { ConfirmButton } from "@/components/Button/ConfirmButton";
 
 interface Props {
   isOpen: boolean;
+  data: ICreateAssignment;
   onClose: () => void;
   onSubmit: () => void;
-  handleInputChange: (value: string, name: string) => void;
+  handleInputChange: (value: string | number, name: string) => void;
 }
 
 export const CreateAssignmentModal: React.FC<Props> = ({
   isOpen,
+  data,
   onClose,
   onSubmit,
   handleInputChange,
@@ -18,89 +26,84 @@ export const CreateAssignmentModal: React.FC<Props> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className=" mx-44 my-20">
-        <h2 className="text-xl font-bold text-center text-black">
+        <p className="text-xl font-bold text-center text-black">
           สร้างแบบฝึกหัด/การทดสอบ
-        </h2>
+        </p>
 
         <div className="mt-6 space-y-4">
-          <div className="flex flex-col">
-            <label className="font-medium text-black">
-              หัวข้อ <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-md text-black"
+          <div className="flex flex-col w-full justify-start items-start">
+            <Label text="หัวข้อ" isRequired={true} />
+            <TextField
+              name="title"
+              value={data.title}
+              className="bg-transparent border-border-text-light"
               placeholder="หัวข้อ"
-              onChange={(e) => handleInputChange(e.target.value, "title")}
+              onChange={handleInputChange}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <div className="flex flex-col">
-              <label className="font-medium text-black">
-                ประเภท <span className="text-red-500">*</span>
-              </label>
-              <select
-                className="w-full p-2 border border-gray-300 rounded-md text-black"
-                onChange={(e) => handleInputChange(e.target.value, "type")}
-              >
-                <option value="EXERCISE">แบบฝึกหัด</option>
-                <option value="EXAMONSITE">การทดสอบ</option>
-                <option value="EXAMONLINE">การทดสอบออนไลน์</option>
-              </select>
+            <div className="flex flex-col w-full justify-start items-start">
+              <Label text="ประเภท" isRequired={true} />
+              <Dropdown
+                value={textAssignmentType(data.type)}
+                name="type"
+                onChange={handleInputChange}
+                options={["แบบฝึกหัด", "การทดสอบออนไซต์", "การทดสอบออนไลน์"]}
+                className="border-border-text-light border-[1px] rounded-md w-full"
+                bgColor="bg-white"
+                topClass="top-12 z-10"
+              />
             </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-black">
-                วันเวลาแจ้งเตือน <span className="text-red-500">*</span>
-              </label>
+            <div className="flex flex-col w-full justify-start items-start">
+              <Label text="วันที่ประกาศ" isRequired={true} />
               <InputDateTimePicker
-                value=""
+                value={data.announceDate.toString()}
                 name="announceDate"
                 bgColor="#FFFFFF"
                 textColor="#0F1119"
-                onChange={handleInputChange}/>
+                border="1px solid #D1D5DB"
+                onChange={handleInputChange} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            <div className="flex flex-col">
-              <label className="font-medium text-black">
-                วันเวลาเริ่มต้น <span className="text-red-500">*</span>
-              </label>
+            <div className="flex flex-col justify-start items-start">
+              <Label text="วันเวลาเริ่ม" isRequired={true} />
               <InputDateTimePicker
-                value=""
+                value={data.startAt.toString()}
                 name="startAt"
                 bgColor="#FFFFFF"
                 textColor="#0F1119"
-                onChange={handleInputChange}/>
+                border="1px solid #D1D5DB"
+                onChange={handleInputChange} />
             </div>
-            <div className="flex flex-col">
-              <label className="font-medium text-black">
-                วันเวลาสิ้นสุด <span className="text-red-500">*</span>
-              </label>
+            <div className="flex flex-col w-full justify-start items-start">
+              <Label text="วันเวลาสิ้นสุด" isRequired={true} />
               <InputDateTimePicker
-                value=""
+                value={data.expireAt.toString()}
                 name="expireAt"
                 bgColor="#FFFFFF"
                 textColor="#0F1119"
-                onChange={handleInputChange}/>
+                border="1px solid #D1D5DB"
+                onChange={handleInputChange} />
             </div>
           </div>
         </div>
 
         <div className="mt-6 flex justify-center gap-4">
-          <button
-            className="border-[#CED4DA] border px-6 py-2 rounded-md text-black"
+          <CancelButton
+            className="py-3 hover:bg-gray-300 border-border-text-light"
             onClick={onClose}
           >
             ยกเลิก
-          </button>
-          <button
-            className="bg-[#5572FA] text-white px-6 py-2 rounded-md"
+          </CancelButton>
+          <ConfirmButton
+            className="px-11 text-white"
             onClick={onSubmit}
           >
             สร้าง
-          </button>
+          </ConfirmButton>
         </div>
       </div>
     </Modal>

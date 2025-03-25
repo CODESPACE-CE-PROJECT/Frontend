@@ -25,7 +25,6 @@ export const getProblemById = async (problemId: string) => {
 
 export const createProblem = async (formData: ICreateProblems) => {
   const token = await getToken();
-  console.log(formData)
   return await axios.post(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/problem`, 
     formData, 

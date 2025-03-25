@@ -14,7 +14,7 @@ import { IProfile } from "@/types/user";
 import { getProfile } from "@/actions/user";
 import { Loading } from "@/components/Loading/Loading";
 import { CreateAssignmentModal } from "@/components/Modals/CreateAssignmentModal";
-import { createAssignment, deleteAssignment } from "@/actions/assignment";
+import { createAssignment, deleteAssignmentById } from "@/actions/assignment";
 import { AssignmentType } from "@/enum/enum";
 import { updatedLockAssignment } from "@/actions/assignment";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
@@ -28,12 +28,12 @@ export default function Assignment() {
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState<ICreateAssignment>({
+  const [createData, setCreateData] = useState<ICreateAssignment>({
     title: "",
     type: AssignmentType.EXERCISE,
-    announceDate: new Date(""),
-    startAt: new Date(""),
-    expireAt: new Date(""),
+    announceDate: new Date(),
+    startAt: new Date(),
+    expireAt: new Date(new Date().setDate(new Date().getDate() + 1)),
     courseId: param.courseId,
   });
 
@@ -50,33 +50,26 @@ export default function Assignment() {
   }, [param.courseId]);
 
   const handleInputChange = (value: string | number, name: string) => {
-    setFormData((prev) => {
+    setCreateData((prev) => {
       return {
         ...prev,
         [name]: value,
-      } as ICreateAssignment;
+      };
     });
   };
 
   const handleSubmit = async () => {
-    const assignmentData = {
-      ...formData,
-      courseId: param.courseId,
-    };
-
-    const id = notify(NotifyType.LOADING, "กำลังสร้างแบบฝึกหัด...");
-
-    try {
-      const result = await createAssignment(assignmentData);
-      setIsModalOpen(false);
-      if (id) {
+    const id = notify(NotifyType.LOADING, "กำลังสร้างแบบฝึกหัด");
+    const { status } = await createAssignment(createData);
+    if (id) {
+      if (status === 201) {
         updateNotify(id, NotifyType.SUCCESS, "สร้างแบบฝึกหัดสำเร็จ!");
-      }
-
-    } catch (error) {
-      console.log("Error creating assignment:", error);
-      if (id) {
-        updateNotify(id, NotifyType.ERROR, "ไม่สามารถสร้างแบบฝึกหัดได้");
+        const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
+        const filteredAssignments = data.filter((item) => item.type === AssignmentType.EXERCISE);
+        setAssignments(filteredAssignments)
+        setIsModalOpen(false);
+      } else {
+        updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดสร้างแบบฝึกหัดได้");
       }
     }
   };
@@ -98,9 +91,9 @@ export default function Assignment() {
 
   const handleDelete = async (assignmentId: string) => {
     const id = notify(NotifyType.LOADING, "กำลังลบแบบฝึกหัด");
-    const {status} = await deleteAssignment(assignmentId);
+    const { status } = await deleteAssignmentById(assignmentId);
     if (id) {
-      if(status === 200){
+      if (status === 200) {
         const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
         const filteredAssignments = data.filter((item) => item.type === AssignmentType.EXERCISE);
         setAssignments(filteredAssignments)
@@ -153,6 +146,7 @@ export default function Assignment() {
           </div>
 
           <CreateAssignmentModal
+            data={createData}
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             handleInputChange={handleInputChange}
