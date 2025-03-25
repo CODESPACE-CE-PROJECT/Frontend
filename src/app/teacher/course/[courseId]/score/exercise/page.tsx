@@ -126,7 +126,7 @@ export default function Score() {
                 onChange={(value) =>
                   setSelectedView(value as "แบบฝึกหัด" | "ผู้เรียน")
                 }
-                className="h-[39px] px-4 w-[200px]"
+                className="z-10 h-[39px] px-4 w-[200px]"
               />
             </div>
           </div>
