@@ -1,85 +1,102 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextFieldPassword } from "@/components/Input/TextField/TextFieldPassword";
 import { Label } from "@/components/Input/Label";
-import { updatePassword } from "@/actions/user";
+import { getProfile, updatePassword } from "@/actions/user";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
+import { useRouter } from "next/navigation";
+import { IProfile, IUpdatePassword } from "@/types/user";
+import { TopNav } from "@/components/Navbar/TopNav";
+import { Loading } from "@/components/Loading/Loading";
 
 export default function Page() {
-    const [formData, setFormData] = useState({
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [profile, setProfile] = useState<IProfile>()
+    const [formData, setFormData] = useState<IUpdatePassword>({
         password: "",
-        confirmPassword: "",
+        confirmPassword: ""
     });
 
     const handleInputChange = (value: string | number, name: string) => {
         setFormData((prev) => {
-              return {
+            return {
                 ...prev,
-                [name]: value as string
-              } as {password: string , confirmPassword: string}
-            })
+                [name]: value
+            }
+        })
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         const id = notify(NotifyType.LOADING, "กำลังเปลี่ยนรหัสผ่าน");
-        const result = await updatePassword(formData);
-        if (id !== undefined) {
-              if (result.status === 201) {
-                updateNotify(id, NotifyType.SUCCESS, "ตอบกลับสำเร็จ");
-                
-              } else {
-                updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการตอบกลับ");
-              }
+        const { status } = await updatePassword(formData);
+        if (id) {
+            if (status === 201) {
+                updateNotify(id, NotifyType.SUCCESS, "แก้ไขรหัสผ่านสำเร็จ");
+                router.back()
+            } else {
+                updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการแก้ไขรหัสผ่าน");
             }
-        
+        }
     };
 
     const handleCancel = () => {
-        setFormData({
-            password: "",
-            confirmPassword: "",
-        });
-
+        router.back()
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const profile = await getProfile()
+            setProfile(profile)
+            setIsLoading(false)
+        }
+        fetchData()
+    }, [])
 
     const isDisabled = formData.password !== formData.confirmPassword || !formData.password || !formData.confirmPassword;
 
-    return (
-        <div>
-         
-            <div className="min-h-screen  flex items-start justify-center">
-                <div className="p-8 rounded-lg shadow-lg w-full max-w-[540px]">
-                    <p className="text-4xl mt-6 font-semibold text-center">เปลี่ยนรหัสผ่าน</p>
-                    <form onSubmit={handleSubmit} className="flex flex-col items-center mt-8">
+    return isLoading ? (
+        <div className="flex flex-col items-center justify-center h-full w-full">
+            <Loading className="size-20" />
+        </div>
+    ) : (
+        <div className="p-10 w-full h-[calc(100%-10px)]">
+            <TopNav
+                disableNotification={false}
+                imageUrl={profile?.pictureUrl}
+                role={profile?.role}
+            >
+                <p>โปรไฟล์</p>
+            </TopNav>
+            <div className="flex flex-row justify-center w-full h-full">
+                <div className="flex flex-col justify-center w-[540px]">
+                    <p className="text-4xl font-semibold text-center">เปลี่ยนรหัสผ่าน</p>
+                    <div className="flex flex-col items-start gap-y-3">
+                        <Label text="รหัสผ่าน" isRequired={true} />
+                        <TextFieldPassword name="password" onChange={handleInputChange} />
+                    </div>
 
-                        <div className="flex flex-col items-start w-full gap-y-3">
-                            <Label text="รหัสผ่าน" isRequired={true} />
-                            <TextFieldPassword name="password" onChange={handleInputChange} />
-                        </div>
+
+                    <div className="flex flex-col items-start w-full gap-y-3 mt-4">
+                        <Label text="ยืนยันรหัสผ่าน" isRequired={true} />
+                        <TextFieldPassword name="confirmPassword" onChange={handleInputChange} />
+                    </div>
 
 
-                        <div className="flex flex-col items-start w-full gap-y-3 mt-4">
-                            <Label text="ยืนยันรหัสผ่าน" isRequired={true} />
-                            <TextFieldPassword name="confirmPassword" onChange={handleInputChange} />
-                        </div>
-
-
-                        <div className="mt-6 w-full">
-                            <ConfirmButton className="w-full" disabled={isDisabled}>
-                                ยืนยัน
-                            </ConfirmButton>
-                        </div>
-                        <div className="mt-6 w-full">
-                            <CancelButton className="w-full" onClick={handleCancel}>
-                                ยกเลิก
-                            </CancelButton>
-                        </div>
-                    </form>
+                    <div className="mt-6 w-full">
+                        <ConfirmButton className="w-full" disabled={isDisabled} onClick={handleSubmit}>
+                            ยืนยัน
+                        </ConfirmButton>
+                    </div>
+                    <div className="mt-6 w-full">
+                        <CancelButton className="w-full hover:bg-gray-600" onClick={handleCancel}>
+                            ยกเลิก
+                        </CancelButton>
+                    </div>
                 </div>
             </div>
         </div>
