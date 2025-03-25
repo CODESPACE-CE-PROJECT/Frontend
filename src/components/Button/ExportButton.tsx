@@ -11,14 +11,14 @@ interface IStudentScore {
 }
 
 
-interface ExportButtonProps {
+interface Props {
   assignments: {
     title: string;
     scores: IStudentScore[];
   }[];
 }
 
-const ExportButton: React.FC<ExportButtonProps> = ({ assignments }) => {
+const ExportButton: React.FC<Props> = ({ assignments }) => {
   const exportToExcel = () => {
     if (assignments.length === 0) {
       alert("ไม่มีข้อมูลสำหรับส่งออก");
