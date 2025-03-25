@@ -1,6 +1,9 @@
 import { Modal } from "@/components/Modals/Modal";
 import { useState } from "react";
 import InputDateTimePicker from "@/components/Input/InputDateTimePicker";
+import { Dropdown } from "../Input/Dropdown";
+import { CancelButton } from "../Button/CancelButton";
+import { ConfirmButton } from "../Button/ConfirmButton";
 
 interface Props {
   isOpen: boolean;
@@ -15,9 +18,30 @@ export const CreateAssignmentModal: React.FC<Props> = ({
   onSubmit,
   handleInputChange,
 }) => {
+  const [selectedType, setSelectedType] = useState<string>("");
+
+  const handleTypeChange = (value: string, name: string) => {
+    let mappedValue = "";
+    switch (value) {
+      case "แบบฝึกหัด":
+        mappedValue = "EXERCISE";
+        break;
+      case "การทดสอบออนไซต์":
+        mappedValue = "EXAMONSITE";
+        break;
+      case "การทดสอบออนไลน์":
+        mappedValue = "EXAMONLINE";
+        break;
+      default:
+        mappedValue = "";
+    }
+    setSelectedType(mappedValue); 
+    handleInputChange(mappedValue, name); 
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className=" mx-44 my-20">
+      <div className="mx-44 my-20">
         <h2 className="text-xl font-bold text-center text-black">
           สร้างแบบฝึกหัด/การทดสอบ
         </h2>
@@ -40,14 +64,16 @@ export const CreateAssignmentModal: React.FC<Props> = ({
               <label className="font-medium text-black">
                 ประเภท <span className="text-red-500">*</span>
               </label>
-              <select
-                className="w-full p-2 border border-gray-300 rounded-md text-black"
-                onChange={(e) => handleInputChange(e.target.value, "type")}
-              >
-                <option value="EXERCISE">แบบฝึกหัด</option>
-                <option value="EXAMONSITE">การทดสอบ</option>
-                <option value="EXAMONLINE">การทดสอบออนไลน์</option>
-              </select>
+              <Dropdown
+                name="type"
+                options={["แบบฝึกหัด", "การทดสอบออนไซต์", "การทดสอบออนไลน์"]}
+                value={selectedType}
+                onChange={handleTypeChange} 
+                className="w-full border border-gray-300 rounded-md z-10"
+                bgColor="bg-white"
+                textColor="text-black"
+                border="border-gray-300"
+              />
             </div>
             <div className="flex flex-col">
               <label className="font-medium text-black">
@@ -58,7 +84,8 @@ export const CreateAssignmentModal: React.FC<Props> = ({
                 name="announceDate"
                 bgColor="#FFFFFF"
                 textColor="#0F1119"
-                onChange={handleInputChange}/>
+                onChange={handleInputChange}
+              />
             </div>
           </div>
 
@@ -72,7 +99,8 @@ export const CreateAssignmentModal: React.FC<Props> = ({
                 name="startAt"
                 bgColor="#FFFFFF"
                 textColor="#0F1119"
-                onChange={handleInputChange}/>
+                onChange={handleInputChange}
+              />
             </div>
             <div className="flex flex-col">
               <label className="font-medium text-black">
@@ -83,24 +111,25 @@ export const CreateAssignmentModal: React.FC<Props> = ({
                 name="expireAt"
                 bgColor="#FFFFFF"
                 textColor="#0F1119"
-                onChange={handleInputChange}/>
+                onChange={handleInputChange}
+              />
             </div>
           </div>
         </div>
 
         <div className="mt-6 flex justify-center gap-4">
-          <button
-            className="border-[#CED4DA] border px-6 py-2 rounded-md text-black"
+          <CancelButton
+            className="border-[#CED4DA] border px-4 py-3 rounded-md text-black w-[160px] h-[54px]"
             onClick={onClose}
           >
             ยกเลิก
-          </button>
-          <button
-            className="bg-[#5572FA] text-white px-6 py-2 rounded-md"
+          </CancelButton>
+          <ConfirmButton
+            className="bg-[#5572FA] text-white px-4 py-3 rounded-md w-[160px] h-[54px]"
             onClick={onSubmit}
           >
             สร้าง
-          </button>
+          </ConfirmButton>
         </div>
       </div>
     </Modal>
