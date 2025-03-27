@@ -168,7 +168,7 @@ export default function Page() {
               "authorization": accessToken as string
             }
           })
-          sockerTeminal.connect()
+          await sockerTeminal.connect()
           socketRef.current = sockerTeminal
           
           setSocket(sockerTeminal)
