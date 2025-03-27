@@ -141,7 +141,7 @@ export default function Setting() {
 
             <CancelButton
               onClick={() => document.getElementById("fileInput")?.click()}
-              className="hover:bg-gray-600">
+              className="hover:bg-gray-600 py-4">
               <p>เปลี่ยนโปรไฟล์</p>
               <input type="file" id="fileInput" onInput={handleFileChange} style={{ display: "none" }} accept="image/png, image/jpg" />
             </CancelButton>

@@ -9,9 +9,10 @@ interface Props {
   data: IAssignment[];
   onToggle: (updateForm: IUpdateLock) => void;
   handleDelete: (assignmentId: string) => void;
+  titleTable: string;
 }
 
-const AssignmentTableTeacher: React.FC<Props> = ({ data, onToggle, handleDelete }) => { 
+const AssignmentTableTeacher: React.FC<Props> = ({ data, onToggle, handleDelete, titleTable }) => { 
   const handleToggle = (assignmentId: string,isLock: boolean) => {
     const updateLock: IUpdateLock = {
       assignmentId: assignmentId,
@@ -24,7 +25,7 @@ const AssignmentTableTeacher: React.FC<Props> = ({ data, onToggle, handleDelete 
     <table className="w-full border-separate border-spacing-4">
       <thead className="text-lg font-medium">
         <tr>
-          <th className="py-4 rounded-md bg-table-header">{data[0].type === AssignmentType.EXERCISE ? 'แบบฝึกหัด': 'การทดสอบ'}</th>
+          <th className="py-4 rounded-md bg-table-header">{titleTable}</th>
           <th className="py-4 rounded-md bg-table-header">สถานะ</th>
           <th className="py-4 rounded-md bg-table-header">ข้อย่อย</th>
           <th className="py-4 rounded-md bg-table-header">คะแนน</th>

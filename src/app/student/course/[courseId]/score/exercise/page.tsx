@@ -66,6 +66,7 @@ export default function Score() {
           <ScoreTable
             assignments={assignments}
             isLoading={loading}
+            titleTable="แบบฝึกหัด"
           />
 
           <div className="flex justify-between items-center rounded-lg mt-6">
