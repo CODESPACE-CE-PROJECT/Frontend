@@ -23,6 +23,10 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
+      {
+        protocol: "https",
+        hostname: "ce67-07.cloud.ce.kmitl.ac.th",
+      },
     ],
   },
   experimental: {
