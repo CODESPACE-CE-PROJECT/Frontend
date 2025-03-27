@@ -23,7 +23,7 @@ import { NotifyType } from "@/enum/enum";
 
 export default function Assignment() {
   const param = useParams<{ courseId: string }>();
-  const [assignments, setAssignments] = useState<IAssignment[]>();
+  const [assignments, setAssignments] = useState<IAssignment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<IProfile>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +42,7 @@ export default function Assignment() {
       const profile: IProfile = await getProfile();
       setProfile(profile);
       const data: IAssignment[] = await getAssignmentByCourseId(param.courseId);
-      const filteredAssignments = data.filter((item) => item.type === AssignmentType.EXERCISE);
+      const filteredAssignments = data && data.filter((item) => item.type === AssignmentType.EXERCISE);
       setAssignments(filteredAssignments)
       setLoading(false);
     };
