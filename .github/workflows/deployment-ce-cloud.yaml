@@ -15,11 +15,13 @@ jobs:
           NEXT_PUBLIC_COMPILER_URL: ${{ secrets.NEXT_PUBLIC_COMPILER_URL_CE_CLOUD }}
           NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL_CE_CLOUD }}
           NEXT_PUBLIC_TERMINAL_STREAM_URL: ${{ secrets.NEXT_PUBLIC_TERMINAL_STREAM_URL_CE_CLOUD }}
+          NEXT_TRUSTED_PROXIES: ${{ secrets.NEXT_TRUSTED_PROXIES }}
         run: |
           echo "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" >> .env
           echo "NEXT_PUBLIC_COMPILER_URL=$NEXT_PUBLIC_COMPILER_URL" >> .env
           echo "NEXT_PUBLIC_REAL_TIME_URL=$NEXT_PUBLIC_REAL_TIME_URL" >> .env
           echo "NEXT_PUBLIC_TERMINAL_STREAM_URL=$NEXT_PUBLIC_TERMINAL_STREAM_URL" >> .env
+          echo "NEXT_TRUSTED_PROXIES=$NEXT_TRUSTED_PROXIES" >> .env
       - name: Clear Cache 🫧
         run: |
           docker stop frontend || true
