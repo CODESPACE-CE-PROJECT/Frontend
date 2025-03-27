@@ -1,0 +1,18 @@
+---
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: ./.env
+    networks:
+      - backend
+      - frontend
