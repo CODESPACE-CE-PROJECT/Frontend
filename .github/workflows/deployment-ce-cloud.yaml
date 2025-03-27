@@ -1,26 +1,25 @@
-name: Deployment Pre Production
+name: Deployment CE Cloud
 on:
   push:
-    branches: ["dev"]
+    branches: ["main"]
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ce-cloud
     steps:
       - name: Clone Repo 🤖
         uses: actions/checkout@v3
 
       - name: Set Environment Variables 🔠
         env:
-          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
-          NEXT_PUBLIC_COMPILER_URL: ${{ secrets.NEXT_PUBLIC_COMPILER_URL }}
-          NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL }}
-          NEXT_PUBLIC_TERMINAL_STREAM_URL: ${{ secrets.NEXT_PUBLIC_TERMINAL_STREAM_URL }}
+          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL_CE_CLOUD }}
+          NEXT_PUBLIC_COMPILER_URL: ${{ secrets.NEXT_PUBLIC_COMPILER_URL_CE_CLOUD }}
+          NEXT_PUBLIC_REAL_TIME_URL: ${{ secrets.NEXT_PUBLIC_REAL_TIME_URL_CE_CLOUD }}
+          NEXT_PUBLIC_TERMINAL_STREAM_URL: ${{ secrets.NEXT_PUBLIC_TERMINAL_STREAM_URL_CE_CLOUD }}
         run: |
           echo "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" >> .env
           echo "NEXT_PUBLIC_COMPILER_URL=$NEXT_PUBLIC_COMPILER_URL" >> .env
           echo "NEXT_PUBLIC_REAL_TIME_URL=$NEXT_PUBLIC_REAL_TIME_URL" >> .env
           echo "NEXT_PUBLIC_TERMINAL_STREAM_URL=$NEXT_PUBLIC_TERMINAL_STREAM_URL" >> .env
-
       - name: Clear Cache 🫧
         run: |
           docker stop frontend || true
@@ -29,13 +28,13 @@ jobs:
 
       - name: Run Image ✅
         run: |
-          docker compose up -d
+          docker compose -f docker-compose.ce-cloud.yaml up -d
 
       - name: Message ✉️
         uses: fjogeleit/http-request-action@v1
         with:
           timeout: 60000
-          url: ${{ secrets.DISCORD_WEBHOOK }}
+          url: "https://discord.com/api/webhooks/1204992482962833408/hu0daelau0uY8lIpQjmlub6q8-E5PdkfUTt1O_8uN8aPrS-Nj4C2r9POCvxkahW1NHzW"
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"content": "Frontend Build ✅","embeds": [{"title": "Preview[Frontend]","url": "https://codespace.srv-demo-2.home.unixvextor.com","color": "655172"}]}'
+          data: '{"content": "Frontend CE Cloud ✅","embeds": [{"title": "Preview[Frontend]","url": "https://ce67-07.cloud.ce.kmitl.ac.th","color": "655172"}]}'
