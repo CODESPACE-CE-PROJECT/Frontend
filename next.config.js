@@ -15,9 +15,18 @@ const nextConfig = {
     ],
   },
   experimental: {
+    serverActions: true,
     serverActions: {
       bodySizeLimit: '50mb',
     }
-  }
+  },
+  headers: async () => [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "X-Forwarded-Host", value: "ce67-07.cloud.ce.kmitl.ac.th" },
+      ],
+    },
+  ],
 };
 module.exports = nextConfig;
