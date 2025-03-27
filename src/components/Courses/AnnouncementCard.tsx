@@ -7,11 +7,13 @@ import { getAvatar } from "@/utils/gender.util";
 interface AnnouncementProps {
   courseId: string;
   announcement: IAssignment;
+  role: string;
 }
 
 const AnnouncementCard: React.FC<AnnouncementProps> = ({
   courseId,
   announcement,
+  role,
 }) => {
   return (
     <div className="bg-[#16233A] rounded-md w-full">
@@ -45,7 +47,7 @@ const AnnouncementCard: React.FC<AnnouncementProps> = ({
           </div>
 
           <button className="self-end text-sm rounded px-4 py-2 hover:bg-[#808080]">
-            <Link href={`/student/course/${courseId}/assignment/exercise`}>
+            <Link href={`/${role}/course/${courseId}/assignment/exercise`}>
               ดูงานที่ได้รับมอบหมาย
             </Link>
           </button>

@@ -2,19 +2,19 @@
 
 import React from "react";
 import { IAssignment } from "@/types/assignment";
-import { AssignmentType } from "@/enum/enum";
 
 interface Props {
   assignments?: IAssignment[];
   isLoading: boolean;
+  titleTable: string;
 }
 
-export default function ScoreTable({ assignments, isLoading }: Props) {
+export default function ScoreTable({ assignments, isLoading, titleTable }: Props) {
   return (
     <>
       <div className="flex justify-between items-center rounded-lg mt-6">
         <p className="text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] flex-1 text-center mr-4">
-          {assignments && assignments[0].type === AssignmentType.EXERCISE ? "แบบฝึกหัด" : "การทดสอบ"}
+          {titleTable}
         </p>
         <div className="flex w-36 text-white text-lg px-4 py-3 rounded-md bg-[#161f2e] text-center items-center justify-center">
           คะแนน

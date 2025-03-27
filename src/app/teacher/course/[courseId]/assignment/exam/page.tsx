@@ -142,6 +142,7 @@ export default function Assignment() {
                 data={assignments}
                 onToggle={handleToggle}
                 handleDelete={handleDelete}
+                titleTable="การทดสอบ"
               />
             )}
           </div>

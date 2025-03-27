@@ -255,7 +255,7 @@ const Page = () => {
         role={profile?.role}
         className="mb-6"
       >
-        <p>แก้ไขการทดสอบ</p>
+        <p>แก้ไขแบบฝึกหัด/การทดสอบ</p>
       </TopNav>
       <div className="h-full">
         <div className="text-white font-sans flex justify-between">
