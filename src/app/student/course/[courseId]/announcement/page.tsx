@@ -60,6 +60,7 @@ export default function Page() {
                   key={announce.assignmentId}
                   courseId={courseId}
                   announcement={announce}
+                  role="student"
                 />
               ))
             ) : (

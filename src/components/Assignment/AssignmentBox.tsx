@@ -13,7 +13,7 @@ const AssignmentBox: React.FC<Props> = ({ data, isLock }) => {
   const getBackgroundColor = (stateSubmission: StateSubmission | undefined) => {
     switch (stateSubmission) {
       case StateSubmission.PASS:
-        return "bg-[#00DACC] hover:bg-green-400";
+        return "bg-[#00DACC] hover:bg-[#0EFFF0] text-black";
       case StateSubmission.FAILED:
         return "bg-[#EF4343] hover:bg-red-300";
       case StateSubmission.NOTSEND:
@@ -54,7 +54,7 @@ const AssignmentBox: React.FC<Props> = ({ data, isLock }) => {
           </p>
           <p>
             <span>
-              {item.stateSubmission === StateSubmission.NOTSEND
+              {item.stateSubmission !== StateSubmission.PASS
                 ? 0
                 : item.score || 0}
             </span>
