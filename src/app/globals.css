@@ -1,31 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+body {
+  overscroll-behavior: none;
+  overflow-x: hidden;
+  background-color: #0B111B;
+  color: #fafafa;
+  margin: 0px;
+  padding: 0px; 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+xterm-viewport {
+  background-color: #161D2D !important;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
+.xterm-viewport {
+  background-color: #161D2D !important;
+}
 
-body {
-  background-color: #0E1525;
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #2A3A50;
+}
+
+.fc-daygrid-event{
+  padding: 1rem;
+  text-wrap: wrap;
+}
+
+/* disable dot on dayGridMonth*/
+.fc-daygrid-event-dot {
+  display: none !important;
+}
+
+/* change bg event on dayGridMonth*/
+.fc-daygrid-dot-event.fc-event-mirror, .fc-daygrid-dot-event {
+  background: #5572FA;
+}
+/* change bg event on dayGridMonth(hover)*/
+.fc-daygrid-dot-event.fc-event-mirror, .fc-daygrid-dot-event:hover {
+  background: #5572FA;
+}
+
+/* fix timeGridWeek,timeGridDay*/
+.fc-event-main{
+  display: flex;
+  align-items: center;
+  text-wrap: wrap;
+}
+.fc .fc-timegrid-col:hover{
+  background: #2A3A50AA;
+}
+/* change bg today on timeGridWeek,timeGridDay*/
+.fc-day-today {
+  --fc-today-bg-color:#2A3A50
+}
+/* fix listMonth event hover*/
+.fc-event {
+  --fc-list-event-hover-bg-color:#2A3A50
+}
+
+.fc .fc-daygrid-day:hover {
+  background: #2A3A50AA;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  border: 2px solid;
+  border-color: #3049724d;
+}
+
+.fc .fc-list-event.fc-event-forced-url:hover {
+  background: #2A3A50AA;
+  cursor: pointer;
+}
+
+.scrollbar-x-custom::-webkit-scrollbar {
+  height: 8px; /* Adjust horizontal scrollbar height */
+}
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #2B2D34; /* Change this to your desired background color */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #424E6C; /* Change this to your desired handle color */
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #445889; /* Change this to your desired hover color */
+}
+
+.dropdown::-webkit-scrollbar-track {
+    background: #302f2f; /* Color of the scrollbar track */
+    border-radius: 10px; /* Rounded corners for the track */
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.apexcharts-tooltip {
+    background: #000;
+    color: #fafafa;
+}
+
+/* Custom scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #FAFAFA; /* Track color */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #5572fa; /* Scrollbar handle color */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #1E429F; /* Scrollbar handle hover color */
 }

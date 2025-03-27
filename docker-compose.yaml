@@ -1,0 +1,26 @@
+---
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: ./.env
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.codespace.loadbalancer.server.port: '3000'
+      traefik.http.services.codespace.loadbalancer.server.scheme: 'http'
+      traefik.http.routers.codespace-https.entrypoints: 'websecure'
+      traefik.http.routers.codespace-https.rule: 'Host(`codespace.srv-demo-2.home.unixvextor.com`)'
+      traefik.http.routers.codespace-https.tls: 'true'
+      traefik.http.routers.codespace-https.tls.certresolver: 'cloudflare'
+    networks:
+      - backend
+      - frontend
