@@ -62,7 +62,7 @@ export default function Page() {
       if (response.status === 201) {
         const codeFile: ICodeSpace[] = await getCodeSpace();
         setCodeFile(codeFile);
-        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
+        localStorage.setItem(`fileCach-${profile?.username}`, JSON.stringify(selectedFile))
         updateNotify(notifyId, NotifyType.SUCCESS, "สร้างไฟล์สำเร็จ");
       } else {
         updateNotify(
@@ -88,7 +88,7 @@ export default function Page() {
       if (response.status === 200) {
         updateNotify(notifyId, NotifyType.SUCCESS, "เปลี่ยนชื่อไฟล์สำเร็จ");
         const codeFile: ICodeSpace[] = await getCodeSpace();
-        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
+        localStorage.setItem(`fileCach-${profile?.username}`, JSON.stringify(selectedFile))
         setCodeFile(codeFile);
         setEditState({
           isLoading: false,
@@ -128,12 +128,14 @@ export default function Page() {
       const codeFile: ICodeSpace[] = await getCodeSpace();
       setProfile(profile);
       setCodeFile(codeFile);
-      const fileCache = localStorage.getItem("fileCache")
+      const fileCache = localStorage.getItem(`fileCach-${profile.username}`)
       if (fileCache) {
         setSelectedFile(JSON.parse(fileCache))
       }else {
-        setSelectedFile(codeFile[0])
-        localStorage.setItem("fileCache", JSON.stringify(codeFile[0]))
+        if(codeFile.length > 0){
+          setSelectedFile(codeFile[0])
+          localStorage.setItem(`fileCach-${profile.username}`, JSON.stringify(codeFile[0]))
+        }
       }
 
       if(profile.school.package === PackageType.STANDARD){
@@ -215,7 +217,7 @@ export default function Page() {
           sourceCode: selectedFile.sourceCode,
           username: profile?.username
         }
-        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
+        localStorage.setItem(`fileCach-${profile.username}`, JSON.stringify(selectedFile))
         const { status } = await compileCode(submitCode)
         if (status === 200) {
           updateNotify(id, NotifyType.SUCCESS, "ประมวลผลเสร็จสิ้น")
@@ -248,7 +250,7 @@ export default function Page() {
       }
       const { status } = await updateFileCodeSpace(selectedFile?.codeSpaceId, updateForm);
       if (status === 200 && profile) {
-        localStorage.setItem("fileCache", JSON.stringify(selectedFile))
+        localStorage.setItem(`fileCach-${profile.username}`, JSON.stringify(selectedFile))
       } else {
         return;
       }
