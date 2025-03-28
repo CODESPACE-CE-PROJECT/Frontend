@@ -14,9 +14,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={noto.className}>
         <ToastContainer />
-        {/* <SSEContext> */}
+        <SSEContext>
           {children}
-        {/* </SSEContext> */}
+        </SSEContext>
       </body>
     </html>
   );
