@@ -163,9 +163,6 @@ export default function Page() {
           const sockerTeminal = io(terminalStreamURL, {
             transports: ["websocket"],
             autoConnect: false,
-            extraHeaders: {
-              "authorization": accessToken as string
-            }
           })
           await sockerTeminal.connect()
           socketRef.current = sockerTeminal
