@@ -47,3 +47,25 @@ export const createAnnonuncement = async (formData: ICreateAnnounce) => {
       };
     });
 }
+
+export const deleteAnnounceById = async (announceId: string) => {
+  const token = await getToken();
+  return await axios.delete(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/announce/${announceId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  ).then((res) => {
+    return {
+      status: res.status,
+      data: res.data.data,
+    };
+  }).catch((e: AxiosError) => {
+    return {
+      status: e.response?.status,
+      data: e.response?.data,
+    };
+  });
+};

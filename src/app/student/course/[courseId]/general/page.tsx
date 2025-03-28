@@ -83,6 +83,7 @@ export default function Page() {
                   announce={announce}
                   profilePicture={profile?.pictureUrl || (profile?.gender && getAvatar(profile?.gender))}
                   handleReply={handleReply}
+                  disable={true}
                 />
               ))
             ) : (

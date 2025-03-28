@@ -7,7 +7,10 @@ import { getProfile } from "@/actions/user";
 import { IProfile } from "@/types/user";
 import { ICourse } from "@/types/course";
 import { ICourseAnnounce, ICreateAnnounce } from "@/types/courseAnnounce";
-import { createAnnonuncement, createReplyAnnounce } from "@/actions/announcement";
+import {
+  createAnnonuncement,
+  createReplyAnnounce,
+} from "@/actions/announcement";
 import { TopNav } from "@/components/Navbar/TopNav";
 import { notify, updateNotify } from "@/utils/toast.util";
 import { NotifyType } from "@/enum/enum";
@@ -18,6 +21,7 @@ import { LexicalEditor } from "@/components/LexicalEditor/LexicalEditor";
 import { ConfirmButton } from "@/components/Button/ConfirmButton";
 import { CancelButton } from "@/components/Button/CancelButton";
 import { checkValidMessage } from "@/utils/text.util";
+import { deleteAnnounceById } from "@/actions/announcement";
 
 export default function Page() {
   const param = useParams<{ courseId: string }>();
@@ -30,7 +34,7 @@ export default function Page() {
   const [createForm, setCreateForm] = useState<ICreateAnnounce>({
     courseId: courseId,
     description: "",
-  })
+  });
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -63,6 +67,22 @@ export default function Page() {
     }
   };
 
+  const handleOnClickOption = async (name: string, announceId: string) => {
+    if (name === "delete") {
+      const id = notify(NotifyType.LOADING, "กำลังลบประกาศ");
+      const { status } = await deleteAnnounceById(announceId);
+      if (id) {
+        if (status === 200) {
+          updateNotify(id, NotifyType.SUCCESS, "ลบประกาศเสร็จสิ้น");
+          const response: ICourse = await getCoursesById(courseId);
+          setAnnounce(response.courseAnnounce);
+        } else {
+          updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการลบประกาศ");
+        }
+      }
+    }
+  };
+
   const handleCreateAnnounce = async () => {
     const id = notify(NotifyType.LOADING, "กำลังสร้างประกาศ");
     const { status } = await createAnnonuncement(createForm);
@@ -78,7 +98,7 @@ export default function Page() {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดพลาดในการสร้างประกาศ");
       }
     }
-  }
+  };
 
   return (
     <>
@@ -108,17 +128,25 @@ export default function Page() {
                 setCreateForm(prev => ({
                   ...prev,
                   description: editorState,
-                }))
-              }} className="min-h-28 h-full">
+                }));
+              }}
+              className="min-h-28 h-full"
+            >
               <div className="flex flex-row items-center justify-end gap-x-4 pt-2 border-t-[1px] border-white">
-                <CancelButton className="border-white py-3 hover:bg-gray-600" onClick={() => {
-                  if (editorRef.current) {
-                    editorRef.current.clearEditor();
-                  }
-                }}>
+                <CancelButton
+                  className="border-white py-3 hover:bg-gray-600"
+                  onClick={() => {
+                    if (editorRef.current) {
+                      editorRef.current.clearEditor();
+                    }
+                  }}
+                >
                   <p>ยกเลิก</p>
                 </CancelButton>
-                <ConfirmButton onClick={handleCreateAnnounce} disabled={!checkValidMessage(createForm.description)}>
+                <ConfirmButton
+                  onClick={handleCreateAnnounce}
+                  disabled={!checkValidMessage(createForm.description)}
+                >
                   <p className="px-11">สร้าง</p>
                 </ConfirmButton>
               </div>
@@ -128,8 +156,13 @@ export default function Page() {
                 <AnnounceCard
                   key={announce.courseAnnounceId}
                   announce={announce}
-                  profilePicture={profile?.pictureUrl || (profile?.gender && getAvatar(profile?.gender))}
+                  profilePicture={
+                    profile?.pictureUrl ||
+                    (profile?.gender && getAvatar(profile?.gender))
+                  }
                   handleReply={handleReply}
+                  onClickOption={handleOnClickOption}
+                  disable={false}
                 />
               ))
             ) : (
