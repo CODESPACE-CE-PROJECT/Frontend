@@ -105,7 +105,6 @@ export default function Page() {
             <LexicalEditor
               ref={editorRef}
               onChange={(editorState) => {
-                console.log(editorState)
                 setCreateForm(prev => ({
                   ...prev,
                   description: editorState,
