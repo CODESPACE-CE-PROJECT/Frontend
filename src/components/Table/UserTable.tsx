@@ -36,7 +36,7 @@ export const UserTable:React.FC<Props> = ({title, data, onClickOption}) => {
                                                   alt="avatar"
                                                   width={60}
                                                   height={60}
-                                                  className="object-cover"
+                                                  className="object-cover rounded-full size-[60px]"
                                              />
                                              <div className="flex flex-col items-start">
                                                   <p className="text-center text-xl">{item.firstName} {item.lastName}</p>
