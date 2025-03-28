@@ -15,22 +15,10 @@ interface Props {
   socket: Socket | null;
 }
 
-// Forward ref to expose only the clear method along with the full terminal instance
 const XTermTerminal = forwardRef<TerminalRef | null, Props>(({ socket }, ref) => {
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-
-  useImperativeHandle(ref, () => ({
-    ...(termRef.current as TerminalRef), 
-    clear: () => {
-      const term = termRef.current;
-      if (term) {
-        console.log("clear");
-        term.reset();
-      }
-    },
-  }));
 
   useEffect(() => {
     const terminal = new XTerm({
@@ -83,9 +71,15 @@ const XTermTerminal = forwardRef<TerminalRef | null, Props>(({ socket }, ref) =>
 
     term.onData(handleInput);
     socket.on("message", handleMessage);
+    
+    socket.on("clear", (msg) => {
+      console.log(msg)
+      term.clear()
+    })
 
     return () => {
       socket.off("message", handleMessage);
+      socket.off("clear")
     };
   }, [socket]);
 

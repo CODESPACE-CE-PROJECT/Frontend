@@ -20,23 +20,6 @@ const DynamicTerminal = dynamic(() => import("@/components/Workspace/XTermTermin
 
 
 export const WorkSpaceTerminal = forwardRef<TerminalRef | null, Props>(({ socket }, ref) => {
-  const terminalRef = useRef<Terminal | null>(null); 
-
-  useImperativeHandle(ref, () => {
-    const currentTerminal = terminalRef.current;
-
-    return {
-      ...currentTerminal,
-      clear: () => {
-        if (currentTerminal) {
-          currentTerminal.clear();
-        }
-      },
-    } as TerminalRef;
-  });
-  
-  if (!socket) return <p>Connecting to terminal...</p>;
-
   return (
     <div className="pt-2 w-5/12 h-full bg-[#161D2D]">
       <div className="flex h-auto border-b-[0.5px] border-b-[#2A3A50]">
@@ -46,7 +29,7 @@ export const WorkSpaceTerminal = forwardRef<TerminalRef | null, Props>(({ socket
         </div>
       </div>
 
-      <DynamicTerminal ref={terminalRef} socket={socket} />
+      <DynamicTerminal socket={socket} />
     </div>
   );
 });

@@ -28,7 +28,6 @@ import { compileCode } from "@/actions/compiler";
 import { ICompileCode } from "@/types/compile";
 import { getRealTimeURL, getTerminalStreamURL } from "@/actions/env";
 import { Socket, io } from 'socket.io-client'
-import { Terminal } from "@xterm/xterm";
 
 export default function Page() {
   const [profile, setProfile] = useState<IProfile>();
@@ -39,7 +38,6 @@ export default function Page() {
   const socketRef = useRef<Socket | null>(null)
   const [output, setOutput] = useState<string>()
   const [input, setInput] = useState<string>()
-  const terminalRef = useRef<Terminal | null>(null)
   const accessToken = getCookie('accessToken')
 
   const [editState, setEditState] = useState<{
@@ -163,6 +161,7 @@ export default function Page() {
         
         if(!socketRef.current){
           const sockerTeminal = io(terminalStreamURL, {
+            transports: ["websocket"],
             autoConnect: false,
             extraHeaders: {
               "authorization": accessToken as string
@@ -191,7 +190,7 @@ export default function Page() {
     fetchData();
     
     return () => {
-      if(socketRef.current && socketRef.current.connected){
+      if(socketRef.current){
         socketRef.current.disconnect()
         socketRef.current = null;
       }
@@ -233,7 +232,6 @@ export default function Page() {
   }
 
   const handleExecutePremiumPackage = async () => {
-    terminalRef.current?.clear()
     if(selectedFile){
       const payload = {
         sourceCode: selectedFile?.sourceCode,
@@ -291,7 +289,7 @@ export default function Page() {
           />
           {
             isPremium ?
-              <WorkSpaceTerminal ref={terminalRef} socket={socketRef.current}/> :
+              <WorkSpaceTerminal socket={socketRef.current}/> :
               <InputOutput onInputChange={(value) => setInput(value)} output={output} />
           }
         </>
