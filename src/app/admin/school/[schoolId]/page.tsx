@@ -108,9 +108,8 @@ export default function Page() {
      }
 
      const clearDataUpdateForm = async (username: string) => {
-          const {status, data} = await getUserByUsername(username)
-          console.log(data)
-          if(status === 200){
+          const { status, data } = await getUserByUsername(username)
+          if (status === 200) {
                setUpdateForm({
                     ...data,
                     picture: null,
@@ -138,7 +137,7 @@ export default function Page() {
                }
           } else if (name === "delete") {
                const id = notify(NotifyType.LOADING, "กำลังลบบัญชีผู้ใช้ไปถังขยะ")
-               const { status } = await setEnableUserByUsername(username, false)
+               const { status, data } = await setEnableUserByUsername(username, false)
                if (id) {
                     if (status === 200) {
                          updateNotify(id, NotifyType.SUCCESS, 'ลบบัญชีผู้ใช้เสร็จสิ้น');
@@ -154,17 +153,17 @@ export default function Page() {
                }
           } else if (name === "edit") {
                setIsOpenUpdateUserForm(true)
-               const {status, data} = await getUserByUsername(username)
-               if(status === 200){
+               const { status, data } = await getUserByUsername(username)
+               if (status === 200) {
                     setUpdateForm(data)
-               } 
+               }
           }
      }
 
      const handleSubmitCreateUser = async (createFrom: ICreateUser) => {
           const id = notify(NotifyType.LOADING, "กำลังสร้างบัญชีผู้ใช้งาน")
           if (school?.schoolId && id) {
-               const { status } = await createUserBySchoolId(school?.schoolId, createFrom)
+               const { status, data } = await createUserBySchoolId(school?.schoolId, createFrom)
                if (status === 201) {
                     updateNotify(id, NotifyType.SUCCESS, "สร้างบัญชีผู้ใช้เสร็จสิ้น")
                     const { data } = await getSchoolById(param.schoolId);
@@ -173,10 +172,24 @@ export default function Page() {
                     setSchool(response);
                     setTeachers(response.users.filter((user) => user.role === Role.TEACHER));
                     setStudents(response.users.filter((user) => user.role === Role.STUDENT));
+                    setCreateForm({
+                         email: "",
+                         firstName: "",
+                         lastName: "",
+                         username: "",
+                         gender: Gender.MALE,
+                         role: Role.STUDENT,
+                         studentNo: ""
+                    })
                     setIsOpenCreateUserForm(false)
                } else if (status === 406) {
                     updateNotify(id, NotifyType.ERROR, "มีชื่อผู้ใช้งานหรืออีเมลนี้อยู่ในระบบแล้ว")
-               } else {
+               } else if (status === 400 && data.message.includes('Over Limit Create Teacher')) {
+                    updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างเกินจำนวนครู ${data.message.split(" ").pop()} คนได้`)
+               } else if (status === 400 && data.message.includes('Over Limit Create Student')) {
+                    updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างเกินจำนวนนักเรียน ${data.message.split(" ").pop()} คนได้`)
+               }
+               else {
                     updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการสร้างบัญชี")
                }
           }
@@ -204,18 +217,18 @@ export default function Page() {
      }
 
      const handleFileImport = async () => {
-          if(file){
+          if (file) {
                const id = notify(NotifyType.LOADING, 'กำลังประมวลผลไฟล์')
-               const {status, data} = await importFileExel(file)
-               if(id){
-                    if(status === 201){
+               const { status, data } = await importFileExel(file)
+               if (id) {
+                    if (status === 201) {
                          updateNotify(id, NotifyType.SUCCESS, 'ประมวลผลไฟล์เสร็จสิ้น')
                          sessionStorage.setItem(`dataFile-${param.schoolId}`, JSON.stringify(data))
                          setIsOpenImportFileModal(false)
                          router.push(`/admin/school/${param.schoolId}/file`)
-                    } else if (status === 400){
+                    } else if (status === 400) {
                          updateNotify(id, NotifyType.ERROR, 'รูปแบบไฟล์ไม่ถูกต้อง')
-                         data.errors.map((item:string) => {
+                         data.errors.map((item: string) => {
                               notify(NotifyType.WARNING, item)
                          })
                     } else {
@@ -267,10 +280,10 @@ export default function Page() {
                <Loading className="size-20" />
           </div>
      ) : (<div className="flex flex-col gap-y-12">
-          <TopNav 
-               disableNotification={true} 
-               imageUrl={profile?.pictureUrl} 
-               role={profile?.role} 
+          <TopNav
+               disableNotification={true}
+               imageUrl={profile?.pictureUrl}
+               role={profile?.role}
                gender={profile?.gender}
           >
                <div className="flex flex-row items-center gap-x-3">
@@ -285,7 +298,7 @@ export default function Page() {
                <SchoolCard data={school} />
                <div className="flex flex-row items-center gap-x-4">
                     <SearchBar onChange={(value) => setSearch(value)} />
-                    <InpuFileButton className="flex flex-row font-semibold items-center justify-center w-36" onClick={() => setIsOpenImportFileModal(true)}/>
+                    <InpuFileButton className="flex flex-row font-semibold items-center justify-center w-36" onClick={() => setIsOpenImportFileModal(true)} />
                     <ConfirmButton className="px-3" onClick={() => setIsOpenCreateUserForm(true)}>
                          <AddRoundedIcon className="text-neutral-50 w-6 h-6" />
                     </ConfirmButton>
@@ -295,8 +308,8 @@ export default function Page() {
                     <UserTable title="บัญชีผู้เรียน" data={students} onClickOption={handleOnClickOption} />
                </div>
           </div>
-          <CreateUserModal onSubmit={(createForm) => handleSubmitCreateUser(createForm)} handleInputChange={handleInputChangeCreateForm} createForm={createForm} isOpen={isOpenCreateUserForm} onClose={() => {setIsOpenCreateUserForm(false); clearDataCreateForm()}} />
-          <UpdateUserModal onSubmit={(updateForm) => handleSubmitUpdateUser(updateForm)} isOpen={isOpenUpdateUserForm} handleFileInputChange={handleFileInputChangeUpdateForm} onClose={(username) => {setIsOpenUpdateUserForm(false); clearDataUpdateForm(username)}} updateForm={updateForm} handleInputChange={handleInputChangeUpdateForm}/>
-          <ImportFileModal isOpen={isOpenImportFileModal} onInput={(file) => setFile(file)} onClose={() => setIsOpenImportFileModal(false)} onClick={handleFileImport}/>
+          <CreateUserModal onSubmit={(createForm) => handleSubmitCreateUser(createForm)} handleInputChange={handleInputChangeCreateForm} createForm={createForm} isOpen={isOpenCreateUserForm} onClose={() => { setIsOpenCreateUserForm(false); clearDataCreateForm() }} />
+          <UpdateUserModal onSubmit={(updateForm) => handleSubmitUpdateUser(updateForm)} isOpen={isOpenUpdateUserForm} handleFileInputChange={handleFileInputChangeUpdateForm} onClose={(username) => { setIsOpenUpdateUserForm(false); clearDataUpdateForm(username) }} updateForm={updateForm} handleInputChange={handleInputChangeUpdateForm} />
+          <ImportFileModal isOpen={isOpenImportFileModal} onInput={(file) => setFile(file)} onClose={() => setIsOpenImportFileModal(false)} onClick={handleFileImport} />
      </div>)
 }

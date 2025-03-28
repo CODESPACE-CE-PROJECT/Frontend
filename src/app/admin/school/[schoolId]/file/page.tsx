@@ -34,7 +34,7 @@ export default function Page() {
                if (fileData) {
                     setFileData(JSON.parse(fileData))
                     setUser(JSON.parse(fileData))
-               }else if(fileData === null){
+               } else if (fileData === null) {
                     setIsLoading(false)
                }
                setIsLoading(false)
@@ -70,17 +70,21 @@ export default function Page() {
                }
           })
 
-          if(userFormat){
+          if (userFormat) {
                const id = notify(NotifyType.LOADING, 'กำลังสร้างบัญชีผู้ใช้งาน')
-               
-               if(id){
-                    const {status} = await createMultipleUserBySchoolId(param.schoolId, userFormat as ICreateUser[])
-                    if(status === 201){
-                         updateNotify(id,NotifyType.SUCCESS, 'สร้างบัญชีผู้ใช้งานสำเร็จ')
+
+               if (id) {
+                    const { status, data } = await createMultipleUserBySchoolId(param.schoolId, userFormat as ICreateUser[])
+                    if (status === 201) {
+                         updateNotify(id, NotifyType.SUCCESS, 'สร้างบัญชีผู้ใช้งานสำเร็จ')
                          sessionStorage.removeItem(`dataFile-${param.schoolId}`)
                          router.push(`/admin/school/${param.schoolId}`)
-                    }else{
-                         updateNotify(id,NotifyType.ERROR, 'เกิดข้อผิดผลาดในการสร้างบัญชีผู้ใช้งาน')
+                    } else if (status === 400 && data.message.includes('Over Limit Create Teacher')) {
+                         updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างเกินจำนวนครู ${data.message.split(" ").pop()} คนได้`)
+                    } else if (status === 400 && data.message.includes('Over Limit Create Student')) {
+                         updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างเกินจำนวนนักเรียน ${data.message.split(" ").pop()} คนได้`)
+                    } else {
+                         updateNotify(id, NotifyType.ERROR, 'เกิดข้อผิดผลาดในการสร้างบัญชีผู้ใช้งาน')
                     }
                }
           }
@@ -96,9 +100,9 @@ export default function Page() {
           </div>
      ) : (
           <div className="flex flex-col gap-y-12">
-               <TopNav 
-                    disableNotification={true} 
-                    imageUrl={profile?.pictureUrl} 
+               <TopNav
+                    disableNotification={true}
+                    imageUrl={profile?.pictureUrl}
                     role={profile?.role}
                     gender={profile?.gender}
                >
@@ -129,7 +133,7 @@ export default function Page() {
                     </OutlineButton>
                </div>
                <ImportFileUserTable onClickOption={(index) => onClickOption(index)} data={user} />
-               <ConfirmFilModal isOpen={isOpenConfirmFileModal} onClose={() => setIsConfirmFileModal(false)} onClick={() => handleOnClickCreateUser()} isDuplicate={user?.filter(item => item.validType === ValidType.DUPLICATE).length !== 0} isExist={user?.filter(item => item.validType === ValidType.EXIST).length !== 0}/>
+               <ConfirmFilModal isOpen={isOpenConfirmFileModal} onClose={() => setIsConfirmFileModal(false)} onClick={() => handleOnClickCreateUser()} isDuplicate={user?.filter(item => item.validType === ValidType.DUPLICATE).length !== 0} isExist={user?.filter(item => item.validType === ValidType.EXIST).length !== 0} />
           </div>
      )
 }

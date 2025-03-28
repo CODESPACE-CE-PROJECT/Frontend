@@ -202,7 +202,7 @@ export const updateUserByUsername = async (updateForm: IUpdateUser) => {
   }
 
   return await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/username/${updateForm.username}`, {
-    ...updateForm
+    updateForm
   }, {
     headers: {
       Authorization: `Bearer ${token}`,

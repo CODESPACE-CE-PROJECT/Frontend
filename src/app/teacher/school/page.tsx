@@ -71,8 +71,8 @@ export default function People() {
           name !== "role"
             ? value
             : value === "ผู้สอน"
-            ? Role.TEACHER
-            : Role.STUDENT,
+              ? Role.TEACHER
+              : Role.STUDENT,
       };
     });
     if (name === "role" && value === "ผู้สอน") {
@@ -108,8 +108,8 @@ export default function People() {
           name !== "role"
             ? value
             : value === "ผู้สอน"
-            ? Role.TEACHER
-            : Role.STUDENT,
+              ? Role.TEACHER
+              : Role.STUDENT,
       };
     });
     if (name === "role" && value === "ผู้สอน") {
@@ -211,7 +211,7 @@ export default function People() {
     }
     const id = notify(NotifyType.LOADING, "กำลังสร้างบัญชีผู้ใช้งาน");
     if (profile?.schoolId && id) {
-      const { status } = await createUserBySchoolId(
+      const { status, data } = await createUserBySchoolId(
         profile?.schoolId,
         createFrom
       );
@@ -234,6 +234,10 @@ export default function People() {
           NotifyType.ERROR,
           "มีชื่อผู้ใช้งานหรืออีเมลนี้อยู่ในระบบแล้ว หรือคุณไม่มีสิทธิ์ในการสร้างบัญชีผู้ใช้"
         );
+      } else if (status === 400 && data.message.includes('Over Limit Create Teacher')) {
+        updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างเกินจำนวนครู ${data.message.split(" ").pop()} คนได้`)
+      } else if (status === 400 && data.message.includes('Over Limit Create Student')) {
+        updateNotify(id, NotifyType.ERROR, `ไม่สามารถสร้างเกินจำนวนนักเรียน ${data.message.split(" ").pop()} คนได้`)
       } else {
         updateNotify(id, NotifyType.ERROR, "เกิดข้อผิดผลาดในการสร้างบัญชี");
       }
