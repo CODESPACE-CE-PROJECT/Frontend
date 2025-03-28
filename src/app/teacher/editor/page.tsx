@@ -191,7 +191,7 @@ export default function Page() {
     fetchData();
     
     return () => {
-      if(socketRef.current){
+      if(socketRef.current && socketRef.current.connected){
         socketRef.current.disconnect()
         socketRef.current = null;
       }
